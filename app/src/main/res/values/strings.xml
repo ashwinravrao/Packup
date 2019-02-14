@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Boxray</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="box_list_fragment_action_bar_title">Boxes</string>
+    <string name="action_search">Search</string>
+    <string name="action_invert_colors">Invert Colors</string>
+    <string name="name_edit_text_hint">Name</string>
+    <string name="box_name_placeholder">Kitchen Supplies</string>
+    <string name="box_num_items_placeholder">%1$d items</string>
+    <string name="box_number_placeholder">21</string>
+    <string name="app_placeholder">PLACEHOLDER</string>
+</resources>

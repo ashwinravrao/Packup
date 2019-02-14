@@ -1,0 +1,74 @@
+<resources>
+
+    <!-- Light theme. -->
+    <!-- Default theme that extends the AppCompat Light theme, which in turn extends the Base theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="drawerArrowStyle">@style/ActionBarDrawerIconLight</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Auto Generated: Not sure what this does -->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+    <!-- TOOLBAR STYLES -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/textcolor</item>
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:actionOverflowButtonStyle">@style/OverflowButtonLight</item>
+    </style>
+
+    <style name="OverflowButtonLight" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/textcolor</item>
+    </style>
+
+    <style name="ActionBarDrawerIconLight" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/textcolor</item>
+    </style>
+
+
+    <!-- VH CARDVIEW STYLES -->
+    <style name="AppTheme.VHCard" parent="CardView.Light">
+        <item name="cardBackgroundColor">@color/cardbordercolor</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="contentPadding">1dp</item>
+    </style>
+
+    <!-- VH TEXT STYLE 0 (HEADLINE) -->
+    <style name="AppTheme.CardTextAppearance" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:padding">4dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/textcolor</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- VH TEXT STYLE 1 (NUM. ITEMS) -->
+    <style name="AppTheme.CardTextAppearance.SubHeading">
+        <item name="android:layout_marginTop">52dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- VH TEXT STYLE 2 (BOX NUMBER) -->
+    <style name="AppTheme.CardTextAppearance.Number">
+        <item name="android:layout_gravity">center_vertical|end</item>
+        <item name="android:layout_marginStart">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:textColor">@color/boxnumbercolor</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">60sp</item>
+    </style>
+
+</resources>
