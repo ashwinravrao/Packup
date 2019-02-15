@@ -38,7 +38,6 @@ public class ListFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         ((MainActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(getString(R.string.box_list_fragment_action_bar_title));
@@ -51,6 +50,12 @@ public class ListFragment extends Fragment {
         mBoxesLD = viewModel.getBoxes();
 
         mFab = ((MainActivity) getActivity()).getFloatingActionButton();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mFab.setVisibility(View.VISIBLE);
     }
 
     @Nullable

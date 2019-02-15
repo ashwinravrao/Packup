@@ -7,7 +7,7 @@
     <color name="cardnumbercolor">#6C6C6C</color>
     <color name="textcolor">#4E4E4E</color>
     <color name="boxnumbercolor">#996C6C6C</color>
-    <color name="cardbordercolor">#33000000</color>
+    <color name="cardbordercolor">#1A000000</color>
 
     <!-- Night Mode Colors -->
     <color name="colorPrimaryNight">#303030</color>

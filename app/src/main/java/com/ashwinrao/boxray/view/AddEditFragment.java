@@ -2,14 +2,18 @@ package com.ashwinrao.boxray.view;
 
 
 import android.os.Bundle;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentAddEditBinding;
+import com.ashwinrao.boxray.util.Utilities;
 
 import java.util.Objects;
 
@@ -17,7 +21,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 public class AddEditFragment extends Fragment {
 
@@ -26,44 +29,51 @@ public class AddEditFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mOriginalSoftInputMode = applyFragmentSoftInput(getActivity(), null);
-    }
-
-    /**
-     * @param activity
-     * @param originalSoftInputMode
-     *
-     * Saves current window softInputMode (from AndroidManifest),
-     * and changes to WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING.
-     *
-     * In onDestroy() this method is called again to restore the original config to the Manifest.
-     *
-     * @return manifest WindowManager.Attributes.SoftInputMode from before this Fragment was inflated.
-     */
-
-    private int applyFragmentSoftInput(FragmentActivity activity, @Nullable Integer originalSoftInputMode) {
-        FragmentActivity act = Objects.requireNonNull(activity);
-        if(originalSoftInputMode != null) {
-            activity.getWindow().setSoftInputMode(originalSoftInputMode);
-            return -1;
-        } else {
-            int original = act.getWindow().getAttributes().softInputMode;
-            act.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-            return original;
-        }
+        ((MainActivity) Objects.requireNonNull(getActivity())).getFloatingActionButton().setVisibility(View.GONE);
+        mOriginalSoftInputMode = Utilities.applyFragmentSoftInput(getActivity(), null);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentAddEditBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_edit, container, false);
+        final FragmentAddEditBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_edit, container, false);
+        configureInputFields(binding);
         return binding.getRoot();
+    }
+
+    private void configureInputFields(@NonNull FragmentAddEditBinding binding) {
+        String[] field_titles = {getString(R.string.name_field_title), getString(R.string.source_field_title), getString(R.string.dest_field_title)};
+        View[] views = {binding.nameInput, binding.sourceInput, binding.destInput};
+
+        for (int i = 0; i < views.length; i++) {
+            final TextView hint = views[i].findViewById(R.id.input_field_hint);
+            EditText editable = views[i].findViewById(R.id.input_field_editable);
+
+            hint.setText(field_titles[i]);
+            editable.setHint(field_titles[i]);
+
+            editable.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.toString().length() > 0) {
+                        hint.setVisibility(View.VISIBLE);
+                    } else {
+                        hint.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
+        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
     }
 }

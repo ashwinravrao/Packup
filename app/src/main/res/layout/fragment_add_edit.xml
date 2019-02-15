@@ -26,20 +26,26 @@
                     android:layout_weight="0.7"
                     android:orientation="vertical">
 
-                    <com.google.android.material.textfield.TextInputLayout
+                    <include
+                        android:id="@+id/name_input"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/name_edit_text_hint"
-                        app:boxBackgroundColor="@color/cardbackgroundcolor"
-                        app:boxBackgroundMode="filled"
-                        app:hintAnimationEnabled="true"
-                        app:hintTextColor="@color/textcolor">
+                        android:layout_marginBottom="16dp"
+                        layout="@layout/input_field_add_edit" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                    <include
+                        android:id="@+id/source_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        layout="@layout/input_field_add_edit" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                    <include
+                        android:id="@+id/dest_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        layout="@layout/input_field_add_edit" />
 
                 </LinearLayout>
 
