@@ -1,4 +1,5 @@
 <resources>
+    <!-- Application -->
     <string name="app_name">Boxray</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -9,13 +10,19 @@
     <string name="box_list_fragment_action_bar_title">Boxes</string>
     <string name="action_search">Search</string>
     <string name="action_invert_colors">Invert Colors</string>
+
+    <!-- AddEditFragment -->
     <string name="name_field_title">Name</string>
     <string name="source_field_title">Source</string>
     <string name="dest_field_title">Destination</string>
     <string name="add_item_field_title">Add item</string>
+    <string name="category_button_text">Category</string>
+
+    <!-- ListFragment -->
     <string name="box_name_placeholder">Kitchen Supplies</string>
     <string name="box_num_items_placeholder">%1$d items</string>
     <string name="box_number_placeholder">21</string>
+
+    <!-- DetailFragment -->
     <string name="app_placeholder">PLACEHOLDER</string>
-    <string name="category_button_text">Category</string>
 </resources>

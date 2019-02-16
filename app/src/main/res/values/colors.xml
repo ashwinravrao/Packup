@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Day Mode Colors -->
+    <!-- AppTheme -->
     <color name="colorPrimary">#EEEEEE</color>
     <color name="colorPrimaryDark">#E0E0E0</color>
     <color name="cardnumbercolor">#6C6C6C</color>
@@ -9,13 +9,13 @@
     <color name="cardbordercolor">#1A000000</color>
     <color name="iconDisabledColor">#80000000</color>
 
-    <!-- Night Mode Colors -->
+    <!-- AppTheme.Dark -->
     <color name="colorPrimaryNight">#303030</color>
     <color name="colorPrimaryNightDark">#282828</color>
     <color name="cardnumbercolorNight">#E9E9E9</color>
     <color name="textcolorNight">#E9E9E9</color>
 
-    <!-- Universal Colors -->
+    <!-- Nonspecific colors -->
     <color name="colorAccent">#1788D3</color>
     <color name="cardbackgroundcolor">#E6E6E6</color>
 
