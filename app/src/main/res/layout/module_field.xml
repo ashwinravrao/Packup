@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/AppTheme.VHCard"
+    android:id="@+id/outer_card_view"
+    style="@style/AppTheme.InputField.OuterCard"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardCornerRadius="7dp"
-    app:cardElevation="0dp">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
-        style="@style/AppTheme.VHCard"
+        style="@style/AppTheme.InputField.InnerCard"
+        android:id="@+id/inner_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/cardbackgroundcolor"
-        app:cardElevation="0dp"
-        app:contentPadding="0dp">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,13 +17,13 @@
             android:animateLayoutChanges="true"
             android:orientation="horizontal">
 
-            <!-- Set text for below TextView programmatically -->
+            <!-- Set TextView text property programmatically -->
 
             <TextView
                 android:id="@+id/input_field_hint"
                 style="@style/AppTheme.InputField.Hint" />
 
-            <!-- Set hint for below EditText programmatically -->
+            <!-- Set EditText hint property programmatically -->
 
             <EditText
                 android:id="@+id/input_field_editable"
