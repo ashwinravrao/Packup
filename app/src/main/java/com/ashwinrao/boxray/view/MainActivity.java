@@ -65,12 +65,10 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setBackgroundColor(color);
     }
 
-    // Rao Convenience Method
     public FloatingActionButton getFloatingActionButton() {
         return mFAB;
     }
 
-    // Rao Convenience Method
     public void setActionBarTitle(String title) {
         Objects.requireNonNull(getSupportActionBar()).setTitle(title);
     }
@@ -103,6 +101,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_search) {
+            // todo replace with SearchView implementation
             Snackbar.make(this.findViewById(R.id.fragment_container), "Searching...", Snackbar.LENGTH_LONG).show();
         }
 
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
