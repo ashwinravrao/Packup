@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -15,105 +15,123 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <include
-                        android:id="@+id/name_input"
-                        android:layout_width="match_parent"
+                    <LinearLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        layout="@layout/module_field" />
+                        android:layout_weight="0.7"
+                        android:orientation="vertical">
 
-                    <include
-                        android:id="@+id/source_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        layout="@layout/module_field" />
+                        <include
+                            android:id="@+id/name_input"
+                            layout="@layout/module_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
 
-                    <include
-                        android:id="@+id/dest_input"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        layout="@layout/module_field" />
+                        <include
+                            android:id="@+id/source_input"
+                            layout="@layout/module_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
 
-                    <androidx.cardview.widget.CardView
-                        style="@style/AppTheme.InputField.OuterCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        <include
+                            android:id="@+id/dest_input"
+                            layout="@layout/module_field"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
 
                         <androidx.cardview.widget.CardView
-                            style="@style/AppTheme.InputField.InnerCard"
+                            style="@style/AppTheme.InputField.OuterCard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <LinearLayout
+                            <androidx.cardview.widget.CardView
+                                style="@style/AppTheme.InputField.InnerCard"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:animateLayoutChanges="true"
-                                android:orientation="horizontal">
+                                android:layout_height="wrap_content">
 
-                                <ImageView
-                                    android:id="@+id/add_item_image_view"
-                                    android:layout_width="wrap_content"
+                                <LinearLayout
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/ic_add_item_disabled"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_gravity="center_vertical"/>
+                                    android:animateLayoutChanges="true"
+                                    android:orientation="horizontal">
 
-                                <EditText
-                                    android:id="@+id/add_item_field_editable"
-                                    style="@style/AppTheme.InputField.Editable" />
+                                    <ImageView
+                                        android:id="@+id/add_item_image_view"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_marginStart="8dp"
+                                        android:src="@drawable/ic_add_item_disabled" />
 
-                            </LinearLayout>
+                                    <EditText
+                                        android:id="@+id/add_item_field_editable"
+                                        style="@style/AppTheme.InputField.Editable" />
+
+                                </LinearLayout>
+
+                            </androidx.cardview.widget.CardView>
 
                         </androidx.cardview.widget.CardView>
 
-                    </androidx.cardview.widget.CardView>
+                    </LinearLayout>
 
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:layout_marginStart="12dp">
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/choose_photo_card"
-                        style="@style/AppTheme.InputField.OuterCard"
-                        android:layout_width="match_parent"
-                        android:layout_height="90dp"
-                        android:layout_marginStart="4dp"
-                        android:foreground="?android:attr/selectableItemBackground">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="0.25"
+                        android:orientation="vertical">
 
                         <androidx.cardview.widget.CardView
-                            style="@style/AppTheme.InputField.InnerCard"
+                            android:id="@+id/choose_photo_card"
+                            style="@style/AppTheme.InputField.OuterCard"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="90dp"
+                            android:layout_marginStart="4dp"
+                            android:foreground="?android:attr/selectableItemBackground">
 
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_gravity="center"
-                                android:src="@drawable/ic_menu_camera"/>
+                            <androidx.cardview.widget.CardView
+                                style="@style/AppTheme.InputField.InnerCard"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_menu_camera" />
+
+                            </androidx.cardview.widget.CardView>
 
                         </androidx.cardview.widget.CardView>
 
-                    </androidx.cardview.widget.CardView>
+                    </LinearLayout>
 
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:background="@color/cardbordercolor"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/item_recycler_view"
+                    android:focusable="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </androidx.recyclerview.widget.RecyclerView>
 
             </LinearLayout>
 
@@ -123,12 +141,10 @@
             android:id="@+id/bottom_graphic_mars"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:scaleType="centerCrop"
-            android:src="@drawable/mars_fogg_edited"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:src="@drawable/mars_fogg_edited" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

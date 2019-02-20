@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:focusable="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/item_checkbox"
+            android:theme="@style/AppTheme.ItemCheckbox"
+            android:focusable="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/item"
+            android:hint="@string/add_item_field_title"
+            android:background="@null"
+            android:layout_gravity="bottom|center"
+            android:maxLines="1"
+            android:focusable="false"
+            android:inputType="textCapWords"
+            android:textSize="15sp"
+            android:textColorHint="@color/cardnumbercolor"
+            android:textColor="@color/textcolor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"/>
+
+    </LinearLayout>
+
+</layout>

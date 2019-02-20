@@ -5,37 +5,65 @@ import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ashwinrao.boxray.R;
+import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentAddEditBinding;
-import com.ashwinrao.boxray.util.Utilities;
+import com.ashwinrao.boxray.view.adapter.ItemAdapter;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class AddEditFragment extends Fragment {
 
-    private int mOriginalSoftInputMode;
+//    private int mOriginalSoftInputMode;
+//    private Box mExistingBox;
+//    private Box mNewBox;
+//    private int mBoxIdentifier;
+    private LiveData<Box> mBoxLiveData;
+    private List<String> mItems;
+    private BoxViewModel mBoxViewModel;
+    private FragmentManager mFragmentManager;
+    private MutableLiveData<List<String>> mItemsMLD;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FloatingActionButton fab = ((MainActivity) getActivity()).getFloatingActionButton();
+        FloatingActionButton fab = ((MainActivity) Objects.requireNonNull(getActivity())).getFloatingActionButton();
         if(fab != null) { fab.setVisibility(View.GONE); }
 
-        mOriginalSoftInputMode = Utilities.applyFragmentSoftInput(getActivity(), null);
+        mFragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
+        mBoxViewModel = factory.create(BoxViewModel.class);
+        mItems = new ArrayList<>();
+        mItemsMLD = new MutableLiveData<>();
+
+//        mOriginalSoftInputMode = Utilities.applyFragmentSoftInput(getActivity(), null);
     }
 
     @Nullable
@@ -53,7 +81,44 @@ public class AddEditFragment extends Fragment {
             }
         });
 
+        binding.addItemFieldEditable.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        // Add item to recycler view on "Return" key press
+        binding.addItemFieldEditable.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if(v.getText().toString().length() >= 1) {
+                        saveItem(binding.addItemFieldEditable.getText().toString());
+                        v.setText(null);
+                    } else {
+                        Toast.makeText(getActivity(), "Make sure to name your item", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        // Items RecyclerView
+        binding.itemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        final ItemAdapter adapter = new ItemAdapter(getActivity());
+        binding.itemRecyclerView.setAdapter(adapter);
+        mItemsMLD.observe(this, new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                adapter.setItems(strings);
+                binding.itemRecyclerView.setAdapter(adapter);
+            }
+        });
+
         return binding.getRoot();
+    }
+
+    private void saveItem(String item) {
+        mItems.add(0, item);
+        mItemsMLD.setValue(mItems);
     }
 
     private void configureAddItemField(@NonNull final FragmentAddEditBinding binding) {
@@ -109,6 +174,6 @@ public class AddEditFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
+//        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
     }
 }

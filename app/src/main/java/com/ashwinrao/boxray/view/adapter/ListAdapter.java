@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
-import com.ashwinrao.boxray.databinding.BoxViewholderBinding;
+import com.ashwinrao.boxray.databinding.ViewholderBoxBinding;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
 
@@ -35,7 +35,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     @NonNull
     @Override
     public BoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        BoxViewholderBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.box_viewholder, parent, false);
+        ViewholderBoxBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.viewholder_box, parent, false);
         return new BoxViewHolder(binding);
     }
 
@@ -53,9 +53,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
     public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private BoxViewholderBinding binding;
+        private ViewholderBoxBinding binding;
 
-        public BoxViewHolder(@NonNull BoxViewholderBinding binding) {
+        public BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);
