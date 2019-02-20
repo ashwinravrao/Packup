@@ -8,6 +8,8 @@
     <color name="boxnumbercolor">#996C6C6C</color>
     <color name="cardbordercolor">#1A000000</color>
     <color name="iconDisabledColor">#80000000</color>
+    <color name="divider">#707070</color>
+    <color name="mutedGrayButtonColor">#CC4E4E4E</color>
 
     <!-- AppTheme.Dark -->
     <color name="colorPrimaryNight">#303030</color>

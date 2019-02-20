@@ -15,6 +15,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -120,11 +121,14 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/divider"
+                    android:visibility="invisible"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="0.5dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="24dp"
-                    android:background="@color/cardbordercolor"/>
+                    android:alpha="0.5"
+                    android:background="@color/divider"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/item_recycler_view"

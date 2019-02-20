@@ -21,9 +21,11 @@
 
     <!-- ListFragment -->
     <string name="box_name_placeholder">Kitchen Supplies</string>
-    <string name="box_num_items_placeholder">%1$d items</string>
+    <string name="box_num_items_placeholder">%1$d adapterItems</string>
     <string name="box_number_placeholder">Box # %1$d</string>
 
     <!-- DetailFragment -->
     <string name="app_placeholder">PLACEHOLDER</string>
+    <string name="snackbar_item_deleted">Item deleted</string>
+    <string name="Undo">Undo</string>
 </resources>

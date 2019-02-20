@@ -72,48 +72,35 @@ public class AddEditFragment extends Fragment {
         final FragmentAddEditBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_edit, container, false);
         configureInputFields(binding);
         configureAddItemField(binding);
-
-        binding.choosePhotoCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // todo add image picker with option for launching camera
-                Snackbar.make(Objects.requireNonNull(getActivity()).getWindow().getDecorView().findViewById(R.id.drawer_layout), "Add more items", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-
-        binding.addItemFieldEditable.setImeOptions(EditorInfo.IME_ACTION_DONE);
-
-        // Add item to recycler view on "Return" key press
-        binding.addItemFieldEditable.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if(v.getText().toString().length() >= 1) {
-                        saveItem(binding.addItemFieldEditable.getText().toString());
-                        v.setText(null);
-                    } else {
-                        Toast.makeText(getActivity(), "Make sure to name your item", Toast.LENGTH_SHORT).show();
-                    }
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
+        configureChoosePhotoButton(binding);
 
         // Items RecyclerView
         binding.itemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final ItemAdapter adapter = new ItemAdapter(getActivity());
+        final ItemAdapter adapter = new ItemAdapter(getActivity(), (Objects.requireNonNull(getActivity()))
+                .getWindow()
+                .getDecorView()
+                .findViewById(R.id.drawer_layout), mItemsMLD);
         binding.itemRecyclerView.setAdapter(adapter);
         mItemsMLD.observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                adapter.setItems(strings);
+                if(strings.size() > 0) { binding.divider.setVisibility(View.VISIBLE); }
+                else { binding.divider.setVisibility(View.INVISIBLE); }
+                adapter.setAdapterItems(strings);
                 binding.itemRecyclerView.setAdapter(adapter);
             }
         });
 
         return binding.getRoot();
+    }
+
+    private void configureChoosePhotoButton(@NonNull final FragmentAddEditBinding binding) {
+        binding.choosePhotoCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(Objects.requireNonNull(getActivity()).getWindow().getDecorView().findViewById(R.id.drawer_layout), "Add more items", Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void saveItem(String item) {
@@ -139,9 +126,36 @@ public class AddEditFragment extends Fragment {
                 }
             }
         });
+
+        binding.addItemFieldEditable.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+        // Add item to recycler view on "Return" key press
+        binding.addItemFieldEditable.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+
+                    if(v.getText().toString().length() >= 1) {
+                        saveItem(binding.addItemFieldEditable.getText().toString());
+                        v.setText(null);
+                    } else {
+                        Toast.makeText(getActivity(), "Make sure to name your item", Toast.LENGTH_SHORT).show();
+                    }
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
     }
 
     private void configureInputFields(@NonNull final FragmentAddEditBinding binding) {
+        // Bring nested scroll view to front (over the bottom-anchored ImageView)
+        binding.nestedScrollView.bringToFront();
+
         String[] field_titles = {getString(R.string.name_field_title), getString(R.string.source_field_title), getString(R.string.dest_field_title)};
         final View[] views = {binding.nameInput, binding.sourceInput, binding.destInput};
 
@@ -171,9 +185,9 @@ public class AddEditFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
-    }
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+////        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
+//    }
 }
