@@ -60,6 +60,7 @@ public class AddEditFragment extends Fragment {
         mFragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
         mBoxViewModel = factory.create(BoxViewModel.class);
+
         mItems = new ArrayList<>();
         mItemsMLD = new MutableLiveData<>();
 
@@ -70,6 +71,7 @@ public class AddEditFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentAddEditBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_edit, container, false);
+
         configureInputFields(binding);
         configureAddItemField(binding);
         configureChoosePhotoButton(binding);
@@ -84,14 +86,24 @@ public class AddEditFragment extends Fragment {
         mItemsMLD.observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                if(strings.size() > 0) { binding.divider.setVisibility(View.VISIBLE); }
-                else { binding.divider.setVisibility(View.INVISIBLE); }
+                toggleViewsOnChanged(strings, binding);
                 adapter.setAdapterItems(strings);
                 binding.itemRecyclerView.setAdapter(adapter);
             }
         });
 
         return binding.getRoot();
+    }
+
+    private void toggleViewsOnChanged(@NonNull List<String> strings, final FragmentAddEditBinding binding) {
+        if(strings.size() > 0) {
+            binding.divider.setVisibility(View.VISIBLE);
+            binding.bottomGraphicMars.setImageDrawable(getResources().getDrawable(R.drawable.mars_fogg_frosted, Objects.requireNonNull(getActivity()).getTheme()));
+        } else {
+            binding.divider.setVisibility(View.INVISIBLE);
+            binding.bottomGraphicMars.setImageDrawable(getResources().getDrawable(R.drawable.mars_fogg_edited, Objects.requireNonNull(getActivity()).getTheme()));
+        }
+
     }
 
     private void configureChoosePhotoButton(@NonNull final FragmentAddEditBinding binding) {
