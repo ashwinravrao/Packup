@@ -98,7 +98,7 @@
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginStart">8dp</item>
         <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textSize">12sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:visibility">gone</item>
     </style>
 
@@ -110,7 +110,13 @@
         <item name="android:inputType">textCapWords</item>
         <item name="android:textColor">@color/textcolor</item>
         <item name="android:textColorHint">@color/textcolor</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="AppTheme.InputField.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
+        <item name="android:colorControlNormal">@color/colorAccent</item>
+        <item name="android:colorControlActivated">@color/textcolor</item>
+        <item name="android:colorControlHighlight">@color/textcolor_muted</item>
     </style>
 
 </resources>

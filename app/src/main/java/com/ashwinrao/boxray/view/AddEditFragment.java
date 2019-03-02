@@ -22,6 +22,8 @@ import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +31,17 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 public class AddEditFragment extends Fragment {
 
@@ -44,6 +50,7 @@ public class AddEditFragment extends Fragment {
 //    private Box mNewBox;
 //    private int mBoxIdentifier;
     private LiveData<Box> mBoxLiveData;
+    private ItemAdapter mAdapter;
     private List<String> mItems;
     private BoxViewModel mBoxViewModel;
     private FragmentManager mFragmentManager;
@@ -78,17 +85,18 @@ public class AddEditFragment extends Fragment {
 
         // Items RecyclerView
         binding.itemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final ItemAdapter adapter = new ItemAdapter(getActivity(), (Objects.requireNonNull(getActivity()))
+        mAdapter = new ItemAdapter(getActivity(), (Objects.requireNonNull(getActivity()))
                 .getWindow()
                 .getDecorView()
                 .findViewById(R.id.drawer_layout), mItemsMLD);
-        binding.itemRecyclerView.setAdapter(adapter);
+        binding.itemRecyclerView.setAdapter(mAdapter);
+
         mItemsMLD.observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 toggleViewsOnChanged(strings, binding);
-                adapter.setAdapterItems(strings);
-                binding.itemRecyclerView.setAdapter(adapter);
+                mAdapter.setAdapterItems(strings);
+                binding.itemRecyclerView.setAdapter(mAdapter);
             }
         });
 
@@ -168,29 +176,16 @@ public class AddEditFragment extends Fragment {
         // Bring nested scroll view to front (over the bottom-anchored ImageView)
         binding.nestedScrollView.bringToFront();
 
-        String[] field_titles = {getString(R.string.name_field_title), getString(R.string.source_field_title), getString(R.string.dest_field_title)};
-        final View[] views = {binding.nameInput, binding.sourceInput, binding.destInput};
+        final TextInputEditText[] tiets = {binding.nameEditable, binding.srcEditable, binding.destEditable};
 
-        for (int i = 0; i < views.length; i++) {
-            final TextView hint = views[i].findViewById(R.id.input_field_hint);
-            final EditText editable = views[i].findViewById(R.id.input_field_editable);
-
-            hint.setText(field_titles[i]);
-            editable.setHint(field_titles[i]);
-
-            editable.addTextChangedListener(new TextWatcher() {
+        for (final TextInputEditText tiet : tiets) {
+            tiet.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if(s.toString().length() > 0) {
-                        hint.setVisibility(View.VISIBLE);
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if(!hasFocus) {
+                        tiet.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.colorAccent));
                     } else {
-                        hint.setVisibility(View.GONE);
+                        tiet.setTextColor(ContextCompat.getColor(Objects.requireNonNull(getActivity()), R.color.textcolor));
                     }
                 }
             });

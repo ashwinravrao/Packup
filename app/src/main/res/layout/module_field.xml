@@ -1,36 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/outer_card_view"
-    style="@style/AppTheme.InputField.OuterCard"
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/til"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:boxBackgroundMode="outline"
+    app:boxCornerRadiusTopStart="5dp"
+    app:boxCornerRadiusTopEnd="5dp"
+    app:boxCornerRadiusBottomStart="5dp"
+    app:boxCornerRadiusBottomEnd="5dp"
+    android:layout_marginBottom="16dp"
+    android:textColorHint="@color/textcolor_muted">
 
-    <androidx.cardview.widget.CardView
-        style="@style/AppTheme.InputField.InnerCard"
-        android:id="@+id/inner_card_view"
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/tiet"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:textColor="@color/textcolor"
+        android:inputType="textCapWords"
+        android:paddingStart="12dp"
+        android:paddingEnd="8dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:orientation="horizontal">
+</com.google.android.material.textfield.TextInputLayout>
+<!--<androidx.cardview.widget.CardView -->
+    <!--android:id="@+id/outer_card_view"-->
+    <!--style="@style/AppTheme.InputField.OuterCard"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
-            <!-- Set TextView text property programmatically -->
+    <!--<androidx.cardview.widget.CardView-->
+        <!--style="@style/AppTheme.InputField.InnerCard"-->
+        <!--android:id="@+id/inner_card_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
-            <TextView
-                android:id="@+id/input_field_hint"
-                style="@style/AppTheme.InputField.Hint" />
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:animateLayoutChanges="true"-->
+            <!--android:orientation="horizontal">-->
 
-            <!-- Set EditText hint property programmatically -->
+            <!--&lt;!&ndash; Set TextView text property programmatically &ndash;&gt;-->
 
-            <EditText
-                android:id="@+id/input_field_editable"
-                style="@style/AppTheme.InputField.Editable" />
+            <!--<TextView-->
+                <!--android:id="@+id/input_field_hint"-->
+                <!--style="@style/AppTheme.InputField.Hint" />-->
 
-        </LinearLayout>
+            <!--&lt;!&ndash; Set EditText hint property programmatically &ndash;&gt;-->
 
-    </androidx.cardview.widget.CardView>
+            <!--<EditText-->
+                <!--android:id="@+id/input_field_editable"-->
+                <!--style="@style/AppTheme.InputField.Editable" />-->
 
-</androidx.cardview.widget.CardView>
+        <!--</LinearLayout>-->
+
+    <!--</androidx.cardview.widget.CardView>-->
+
+<!--</androidx.cardview.widget.CardView>-->

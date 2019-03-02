@@ -9,6 +9,7 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.ViewholderItemBinding;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     private View mActivityRoot;
     private Context mContext;
-    private List<String> mAdapterItems;
+    private List<String> mAdapterItems = new ArrayList<>();
     private MutableLiveData<List<String>> mFragmentItems;
 
     public ItemAdapter(Context context, View activityRoot, MutableLiveData<List<String>> fragmentItems) {
