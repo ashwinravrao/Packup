@@ -79,15 +79,15 @@
     <!-- Input Field Styles -->
     <style name="AppTheme.InputField.OuterCard" parent="CardView.Light">
         <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">7dp</item>
+        <item name="cardCornerRadius">5dp</item>
         <item name="cardBackgroundColor">@color/cardbordercolor</item>
         <item name="contentPadding">1dp</item>
     </style>
 
     <style name="AppTheme.InputField.InnerCard" parent="CardView.Light">
         <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">7dp</item>
-        <item name="cardBackgroundColor">@color/cardbackgroundcolor</item>
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardBackgroundColor">@color/colorPrimary</item>
         <item name="contentPadding">0dp</item>
 
     </style>

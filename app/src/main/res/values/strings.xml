@@ -28,4 +28,5 @@
     <string name="app_placeholder">PLACEHOLDER</string>
     <string name="snackbar_item_deleted">Item deleted</string>
     <string name="Undo">Undo</string>
+    <string name="save_button_label">save box</string>
 </resources>

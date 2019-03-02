@@ -115,10 +115,14 @@ public class AddEditFragment extends Fragment {
     }
 
     private void configureChoosePhotoButton(@NonNull final FragmentAddEditBinding binding) {
-        binding.choosePhotoCard.setOnClickListener(new View.OnClickListener() {
+        binding.photoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(Objects.requireNonNull(getActivity()).getWindow().getDecorView().findViewById(R.id.drawer_layout), "Add more items", Snackbar.LENGTH_SHORT).show();
+                if(mItems.size() == 0) {
+                    Snackbar.make(Objects.requireNonNull(getActivity()).getWindow().getDecorView().findViewById(R.id.drawer_layout), "Add more items", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Opening image picker...", Toast.LENGTH_SHORT).show();    // todo replace with image chooser dialog
+                }
             }
         });
     }
@@ -129,35 +133,18 @@ public class AddEditFragment extends Fragment {
     }
 
     private void configureAddItemField(@NonNull final FragmentAddEditBinding binding) {
-        binding.addItemFieldEditable.setHint(R.string.add_item_field_title);
-        binding.addItemFieldEditable.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString().length() > 0) {
-                    binding.addItemImageView.setImageResource(R.drawable.ic_add_item_enabled);
-                } else {
-                    binding.addItemImageView.setImageResource(R.drawable.ic_add_item_disabled);
-                }
-            }
-        });
-
-        binding.addItemFieldEditable.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        binding.itemEditable.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // Add item to recycler view on "Return" key press
-        binding.addItemFieldEditable.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        binding.itemEditable.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
 
                     if(v.getText().toString().length() >= 1) {
-                        saveItem(binding.addItemFieldEditable.getText().toString());
+                        saveItem(Objects.requireNonNull(binding.itemEditable.getText()).toString());
                         v.setText(null);
                     } else {
                         Toast.makeText(getActivity(), "Make sure to name your item", Toast.LENGTH_SHORT).show();

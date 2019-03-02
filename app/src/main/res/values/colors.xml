@@ -7,7 +7,7 @@
     <color name="textcolor">#4E4E4E</color>
     <color name="textcolor_muted">#CC4E4E4E</color>
     <color name="boxnumbercolor">#996C6C6C</color>
-    <color name="cardbordercolor">#1A000000</color>
+    <color name="cardbordercolor">#33000000</color>
     <color name="iconDisabledColor">#80000000</color>
     <color name="divider">#707070</color>
     <color name="mutedGrayButtonColor">#CC4E4E4E</color>
@@ -21,7 +21,7 @@
     <!-- Nonspecific colors -->
     <color name="colorAccent">#1788D3</color>
     <color name="cardbackgroundcolor">#E6E6E6</color>
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">#33000000</color>
+    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/textcolor_muted</color>
 
 
 </resources>
