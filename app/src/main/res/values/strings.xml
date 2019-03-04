@@ -16,7 +16,7 @@
     <string name="source_field_title">Source</string>
     <string name="dest_field_title">Destination</string>
     <string name="add_item_field_title">Add item</string>
-    <string name="category_button_text">Category</string>
+    <string name="category_button_text">Categories</string>
     <string name="ID_LEDGER">com.ashwinrao.boxray.ID_LEDGER_KEY</string>
 
     <!-- ListFragment -->
@@ -29,4 +29,7 @@
     <string name="snackbar_item_deleted">Item deleted</string>
     <string name="Undo">Undo</string>
     <string name="save_button_label">save box</string>
+    <string name="box_number_label">Box Number</string>
+    <string name="label_instructions_label">box label helper</string>
+    <string name="add_edit_fragment_action_bar_title">Add box</string>
 </resources>

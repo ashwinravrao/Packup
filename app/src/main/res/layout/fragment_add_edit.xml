@@ -2,21 +2,28 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_edit_root"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="false">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
             <LinearLayout
                 android:id="@+id/content_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="16dp">
 
                 <LinearLayout
                     android:id="@+id/name_source_photo_container"
@@ -160,31 +167,34 @@
                     android:id="@+id/add_item_save_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="24dp"
                     android:orientation="horizontal">
+
+                    <!-- Label Instructions Button -->
 
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/item_input"
+                        android:id="@+id/box_number_input"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="0.7"
-                        android:hint="@string/add_item_field_title"
+                        android:hint="@string/box_number_label"
                         android:textColorHint="@color/textcolor"
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusBottomEnd="5dp"
                         app:boxCornerRadiusBottomStart="5dp"
                         app:boxCornerRadiusTopEnd="5dp"
-                        app:boxCornerRadiusTopStart="5dp">
+                        app:boxCornerRadiusTopStart="5dp"
+                        app:hintAnimationEnabled="false">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/item_editable"
+                            android:id="@+id/box_number_editable"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textCapWords"
                             android:paddingStart="12dp"
                             android:paddingEnd="8dp"
-                            android:textColor="@color/textcolor"
+                            android:textColor="@color/colorAccent"
                             android:textSize="16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -210,11 +220,7 @@
                     android:id="@+id/divider"
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginBottom="24dp"
-                    android:alpha="0.5"
-                    android:background="@color/divider"
-                    android:visibility="invisible" />
+                    android:background="@color/textcolor_muted" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/item_recycler_view"
@@ -224,6 +230,41 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
+                <LinearLayout
+                    android:id="@+id/item_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/background_outline_photo_button"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/item_plus_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="12dp"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:src="@drawable/ic_add_item_disabled" />
+
+                    <EditText
+                        android:id="@+id/item_editable"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:backgroundTint="@android:color/transparent"
+                        android:hint="@string/add_item_field_title"
+                        android:inputType="textCapWords"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="0dp"
+                        android:textColor="@color/textcolor"
+                        android:textColorHint="@color/textcolor"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
@@ -232,10 +273,12 @@
             android:id="@+id/bottom_graphic_mars"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/mars_fogg_edited" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
