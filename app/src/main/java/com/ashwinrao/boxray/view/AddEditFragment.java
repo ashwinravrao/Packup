@@ -36,6 +36,8 @@ import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -47,14 +49,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class AddEditFragment extends Fragment {
 
-//    private Box mExistingBox;
-//    private Box mNewBox;
     private LiveData<Box> mBoxLiveData;
     private ItemAdapter mAdapter;
     private List<String> mItems;
     private BoxViewModel mBoxViewModel;
     private FragmentManager mFragmentManager;
     private SharedPreferences mPreferences;
+    private ActionBar mActivityActionBar;
     private MutableLiveData<List<String>> mItemsMLD;
 
     private static final String CURRENT_BOX_IDENTIFIER = "current_box_identifier";
@@ -66,38 +67,12 @@ public class AddEditFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FloatingActionButton fab = ((MainActivity) Objects.requireNonNull(getActivity())).getFloatingActionButton();
-        if(fab != null) { fab.setVisibility(View.GONE); }
-
         mFragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
         mBoxViewModel = factory.create(BoxViewModel.class);
 
         mItems = new ArrayList<>();
         mItemsMLD = new MutableLiveData<>();
-
-//        Log.d(TAG, "Number of attached fragments (pre-removal): " + getActivity().getSupportFragmentManager().getFragments().size());
-
-//        (getActivity()).getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getActivity().getSupportFragmentManager().findFragmentByTag("ListFragment"))).commit();
-
-//        for (Fragment fragment : mFragmentManager.getFragments()) {
-//            Log.d(TAG, fragment.getTag());
-//        }
-
-//        Log.d(TAG, "Number of attached fragments (post-removal): " + getActivity().getSupportFragmentManager().getFragments().size());
-
-
-//        Log.d(TAG, "onCreate: " + mFragmentManager.getFragments());
-
-//        mPreferences = getActivity().getSharedPreferences(getString(R.string.ID_LEDGER), Context.MODE_PRIVATE);
-
-//        mFragmentManager.beginTransaction().addToBackStack(null).detach(Objects.requireNonNull(mFragmentManager.findFragmentByTag("ListFragment"))).commit();
-//
-//        if(mFragmentManager.findFragmentByTag("ListFragment").isDetached()) {
-//            Log.d(TAG, "onCreate: ListFragment has been detached");
-//        }
-
-//        mOriginalSoftInputMode = Utilities.applyFragmentSoftInput(getActivity(), null);
     }
 
     @Override
@@ -111,6 +86,7 @@ public class AddEditFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentAddEditBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_edit, container, false);
 
+//        configureToolbar(binding);
         configureInputFields(binding);
         configureAddItemField(binding);
         configureChoosePhotoButton(binding);
@@ -156,20 +132,12 @@ public class AddEditFragment extends Fragment {
             Box box = new Box(r.nextInt(100),
                     binding.nameEditable.getText() == null ? "" : binding.nameEditable.getText().toString(),
                     binding.srcEditable.getText() == null ? "" : binding.srcEditable.getText().toString(),
-                    binding.destEditable.getText() == null ? "" : binding.destEditable.getText().toString());
+                    binding.destEditable.getText() == null ? "" : binding.destEditable.getText().toString(),
+                    mItems);
             mBoxViewModel.save(box);
             mFragmentManager.popBackStack();
         }
     }
-
-//    private void saveBox(@NonNull final FragmentAddEditBinding binding) {
-//        if(checkBoxRequirements(binding.nameInput)) {
-//            // todo replace hard-coded box number with one stored/retrieved from SharedPreferences
-//            Box box = new Box(43, binding.nameEditable.getText().toString(), binding.srcEditable.getText().toString(), binding.destEditable.getText().toString());
-//            mBoxViewModel.save(box);
-//            mFragmentManager.popBackStack();
-//        }
-//    }
 
     private boolean checkBoxRequirements(final TextInputLayout til) {
         boolean result = true;
@@ -198,12 +166,21 @@ public class AddEditFragment extends Fragment {
         return result;
     }
 
+    private void configureToolbar(@NonNull final FragmentAddEditBinding binding) {
+        // Hide activity's action bar
+//        mActivityActionBar = ((MainActivity) Objects.requireNonNull(getActivity())).getSupportActionBar();
+//        Objects.requireNonNull(mActivityActionBar).hide();
+
+//        // Set fragment custom action bar
+//        Toolbar toolbar = binding.toolbarAddEdit;
+//        ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(mToolbar);
+    }
+
     private void configureSaveBoxButton(@NonNull final FragmentAddEditBinding binding) {
 
         binding.saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Utilities.hideKeyboardFrom(Objects.requireNonNull(getActivity()), v);
                 saveBox(binding);
             }
         });
@@ -219,19 +196,10 @@ public class AddEditFragment extends Fragment {
     }
 
     private void hideBackgroundViewOnSoftInputVisible(@NonNull ViewGroup root, @NonNull View viewToHide) {
-        // Hides the specified view when the soft keyboard is visible, so as not to resize along with other views
-        // Solution borrowed from: https://stackoverflow.com/questions/4745988/how-do-i-detect-if-software-keyboard-is-visible-on-android-device
 
-        // todo use the implementation from Utilities.class (once it gets pulled out of ListFragment's onResume())
-        Rect r = new Rect();
-        root.getWindowVisibleDisplayFrame(r);
-        int screenHeight = root.getRootView().getHeight();
-        // r.bottom is the position above soft keypad or device button.
-        // if keypad is shown, the r.bottom is smaller than that before.
-        int keypadHeight = screenHeight - r.bottom;
-        // applying 0.15 multiplier as threshold for min screenHeight that a keyboard should take up
-        if (keypadHeight > screenHeight * 0.15) { viewToHide.setVisibility(View.INVISIBLE); } // keyboard is opened
-        else { viewToHide.setVisibility(View.VISIBLE); } // keyboard is closed
+        // Hides the specified view when the soft keyboard is visible, so as not to resize along with other views
+        if(Utilities.keyboardIsShowing(root)) { viewToHide.setVisibility(View.INVISIBLE); }
+        else { viewToHide.setVisibility(View.VISIBLE); }
     }
 
     private void toggleViewsOnChanged(@NonNull List<String> strings, final FragmentAddEditBinding binding) {
@@ -324,8 +292,5 @@ public class AddEditFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Objects.requireNonNull(((MainActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(getString(R.string.box_list_fragment_action_bar_title));
-        ((MainActivity) getActivity()).getFloatingActionButton().setVisibility(View.VISIBLE);
-
-        //        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
     }
 }

@@ -2,12 +2,14 @@ package com.ashwinrao.boxray.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Rect;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 
@@ -47,10 +49,13 @@ public class Utilities {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-//    // Manually hide software keyboard (alternate method)
-//    public static void hideKeyboardFromAlt(Activity activity) {
-//        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-//    }
+    // Detect soft keyboard
+    public static boolean keyboardIsShowing(@NonNull View root) {
+        Rect r = new Rect();
+        root.getWindowVisibleDisplayFrame(r);
+        int screenHeight = root.getRootView().getHeight();
+        int keypadHeight = screenHeight - r.bottom;
+        return keypadHeight > screenHeight * 0.15;
+    }
 
 }

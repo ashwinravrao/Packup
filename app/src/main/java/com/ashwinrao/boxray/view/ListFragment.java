@@ -37,7 +37,6 @@ public class ListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
     private LiveData<List<Box>> mBoxesLD;
-    private FloatingActionButton mFab;
     private FragmentManager mFragmentManager;
 
     @Override
@@ -53,24 +52,16 @@ public class ListFragment extends Fragment {
         final BoxViewModel viewModel = factory.create(BoxViewModel.class);
 
         mBoxesLD = viewModel.getBoxes();
-
-        mFab = ((MainActivity) getActivity()).getFloatingActionButton();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        // todo pull out into own function in Utilities.class
         View root = Objects.requireNonNull(this.getView()).getRootView();
-        Rect r = new Rect();
-        root.getWindowVisibleDisplayFrame(r);
-        int screenHeight = root.getRootView().getHeight();
-        // r.bottom is the position above soft keypad or device button.
-        // if keypad is shown, the r.bottom is smaller than that before.
-        int keypadHeight = screenHeight - r.bottom;
-        // applying 0.15 multiplier as threshold for min screenHeight that a keyboard should take up
-        if (keypadHeight > screenHeight * 0.15) { Utilities.hideKeyboardFrom(Objects.requireNonNull(getActivity()), root);} // keyboard is opened
+        if(Utilities.keyboardIsShowing(root)) {
+            Utilities.hideKeyboardFrom(Objects.requireNonNull(getActivity()), root);
+        }
     }
 
     @Nullable
@@ -79,8 +70,7 @@ public class ListFragment extends Fragment {
 
         final FragmentBoxListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_box_list, container, false);
 
-        // todo work on animations
-        mFab.setOnClickListener(new View.OnClickListener() {
+        binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFragmentManager

@@ -32,11 +32,12 @@ public class Box {
     @ColumnInfo(name = "favorite")
     private boolean mFavorite;
 
-    public Box(int id, String name, String source, String destination) {
+    public Box(int id, String name, String source, String destination, List<String> contents) {
         mId = id;
         mName = name;
         mSource = source;
         mDestination = destination;
+        mContents = contents;
         mCreatedDate = new Date();
     }
 

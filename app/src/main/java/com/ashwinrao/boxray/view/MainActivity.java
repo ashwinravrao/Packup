@@ -1,20 +1,13 @@
 package com.ashwinrao.boxray.view;
 
-import android.app.Activity;
-import android.content.Context;
+
 import android.os.Bundle;
 
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.util.Utilities;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import android.util.Log;
-import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -25,14 +18,12 @@ import androidx.fragment.app.FragmentManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private FloatingActionButton mFAB;
     private NavigationView mNavigationView;
 
     @Override
@@ -41,15 +32,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mFAB = findViewById(R.id.fab);
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -65,27 +47,10 @@ public class MainActivity extends AppCompatActivity
         if(fragment == null) {
             manager.beginTransaction().replace(R.id.fragment_container, new ListFragment(), "ListFragment").commit();
         }
-
-//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//            @Override
-//            public void onBackStackChanged() {
-//                Utilities.hideKeyboardFromAlt(MainActivity.this);
-//            }
-//        });
-    }
-
-    protected void showSoftwareKeyboard(boolean showKeyboard){
-        final InputMethodManager inputManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputManager.hideSoftInputFromWindow(Objects.requireNonNull(this.getCurrentFocus()).getWindowToken(), showKeyboard ? InputMethodManager.SHOW_FORCED : InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     public void setNavigationViewBackgroundColor(int color) {
         mNavigationView.setBackgroundColor(color);
-    }
-
-    public FloatingActionButton getFloatingActionButton() {
-        return mFAB;
     }
 
     public void setActionBarTitle(String title) {
