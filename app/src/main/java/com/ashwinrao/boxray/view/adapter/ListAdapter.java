@@ -43,7 +43,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         Box box = mBoxes.get(position);
         holder.binding.setBox(box);
-        holder.binding.numItemsTextView.setText(mContext.getString(R.string.box_num_items_placeholder, box.getContents().size()));
+        holder.binding.boxNumberTextView.setText(String.valueOf(box.getId()));
+        holder.binding.numItemsTextView.setText(box.getContents() == null ? "No items" : mContext.getString(R.string.box_num_items_placeholder, box.getContents().size()));
+//        holder.binding.numItemsTextView.setText(mContext.getString(R.string.box_num_items_placeholder, box.getContents().size()));
     }
 
     @Override
@@ -51,25 +53,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         return mBoxes == null ? 0 : mBoxes.size();
     }
 
-    public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class BoxViewHolder extends RecyclerView.ViewHolder {    // todo implement onClick listener interface
 
         private ViewholderBoxBinding binding;
 
         public BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.getRoot().setOnClickListener(this);
+//            this.binding.getRoot().setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View v) {
-            // todo pass box id via Bundle, retrieve corresponding box in DetailFragment via BoxViewModel
-            ((MainActivity) mContext)
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .replace(R.id.fragment_container, new DetailFragment(), "DetailFragment")
-                    .commit();
-        }
+//        @Override
+//        public void onClick(View v) {
+//            // todo pass box id via Bundle, retrieve corresponding box in DetailFragment via BoxViewModel
+//            ((MainActivity) mContext)
+//                    .getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .addToBackStack(null)
+//                    .replace(R.id.fragment_container, new DetailFragment(), "DetailFragment")
+//                    .commit();
+//        }
     }
 }

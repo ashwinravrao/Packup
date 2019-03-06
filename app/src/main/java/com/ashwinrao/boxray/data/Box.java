@@ -32,15 +32,11 @@ public class Box {
     @ColumnInfo(name = "favorite")
     private boolean mFavorite;
 
-    @ColumnInfo(name = "notes")
-    private String mNotes;
-
-    public Box(int id, String name, String source, String destination, String notes) {
+    public Box(int id, String name, String source, String destination) {
         mId = id;
         mName = name;
         mSource = source;
         mDestination = destination;
-        mNotes = notes;
         mCreatedDate = new Date();
     }
 
@@ -98,13 +94,5 @@ public class Box {
 
     public void setFavorite(boolean favorite) {
         mFavorite = favorite;
-    }
-
-    public String getNotes() {
-        return mNotes;
-    }
-
-    public void setNotes(String notes) {
-        mNotes = notes;
     }
 }

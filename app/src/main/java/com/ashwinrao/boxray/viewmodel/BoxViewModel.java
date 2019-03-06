@@ -29,4 +29,5 @@ public class BoxViewModel extends ViewModel {
     public void save(Box box) {
         mRepository.saveBox(box);
     }
+
 }

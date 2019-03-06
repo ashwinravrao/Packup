@@ -10,6 +10,7 @@ public class BoxRepository {
 
     private BoxDao mDao;
     private static BoxRepository sInstance;
+    private BoxDatabase mDatabase;
 
     public static BoxRepository getInstance(BoxDatabase db) {
         if(sInstance == null) {

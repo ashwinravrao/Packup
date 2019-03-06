@@ -21,8 +21,9 @@
 
     <!-- ListFragment -->
     <string name="box_name_placeholder">Kitchen Supplies</string>
-    <string name="box_num_items_placeholder">%1$d adapterItems</string>
+    <string name="box_num_items_placeholder">%1$d items</string>
     <string name="box_number_placeholder">Box # %1$d</string>
+    <string name="box_number_placeholder_small">43</string>
 
     <!-- DetailFragment -->
     <string name="app_placeholder">PLACEHOLDER</string>

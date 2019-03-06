@@ -1,6 +1,7 @@
 package com.ashwinrao.boxray.view;
 
 
+import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 
@@ -11,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,33 +32,34 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 
 public class AddEditFragment extends Fragment {
 
 //    private Box mExistingBox;
 //    private Box mNewBox;
-    private int mBoxIdentifier;
     private LiveData<Box> mBoxLiveData;
     private ItemAdapter mAdapter;
     private List<String> mItems;
     private BoxViewModel mBoxViewModel;
     private FragmentManager mFragmentManager;
+    private SharedPreferences mPreferences;
     private MutableLiveData<List<String>> mItemsMLD;
+
+    private static final String CURRENT_BOX_IDENTIFIER = "current_box_identifier";
+
+    private static final String TAG = "AddEditFragment";
 
 
     @Override
@@ -74,6 +76,26 @@ public class AddEditFragment extends Fragment {
         mItems = new ArrayList<>();
         mItemsMLD = new MutableLiveData<>();
 
+//        Log.d(TAG, "Number of attached fragments (pre-removal): " + getActivity().getSupportFragmentManager().getFragments().size());
+
+//        (getActivity()).getSupportFragmentManager().beginTransaction().remove(Objects.requireNonNull(getActivity().getSupportFragmentManager().findFragmentByTag("ListFragment"))).commit();
+
+//        for (Fragment fragment : mFragmentManager.getFragments()) {
+//            Log.d(TAG, fragment.getTag());
+//        }
+
+//        Log.d(TAG, "Number of attached fragments (post-removal): " + getActivity().getSupportFragmentManager().getFragments().size());
+
+
+//        Log.d(TAG, "onCreate: " + mFragmentManager.getFragments());
+
+//        mPreferences = getActivity().getSharedPreferences(getString(R.string.ID_LEDGER), Context.MODE_PRIVATE);
+
+//        mFragmentManager.beginTransaction().addToBackStack(null).detach(Objects.requireNonNull(mFragmentManager.findFragmentByTag("ListFragment"))).commit();
+//
+//        if(mFragmentManager.findFragmentByTag("ListFragment").isDetached()) {
+//            Log.d(TAG, "onCreate: ListFragment has been detached");
+//        }
 
 //        mOriginalSoftInputMode = Utilities.applyFragmentSoftInput(getActivity(), null);
     }
@@ -93,6 +115,7 @@ public class AddEditFragment extends Fragment {
         configureAddItemField(binding);
         configureChoosePhotoButton(binding);
         configureSoftInputBackgroundViewBehavior(binding);
+        configureSaveBoxButton(binding);
 
         // Items RecyclerView
         binding.itemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -116,6 +139,76 @@ public class AddEditFragment extends Fragment {
         return binding.getRoot();
     }
 
+    private int getBoxNumFromSharedPref() {
+        return mPreferences.getInt(CURRENT_BOX_IDENTIFIER, 1);  // returns 1 if key doesn't yet exist
+    }
+
+    private void saveBoxNumToSharedPref() {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(CURRENT_BOX_IDENTIFIER, getBoxNumFromSharedPref() + 1);
+        editor.apply();
+    }
+
+    private void saveBox(@NonNull final FragmentAddEditBinding binding) {
+        Random r = new Random();    // todo replace with actual box id generated/retrieved from SharedPreferences
+        if(checkBoxRequirements(binding.nameInput)) {
+
+            Box box = new Box(r.nextInt(100),
+                    binding.nameEditable.getText() == null ? "" : binding.nameEditable.getText().toString(),
+                    binding.srcEditable.getText() == null ? "" : binding.srcEditable.getText().toString(),
+                    binding.destEditable.getText() == null ? "" : binding.destEditable.getText().toString());
+            mBoxViewModel.save(box);
+            mFragmentManager.popBackStack();
+        }
+    }
+
+//    private void saveBox(@NonNull final FragmentAddEditBinding binding) {
+//        if(checkBoxRequirements(binding.nameInput)) {
+//            // todo replace hard-coded box number with one stored/retrieved from SharedPreferences
+//            Box box = new Box(43, binding.nameEditable.getText().toString(), binding.srcEditable.getText().toString(), binding.destEditable.getText().toString());
+//            mBoxViewModel.save(box);
+//            mFragmentManager.popBackStack();
+//        }
+//    }
+
+    private boolean checkBoxRequirements(final TextInputLayout til) {
+        boolean result = true;
+        // Check name field for valid input; returns true if condition satisfied
+        if(Objects.requireNonNull(til.getEditText()).getText().toString().isEmpty()) {
+            til.setError("Make sure your box has a name");
+            result = false;
+        }
+
+        til.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                til.setErrorEnabled(false);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        return result;
+    }
+
+    private void configureSaveBoxButton(@NonNull final FragmentAddEditBinding binding) {
+
+        binding.saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Utilities.hideKeyboardFrom(Objects.requireNonNull(getActivity()), v);
+                saveBox(binding);
+            }
+        });
+    }
+
     private void configureSoftInputBackgroundViewBehavior(@NonNull final FragmentAddEditBinding binding) {
         binding.addEditRoot.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -129,6 +222,7 @@ public class AddEditFragment extends Fragment {
         // Hides the specified view when the soft keyboard is visible, so as not to resize along with other views
         // Solution borrowed from: https://stackoverflow.com/questions/4745988/how-do-i-detect-if-software-keyboard-is-visible-on-android-device
 
+        // todo use the implementation from Utilities.class (once it gets pulled out of ListFragment's onResume())
         Rect r = new Rect();
         root.getWindowVisibleDisplayFrame(r);
         int screenHeight = root.getRootView().getHeight();
@@ -230,6 +324,8 @@ public class AddEditFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Objects.requireNonNull(((MainActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(getString(R.string.box_list_fragment_action_bar_title));
-//        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
+        ((MainActivity) getActivity()).getFloatingActionButton().setVisibility(View.VISIBLE);
+
+        //        Utilities.applyFragmentSoftInput(getActivity(), mOriginalSoftInputMode);
     }
 }

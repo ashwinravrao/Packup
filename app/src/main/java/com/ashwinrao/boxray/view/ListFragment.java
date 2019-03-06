@@ -1,13 +1,16 @@
 package com.ashwinrao.boxray.view;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentBoxListBinding;
+import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
@@ -23,6 +26,7 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,6 +51,7 @@ public class ListFragment extends Fragment {
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(( Objects.requireNonNull(getActivity())).getApplication());
         final BoxViewModel viewModel = factory.create(BoxViewModel.class);
+
         mBoxesLD = viewModel.getBoxes();
 
         mFab = ((MainActivity) getActivity()).getFloatingActionButton();
@@ -55,21 +60,33 @@ public class ListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        mFab.setVisibility(View.VISIBLE);
+
+        // todo pull out into own function in Utilities.class
+        View root = Objects.requireNonNull(this.getView()).getRootView();
+        Rect r = new Rect();
+        root.getWindowVisibleDisplayFrame(r);
+        int screenHeight = root.getRootView().getHeight();
+        // r.bottom is the position above soft keypad or device button.
+        // if keypad is shown, the r.bottom is smaller than that before.
+        int keypadHeight = screenHeight - r.bottom;
+        // applying 0.15 multiplier as threshold for min screenHeight that a keyboard should take up
+        if (keypadHeight > screenHeight * 0.15) { Utilities.hideKeyboardFrom(Objects.requireNonNull(getActivity()), root);} // keyboard is opened
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        FragmentBoxListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_box_list, container, false);
+        final FragmentBoxListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_box_list, container, false);
 
+        // todo work on animations
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mFragmentManager
                         .beginTransaction()
                         .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
                         .replace(R.id.fragment_container, new AddEditFragment(), "AddEditFragment")
                         .commit();
             }

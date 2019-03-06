@@ -1,8 +1,11 @@
 package com.ashwinrao.boxray.view;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import com.ashwinrao.boxray.R;
+import com.ashwinrao.boxray.util.Utilities;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -22,6 +25,7 @@ import androidx.fragment.app.FragmentManager;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Objects;
 
@@ -59,8 +63,21 @@ public class MainActivity extends AppCompatActivity
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.fragment_container);
         if(fragment == null) {
-            manager.beginTransaction().replace(R.id.fragment_container, new ListFragment()).commit();
+            manager.beginTransaction().replace(R.id.fragment_container, new ListFragment(), "ListFragment").commit();
         }
+
+//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//            @Override
+//            public void onBackStackChanged() {
+//                Utilities.hideKeyboardFromAlt(MainActivity.this);
+//            }
+//        });
+    }
+
+    protected void showSoftwareKeyboard(boolean showKeyboard){
+        final InputMethodManager inputManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(Objects.requireNonNull(this.getCurrentFocus()).getWindowToken(), showKeyboard ? InputMethodManager.SHOW_FORCED : InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     public void setNavigationViewBackgroundColor(int color) {

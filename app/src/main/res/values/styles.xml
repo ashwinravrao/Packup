@@ -62,7 +62,6 @@
     <style name="AppTheme.CardTextAppearance.SubHeading">
         <item name="android:layout_marginTop">52dp</item>
         <item name="android:textStyle">normal</item>
-        <item name="android:paddingStart">12dp</item>
         <item name="android:textSize">14sp</item>
     </style>
 
@@ -93,15 +92,15 @@
 
     </style>
     
-    <style name="AppTheme.InputField.Hint" parent="Widget.AppCompat.TextView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center_vertical</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:visibility">gone</item>
-    </style>
+    <!--<style name="AppTheme.InputField.Hint" parent="Widget.AppCompat.TextView">-->
+        <!--<item name="android:layout_width">wrap_content</item>-->
+        <!--<item name="android:layout_height">wrap_content</item>-->
+        <!--<item name="android:layout_gravity">center_vertical</item>-->
+        <!--<item name="android:layout_marginStart">8dp</item>-->
+        <!--<item name="android:textColor">@color/colorAccent</item>-->
+        <!--<item name="android:textSize">14sp</item>-->
+        <!--<item name="android:visibility">gone</item>-->
+    <!--</style>-->
 
     <style name="AppTheme.InputField.Editable" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">match_parent</item>

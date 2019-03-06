@@ -1,6 +1,10 @@
 package com.ashwinrao.boxray.util;
 
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Objects;
 
@@ -36,5 +40,17 @@ public class Utilities {
             return original;
         }
     }
+
+    // Manually hide software keyboard
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+//    // Manually hide software keyboard (alternate method)
+//    public static void hideKeyboardFromAlt(Activity activity) {
+//        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+//    }
 
 }
