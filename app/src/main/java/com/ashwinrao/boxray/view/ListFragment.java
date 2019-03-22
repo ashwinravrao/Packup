@@ -62,6 +62,10 @@ public class ListFragment extends Fragment {
         if(Utilities.keyboardIsShowing(root)) {
             Utilities.hideKeyboardFrom(Objects.requireNonNull(getActivity()), root);
         }
+
+        Objects.requireNonNull(((MainActivity) Objects.requireNonNull(getActivity())).getSupportActionBar()).setTitle(getString(R.string.box_list_fragment_action_bar_title));
+        ((MainActivity) Objects.requireNonNull(getActivity())).resetDrawerToggle();
+
     }
 
     @Nullable
@@ -77,7 +81,7 @@ public class ListFragment extends Fragment {
                         .beginTransaction()
                         .addToBackStack(null)
                         .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                        .replace(R.id.fragment_container, new AddEditFragment(), "AddEditFragment")
+                        .replace(R.id.fragment_container_main, new AddEditFragment(), "AddEditFragment")
                         .commit();
             }
         });

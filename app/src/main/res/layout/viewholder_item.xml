@@ -4,11 +4,15 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="4dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/background_outline_photo_button">
+        android:layout_marginTop="8dp">
+
+        <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/ic_drag_indicator"-->
+            <!--android:layout_gravity="center_vertical"/>-->
 
         <CheckBox
             android:id="@+id/item_checkbox"
@@ -16,16 +20,18 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:focusable="false"
+            android:layout_gravity="center_vertical"
             style="@style/AppTheme.ItemCheckbox"/>
 
         <EditText
             android:id="@+id/item"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="0.7"
             android:background="@null"
             android:textSize="16sp"
             android:maxLines="1"
+            android:layout_gravity="center_vertical"
             android:inputType="textCapWords"
             android:textColorHint="@color/cardnumbercolor"
             android:textColor="@color/textcolor"
@@ -40,68 +46,9 @@
             android:layout_height="wrap_content"
             android:background="@null"
             android:src="@drawable/ic_remove"
-            android:layout_gravity="center"
-            android:layout_marginEnd="4dp"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="16dp"/>
 
     </LinearLayout>
-
-        <!--<androidx.cardview.widget.CardView-->
-            <!--style="@style/AppTheme.InputField.OuterCard"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="16dp">-->
-
-            <!--<androidx.cardview.widget.CardView-->
-                <!--style="@style/AppTheme.InputField.InnerCard"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:padding="4dp"-->
-                    <!--android:layout_gravity="center_vertical">-->
-
-                    <!--<CheckBox-->
-                        <!--android:id="@+id/item_checkbox"-->
-                        <!--android:theme="@style/AppTheme.ItemCheckbox"-->
-                        <!--android:focusable="false"-->
-                        <!--android:layout_marginStart="4dp"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:scaleX="0.75"-->
-                        <!--android:scaleY="0.75"/>-->
-
-                    <!--<EditText-->
-                        <!--android:id="@+id/item"-->
-                        <!--android:hint="@string/add_item_field_title"-->
-                        <!--android:background="@null"-->
-                        <!--android:maxLines="1"-->
-                        <!--android:inputType="textCapWords"-->
-                        <!--android:textSize="14sp"-->
-                        <!--android:textColorHint="@color/cardnumbercolor"-->
-                        <!--android:textColor="@color/textcolor"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_weight="0.7"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_marginStart="16dp"/>-->
-
-                    <!--<ImageView-->
-                        <!--android:id="@+id/item_remove_button"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:scaleX="0.75"-->
-                        <!--android:scaleY="0.75"-->
-                        <!--android:clickable="true"-->
-                        <!--android:focusable="true"-->
-                        <!--android:layout_marginEnd="4dp"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:src="@drawable/ic_remove"/>-->
-
-                <!--</LinearLayout>-->
-
-            <!--</androidx.cardview.widget.CardView>-->
-
-        <!--</androidx.cardview.widget.CardView>-->
 
 </layout>

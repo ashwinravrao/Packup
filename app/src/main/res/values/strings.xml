@@ -16,13 +16,19 @@
     <string name="source_field_title">Source</string>
     <string name="dest_field_title">Destination</string>
     <string name="add_item_field_title">Add item</string>
-    <string name="category_button_text">Categories</string>
+    <string name="category_button_text">Category</string>
     <string name="ID_LEDGER">com.ashwinrao.boxray.ID_LEDGER_KEY</string>
+    
+    <!-- AddEditFragment - Alert Dialog - Label Instructions -->
+    <string name="label_instructions_dialog_title">Choosing a Label for your Box</string>
+    <string name="label_instructions_dialog_body">Some text</string>
+    <string name="label_instructions_dialog_positive_button_text">Got it</string>
 
     <!-- ListFragment -->
     <string name="box_name_placeholder">Kitchen Supplies</string>
     <string name="box_num_items_placeholder">%1$d items</string>
-    <string name="box_number_placeholder">Box # %1$d</string>
+    <string name="box_button_label">box label</string>
+    <string name="box_number_placeholder">Box Number %1$d</string>
     <string name="box_number_placeholder_small">43</string>
 
     <!-- DetailFragment -->
@@ -31,6 +37,17 @@
     <string name="Undo">Undo</string>
     <string name="save_button_label">save box</string>
     <string name="box_number_label">Box Number</string>
-    <string name="label_instructions_label">box label helper</string>
     <string name="add_edit_fragment_action_bar_title">Add box</string>
+    <string name="step_one_instructions">Enter a few details about your new box. </string>
+    <string name="step_one_title">Step 1</string>
+    <string name="show_more">show more</string>
+    <string name="step_two_title">Step 2</string>
+    <string name="step_two_instructions">Add at least one item. Using descriptive names will help you find your items later.</string>
+    <string name="step_three_title">Step 3</string>
+    <string name="step_three_instructions">Take a photo by holding your camera out over your opened box.</string>
+    <string name="box_number_button_text">box number</string>
+    <string name="notes_field_title">Notes</string>
+    <string name="label_placement_button_text">Label Placement</string>
+    <string name="menu_label">Box Label</string>
+    <string name="menu_save">Save Box</string>
 </resources>

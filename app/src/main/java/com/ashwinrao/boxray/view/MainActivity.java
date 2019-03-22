@@ -25,11 +25,14 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private NavigationView mNavigationView;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -43,10 +46,22 @@ public class MainActivity extends AppCompatActivity
         mNavigationView.setNavigationItemSelectedListener(this);
 
         FragmentManager manager = getSupportFragmentManager();
-        Fragment fragment = manager.findFragmentById(R.id.fragment_container);
+        Fragment fragment = manager.findFragmentById(R.id.fragment_container_main);
         if(fragment == null) {
-            manager.beginTransaction().replace(R.id.fragment_container, new ListFragment(), "ListFragment").commit();
+            manager.beginTransaction().replace(R.id.fragment_container_main, new ListFragment(), "ListFragment").commit();
         }
+    }
+
+    public void resetDrawerToggle() {
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
     public void setNavigationViewBackgroundColor(int color) {
@@ -67,10 +82,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+//    public Menu getMenu() {
+//        return mMenu;
+//    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        mMenu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        if(getSupportFragmentManager().getFragments().get(0).getClass() == AddEditFragment.class) {
+            getMenuInflater().inflate(R.menu.add_edit, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.main, menu);
+        }
         return true;
     }
 
@@ -86,7 +110,7 @@ public class MainActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.action_search) {
             // todo replace with SearchView implementation
-            Snackbar.make(this.findViewById(R.id.fragment_container), "Searching...", Snackbar.LENGTH_LONG).show();
+            Snackbar.make(this.findViewById(R.id.fragment_container_main), "Searching...", Snackbar.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);

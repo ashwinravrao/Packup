@@ -8,6 +8,6 @@
     tools:context=".view.MainActivity"
     android:background="@color/colorPrimary"
     tools:showIn="@layout/app_bar_main"
-    android:id="@+id/fragment_container">
+    android:id="@+id/fragment_container_main">
 
 </FrameLayout>

@@ -119,4 +119,11 @@
         <item name="android:colorControlHighlight">@color/textcolor_muted</item>
     </style>
 
+    <!-- Label Instructions Alert Dialog -->
+    <style name="AppTheme.AlertDialog.LabelInstructions" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/textcolor_muted</item>
+        <item name="android:textColorPrimary">@color/textcolor</item>
+    </style>
+
 </resources>

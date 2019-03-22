@@ -75,7 +75,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
                     .beginTransaction()
                     .addToBackStack(null)
                     .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                    .replace(R.id.fragment_container, detail, "DetailFragment")
+                    .replace(R.id.fragment_container_main, detail, "DetailFragment")
                     .commit();
         }
     }
