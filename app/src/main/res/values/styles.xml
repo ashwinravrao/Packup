@@ -1,13 +1,15 @@
 <resources>
 
     <!-- Light Theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowBackground">@android:color/white</item>
-        <item name="drawerArrowStyle">@style/ActionBarDrawerIconLight</item>
+        <item name="android:textColorSecondary">@color/textColorSecondary</item>
+        <item name="android:listDivider">@color/listDivider</item>
+        <!--<item name="android:windowLightStatusBar">true</item>-->
+        <!--<item name="android:windowBackground">@android:color/white</item>-->
+        <!--<item name="drawerArrowStyle">@style/ActionBarDrawerIconLight</item>-->
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -25,19 +27,22 @@
 
 
     <!-- Toolbar Styles -->
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColorPrimary">@color/textcolor</item>
-        <item name="android:backgroundTint">@color/colorPrimary</item>
-        <item name="android:actionOverflowButtonStyle">@style/OverflowButtonLight</item>
-    </style>
+    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">-->
+        <!--<item name="android:textColorPrimary">@color/textcolor</item>-->
+        <!--<item name="android:backgroundTint">@color/colorPrimary</item>-->
+        <!--<item name="android:actionOverflowButtonStyle">@style/OverflowButtonLight</item>-->
+    <!--</style>-->
 
-    <style name="OverflowButtonLight" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">@color/textcolor</item>
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <style name="ActionBarDrawerIconLight" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@color/textcolor</item>
-    </style>
+
+    <!--<style name="OverflowButtonLight" parent="Widget.AppCompat.ActionButton.Overflow">-->
+        <!--<item name="android:tint">@color/textcolor</item>-->
+    <!--</style>-->
+
+    <!--<style name="ActionBarDrawerIconLight" parent="Widget.AppCompat.DrawerArrowToggle">-->
+        <!--<item name="color">@color/textcolor</item>-->
+    <!--</style>-->
 
 
     <!-- BoxViewHolder (CardView) Style -->

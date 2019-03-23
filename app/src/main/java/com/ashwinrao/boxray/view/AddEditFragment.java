@@ -100,7 +100,7 @@ public class AddEditFragment extends Fragment {
 
 //        configureSoftInputBackgroundViewBehavior(binding);
 
-        configureSaveBoxButton(binding);
+//        configureSaveBoxButton(binding);
 
         configureLabelInstructionsButton(binding);
 
@@ -217,14 +217,14 @@ public class AddEditFragment extends Fragment {
 //        });
 //    }
 
-    private void configureSaveBoxButton(@NonNull final FragmentAddEditBinding binding) {
-        binding.saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveBox(binding);
-            }
-        });
-    }
+//    private void configureSaveBoxButton(@NonNull final FragmentAddEditBinding binding) {
+//        binding.saveButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                saveBox(binding);
+//            }
+//        });
+//    }
 
     private void configureLabelInstructionsButton(@NonNull final FragmentAddEditBinding binding) {
         binding.labelPlacementButton.setOnClickListener(new View.OnClickListener() {
@@ -269,17 +269,17 @@ public class AddEditFragment extends Fragment {
         editor.apply();
     }
 
-    private void saveBox(@NonNull final FragmentAddEditBinding binding) {
-        if(checkBoxRequirements(binding.nameField)) {
-            Box box = new Box(mDummyBoxNumber,  // todo replace with actual box number
-                    binding.nameEditable.getText() == null ? "" : binding.nameEditable.getText().toString(),
-                    binding.sourceEditable.getText() == null ? "" : binding.sourceEditable.getText().toString(),
-                    binding.destEditable.getText() == null ? "" : binding.destEditable.getText().toString(),
-                    mItems);
-            mBoxViewModel.save(box);
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-        }
-    }
+//    private void saveBox(@NonNull final FragmentAddEditBinding binding) {
+//        if(checkBoxRequirements(binding.nameField)) {
+//            Box box = new Box(mDummyBoxNumber,  // todo replace with actual box number
+//                    binding.nameEditable.getText() == null ? "" : binding.nameEditable.getText().toString(),
+//                    binding.sourceEditable.getText() == null ? "" : binding.sourceEditable.getText().toString(),
+//                    binding.destEditable.getText() == null ? "" : binding.destEditable.getText().toString(),
+//                    mItems);
+//            mBoxViewModel.save(box);
+//            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+//        }
+//    }
 
     private boolean checkBoxRequirements(final TextInputLayout til) {
         boolean result = true;

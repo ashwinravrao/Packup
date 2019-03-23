@@ -18,7 +18,7 @@
     <string name="add_item_field_title">Add item</string>
     <string name="category_button_text">Category</string>
     <string name="ID_LEDGER">com.ashwinrao.boxray.ID_LEDGER_KEY</string>
-    
+
     <!-- AddEditFragment - Alert Dialog - Label Instructions -->
     <string name="label_instructions_dialog_title">Choosing a Label for your Box</string>
     <string name="label_instructions_dialog_body">Some text</string>
@@ -50,4 +50,9 @@
     <string name="label_placement_button_text">Label Placement</string>
     <string name="menu_label">Box Label</string>
     <string name="menu_save">Save Box</string>
+    <string name="instructions_page_box_properties">Save a few details about your new box</string>
+    <string name="hint_name_page_box_properties">Name</string>
+    <string name="hint_from_page_box_properties">From</string>
+    <string name="hint_to_page_box_properties">To</string>
+    <string name="next_button_title">NEXT</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -71,18 +72,19 @@ public class ListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         final FragmentBoxListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_box_list, container, false);
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mFragmentManager
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                        .replace(R.id.fragment_container_main, new AddEditFragment(), "AddEditFragment")
-                        .commit();
+                startActivity(new Intent(getActivity(), CommonActivity.class));
+
+//                mFragmentManager
+//                        .beginTransaction()
+//                        .addToBackStack(null)
+//                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
+//                        .replace(R.id.fragment_container_main, new AddEditFragment(), "AddEditFragment")
+//                        .commit();
             }
         });
 

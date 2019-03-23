@@ -15,18 +15,17 @@
         <activity
             android:name=".view.MainActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.AddActivity" />
+        <activity
+            android:name=".view.CommonActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
-
-    <!--android:windowSoftInputMode="stateVisible|adjustPan"-->
-    <!--android:windowSoftInputMode="adjustResize|stateAlwaysHidden"-->
