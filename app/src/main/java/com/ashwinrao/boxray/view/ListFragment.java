@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -77,7 +78,9 @@ public class ListFragment extends Fragment {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), CommonActivity.class));
+                Intent intent = new Intent(getActivity(), CommonActivity.class);
+                ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_from_right, R.anim.stay_still);
+                startActivity(intent, activityOptions.toBundle());
 
 //                mFragmentManager
 //                        .beginTransaction()
