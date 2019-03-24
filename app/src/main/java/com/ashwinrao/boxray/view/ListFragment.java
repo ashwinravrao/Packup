@@ -78,16 +78,16 @@ public class ListFragment extends Fragment {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CommonActivity.class);
-                ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_from_right, R.anim.stay_still);
-                startActivity(intent, activityOptions.toBundle());
+//                Intent intent = new Intent(getActivity(), CommonActivity.class);
+//                ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_from_right, R.anim.stay_still);
+//                startActivity(intent, activityOptions.toBundle());
 
-//                mFragmentManager
-//                        .beginTransaction()
-//                        .addToBackStack(null)
-//                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-//                        .replace(R.id.fragment_container_main, new AddEditFragment(), "AddEditFragment")
-//                        .commit();
+                mFragmentManager
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
+                        .replace(R.id.fragment_container_main, new AddEditFragment(), "AddEditFragment")
+                        .commit();
             }
         });
 
