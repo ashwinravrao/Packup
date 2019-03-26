@@ -1,12 +1,9 @@
 package com.ashwinrao.boxray.view;
 
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.os.Bundle;
 
 import android.text.Editable;
@@ -15,25 +12,18 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentAddEditBinding;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ItemAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -45,28 +35,24 @@ import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class AddEditFragment extends Fragment {
 
-    private Toolbar mToolbar;
-    private List<String> mItems;
-    private int mDummyBoxNumber;    // todo remove when box number is retrieved from SharedPref
-    private ItemAdapter mAdapter;
-    private BoxViewModel mBoxViewModel;
-    private SharedPreferences mPreferences;
-    private MutableLiveData<List<String>> mItemsMLD;
+    private Toolbar toolbar;
+    private List<String> items;
+    private int dummyBoxNum;    // todo remove when box number is retrieved from SharedPref
+    private ItemAdapter itemAdapter;
+    private BoxViewModel viewModel;
+    private SharedPreferences sharedPreferences;
+    private MutableLiveData<List<String>> itemsMLD;
 
     private static final String TAG = AddEditFragment.class.getName();
     private static final String CURRENT_BOX_IDENTIFIER = "current_box_identifier";
@@ -80,11 +66,11 @@ public class AddEditFragment extends Fragment {
 
         // Obtain ViewModel reference
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        mBoxViewModel = factory.create(BoxViewModel.class);
+        viewModel = factory.create(BoxViewModel.class);
 
         // Instantiate global vars
-        mItems = new ArrayList<>();
-        mItemsMLD = new MutableLiveData<>();
+        items = new ArrayList<>();
+        itemsMLD = new MutableLiveData<>();
     }
 
     @Nullable
@@ -199,7 +185,7 @@ public class AddEditFragment extends Fragment {
         binding.photoPlaceholder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mItems.size() == 0) {
+                if(items.size() == 0) {
                     Snackbar.make(Objects.requireNonNull(getActivity()).getWindow().getDecorView().findViewById(R.id.drawer_layout), "Add more items", Snackbar.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getActivity(), "Opening image picker...", Toast.LENGTH_SHORT).show();    // todo replace with image chooser dialog
@@ -237,18 +223,18 @@ public class AddEditFragment extends Fragment {
 
     private void configureItemRecyclerView(@NonNull final FragmentAddEditBinding binding) {
         binding.itemRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ItemAdapter(getActivity(), (Objects.requireNonNull(getActivity()))
+        itemAdapter = new ItemAdapter(getActivity(), (Objects.requireNonNull(getActivity()))
                 .getWindow()
                 .getDecorView()
-                .findViewById(R.id.drawer_layout), mItemsMLD);
-        binding.itemRecyclerView.setAdapter(mAdapter);
+                .findViewById(R.id.drawer_layout), itemsMLD);
+        binding.itemRecyclerView.setAdapter(itemAdapter);
 
-        mItemsMLD.observe(this, new Observer<List<String>>() {
+        itemsMLD.observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
 //                toggleViewsOnChanged(strings, binding);
-                mAdapter.setAdapterItems(strings);
-                binding.itemRecyclerView.setAdapter(mAdapter);
+                itemAdapter.setAdapterItems(strings);
+                binding.itemRecyclerView.setAdapter(itemAdapter);
             }
         });
     }
@@ -256,27 +242,27 @@ public class AddEditFragment extends Fragment {
     // View backend logic
     private void generateDummyBoxNumber() {
         Random r = new Random();
-        mDummyBoxNumber = r.nextInt(100);
+        dummyBoxNum = r.nextInt(100);
     }
 
     private int getBoxNumFromSharedPref() {
-        return mPreferences.getInt(CURRENT_BOX_IDENTIFIER, 1);  // returns 1 if key doesn't yet exist
+        return sharedPreferences.getInt(CURRENT_BOX_IDENTIFIER, 1);  // returns 1 if key doesn't yet exist
     }
 
     private void saveBoxNumToSharedPref() {
-        SharedPreferences.Editor editor = mPreferences.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(CURRENT_BOX_IDENTIFIER, getBoxNumFromSharedPref() + 1);
         editor.apply();
     }
 
 //    private void saveBox(@NonNull final FragmentAddEditBinding binding) {
 //        if(checkBoxRequirements(binding.nameField)) {
-//            Box box = new Box(mDummyBoxNumber,  // todo replace with actual box number
+//            Box box = new Box(dummyBoxNum,  // todo replace with actual box number
 //                    binding.nameEditable.getText() == null ? "" : binding.nameEditable.getText().toString(),
 //                    binding.sourceEditable.getText() == null ? "" : binding.sourceEditable.getText().toString(),
 //                    binding.destEditable.getText() == null ? "" : binding.destEditable.getText().toString(),
-//                    mItems);
-//            mBoxViewModel.save(box);
+//                    items);
+//            viewModel.save(box);
 //            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
 //        }
 //    }
@@ -325,8 +311,8 @@ public class AddEditFragment extends Fragment {
 //    }
 
     private void saveItem(String item) {
-        mItems.add(item);
-        mItemsMLD.setValue(mItems);
+        items.add(item);
+        itemsMLD.setValue(items);
     }
 
     private void showLabeInstructionsDialog(@NonNull final Context context) {

@@ -8,28 +8,28 @@ import androidx.lifecycle.LiveData;
 
 public class BoxRepository {
 
-    private BoxDao mDao;
-    private static BoxRepository sInstance;
-    private BoxDatabase mDatabase;
+    private BoxDao dao;
+    private static BoxRepository instance;
+//    private BoxDatabase database;
 
     public static BoxRepository getInstance(BoxDatabase db) {
-        if(sInstance == null) {
-            sInstance = new BoxRepository(db);
+        if(instance == null) {
+            instance = new BoxRepository(db);
         }
-        return sInstance;
+        return instance;
     }
 
     private BoxRepository(BoxDatabase db) {
-        mDao = db.mDao();
+        dao = db.mDao();
     }
 
     public LiveData<List<Box>> getBoxes() {
-        return mDao.getBoxes();
+        return dao.getBoxes();
     }
 
-    public LiveData<Box> getBoxByID(int id) { return mDao.getBoxById(id); }
+    public LiveData<Box> getBoxByID(int id) { return dao.getBoxById(id); }
 
     public void saveBox(Box box) {
-        new AsyncTasks.Insert(mDao).execute(box);
+        new AsyncTasks.Insert(dao).execute(box);
     }
 }

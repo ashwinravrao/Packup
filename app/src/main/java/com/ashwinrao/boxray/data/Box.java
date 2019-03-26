@@ -12,94 +12,94 @@ public class Box {
 
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private int mId;
+    private int id;
 
     @ColumnInfo(name = "name")
-    private String mName;
+    private String name;
 
     @ColumnInfo(name = "source")
-    private String mSource;
+    private String source;
 
     @ColumnInfo(name = "destination")
-    private String mDestination;
+    private String destination;
 
     @ColumnInfo(name = "notes")
-    private String mNotes;
+    private String notes;
 
     @ColumnInfo(name = "created")
-    private Date mCreatedDate;
+    private Date createdDate;
 
     @ColumnInfo(name = "contents")
-    private List<String> mContents;
+    private List<String> contents;
 
     @ColumnInfo(name = "favorite")
-    private boolean mFavorite;
+    private boolean favorite;
 
     public Box() {
-        mCreatedDate = new Date();
+        createdDate = new Date();
     }
 
     public List<String> getContents() {
-        return mContents;
+        return contents;
     }
 
     public void setContents(List<String> contents) {
-        mContents = contents;
+        this.contents = contents;
     }
 
     public Date getCreatedDate() {
-        return mCreatedDate;
+        return createdDate;
     }
 
     public void setCreatedDate(Date createdDate) {
-        mCreatedDate = createdDate;
+        this.createdDate = createdDate;
     }
 
     public int getId() {
-        return mId;
+        return id;
     }
 
     public void setId(int id) {
-        mId = id;
+        this.id = id;
     }
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 
     public String getSource() {
-        return mSource;
+        return source;
     }
 
     public void setSource(String source) {
-        mSource = source;
+        this.source = source;
     }
 
     public String getDestination() {
-        return mDestination;
+        return destination;
     }
 
     public void setDestination(String destination) {
-        mDestination = destination;
+        this.destination = destination;
     }
 
     public boolean isFavorite() {
-        return mFavorite;
+        return favorite;
     }
 
     public void setFavorite(boolean favorite) {
-        mFavorite = favorite;
+        this.favorite = favorite;
     }
 
     public String getNotes() {
-        return mNotes;
+        return notes;
     }
 
     public void setNotes(String notes) {
-        mNotes = notes;
+        this.notes = notes;
     }
 }

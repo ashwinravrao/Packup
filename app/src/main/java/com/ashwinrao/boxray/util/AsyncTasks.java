@@ -9,13 +9,13 @@ public class AsyncTasks {
 
     public static class Insert extends AsyncTask<Box, Void, Void> {
 
-        private BoxDao mDao;
+        private BoxDao dao;
 
-        public Insert(BoxDao dao) { mDao = dao; }
+        public Insert(BoxDao dao) { this.dao = dao; }
 
         @Override
         protected Void doInBackground(Box... boxes) {
-            mDao.save(boxes[0]);
+            dao.save(boxes[0]);
             return null;
         }
     }

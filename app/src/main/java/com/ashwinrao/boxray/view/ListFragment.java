@@ -1,13 +1,9 @@
 package com.ashwinrao.boxray.view;
 
-import android.app.ActivityOptions;
-import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
@@ -16,7 +12,6 @@ import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +23,6 @@ import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,10 +30,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ListFragment extends Fragment {
 
-    private RecyclerView mRecyclerView;
-    private ListAdapter mAdapter;
-    private LiveData<List<Box>> mBoxesLD;
-    private FragmentManager mFragmentManager;
+    private RecyclerView recyclerView;
+    private ListAdapter listAdapter;
+    private LiveData<List<Box>> boxesLD;
+    private FragmentManager fragmentManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,12 +42,12 @@ public class ListFragment extends Fragment {
         ((MainActivity) Objects.requireNonNull(getActivity())).setActionBarTitle(getString(R.string.box_list_fragment_action_bar_title));
         ((MainActivity) getActivity()).setNavigationViewBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorPrimary));
 
-        mFragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
+        fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(( Objects.requireNonNull(getActivity())).getApplication());
         final BoxViewModel viewModel = factory.create(BoxViewModel.class);
 
-        mBoxesLD = viewModel.getBoxes();
+        boxesLD = viewModel.getBoxes();
     }
 
     @Override
@@ -82,7 +76,7 @@ public class ListFragment extends Fragment {
 //                ActivityOptions activityOptions = ActivityOptions.makeCustomAnimation(getActivity(), R.anim.slide_in_from_right, R.anim.stay_still);
 //                startActivity(intent, activityOptions.toBundle());
 
-                mFragmentManager
+                fragmentManager
                         .beginTransaction()
                         .addToBackStack(null)
                         .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
@@ -91,17 +85,17 @@ public class ListFragment extends Fragment {
             }
         });
 
-        mRecyclerView = binding.recyclerView;
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new ListAdapter(Objects.requireNonNull(getActivity()), mBoxesLD.getValue());
-        mRecyclerView.setAdapter(mAdapter);
+        recyclerView = binding.recyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()), boxesLD.getValue());
+        recyclerView.setAdapter(listAdapter);
 
-        mBoxesLD.observe(this, new Observer<List<Box>>() {
+        boxesLD.observe(this, new Observer<List<Box>>() {
             @Override
             public void onChanged(List<Box> boxes) {
-                if(boxes != null) { mAdapter.setBoxes(boxes); }
-                else { mAdapter.setBoxes(new ArrayList<Box>()); }
-                mRecyclerView.setAdapter(mAdapter);
+                if(boxes != null) { listAdapter.setBoxes(boxes); }
+                else { listAdapter.setBoxes(new ArrayList<Box>()); }
+                recyclerView.setAdapter(listAdapter);
             }
         });
 

@@ -21,36 +21,36 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder> {
 
-    private Context mContext;
-    private List<Box> mBoxes;
+    private Context context;
+    private List<Box> boxes;
 
     public ListAdapter(@NonNull Context context, @Nullable List<Box> boxes) {
-        mContext = context;
-        mBoxes = boxes;
+        this.context = context;
+        this.boxes = boxes;
     }
 
     public void setBoxes(List<Box> boxes) {
-        mBoxes = boxes;
+        this.boxes = boxes;
     }
 
     @NonNull
     @Override
     public BoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewholderBoxBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.viewholder_box, parent, false);
+        ViewholderBoxBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_box, parent, false);
         return new BoxViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
-        Box box = mBoxes.get(position);
+        Box box = boxes.get(position);
         holder.binding.setBox(box);
         holder.binding.boxNumberTextView.setText(String.valueOf(box.getId()));
-        holder.binding.numItemsTextView.setText(box.getContents().size() == 0 ? "No items" : mContext.getString(R.string.box_num_items_placeholder, box.getContents().size()));
+        holder.binding.numItemsTextView.setText(box.getContents().size() == 0 ? "No items" : context.getString(R.string.box_num_items_placeholder, box.getContents().size()));
     }
 
     @Override
     public int getItemCount() {
-        return mBoxes == null ? 0 : mBoxes.size();
+        return boxes == null ? 0 : boxes.size();
     }
 
     public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -66,11 +66,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         @Override
         public void onClick(View v) {
             Bundle bundle = new Bundle();
-            bundle.putInt("Box Number", mBoxes.get(getAdapterPosition()).getId());
+            bundle.putInt("Box Number", boxes.get(getAdapterPosition()).getId());
             DetailFragment detail = new DetailFragment();
             detail.setArguments(bundle);
 
-            ((MainActivity) mContext)
+            ((MainActivity) context)
                     .getSupportFragmentManager()
                     .beginTransaction()
                     .addToBackStack(null)

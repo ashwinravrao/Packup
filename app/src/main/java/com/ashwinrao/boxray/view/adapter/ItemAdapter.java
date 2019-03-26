@@ -19,31 +19,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
-    private View mActivityRoot;
-    private Context mContext;
-    private List<String> mAdapterItems = new ArrayList<>();
-    private MutableLiveData<List<String>> mFragmentItems;
+    private View activityRoot;
+    private Context context;
+    private List<String> adapterItems = new ArrayList<>();
+    private MutableLiveData<List<String>> fragmentItems;
 
     public ItemAdapter(Context context, View activityRoot, MutableLiveData<List<String>> fragmentItems) {
-        mContext = context;
-        mActivityRoot = activityRoot;
-        mFragmentItems = fragmentItems;
+        this.context = context;
+        this.activityRoot = activityRoot;
+        this.fragmentItems = fragmentItems;
     }
 
     public void setAdapterItems(List<String> adapterItems) {
-        mAdapterItems = adapterItems;
+        this.adapterItems = adapterItems;
     }
 
     @NonNull
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final ViewholderItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.viewholder_item, parent, false);
+        final ViewholderItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_item, parent, false);
         return new ItemViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ItemViewHolder holder, final int position) {
-        String item = mAdapterItems.get(position);
+        String item = adapterItems.get(position);
         holder.binding.item.setText(item);
         handleItemRemoval(holder.binding.itemRemoveButton, position);
     }
@@ -52,20 +52,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String item = mAdapterItems.get(position);
-                mAdapterItems.remove(position);
+                final String item = adapterItems.get(position);
+                adapterItems.remove(position);
                 notifyItemRemoved(position);
-                mFragmentItems.setValue(mAdapterItems);
-                Snackbar.make(mActivityRoot, mContext.getString(R.string.snackbar_item_deleted), Snackbar.LENGTH_LONG)
-                        .setAction(mContext.getString(R.string.Undo), new View.OnClickListener() {
+                fragmentItems.setValue(adapterItems);
+                Snackbar.make(activityRoot, context.getString(R.string.snackbar_item_deleted), Snackbar.LENGTH_LONG)
+                        .setAction(context.getString(R.string.Undo), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                mAdapterItems.add(position, item);
+                                adapterItems.add(position, item);
                                 notifyItemInserted(position);
-                                mFragmentItems.setValue(mAdapterItems);
+                                fragmentItems.setValue(adapterItems);
                             }
                         })
-                        .setActionTextColor(mContext.getColor(R.color.colorAccent))
+                        .setActionTextColor(context.getColor(R.color.colorAccent))
                         .show();
             }
         });
@@ -73,7 +73,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public int getItemCount() {
-        return mAdapterItems == null ? 0 : mAdapterItems.size();
+        return adapterItems == null ? 0 : adapterItems.size();
     }
 
 

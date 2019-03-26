@@ -8,25 +8,25 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class BoxViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
-    private static BoxViewModelFactory sInstance;
-    private Application mApplication;
+    private static BoxViewModelFactory instance;
+    private Application application;
 
     public static synchronized BoxViewModelFactory getInstance(@NonNull Application application) {
-        if(sInstance == null) {
-            sInstance = new BoxViewModelFactory(application);
+        if(instance == null) {
+            instance = new BoxViewModelFactory(application);
         }
-        return sInstance;
+        return instance;
     }
 
     private BoxViewModelFactory(@NonNull Application application) {
         super();
-        mApplication = application;
+        this.application = application;
     }
 
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new BoxViewModel(mApplication);
+        return (T) new BoxViewModel(application);
     }
 }

@@ -10,8 +10,7 @@ import android.widget.EditText;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.PageBoxPropertiesBinding;
-import com.ashwinrao.boxray.view.CommonActivity;
-import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.view.MainActivity;
 
 import java.util.Objects;
 
@@ -22,13 +21,11 @@ import androidx.fragment.app.Fragment;
 
 public class BoxPropertiesPage extends Fragment {
 
-    private BoxViewModel mViewModel;
     private boolean[] fieldHasInput = {false, false, false};
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mViewModel = ((CommonActivity) Objects.requireNonNull(getActivity())).getViewModel();
     }
 
     @Nullable
@@ -62,8 +59,8 @@ public class BoxPropertiesPage extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 fieldHasInput[fieldIndex] = s.toString().length() > 0;
-                mViewModel.setFieldsSatisfied(fieldHasInput[0] && fieldHasInput[1] && fieldHasInput[2]);
-                mViewModel.boxArgs[boxArgIndex] = s.toString();
+                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().setFieldsSatisfied(fieldHasInput[0] && fieldHasInput[1] && fieldHasInput[2]);
+//                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().boxArgs[boxArgIndex] = s.toString();
             }
         });
     }

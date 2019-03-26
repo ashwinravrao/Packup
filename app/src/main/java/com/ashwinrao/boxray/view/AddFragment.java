@@ -32,22 +32,26 @@ public class AddFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentAddBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
 
-        final Fragment[] fragments = {new BoxPropertiesPage(), new BoxItemsPage(), new BoxPhotoPage(), new BoxNumberPage()};
+        final Fragment[] fragments = {
+                new BoxPropertiesPage(),
+                new BoxItemsPage(),
+                new BoxPhotoPage(),
+                new BoxNumberPage()
+        };
 
         final FragmentPager adapter = new FragmentPager(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragments);
-
         final ScrollOptionalViewPager viewPager = binding.viewPager;
         viewPager.setAdapter(adapter);
         viewPager.setScrollingBehavior(false);
 
-        ((CommonActivity) getActivity()).getViewModel().getFieldsSatisfied().observe(this, new Observer<Boolean>() {
+        ((MainActivity) getActivity()).getViewModel().getFieldsSatisfied().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean) {
-                    // set next button visible
+                if (aBoolean) {
+                    // enable "next" button
                     binding.nextButton.setVisibility(View.VISIBLE);
                 } else {
-                    // set next button invisible
+                    // disable "next" button
                     binding.nextButton.setVisibility(View.INVISIBLE);
                 }
             }

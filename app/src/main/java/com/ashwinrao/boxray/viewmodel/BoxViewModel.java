@@ -15,81 +15,61 @@ import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
 
-//    private Box mBoxBuilder;
-//    private int mBoxBuilderFieldTally = 0;
+    private Box box;
+    private Boolean saveFlag = false;
+    private MutableLiveData<Boolean> fieldsSatisfied;
 
-    public String[] boxArgs = new String[7];
-    private MutableLiveData<Boolean> mFieldsSatisfied;
-
-    private final BoxRepository mRepository;
+    private final BoxRepository repository;
 
     public BoxViewModel(@NonNull Application application) {
-        mRepository = ((Boxray) application).getRepository();
-        mFieldsSatisfied = new MutableLiveData<>();
-//        mBoxBuilder = new Box();
+        repository = ((Boxray) application).getRepository();
+        fieldsSatisfied = new MutableLiveData<>();
+        box = new Box();
     }
 
     public void setFieldsSatisfied(boolean areFieldsSatisfied) {
-        mFieldsSatisfied.setValue(areFieldsSatisfied);
+        saveFlag = areFieldsSatisfied;
+        fieldsSatisfied.setValue(areFieldsSatisfied);
     }
 
     public LiveData<Boolean> getFieldsSatisfied() {
-        return mFieldsSatisfied;
+        return fieldsSatisfied;
     }
 
     public LiveData<List<Box>> getBoxes() {
-        return mRepository.getBoxes();
+        return repository.getBoxes();
     }
 
     public LiveData<Box> getBoxByID(int id) {
-        return mRepository.getBoxByID(id);
+        return repository.getBoxByID(id);
     }
 
     public void save(Box box) {
-        mRepository.saveBox(box);
+        repository.saveBox(box);
     }
 
-//    public void addBoxBuilderId(int id) {
-//        mBoxBuilder.setId(id);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public void addBoxBuilderName(String name) {
-//        mBoxBuilder.setName(name);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public void addBoxBuilderSource(String source) {
-//        mBoxBuilder.setSource(source);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public void addBoxBuilderDestination(String destination) {
-//        mBoxBuilder.setDestination(destination);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public void addBoxBuilderNotes(String notes) {
-//        mBoxBuilder.setNotes(notes);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public void addBoxBuilderContents(List<String> contents) {
-//        mBoxBuilder.setContents(contents);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public void addBoxBuilderFavorite(boolean isFavorite) {
-//        mBoxBuilder.setFavorite(isFavorite);
-//        mBoxBuilderFieldTally++;
-//    }
-//
-//    public boolean saveBuiltBox() {
-//        if (mBoxBuilderFieldTally == 7) {
-//            mRepository.saveBox(mBoxBuilder);
-//            return true;
-//        } else {
-//            return false;
-//        }
-//    }
+
+    // Incrementally builds box object using field input
+    public void boxSetID(int id) { box.setId(id); }
+
+    public void boxSetName(String name) { box.setName(name); }
+
+    public void boxSetSource(String source) { box.setSource(source); }
+
+    public void boxSetDestination(String destination) { box.setDestination(destination); }
+
+    public void boxSetNotes(String notes) { box.setNotes(notes); }
+
+    public void boxSetFavorite(boolean favorite) { box.setFavorite(favorite); }
+
+    public void boxSetContents(List<String> contents) { box.setContents(contents); }
+
+    public boolean boxSave() {
+        if (saveFlag) {
+            repository.saveBox(box);
+            return true;    // for checking and presenting save confirmation to user
+        } else {
+            return false;
+        }
+    }
 }

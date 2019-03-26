@@ -8,11 +8,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class FragmentPager extends FragmentStatePagerAdapter {
 
-    private Fragment[] mFragments;
+    private Fragment[] fragments;
 
     public FragmentPager(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
-        mFragments = fragments;
+        this.fragments = fragments;
     }
 
     /**
@@ -24,7 +24,7 @@ public class FragmentPager extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // preloads the next page for performance
-        return mFragments[position];
+        return fragments[position];
     }
 
     /**
@@ -32,6 +32,6 @@ public class FragmentPager extends FragmentStatePagerAdapter {
      */
     @Override
     public int getCount() {
-        return mFragments == null ? 0 : mFragments.length;
+        return fragments == null ? 0 : fragments.length;
     }
 }

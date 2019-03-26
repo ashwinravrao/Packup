@@ -4,6 +4,8 @@ package com.ashwinrao.boxray.view;
 import android.os.Bundle;
 
 import com.ashwinrao.boxray.R;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 
 import com.google.android.material.navigation.NavigationView;
@@ -24,8 +26,9 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private NavigationView mNavigationView;
-    private Menu mMenu;
+    private NavigationView navigationView;
+    private Menu menu;
+    private BoxViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,11 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        mNavigationView = findViewById(R.id.nav_view);
-        mNavigationView.setNavigationItemSelectedListener(this);
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getApplication());
+        viewModel = factory.create(BoxViewModel.class);
 
         FragmentManager manager = getSupportFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.fragment_container_main);
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity
             manager.beginTransaction().replace(R.id.fragment_container_main, new ListFragment(), "ListFragment").commit();
         }
     }
+
+    public BoxViewModel getViewModel() { return viewModel; }
 
     public void resetDrawerToggle() {
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(false);
@@ -64,7 +72,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setNavigationViewBackgroundColor(int color) {
-        mNavigationView.setBackgroundColor(color);
+        navigationView.setBackgroundColor(color);
     }
 
     public void setActionBarTitle(String title) {
@@ -82,12 +90,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 //    public Menu getMenu() {
-//        return mMenu;
+//        return menu;
 //    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        mMenu = menu;
+        this.menu = menu;
         // Inflate the menu; this adds items to the action bar if it is present.
         if(getSupportFragmentManager().getFragments().get(0).getClass() == AddEditFragment.class) {
             getMenuInflater().inflate(R.menu.add_edit, menu);
