@@ -50,7 +50,7 @@ public class AddEditFragment extends Fragment {
     private List<String> items;
     private int dummyBoxNum;    // todo remove when box number is retrieved from SharedPref
     private ItemAdapter itemAdapter;
-    private BoxViewModel viewModel;
+//    private BoxViewModel viewModel;
     private SharedPreferences sharedPreferences;
     private MutableLiveData<List<String>> itemsMLD;
 
@@ -65,8 +65,8 @@ public class AddEditFragment extends Fragment {
         setHasOptionsMenu(true);
 
         // Obtain ViewModel reference
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = factory.create(BoxViewModel.class);
+//        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+//        viewModel = factory.create(BoxViewModel.class);
 
         // Instantiate global vars
         items = new ArrayList<>();
