@@ -10,7 +10,7 @@
         <TextView
             android:id="@+id/instructions"
             android:text="@string/instructions_page_box_properties"
-            android:textColor="@color/textColor"
+            android:textColor="@color/textcolor"
             android:textAlignment="center"
             android:layout_marginTop="32dp"
             android:textSize="18sp"
@@ -44,7 +44,7 @@
                 android:id="@+id/name_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/colorAccent"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +72,7 @@
                 android:id="@+id/from_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/colorAccent"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,7 +100,7 @@
                 android:id="@+id/to_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@color/colorAccent"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 

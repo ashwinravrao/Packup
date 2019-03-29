@@ -80,7 +80,7 @@ public class ListFragment extends Fragment {
                         .beginTransaction()
                         .addToBackStack(null)
                         .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                        .replace(R.id.fragment_container_main, new AddEditFragment(), "AddEditFragment")
+                        .replace(R.id.fragment_container_main, new AddFragment(), "AddFragment")
                         .commit();
             }
         });

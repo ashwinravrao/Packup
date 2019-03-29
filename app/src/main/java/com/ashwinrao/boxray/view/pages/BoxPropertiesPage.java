@@ -23,11 +23,6 @@ public class BoxPropertiesPage extends Fragment {
 
     private boolean[] fieldHasInput = {false, false, false};
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,7 +39,7 @@ public class BoxPropertiesPage extends Fragment {
         return binding.getRoot();
     }
 
-    private void watchField(@NonNull EditText editText, final int fieldIndex, final int boxArgIndex) {
+    private void watchField(@NonNull EditText editText, final int pagerFieldIndex, final int boxFieldIndex) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -58,9 +53,9 @@ public class BoxPropertiesPage extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                fieldHasInput[fieldIndex] = s.toString().length() > 0;
-                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().setFieldsSatisfied(fieldHasInput[0] && fieldHasInput[1] && fieldHasInput[2]);
-//                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().boxArgs[boxArgIndex] = s.toString();
+                fieldHasInput[pagerFieldIndex] = s.toString().length() > 0;
+                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().setCanEnableNextButton(fieldHasInput[0] && fieldHasInput[1] && fieldHasInput[2]);
+                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().saveBoxField(boxFieldIndex, s.toString());
             }
         });
     }

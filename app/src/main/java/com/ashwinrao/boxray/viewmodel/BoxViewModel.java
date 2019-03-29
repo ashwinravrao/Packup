@@ -6,6 +6,7 @@ import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.data.BoxRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -15,26 +16,50 @@ import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
 
-    private Box box;
-    private Boolean saveFlag = false;
-    private MutableLiveData<Boolean> fieldsSatisfied;
+    private Object[] boxFields;
+    private List<String> boxItems;
+    private MutableLiveData<Boolean> canEnableNextButton;
 
     private final BoxRepository repository;
 
+
     public BoxViewModel(@NonNull Application application) {
         repository = ((Boxray) application).getRepository();
-        fieldsSatisfied = new MutableLiveData<>();
-        box = new Box();
+        canEnableNextButton = new MutableLiveData<>();
+        boxFields = new Object[7];
     }
 
-    public void setFieldsSatisfied(boolean areFieldsSatisfied) {
-        saveFlag = areFieldsSatisfied;
-        fieldsSatisfied.setValue(areFieldsSatisfied);
+    // PERTAINING TO ADDFRAGMENT VIEWPAGER
+
+    // Can be get/set from any page, and indicates whether the hosting ViewPager should enable forward navigation (disabled by default)
+    public void setCanEnableNextButton(boolean pageFieldsSatisfied) { canEnableNextButton.setValue(pageFieldsSatisfied); }
+
+    public LiveData<Boolean> getCanEnableNextButton() { return canEnableNextButton; }
+
+    // Allows for incremental building of a model object from text field input spread across several pages
+    public void saveBoxField(final int boxFieldIndex, Object o) { boxFields[boxFieldIndex] = o; }
+
+    // Allows for contents field in Box constructor to be set independently so as to avoid casting issues in boxFields array
+    public void setBoxItems(List<String> boxItems) { this.boxItems = boxItems; }
+
+    // Iterates through array storing model object fields to determine if saving the box is possible (all indices must point to non-null references)
+    private boolean canSave() {
+        for (Object o : boxFields) {
+            if(o == null) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public LiveData<Boolean> getFieldsSatisfied() {
-        return fieldsSatisfied;
+    public void save() {
+        if(canSave()) {
+            repository.saveBox(new Box((int) boxFields[0], (String) boxFields[1], (String) boxFields[2], (String) boxFields[3], (String) boxFields[4], this.boxItems, (boolean) boxFields[6]));
+        }
     }
+
+
+    // PERTAINING TO LISTFRAGMENT RECYCLERVIEW
 
     public LiveData<List<Box>> getBoxes() {
         return repository.getBoxes();
@@ -42,34 +67,5 @@ public class BoxViewModel extends ViewModel {
 
     public LiveData<Box> getBoxByID(int id) {
         return repository.getBoxByID(id);
-    }
-
-    public void save(Box box) {
-        repository.saveBox(box);
-    }
-
-
-    // Incrementally builds box object using field input
-    public void boxSetID(int id) { box.setId(id); }
-
-    public void boxSetName(String name) { box.setName(name); }
-
-    public void boxSetSource(String source) { box.setSource(source); }
-
-    public void boxSetDestination(String destination) { box.setDestination(destination); }
-
-    public void boxSetNotes(String notes) { box.setNotes(notes); }
-
-    public void boxSetFavorite(boolean favorite) { box.setFavorite(favorite); }
-
-    public void boxSetContents(List<String> contents) { box.setContents(contents); }
-
-    public boolean boxSave() {
-        if (saveFlag) {
-            repository.saveBox(box);
-            return true;    // for checking and presenting save confirmation to user
-        } else {
-            return false;
-        }
     }
 }

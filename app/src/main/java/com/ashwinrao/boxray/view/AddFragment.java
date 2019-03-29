@@ -44,7 +44,7 @@ public class AddFragment extends Fragment {
         viewPager.setAdapter(adapter);
         viewPager.setScrollingBehavior(false);
 
-        ((MainActivity) getActivity()).getViewModel().getFieldsSatisfied().observe(this, new Observer<Boolean>() {
+        ((MainActivity) getActivity()).getViewModel().getCanEnableNextButton().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean) {
