@@ -13,56 +13,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
+public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
-    private View activityRoot;
     private Context context;
-    private List<String> adapterItems = new ArrayList<>();
+    private List<String> items;
+    private View viewForSnackbar;
     private MutableLiveData<List<String>> fragmentItems;
 
-    public ItemAdapter(Context context, View activityRoot, MutableLiveData<List<String>> fragmentItems) {
+    public ItemAdapter(@NonNull Context context, @NonNull View viewForSnackbar, @NonNull MutableLiveData<List<String>> fragmentItems, @Nullable List<String> items) {
         this.context = context;
-        this.activityRoot = activityRoot;
+        this.viewForSnackbar = viewForSnackbar;
+        this.items = new ArrayList<>();
         this.fragmentItems = fragmentItems;
+        if(items != null) { this.items = items; }
     }
 
-    public void setAdapterItems(List<String> adapterItems) {
-        this.adapterItems = adapterItems;
+    public void setItems(List<String> items) {
+        this.items = items;
     }
 
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         final ViewholderItemBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_item, parent, false);
-        return new ItemViewHolder(binding);
+        return new ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ItemViewHolder holder, final int position) {
-        String item = adapterItems.get(position);
-        holder.binding.item.setText(item);
-        handleItemRemoval(holder.binding.itemRemoveButton, position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String item = items.get(position);
+        holder.binding.savedItemLabel.setText(item);
+        handleItemRemoval(holder.binding.savedItemRemoveButton, position);
     }
 
     private void handleItemRemoval(@NonNull View view, final int position) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String item = adapterItems.get(position);
-                adapterItems.remove(position);
+                final String item = items.get(position);
+                items.remove(position);
                 notifyItemRemoved(position);
-                fragmentItems.setValue(adapterItems);
-                Snackbar.make(activityRoot, context.getString(R.string.snackbar_item_deleted), Snackbar.LENGTH_LONG)
-                        .setAction(context.getString(R.string.Undo), new View.OnClickListener() {
+                fragmentItems.setValue(items);
+                Snackbar.make(viewForSnackbar, context.getString(R.string.snackbar_item_deleted), Snackbar.LENGTH_LONG)
+                        .setAction(context.getString(R.string.message_undo), new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                adapterItems.add(position, item);
+                                items.add(position, item);
                                 notifyItemInserted(position);
-                                fragmentItems.setValue(adapterItems);
+                                fragmentItems.setValue(items);
                             }
                         })
                         .setActionTextColor(context.getColor(R.color.colorAccent))
@@ -71,19 +74,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         });
     }
 
+
+
     @Override
     public int getItemCount() {
-        return adapterItems == null ? 0 : adapterItems.size();
+        return items == null ? 0 : items.size();
     }
 
-
-    public class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         final ViewholderItemBinding binding;
 
-        public ItemViewHolder(final ViewholderItemBinding binding) {
+        public ViewHolder(final ViewholderItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
     }
+
 }

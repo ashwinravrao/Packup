@@ -5,14 +5,20 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.lifecycle.LiveData;
 
 public class FragmentPager extends FragmentStatePagerAdapter {
 
     private Fragment[] fragments;
+    private LiveData<Boolean> wasSwiped;
 
     public FragmentPager(@NonNull FragmentManager fm, @NonNull Fragment[] fragments) {
         super(fm);
         this.fragments = fragments;
+    }
+
+    public void passWasSwipedObservable(LiveData<Boolean> wasSwiped) {
+        this.wasSwiped = wasSwiped;
     }
 
     /**

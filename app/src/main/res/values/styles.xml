@@ -1,134 +1,45 @@
 <resources>
 
-    <!-- Light Theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="android:textColorSecondary">@color/textColorSecondary</item>-->
-        <!--<item name="android:listDivider">@color/listDivider</item>-->
+        <item name="actionOverflowButtonStyle">@style/AppTheme.OverflowButtonStyle</item>
+        <item name="android:windowBackground">@color/colorPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowBackground">@android:color/white</item>
-        <item name="drawerArrowStyle">@style/ActionBarDrawerIconLight</item>
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="AppTheme.OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/iconAndTextColor</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- Item ViewHolder Checkbox Style -->
-    <style name="AppTheme.ItemCheckbox">
-        <item name="colorControlNormal">@color/textcolor_muted</item>
-        <item name="colorControlActivated">@color/colorAccent</item>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:textColorPrimary">@color/iconAndTextColor</item>
+        <item name="android:backgroundTint">@color/colorPrimaryDark</item>
     </style>
 
-
-     Toolbar Styles
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:textColorPrimary">@color/textcolor</item>
-        <item name="android:backgroundTint">@color/colorPrimary</item>
-        <item name="android:actionOverflowButtonStyle">@style/OverflowButtonLight</item>
+    <style name="AppTheme.HintText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <!--<style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>-->
-
-
-    <style name="OverflowButtonLight" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">@color/textcolor</item>
+    <style name="AppTheme.HintText.NameField" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/confirmGreen</item>
     </style>
 
-    <style name="ActionBarDrawerIconLight" parent="Widget.AppCompat.DrawerArrowToggle">
-        <item name="color">@color/textcolor</item>
-    </style>
-
-
-    <!-- BoxViewHolder (CardView) Style -->
-    <style name="AppTheme.VHCard" parent="CardView.Light">
-        <item name="cardBackgroundColor">@color/cardbordercolor</item>
-        <item name="cardCornerRadius">5dp</item>
-        <item name="contentPadding">1dp</item>
-        <item name="cardElevation">0dp</item>
-    </style>
-
-    <!-- BoxViewHolder TextAppearance 0 (Headline) -->
-    <style name="AppTheme.CardTextAppearance" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:padding">4dp</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/textcolor</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <!-- BoxViewHolder TextAppearance 1 (Number of Items) -->
-    <style name="AppTheme.CardTextAppearance.SubHeading">
-        <item name="android:layout_marginTop">52dp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <!-- BoxViewHolder TextAppearance 2 (Box Number) -->
-    <style name="AppTheme.CardTextAppearance.Number">
-        <item name="android:layout_gravity">center_vertical|end</item>
-        <item name="android:layout_marginStart">0dp</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:textColor">@color/boxnumbercolor</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">60sp</item>
-    </style>
-
-    <!-- Input Field Styles -->
-    <style name="AppTheme.InputField.OuterCard" parent="CardView.Light">
-        <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">5dp</item>
-        <item name="cardBackgroundColor">@color/cardbordercolor</item>
-        <item name="contentPadding">1dp</item>
-    </style>
-
-    <style name="AppTheme.InputField.InnerCard" parent="CardView.Light">
-        <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">5dp</item>
-        <item name="cardBackgroundColor">@color/colorPrimary</item>
-        <item name="contentPadding">0dp</item>
-
-    </style>
-    
-    <!--<style name="AppTheme.InputField.Hint" parent="Widget.AppCompat.TextView">-->
-        <!--<item name="android:layout_width">wrap_content</item>-->
-        <!--<item name="android:layout_height">wrap_content</item>-->
-        <!--<item name="android:layout_gravity">center_vertical</item>-->
-        <!--<item name="android:layout_marginStart">8dp</item>-->
-        <!--<item name="android:textColor">@color/colorAccent</item>-->
-        <!--<item name="android:textSize">14sp</item>-->
-        <!--<item name="android:visibility">gone</item>-->
-    <!--</style>-->
-
-    <style name="AppTheme.InputField.Editable" parent="Widget.AppCompat.EditText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">@color/cardbackgroundcolor</item>
-        <item name="android:layout_margin">8dp</item>
-        <item name="android:inputType">textCapWords</item>
-        <item name="android:textColor">@color/textcolor</item>
-        <item name="android:textColorHint">@color/textcolor</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
-    <style name="AppTheme.InputField.TextInputEditText" parent="Widget.MaterialComponents.TextInputEditText.OutlinedBox">
-        <item name="android:colorControlNormal">@color/colorAccent</item>
-        <item name="android:colorControlActivated">@color/textcolor</item>
-        <item name="android:colorControlHighlight">@color/textcolor_muted</item>
-    </style>
-
-    <!-- Label Instructions Alert Dialog -->
-    <style name="AppTheme.AlertDialog.LabelInstructions" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColor">@color/textcolor_muted</item>
-        <item name="android:textColorPrimary">@color/textcolor</item>
+    <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:textColor">@color/iconAndTextColor</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
+        <item name="boxStrokeColor">@color/iconAndTextColor</item>
+        <item name="colorControlNormal">@color/iconAndTextColor</item>
+        <item name="colorControlActivated">@color/iconAndTextColor</item>
+        <item name="colorControlHighlight">@color/iconAndTextColor</item>
     </style>
 
 </resources>

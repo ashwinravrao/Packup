@@ -1,44 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- AppTheme -->
     <color name="colorPrimary">#EEEEEE</color>
-    <color name="colorPrimaryDark">#E0E0E0</color>
-
-    <!-- To Be Refactored / Deleted -->
-    <color name="cardnumbercolor">#6C6C6C</color>
-    <color name="textcolor">#4E4E4E</color>
-    <color name="textcolor_muted">#CC4E4E4E</color>
-    <color name="boxnumbercolor">#996C6C6C</color>
-    <color name="cardbordercolor">#33000000</color>
-    <color name="iconDisabledColor">#80000000</color>
-    <color name="divider">#707070</color>
-    <color name="mutedGrayButtonColor">#CC4E4E4E</color>
-    <color name="inputFieldBackground">#1AAAAAAA</color>
-    <color name="boxNumberButtonBackground">#C1A061</color>
-    <color name="inputFieldBorder">#734E4E4E</color>
-
-    <!-- Refactored AppTheme -->
-    <!--<color name="colorAccent">#FFB74D</color>-->
-    <!--<color name="secondaryColorAccent">#BE7000</color>-->
-    <!--<color name="textColorSecondary">#80FFFFFF</color>-->
-    <!--<color name="listDivider">#1AFFFFFF</color>-->
-
-    <!-- ViewPager -->
-    <color name="textColor">#FFFFFF</color>
-    <color name="background">@color/colorPrimary</color>
-    <color name="grayDots">#80FFFFFF</color>
-    <!--<color name="textInputLayout">@color/colorAccent</color>-->
-
-     <!-- AppTheme.Dark -->
-    <color name="colorPrimaryNight">#303030</color>
-    <color name="colorPrimaryNightDark">#282828</color>
-    <color name="cardnumbercolorNight">#E9E9E9</color>
-    <color name="textcolorNight">#E9E9E9</color>
-
-    <!-- Nonspecific colors -->
+    <color name="colorPrimaryDark">#E3E3E3</color>
+    <color name="colorPrimaryDarker">#BFBFBF</color>
     <color name="colorAccent">#1788D3</color>
-    <color name="cardbackgroundcolor">#E6E6E6</color>
-    <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/textcolor_muted</color>
-
+    <color name="iconAndTextColor">#4E4E4E</color>
+    <color name="toastBackground">#804E4E4E</color>
+    <color name="warningRed">#DC143C</color>
+    <color name="confirmGreen">#33A532</color>
 
 </resources>

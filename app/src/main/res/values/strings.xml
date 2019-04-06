@@ -1,58 +1,44 @@
-<resources>
-    <!-- Application -->
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Boxray</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="box_list_fragment_action_bar_title">Boxes</string>
-    <string name="action_search">Search</string>
-    <string name="action_invert_colors">Invert Colors</string>
-
-    <!-- AddEditFragment -->
-    <string name="name_field_title">Name</string>
-    <string name="source_field_title">Source</string>
-    <string name="dest_field_title">Destination</string>
-    <string name="add_item_field_title">Add item</string>
-    <string name="category_button_text">Category</string>
-    <string name="ID_LEDGER">com.ashwinrao.boxray.ID_LEDGER_KEY</string>
-
-    <!-- AddEditFragment - Alert Dialog - Label Instructions -->
-    <string name="label_instructions_dialog_title">Choosing a Label for your Box</string>
-    <string name="label_instructions_dialog_body">Some text</string>
-    <string name="label_instructions_dialog_positive_button_text">Got it</string>
-
-    <!-- ListFragment -->
-    <string name="box_name_placeholder">Kitchen Supplies</string>
-    <string name="box_num_items_placeholder">%1$d items</string>
-    <string name="box_button_label">box label</string>
-    <string name="box_number_placeholder">Box Number %1$d</string>
-    <string name="box_number_placeholder_small">43</string>
-
-    <!-- DetailFragment -->
-    <string name="app_placeholder">PLACEHOLDER</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="fragment_list_title">List of Boxes</string>
+    <string name="title_list">List</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_search">Search</string>
+    <string name="fragment_search_title">Search</string>
+    <string name="title_about">About</string>
+    <string name="bottom_bar_fab_title">Add Box</string>
+    <string name="toolbar_title_home">Dashboard</string>
+    <string name="title_help">Help</string>
+    <string name="help_placeholder">Your help dialog will go here</string>
+    <string name="title_page_one_details">Make a label</string>
+    <string name="label_page_one_details" tools:ignore="TypographyEllipsis">Let\'s start by creating a virtual label for your new box. Details like the name of your box, where it\'s going and where items are from will all be used to generate this unique virtual label.</string>
+    <string name="hint_box_name">Name</string>
+    <string name="hint_box_source">Source</string>
+    <string name="hint_box_destination">Destination</string>
+    <string name="hint_box_notes">Notes</string>
+    <string name="title_add_note">Add Note</string>
+    <string name="title_more_fields">More Fields</string>
+    <string name="hint_box_category">Category</string>
+    <string name="title_save_draft">Save Draft</string>
+    <string name="message_draft_saved">Draft saved</string>
+    <string name="label_required">Required</string>
+    <string name="title_page_two_items">Fill your box</string>
+    <string name="title_clear_all">Clear All</string>
+    <string name="label_page_two_contents">Perfect! You can start adding items to your new box. As you place each item inside, give it a unique and descriptive name. This will come in handy after the box has arrived and you\'re looking for a particular item.</string>
+    <string name="hint_item">Item</string>
+    <string name="message_add_note">Add note alert dialog goes here</string>
     <string name="snackbar_item_deleted">Item deleted</string>
-    <string name="Undo">Undo</string>
-    <string name="save_button_label">save box</string>
-    <string name="box_number_label">Box Number</string>
-    <string name="add_edit_fragment_action_bar_title">Add box</string>
-    <string name="step_one_instructions">Enter a few details about your new box. </string>
-    <string name="step_one_title">Step 1</string>
-    <string name="show_more">show more</string>
-    <string name="step_two_title">Step 2</string>
-    <string name="step_two_instructions">Add at least one item. Using descriptive names will help you find your items later.</string>
-    <string name="step_three_title">Step 3</string>
-    <string name="step_three_instructions">Take a photo by holding your camera out over your opened box.</string>
-    <string name="box_number_button_text">box number</string>
-    <string name="notes_field_title">Notes</string>
-    <string name="label_placement_button_text">Label Placement</string>
-    <string name="menu_label">Box Label</string>
-    <string name="menu_save">Save Box</string>
-    <string name="instructions_page_box_properties">Save a few details about your new box</string>
-    <string name="hint_name_page_box_properties">Name</string>
-    <string name="hint_from_page_box_properties">From</string>
-    <string name="hint_to_page_box_properties">To</string>
-    <string name="next_button_title">NEXT</string>
+    <string name="message_undo">Undo</string>
+    <string name="message_items_cleared">Items cleared</string>
+    <string name="todo">TODO</string>
+    <string name="label_page_three_photo">Now let\'s take a picture of your box and its items. If you haven\'t added any yet, make sure to do so before taking a photo of your box. You can skip this step and edit your box later when you have more items.</string>
+    <string name="tap_to">tap here to</string>
+    <string name="take_photo">take photo</string>
+    <string name="title_page_three_photo">Take a photo</string>
+    <string name="title_retake_photo">Retake photo</string>
+    <string name="message_photo_tip">Hold your phone out above your open box and take a photo. Make sure that the edges of your box are clear and visible. Tap the top-right menu button to retake your photo!</string>
+    <string name="message_photo_tip_title">Tip:</string>
 </resources>

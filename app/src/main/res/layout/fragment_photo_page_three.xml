@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:id="@+id/instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/app_bar_layout">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.6"
+                android:paddingStart="24dp"
+                android:paddingTop="48dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="32dp"
+                android:text="@string/label_page_three_photo"
+                android:textAlignment="viewStart"
+                android:textColor="@color/iconAndTextColor"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_weight="0.3"
+                android:padding="24dp"
+                android:src="@drawable/ic_take_photo" />
+
+        </LinearLayout>
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/divider"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintTop_toBottomOf="@id/instructions"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--android:visibility="invisible"-->
+            <!--android:layout_marginTop="24dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginEnd="16dp">-->
+
+            <!--<View-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="0.25"-->
+                <!--android:layout_height="2dp"-->
+                <!--android:layout_gravity="bottom"-->
+                <!--android:background="@color/colorPrimaryDarker"/>-->
+
+            <!--<View-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="0.25"-->
+                <!--android:layout_height="2dp"-->
+                <!--android:background="@color/colorPrimaryDarker"/>-->
+
+            <!--<View-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="0.25"-->
+                <!--android:layout_height="2dp"-->
+                <!--android:background="@color/colorPrimaryDarker"/>-->
+
+            <!--<View-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="0.25"-->
+                <!--android:layout_height="2dp"-->
+                <!--android:background="@color/colorPrimaryDark"/>-->
+
+        <!--</LinearLayout>-->
+
+        <LinearLayout
+            android:id="@+id/photo_placeholder"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/instructions"
+            android:background="@drawable/background_photo_placeholder"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                android:layout_gravity="center"
+                android:alpha="0.5"
+                android:src="@drawable/ic_camera"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tip_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="48dp"
+            android:textAlignment="viewStart"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/photo_placeholder"
+            android:text="@string/message_photo_tip_title"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tip_title"
+            android:textColor="@color/iconAndTextColor"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/message_photo_tip"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
