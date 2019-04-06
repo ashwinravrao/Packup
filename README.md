@@ -6,6 +6,5 @@ Android app that helps users manage their packed boxes and items during a move. 
 - Room
 - LiveData
 - AndroidX
-- AsyncTask
 - Data Binding
-- Repository pattern
+- Material Components
