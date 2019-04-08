@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.databinding.FragmentPhotoPageThreeBinding;
+import com.ashwinrao.boxray.databinding.FragmentNumberPageFourBinding;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -18,40 +18,33 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-public class PhotoPageThreeFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
+public class NumberPageFourFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentPhotoPageThreeBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_photo_page_three, container, false);
+        final FragmentNumberPageFourBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_number_page_four, container, false);
 
         configureToolbar(binding.toolbar);
-
-        binding.photoPlaceholder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(Objects.requireNonNull(getView()), "Opening camera intent ...", Snackbar.LENGTH_LONG).show();
-            }
-        });
 
         return binding.getRoot();
     }
 
     private void configureToolbar(@NonNull Toolbar toolbar) {
-        toolbar.setTitle(getString(R.string.title_page_three_photo));
-        toolbar.inflateMenu(R.menu.menu_toolbar_page_three);
+        toolbar.setTitle(getString(R.string.title_page_four_number));
+        toolbar.inflateMenu(R.menu.menu_toolbar_page_four);
         toolbar.setOnMenuItemClickListener(this);
     }
-
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.toolbar_retake_photo:
-                Snackbar.make(Objects.requireNonNull(getView()), "Camera intent goes here", Snackbar.LENGTH_LONG).show();   // todo replace with camera intent
+            case R.id.toolbar_show_me:
+                Snackbar.make(Objects.requireNonNull(getView()), "Help is on the way", Snackbar.LENGTH_LONG).show();   // todo replace with some other action
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 }

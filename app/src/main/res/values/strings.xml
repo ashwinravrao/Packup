@@ -40,5 +40,10 @@
     <string name="title_page_three_photo">Take a photo</string>
     <string name="title_retake_photo">Retake photo</string>
     <string name="message_photo_tip">Hold your phone out above your open box and take a photo. Make sure that the edges of your box are clear and visible. Tap the top-right menu button to retake your photo!</string>
-    <string name="message_photo_tip_title">Tip:</string>
+    <string name="message_tip_title">Tip:</string>
+    <string name="label_page_four_number">Okay, last step! Mark the following number on your box on at least 2 surfaces. This is how you\'ll be able to keep track of what\'s in this box.</string>
+    <string name="message_number_tip">Try and use big, bold letters (preferably with a dark colored and heavy marker). The idea is you want to be able to identify your box from 10 to 15 feet away!</string>
+    <string name="title_page_four_number">Mark your box</string>
+    <string name="title_show_me">Show Me</string>
+    <string name="box_num_items_placeholder">%1$d items</string>
 </resources>

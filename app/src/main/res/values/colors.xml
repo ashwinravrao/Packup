@@ -8,5 +8,8 @@
     <color name="toastBackground">#804E4E4E</color>
     <color name="warningRed">#DC143C</color>
     <color name="confirmGreen">#33A532</color>
+    <color name="boxVHBorder">#734E4E4E</color>
+    <color name="boxVHBackground">#1AAAAAAA</color>
+    <color name="boxVHNumber">#996C6C6C</color>
 
 </resources>

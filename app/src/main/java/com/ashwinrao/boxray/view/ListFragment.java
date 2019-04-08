@@ -9,10 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ashwinrao.boxray.R;
+import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
+import com.ashwinrao.boxray.util.Utilities;
+import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -20,15 +25,26 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class ListFragment extends Fragment {
+
+    private RecyclerView recyclerView;
+    private ListAdapter listAdapter;
+    private LiveData<List<Box>> boxesLD;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        boxesLD = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBoxes();
     }
 
     @Nullable
@@ -65,6 +81,20 @@ public class ListFragment extends Fragment {
                         .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
                         .replace(R.id.fragment_container, new AddFragment())
                         .commit();
+            }
+        });
+
+        recyclerView = binding.recyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()), getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container), boxesLD.getValue());
+        recyclerView.setAdapter(listAdapter);
+
+        boxesLD.observe(this, new Observer<List<Box>>() {
+            @Override
+            public void onChanged(List<Box> boxes) {
+                if(boxes != null) { listAdapter.setBoxes(boxes); }
+                else { listAdapter.setBoxes(new ArrayList<Box>()); }
+                recyclerView.setAdapter(listAdapter);
             }
         });
 

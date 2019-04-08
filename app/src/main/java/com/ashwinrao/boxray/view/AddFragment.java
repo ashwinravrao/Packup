@@ -12,6 +12,7 @@ import com.ashwinrao.boxray.databinding.FragmentAddBinding;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.pages.ContentsPageTwoFragment;
 import com.ashwinrao.boxray.view.pages.DetailsPageOneFragment;
+import com.ashwinrao.boxray.view.pages.NumberPageFourFragment;
 import com.ashwinrao.boxray.view.pages.PhotoPageThreeFragment;
 
 import java.util.Objects;
@@ -32,7 +33,7 @@ public class AddFragment extends Fragment {
         final FragmentAddBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
 
         // Configure viewpager "pages" in order of appearance
-        final Fragment[] fragments = { new DetailsPageOneFragment(), new ContentsPageTwoFragment(), new PhotoPageThreeFragment()};
+        final Fragment[] fragments = { new DetailsPageOneFragment(), new ContentsPageTwoFragment(), new PhotoPageThreeFragment(), new NumberPageFourFragment()};
 
 //         Configure toolbar
 //        Toolbar toolbar = binding.toolbar;
