@@ -1,16 +1,18 @@
 package com.ashwinrao.boxray.view.pages;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentNumberPageFourBinding;
-import com.google.android.material.snackbar.Snackbar;
+import com.ashwinrao.boxray.view.MainActivity;
 
 import java.util.Objects;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,7 +20,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
-public class NumberPageFourFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
+public class NumberPageFourFragment extends Fragment {
+
+    private static final String TAG = "AddBox";
 
     @Nullable
     @Override
@@ -27,24 +31,30 @@ public class NumberPageFourFragment extends Fragment implements Toolbar.OnMenuIt
 
         configureToolbar(binding.toolbar);
 
+        configureFinishButton(binding.finishButton);
+
         return binding.getRoot();
     }
 
     private void configureToolbar(@NonNull Toolbar toolbar) {
         toolbar.setTitle(getString(R.string.title_page_four_number));
-        toolbar.inflateMenu(R.menu.menu_toolbar_page_four);
-        toolbar.setOnMenuItemClickListener(this);
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.toolbar_show_me:
-                Snackbar.make(Objects.requireNonNull(getView()), "Help is on the way", Snackbar.LENGTH_LONG).show();   // todo replace with some other action
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
+    private void configureFinishButton(@NonNull Button button) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "Finish button clicked!");
+                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBox().setId(generateRandomInteger());  // todo replace with sequential numbering scheme
+                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().verifySaveRequirements();
+            }
+        });
+    }
+
+    // todo replace with logical number generation
+    private int generateRandomInteger() {
+        Random r = new Random();
+        return r.nextInt(100);
     }
 
 }

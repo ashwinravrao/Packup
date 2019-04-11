@@ -1,6 +1,7 @@
 package com.ashwinrao.boxray.view;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,65 +22,75 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.viewpager.widget.ViewPager;
 
 public class AddFragment extends Fragment {
 
-    private int currentPage;
+    private static final String TAG = "AddBox";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentAddBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
 
-        // Configure viewpager "pages" in order of appearance
         final Fragment[] fragments = { new DetailsPageOneFragment(), new ContentsPageTwoFragment(), new PhotoPageThreeFragment(), new NumberPageFourFragment()};
 
-//         Configure toolbar
-//        Toolbar toolbar = binding.toolbar;
-//        toolbar.inflateMenu(R.menu.menu_toolbar_add);
-//        toolbar.setOnMenuItemClickListener(this);
-
-        // Configure viewpager + adapter
         final FragmentPager adapter = new FragmentPager(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragments);
         final ScrollOptionalViewPager viewPager = binding.viewpager;
-//        ((MainActivity) getActivity()).getViewModel().setWasSwiped(viewPager.getWasSwiped()); todo maybe re-enable?
         viewPager.setAdapter(adapter);
         viewPager.setScrollingBehavior(true);
-//        ((MainActivity) getActivity()).getViewModel().setCanViewPagerAdvance(false);
+        viewPager.setOffscreenPageLimit(4);
 
-        // Configure viewpager dot indicators
-        addDotsIndicator(binding.indicators, 0, fragments.length);
+        addViewPagerIndicator(binding.indicators, 0, fragments.length);
         viewPager.addOnPageChangeListener(pageChangeListener(binding.indicators, fragments.length));
 
-//        ((MainActivity) getActivity()).getViewModel().getCanViewPagerAdvance().observe(this, new Observer<Boolean>() {
-//            @Override
-//            public void onChanged(Boolean aBoolean) {
-//                viewPager.setScrollingBehavior(aBoolean);
-//            }
-//        });
+        configureIndicatorBehaviorOnSoftKeyboardOpen(binding);
 
-        configureSoftInputBackgroundViewBehavior(binding);
+        ((MainActivity) getActivity()).getViewModel().getShouldGoToInitialPage().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                Log.d(TAG, "shouldGoToInitialPage set to: " + aBoolean);
+                if(aBoolean) {
+                    viewPager.setCurrentItem(0);
+                }
+            }
+        });
+
+        ((MainActivity) getActivity()).getViewModel().getIsAddComplete().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean) {
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                }
+            }
+        });
 
         return binding.getRoot();
     }
 
-    private void configureSoftInputBackgroundViewBehavior(@NonNull final FragmentAddBinding binding) {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().setShouldGoToInitialPage(false);
+        ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().setIsAddComplete(false);
+    }
+
+    private void configureIndicatorBehaviorOnSoftKeyboardOpen(@NonNull final FragmentAddBinding binding) {
         binding.getRoot().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                hideBackgroundViewOnSoftInputVisible(binding.rootViewGroup, binding.indicators);
+                hideIndicatorOnSoftInputVisible(binding.rootViewGroup, binding.indicators);
             }
         });
     }
 
-    private void hideBackgroundViewOnSoftInputVisible(@NonNull ViewGroup root, @NonNull View viewToHide) {
-        // Hides the specified view when the soft keyboard is visible, so as not to resize along with other views
+    private void hideIndicatorOnSoftInputVisible(@NonNull ViewGroup root, @NonNull View viewToHide) {
         if(Utilities.keyboardIsShowing(root)) { viewToHide.setVisibility(View.INVISIBLE); }
         else { viewToHide.setVisibility(View.VISIBLE); }
     }
 
-    private void addDotsIndicator(@NonNull ViewGroup dotsContainer, int position, int numFragments) {
+    private void addViewPagerIndicator(@NonNull ViewGroup dotsContainer, int position, int numFragments) {
         TextView[] dots = new TextView[numFragments];
         dotsContainer.removeAllViews();
 
@@ -104,8 +115,7 @@ public class AddFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
-                currentPage = position;
-                addDotsIndicator(container, position, numFragments);
+                addViewPagerIndicator(container, position, numFragments);
             }
 
             @Override
@@ -114,16 +124,4 @@ public class AddFragment extends Fragment {
             }
         };
     }
-
-
-//    @Override
-//    public boolean onMenuItemClick(MenuItem item) {
-//        switch(item.getItemId()) {
-//            case R.id.toolbar_help:
-//                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.help_placeholder, false, true);
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 }

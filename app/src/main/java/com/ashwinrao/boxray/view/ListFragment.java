@@ -1,12 +1,16 @@
 package com.ashwinrao.boxray.view;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
@@ -33,6 +37,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class ListFragment extends Fragment {
+
+    private static final String TAG = "FAB";
 
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
@@ -74,12 +80,12 @@ public class ListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                (Objects.requireNonNull(getActivity()))
+                Objects.requireNonNull(getActivity())
                         .getSupportFragmentManager()
                         .beginTransaction()
-                        .addToBackStack(null)
                         .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
                         .replace(R.id.fragment_container, new AddFragment())
+                        .addToBackStack(null)
                         .commit();
             }
         });

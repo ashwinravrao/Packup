@@ -29,11 +29,13 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(fragment == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container, new ListFragment())
-                    .commit();
+            fragment = new ListFragment();
         }
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.stay_still, R.anim.stay_still, 0, 0)
+                .replace(R.id.fragment_container, fragment)
+                .commit();
     }
 
     public BoxViewModel getViewModel() {

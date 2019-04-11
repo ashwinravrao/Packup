@@ -35,15 +35,8 @@ public class Box {
     @ColumnInfo(name = "favorite")
     private boolean favorite;
 
-    public Box(int id, String name, String source, String destination, String notes, List<String> contents, boolean favorite) {
-        this.id = id;
-        this.name = name;
-        this.source = source;
-        this.destination = destination;
-        this.notes = notes;
+    public Box() {
         this.createdDate = new Date();
-        this.contents = contents;
-        this.favorite = favorite;
     }
 
     public List<String> getContents() {

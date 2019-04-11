@@ -46,4 +46,7 @@
     <string name="title_page_four_number">Mark your box</string>
     <string name="title_show_me">Show Me</string>
     <string name="box_num_items_placeholder">%1$d items</string>
+    <string name="title_finish">Finish</string>
+    <string name="title_save">save</string>
+    <string name="title_finish_button">finish</string>
 </resources>

@@ -16,38 +16,25 @@ import androidx.lifecycle.ViewModel;
 public class BoxViewModel extends ViewModel {
 
     private final BoxRepository repository;
-    private MutableLiveData<String> toolbarTitle;
-    private MutableLiveData<Boolean> canViewPagerAdvance;
-    private LiveData<Boolean> wasSwiped;
+
+    private Box box;
+
+    private MutableLiveData<Boolean> shouldGoToInitialPage;
+    private MutableLiveData<Boolean> isAddComplete;
 
     public BoxViewModel(@NonNull Application application) {
         repository = ((Boxray) application).getRepository();
-        toolbarTitle = new MutableLiveData<>();
-        canViewPagerAdvance = new MutableLiveData<>();
+        shouldGoToInitialPage = new MutableLiveData<>();
+        isAddComplete = new MutableLiveData<>();
+        recreateBox();
     }
 
-    public void setWasSwiped(LiveData<Boolean> wasSwiped) {
-        this.wasSwiped = wasSwiped;
+    public void recreateBox() {
+        box = new Box();
     }
 
-    public LiveData<Boolean> getWasSwiped() {
-        return this.wasSwiped;
-    }
-
-    public void setCanViewPagerAdvance(boolean canViewPagerAdvance) {
-        this.canViewPagerAdvance.setValue(canViewPagerAdvance);
-    }
-
-    public LiveData<Boolean> getCanViewPagerAdvance() {
-        return this.canViewPagerAdvance;
-    }
-
-    public void setToolbarTitle(String title) {
-        toolbarTitle.setValue(title);
-    }
-
-    public LiveData<String> getToolbarTitle() {
-        return toolbarTitle;
+    public Box getBox() {
+        return box;
     }
 
     public LiveData<List<Box>> getBoxes() {
@@ -56,5 +43,30 @@ public class BoxViewModel extends ViewModel {
 
     public LiveData<Box> getBoxByID(int id) {
         return repository.getBoxByID(id);
+    }
+
+    public LiveData<Boolean> getShouldGoToInitialPage() {
+        return shouldGoToInitialPage;
+    }
+
+    public LiveData<Boolean> getIsAddComplete() {
+        return isAddComplete;
+    }
+
+    public void verifySaveRequirements() {
+        if(box.getName() != null) {
+            repository.saveBox(box);
+            isAddComplete.setValue(true);
+        } else {
+            shouldGoToInitialPage.setValue(true);
+        }
+    }
+
+    public void setIsAddComplete(boolean isAddComplete) {
+        this.isAddComplete.setValue(isAddComplete);
+    }
+
+    public void setShouldGoToInitialPage(boolean shouldGoToInitialPage) {
+        this.shouldGoToInitialPage.setValue(shouldGoToInitialPage);
     }
 }

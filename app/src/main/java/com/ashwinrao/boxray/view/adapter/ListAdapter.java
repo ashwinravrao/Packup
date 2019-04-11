@@ -46,7 +46,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
             Box box = boxes.get(position);
             holder.binding.setBox(box);
             holder.binding.boxNumberTextView.setText(String.valueOf(box.getId()));
-            holder.binding.numItemsTextView.setText(box.getContents().size() == 0 ? "No items" : context.getString(R.string.box_num_items_placeholder, box.getContents().size()));
+            holder.binding.numItemsTextView.setText(box.getContents() == null ? "No items" : context.getString(R.string.box_num_items_placeholder, box.getContents().size()));
         }
 
         @Override
