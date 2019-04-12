@@ -1,6 +1,7 @@
 package com.ashwinrao.boxray.view.pages;
 
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentDetailsPageOneBinding;
 import com.ashwinrao.boxray.view.MainActivity;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -25,7 +27,17 @@ import androidx.fragment.app.Fragment;
 
 public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
-    private boolean nameErrorSet = false;
+    private boolean nameErrorSet;
+    private BoxViewModel viewModel;
+    private Resources.Theme appTheme;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        nameErrorSet = false;
+        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+        appTheme = getActivity().getTheme();
+    }
 
     @Nullable
     @Override
@@ -33,14 +45,14 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         final FragmentDetailsPageOneBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details_page_one, container, false);
 
         configureToolbar(binding.toolbar);
-        configureNameFieldStartBehavior(binding.nameField);
+        setFieldError(binding.nameField, getString(R.string.label_required));
         watchNameField(binding.nameField);
 
         // Apply text appearance for floating hint (must be done at runtime to override default impl)
-        final TextInputLayout[] tils = { binding.nameField, binding.sourceField, binding.destinationField, binding.notesField};
+        final TextInputLayout[] tils = {binding.nameField, binding.sourceField, binding.destinationField, binding.notesField};
         for (TextInputLayout til : tils) {
             til.setHintTextAppearance(R.style.AppTheme_HintText);
-            til.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
+            til.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, appTheme));
         }
 
         return binding.getRoot();
@@ -52,41 +64,41 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         toolbar.setOnMenuItemClickListener(this);
     }
 
-    private void configureNameFieldStartBehavior(@NonNull TextInputLayout nameField) {
-
-        nameField.setErrorEnabled(true);
-        nameField.setError(getString(R.string.label_required));
-        nameField.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.warningRed, Objects.requireNonNull(getActivity()).getTheme())));
-        nameErrorSet = true;
-    }
-
     private void watchNameField(final TextInputLayout nameField) {
         Objects.requireNonNull(nameField.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(s.toString().length() > 0) {
-                    if(nameErrorSet) { nameField.setErrorEnabled(false); }
-                    ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBox().setName(s.toString());
+                if (s.toString().length() > 0) {
+                    if (nameErrorSet) {
+                        nameField.setErrorEnabled(false);
+                    }
+                    viewModel.getCurrentBox().setName(s.toString());
                 } else {
-                    nameField.setErrorEnabled(true);
-                    nameField.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.warningRed, Objects.requireNonNull(getActivity()).getTheme())));
-                    nameErrorSet = true;
-                    nameField.setError("Your box needs a name");
-                    ((MainActivity) getActivity()).getViewModel().getBox().setName(null);
+                    setFieldError(nameField, getString(R.string.message_error_name_field_reprompt));
+                    viewModel.getCurrentBox().setName(null);
                 }
             }
         });
     }
 
+    private void setFieldError(@NonNull TextInputLayout til, String message) {
+        til.setErrorEnabled(true);
+        til.setError(message);
+        til.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.warningRed, appTheme)));
+        this.nameErrorSet = true;
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.toolbar_save_draft:
                 Snackbar.make(Objects.requireNonNull(getView()), R.string.message_draft_saved, Snackbar.LENGTH_LONG).show();
                 return true;
@@ -94,15 +106,4 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
                 return super.onOptionsItemSelected(item);
         }
     }
-
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        Box box = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBox();
-//        if(box != null) {
-//            if(box.getName() != null) {
-//                Objects.requireNonNull(binding.nameField.getEditText()).setText(box.getName());
-//            }
-//        }
-//    }
 }

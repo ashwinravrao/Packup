@@ -30,7 +30,7 @@ public class PhotoPageThreeFragment extends Fragment implements Toolbar.OnMenuIt
         binding.photoPlaceholder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(Objects.requireNonNull(getView()), "Opening camera intent ...", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(Objects.requireNonNull(getView()), "Opening camera intent ...", Snackbar.LENGTH_LONG).show(); // todo replace
             }
         });
 
@@ -46,7 +46,7 @@ public class PhotoPageThreeFragment extends Fragment implements Toolbar.OnMenuIt
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.toolbar_retake_photo:
                 Snackbar.make(Objects.requireNonNull(getView()), "Camera intent goes here", Snackbar.LENGTH_LONG).show();   // todo replace with camera intent
                 return true;

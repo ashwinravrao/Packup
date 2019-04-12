@@ -33,7 +33,7 @@ public class BoxViewModel extends ViewModel {
         box = new Box();
     }
 
-    public Box getBox() {
+    public Box getCurrentBox() {
         return box;
     }
 
@@ -54,7 +54,7 @@ public class BoxViewModel extends ViewModel {
     }
 
     public void verifySaveRequirements() {
-        if(box.getName() != null) {
+        if (box.getName() != null) {
             repository.saveBox(box);
             isAddComplete.setValue(true);
         } else {

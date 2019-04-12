@@ -1,7 +1,6 @@
 package com.ashwinrao.boxray.view.pages;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,48 +9,48 @@ import android.widget.Button;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentNumberPageFourBinding;
 import com.ashwinrao.boxray.view.MainActivity;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 
 import java.util.Objects;
 import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 public class NumberPageFourFragment extends Fragment {
 
-    private static final String TAG = "AddBox";
+    private BoxViewModel viewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentNumberPageFourBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_number_page_four, container, false);
 
-        configureToolbar(binding.toolbar);
+        binding.toolbar.setTitle(getString(R.string.title_page_four_number));
 
         configureFinishButton(binding.finishButton);
 
         return binding.getRoot();
     }
 
-    private void configureToolbar(@NonNull Toolbar toolbar) {
-        toolbar.setTitle(getString(R.string.title_page_four_number));
-    }
-
     private void configureFinishButton(@NonNull Button button) {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "Finish button clicked!");
-                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBox().setId(generateRandomInteger());  // todo replace with sequential numbering scheme
-                ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().verifySaveRequirements();
+                viewModel.getCurrentBox().setId(generateRandomInteger());  // todo replace with sequential numbering scheme
+                viewModel.verifySaveRequirements();
             }
         });
     }
 
-    // todo replace with logical number generation
     private int generateRandomInteger() {
         Random r = new Random();
         return r.nextInt(100);

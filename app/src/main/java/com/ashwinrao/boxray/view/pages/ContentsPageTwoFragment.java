@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view.pages;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,7 +14,9 @@ import android.widget.TextView;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentContentsPageTwoBinding;
+import com.ashwinrao.boxray.view.MainActivity;
 import com.ashwinrao.boxray.view.adapter.ItemAdapter;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,12 +40,17 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
     private List<String> items;
     private MutableLiveData<List<String>> itemsMLD;
     private ItemAdapter itemAdapter;
+    private BoxViewModel viewModel;
+    private Resources.Theme appTheme;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
         itemsMLD = new MutableLiveData<>();
+        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+        appTheme = getActivity().getTheme();
+        viewForSnackbar = getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container);
     }
 
     @Nullable
@@ -51,24 +59,20 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         final FragmentContentsPageTwoBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contents_page_two, container, false);
 
         configureToolbar(binding.toolbar);
-
         configureItemRecyclerView(binding.itemRecyclerView);
-
         configureItemField(binding.itemField);
-
         return binding.getRoot();
     }
 
     private void configureToolbar(@NonNull Toolbar toolbar) {
         toolbar.setTitle(getString(R.string.title_page_two_items));
         toolbar.inflateMenu(R.menu.menu_toolbar_page_two);
-        this.viewForSnackbar = getView();
         toolbar.setOnMenuItemClickListener(this);
     }
 
     private void configureItemRecyclerView(@NonNull final RecyclerView rv) {
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        itemAdapter = new ItemAdapter(Objects.requireNonNull(getActivity()), getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container), itemsMLD, items);
+        itemAdapter = new ItemAdapter(Objects.requireNonNull(getActivity()), viewForSnackbar, itemsMLD, items);
         rv.setAdapter(itemAdapter);
 
         itemsMLD.observe(this, new Observer<List<String>>() {
@@ -76,6 +80,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
             public void onChanged(List<String> strings) {
                 itemAdapter.setItems(strings);
                 rv.setAdapter(itemAdapter);
+                viewModel.getCurrentBox().setContents(strings);
             }
         });
     }
@@ -83,7 +88,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
     private void configureItemField(@NonNull final TextInputLayout itemField) {
 
         itemField.setHintTextAppearance(R.style.AppTheme_HintText);
-        itemField.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
+        itemField.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, appTheme));
 
         Objects.requireNonNull(itemField.getEditText()).setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -91,8 +96,8 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         itemField.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if(v.getText().toString().length() >= 1) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (v.getText().toString().length() >= 1) {
                         saveItem(Objects.requireNonNull(itemField.getEditText().getText()).toString());
                         v.setText(null);
                     } else {
@@ -101,7 +106,6 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
                         itemField.getEditText().addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                             }
 
                             @Override
@@ -111,15 +115,12 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
 
                             @Override
                             public void afterTextChanged(Editable s) {
-
                             }
                         });
                     }
-
                     return true;
-                } else {
-                    return false;
                 }
+                return false;
             }
         });
 
@@ -135,7 +136,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         items.clear();
         itemsMLD.setValue(items);
         itemAdapter.setItems(items);
-        Snackbar.make(Objects.requireNonNull(getActivity()).getWindow().getDecorView().findViewById(R.id.fragment_container),
+        Snackbar.make(viewForSnackbar,
                 R.string.message_items_cleared,
                 Snackbar.LENGTH_LONG)
                 .setAction(R.string.message_undo, new View.OnClickListener() {
@@ -146,13 +147,13 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
                         itemAdapter.setItems(items);
                     }
                 })
-                .setActionTextColor(getResources().getColor(R.color.colorAccent, getActivity().getTheme()))
+                .setActionTextColor(getResources().getColor(R.color.colorAccent, appTheme))
                 .show();
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.toolbar_clear_all:
                 clearItems();
                 return true;
