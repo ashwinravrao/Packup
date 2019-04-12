@@ -6,6 +6,7 @@
     <color name="colorAccent">#1788D3</color>
     <color name="iconAndTextColor">#4E4E4E</color>
     <color name="toastBackground">#804E4E4E</color>
+    <color name="pageDeselected">#804E4E4E</color>
     <color name="warningRed">#DC143C</color>
     <color name="confirmGreen">#33A532</color>
     <color name="boxVHBorder">#734E4E4E</color>

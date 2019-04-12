@@ -15,10 +15,8 @@ import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
 
-    private final BoxRepository repository;
-
     private Box box;
-
+    private final BoxRepository repository;
     private MutableLiveData<Boolean> shouldGoToInitialPage;
     private MutableLiveData<Boolean> isAddComplete;
 

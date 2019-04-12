@@ -2,6 +2,7 @@ package com.ashwinrao.boxray.view;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +31,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class AddFragment extends Fragment {
 
-    private static final String TAG = "AddBox";
+    private Fragment[] fragments;
     private BoxViewModel viewModel;
     private FragmentManager fragmentManager;
     private Resources.Theme appTheme;
@@ -42,6 +43,25 @@ public class AddFragment extends Fragment {
         appTheme = getActivity().getTheme();
         viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
         viewModel.recreateBox();
+        instantiateInitialPage();
+        instantiateRemainingPages();
+    }
+
+    private void instantiateInitialPage() {
+        fragments = new Fragment[4];
+        fragments[0] = new DetailsPageOneFragment();
+    }
+
+    private void instantiateRemainingPages() {
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                fragments[1] = new ContentsPageTwoFragment();
+                fragments[2] = new PhotoPageThreeFragment();
+                fragments[3] = new NumberPageFourFragment();
+            }
+        });
     }
 
     @Nullable
@@ -49,12 +69,9 @@ public class AddFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentAddBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
 
-        final Fragment[] fragments = {new DetailsPageOneFragment(), new ContentsPageTwoFragment(), new PhotoPageThreeFragment(), new NumberPageFourFragment()};
-
-        final FragmentPager adapter = new FragmentPager(fragmentManager, fragments);
-        final ScrollOptionalViewPager viewPager = binding.viewpager;
+        final CustomFragmentStatePagerAdapter adapter = new CustomFragmentStatePagerAdapter(fragmentManager, fragments);
+        final ViewPager viewPager = binding.viewpager;
         viewPager.setAdapter(adapter);
-        viewPager.setScrollingBehavior(true);
         viewPager.setOffscreenPageLimit(4); // to retain page fields in memory
 
         addViewPagerIndicator(binding.indicators, 0, fragments.length);
@@ -65,19 +82,14 @@ public class AddFragment extends Fragment {
         viewModel.getShouldGoToInitialPage().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                Log.d(TAG, "shouldGoToInitialPage set to: " + aBoolean);
-                if (aBoolean) {
-                    viewPager.setCurrentItem(0);
-                }
+                if (aBoolean) viewPager.setCurrentItem(0);
             }
         });
 
         viewModel.getIsAddComplete().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if (aBoolean) {
-                    fragmentManager.popBackStack();
-                }
+                if (aBoolean) fragmentManager.popBackStack();
             }
         });
 
