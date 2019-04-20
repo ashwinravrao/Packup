@@ -50,5 +50,7 @@
     <string name="title_save">save</string>
     <string name="title_finish_button">finish</string>
     <string name="message_error_name_field_reprompt">Your box needs a name</string>
-    <string name="title_efab_box_number">Box # %d</string>
+    <string name="title_detail_box_number">Box # %d</string>
+    <string name="text_view_add_a_note">Add a note</string>
+    <string name="name_field">name</string>
 </resources>

@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,8 @@ import androidx.fragment.app.Fragment;
 
 public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
+    private static final String TAG = "Boxray";
+
     private boolean nameErrorSet;
     private BoxViewModel viewModel;
     private Resources.Theme appTheme;
@@ -44,9 +47,13 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentDetailsPageOneBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details_page_one, container, false);
 
+        final TextInputLayout[] fields = {binding.nameField, binding.sourceField, binding.destinationField, binding.notesField};
+
         configureToolbar(binding.toolbar);
         setFieldError(binding.nameField, getString(R.string.label_required));
-        watchNameField(binding.nameField);
+        for(TextInputLayout field : fields) {
+            watchField(field);
+        }
 
         // Apply text appearance for floating hint (must be done at runtime to override default impl)
         final TextInputLayout[] tils = {binding.nameField, binding.sourceField, binding.destinationField, binding.notesField};
@@ -64,8 +71,8 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         toolbar.setOnMenuItemClickListener(this);
     }
 
-    private void watchNameField(final TextInputLayout nameField) {
-        Objects.requireNonNull(nameField.getEditText()).addTextChangedListener(new TextWatcher() {
+    private void watchField(final TextInputLayout field) {
+        Objects.requireNonNull(field.getEditText()).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -76,14 +83,27 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 0) {
-                    if (nameErrorSet) {
-                        nameField.setErrorEnabled(false);
-                    }
-                    viewModel.getCurrentBox().setName(s.toString());
-                } else {
-                    setFieldError(nameField, getString(R.string.message_error_name_field_reprompt));
-                    viewModel.getCurrentBox().setName(null);
+                switch(field.getTag().toString()) {
+                    case "name":
+                        if(s.toString().length() > 0) {
+                            if (nameErrorSet) field.setErrorEnabled(false);
+                            viewModel.getCurrentBox().setName(s.toString());
+                        } else {
+                            setFieldError(field, getString(R.string.message_error_name_field_reprompt));
+                            viewModel.getCurrentBox().setName(null);
+                        }
+                        break;
+                    case "source":
+                        viewModel.getCurrentBox().setSource(s.toString());
+                        break;
+                    case "destination":
+                        viewModel.getCurrentBox().setDestination(s.toString());
+                        break;
+                    case "note":
+                        viewModel.getCurrentBox().setNotes(s.toString());
+                        break;
+                    default:
+                        Log.e(TAG, "DetailsPageOneFragment: watchField(): TextWatcher: afterTextChanged: error retrieving TextInputLayout tag");
                 }
             }
         });

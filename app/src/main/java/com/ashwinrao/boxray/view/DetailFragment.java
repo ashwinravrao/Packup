@@ -45,6 +45,8 @@ public class DetailFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onChanged(Box box) {
                 binding.setBox(box);
+                binding.boxNumber.setText(getString(R.string.title_detail_box_number, box.getId()));
+                if(box.getNotes() == null) binding.noteContainer.setVisibility(View.GONE);
             }
         });
 

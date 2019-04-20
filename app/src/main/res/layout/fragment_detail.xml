@@ -34,7 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/box_name_text_view"
+                android:id="@+id/box_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{box.name}"
@@ -44,46 +44,52 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/saved_image" />
 
-            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-                android:id="@+id/box_number_efab"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                app:elevation="0dp"
-                android:paddingTop="0dp"
-                android:paddingBottom="0dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp"
-                android:textAllCaps="false"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:textColor="@android:color/white"
-                tools:text="Box # 44"
-                android:clickable="false"
-                android:focusable="false"
-                android:foreground="@android:color/transparent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/saved_image"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="24dp"
-                android:backgroundTint="@color/colorAccent"/>
-
-            <ImageView
-                android:id="@+id/notes_icon"
+            <TextView
+                android:id="@+id/box_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_note"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/box_name_text_view"
-                android:layout_marginStart="32dp"
-                android:layout_marginTop="32dp"/>
+                tools:text="Box # 22"
+                android:background="@drawable/background_box_number"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                app:layout_constraintBaseline_toBaselineOf="@id/box_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@android:color/white"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="5dp"
+                android:layout_margin="32dp"/>
 
-            <!--<com.google.android.gms.maps.MapView-->
-                <!--android:id="@+id/map_view"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@id/notes_icon"/>-->
+            <LinearLayout
+                android:id="@+id/note_container"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/box_name"
+                android:layout_margin="32dp">
+
+                <ImageView
+                    android:id="@+id/notes_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_notepad" />
+
+                <TextView
+                    android:id="@+id/box_note"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:background="@android:color/transparent"
+                    android:textSize="16sp"
+                    android:text="@{box.notes}"
+                    android:textColor="@color/iconAndTextColor" />
+
+            </LinearLayout>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
