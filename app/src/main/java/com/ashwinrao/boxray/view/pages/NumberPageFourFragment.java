@@ -45,7 +45,7 @@ public class NumberPageFourFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewModel.getCurrentBox().setId(generateRandomInteger());  // todo replace with sequential numbering scheme
+//                viewModel.getCurrentBox().setId(generateRandomInteger());  // todo replace with sequential numbering scheme
                 viewModel.verifySaveRequirements();
             }
         });

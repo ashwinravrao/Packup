@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.ViewholderBoxBinding;
+import com.ashwinrao.boxray.view.DetailFragment;
+import com.ashwinrao.boxray.view.MainActivity;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -66,19 +68,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
             @Override
             public void onClick(View v) {
-                Snackbar.make(viewForSnackbar, "Preparing to open " + binding.getBox().getName() + "...", Snackbar.LENGTH_LONG).show(); // todo replace with detail view implementation
-//                Bundle bundle = new Bundle();
-//                bundle.putInt("Box Number", boxes.get(getAdapterPosition()).getId());
-//                DetailFragment detail = new DetailFragment();
-//                detail.setArguments(bundle);
-//
-//                ((MainActivity) context)
-//                        .getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .addToBackStack(null)
-//                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-//                        .replace(R.id.fragment_container_main, detail, "DetailFragment")
-//                        .commit();
+                Bundle bundle = new Bundle();
+                bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
+                DetailFragment detail = new DetailFragment();
+                detail.setArguments(bundle);
+
+                ((MainActivity) context)
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
+                        .replace(R.id.fragment_container, detail)
+                        .commit();
             }
         }
 }

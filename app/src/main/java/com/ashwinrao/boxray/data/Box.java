@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "boxes")
 public class Box {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
 
