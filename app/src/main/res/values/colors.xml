@@ -12,5 +12,6 @@
     <color name="boxVHBorder">#734E4E4E</color>
     <color name="boxVHBackground">#1AAAAAAA</color>
     <color name="boxVHNumber">#996C6C6C</color>
+    <color name="moving_truck_icon_wheel">#455A64</color>
 
 </resources>

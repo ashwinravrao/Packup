@@ -53,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
         this.viewModel = factory.create(BoxViewModel.class);
     }
 
+    public View getFragmentContainerView() {
+        return this.getWindow().getDecorView().findViewById(R.id.fragment_container);
+    }
+
     public void customToast(int message, boolean useToastVerticalOffset, boolean useCustomView) {
         Toast toast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
         if(useCustomView) {

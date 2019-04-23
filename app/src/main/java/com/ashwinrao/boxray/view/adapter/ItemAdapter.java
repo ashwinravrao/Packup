@@ -23,14 +23,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private Context context;
     private List<String> items;
     private View viewForSnackbar;
+    private boolean editable;
     private MutableLiveData<List<String>> fragmentItems;
 
-    public ItemAdapter(@NonNull Context context, @NonNull View viewForSnackbar, @NonNull MutableLiveData<List<String>> fragmentItems, @Nullable List<String> items) {
+    public ItemAdapter(@NonNull Context context, @NonNull View viewForSnackbar, @Nullable MutableLiveData<List<String>> fragmentItems, @Nullable List<String> items, boolean editable) {
         this.context = context;
         this.viewForSnackbar = viewForSnackbar;
         this.items = new ArrayList<>();
-        this.fragmentItems = fragmentItems;
+        if(fragmentItems != null) this.fragmentItems = fragmentItems;
         if(items != null) { this.items = items; }
+        this.editable = editable;
     }
 
     public void setItems(List<String> items) {
@@ -48,7 +50,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String item = items.get(position);
         holder.binding.savedItemLabel.setText(item);
-        handleItemRemoval(holder.binding.savedItemRemoveButton, position);
+        if(editable) handleItemRemoval(holder.binding.savedItemRemoveButton, position);
+        else holder.binding.savedItemRemoveButton.setVisibility(View.INVISIBLE);
     }
 
     private void handleItemRemoval(@NonNull View view, final int position) {

@@ -72,7 +72,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
 
     private void configureItemRecyclerView(@NonNull final RecyclerView rv) {
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        itemAdapter = new ItemAdapter(Objects.requireNonNull(getActivity()), viewForSnackbar, itemsMLD, items);
+        itemAdapter = new ItemAdapter(Objects.requireNonNull(getActivity()), viewForSnackbar, itemsMLD, items, true);
         rv.setAdapter(itemAdapter);
 
         itemsMLD.observe(this, new Observer<List<String>>() {

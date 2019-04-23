@@ -39,7 +39,6 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ListFragment extends Fragment {
 
     private static final String TAG = "FAB";
-
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
@@ -83,7 +82,7 @@ public class ListFragment extends Fragment {
                 Objects.requireNonNull(getActivity())
                         .getSupportFragmentManager()
                         .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
+                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
                         .replace(R.id.fragment_container, new AddFragment())
                         .addToBackStack(null)
                         .commit();

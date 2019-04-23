@@ -22,7 +22,7 @@ android {
 }
 
 dependencies {
-    def lifecycle_version = "2.0.0"
+    def lifecycle_version = "2.1.0-alpha04"
     def room_version = "2.1.0-alpha04"
     // alpha05 throws "...failed to read get kotlin metadata..." error @ compile
 
@@ -36,10 +36,6 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // Google Maps API
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
-
     // Else
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
@@ -49,5 +45,4 @@ dependencies {
     testImplementation 'junit:junit:4.13-beta-2'
     androidTestImplementation 'androidx.test:runner:1.2.0-alpha04'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha04'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
 }

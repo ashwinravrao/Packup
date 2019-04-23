@@ -53,4 +53,17 @@
     <string name="title_detail_box_number">Box # %d</string>
     <string name="text_view_add_a_note">Add a note</string>
     <string name="name_field">name</string>
+    <string name="title_edit_box">Edit Box</string>
+    <string name="close_button_description">Close</string>
+    <string name="saved_image_description">Box Image</string>
+    <string name="old_home">Old Home</string>
+    <string name="new_home">New Home</string>
+    <string name="source_info_tag">From</string>
+    <string name="destination_info_tag">To</string>
+
+    <!-- Choices for Source/Destination Spinners -->
+    <string-array name="source_destination_array">
+        <item>New</item>
+        <item>Old</item>
+    </string-array>
 </resources>
