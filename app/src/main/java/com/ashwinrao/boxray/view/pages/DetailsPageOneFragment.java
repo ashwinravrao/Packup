@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentDetailsPageOneBinding;
-import com.ashwinrao.boxray.view.MainActivity;
+import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
@@ -38,7 +38,7 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         nameErrorSet = false;
-        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
         appTheme = getActivity().getTheme();
     }
 

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         }
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(R.anim.stay_still, R.anim.stay_still, 0, 0)
+//                .setCustomAnimations(R.anim.stay_still, R.anim.stay_still, 0, 0)
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }

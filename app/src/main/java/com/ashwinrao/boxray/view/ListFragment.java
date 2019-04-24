@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -79,13 +80,15 @@ public class ListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Objects.requireNonNull(getActivity())
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                        .replace(R.id.fragment_container, new AddFragment())
-                        .addToBackStack(null)
-                        .commit();
+//                Objects.requireNonNull(getActivity())
+//                        .getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
+//                        .replace(R.id.fragment_container, new AddFragment())
+//                        .addToBackStack(null)
+//                        .commit();
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                startActivity(intent);
             }
         });
 

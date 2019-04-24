@@ -19,6 +19,8 @@ import com.ashwinrao.boxray.view.pages.NumberPageFourFragment;
 import com.ashwinrao.boxray.view.pages.PhotoPageThreeFragment;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -31,7 +33,7 @@ import androidx.viewpager.widget.ViewPager;
 
 public class AddFragment extends Fragment {
 
-    private Fragment[] fragments;
+    private List<Fragment> fragments = new ArrayList<>();
     private BoxViewModel viewModel;
     private FragmentManager fragmentManager;
     private Resources.Theme appTheme;
@@ -41,27 +43,15 @@ public class AddFragment extends Fragment {
         super.onCreate(savedInstanceState);
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         appTheme = getActivity().getTheme();
-        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
         viewModel.recreateBox();
-        instantiateInitialPage();
-        instantiateRemainingPages();
     }
 
-    private void instantiateInitialPage() {
-        fragments = new Fragment[4];
-        fragments[0] = new DetailsPageOneFragment();
-    }
-
-    private void instantiateRemainingPages() {
-        Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                fragments[1] = new ContentsPageTwoFragment();
-                fragments[2] = new PhotoPageThreeFragment();
-                fragments[3] = new NumberPageFourFragment();
-            }
-        });
+    private void addPages() {
+        fragments.add(new DetailsPageOneFragment());
+        fragments.add(new ContentsPageTwoFragment());
+        fragments.add(new PhotoPageThreeFragment());
+        fragments.add(new NumberPageFourFragment());
     }
 
     @Nullable
@@ -69,13 +59,15 @@ public class AddFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentAddBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
 
+        addPages();
+
         final CustomFragmentStatePagerAdapter adapter = new CustomFragmentStatePagerAdapter(fragmentManager, fragments);
         final ViewPager viewPager = binding.viewpager;
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4); // to retain page fields in memory
 
-        addViewPagerIndicator(binding.indicators, 0, fragments.length);
-        viewPager.addOnPageChangeListener(pageChangeListener(binding.indicators, fragments.length));
+        addViewPagerIndicator(binding.indicators, 0, fragments.size());
+        viewPager.addOnPageChangeListener(pageChangeListener(binding.indicators, fragments.size()));
 
         configureIndicatorBehaviorOnSoftKeyboardOpen(binding);
 
@@ -89,18 +81,11 @@ public class AddFragment extends Fragment {
         viewModel.getIsAddComplete().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if (aBoolean) fragmentManager.popBackStack();
+                if (aBoolean) Objects.requireNonNull(getActivity()).finish();
             }
         });
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        viewModel.setShouldGoToInitialPage(false);
-        viewModel.setIsAddComplete(false);
     }
 
     private void configureIndicatorBehaviorOnSoftKeyboardOpen(@NonNull final FragmentAddBinding binding) {

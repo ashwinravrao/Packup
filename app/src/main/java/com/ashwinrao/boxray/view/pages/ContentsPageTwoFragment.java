@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentContentsPageTwoBinding;
-import com.ashwinrao.boxray.view.MainActivity;
+import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.view.adapter.ItemAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,7 +48,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
         itemsMLD = new MutableLiveData<>();
-        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
         appTheme = getActivity().getTheme();
         viewForSnackbar = getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container);
     }

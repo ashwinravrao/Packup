@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentNumberPageFourBinding;
-import com.ashwinrao.boxray.view.MainActivity;
+import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class NumberPageFourFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel();
+        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
     }
 
     @Nullable
