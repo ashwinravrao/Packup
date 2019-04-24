@@ -10,6 +10,7 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentNumberPageFourBinding;
 import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 
 import java.util.Objects;
 import java.util.Random;
@@ -26,7 +27,9 @@ public class NumberPageFourFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
+
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        viewModel = factory.create(BoxViewModel.class);
     }
 
     @Nullable

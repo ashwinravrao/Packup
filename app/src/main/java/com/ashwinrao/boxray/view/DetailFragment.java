@@ -13,6 +13,8 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentDetailBinding;
 import com.ashwinrao.boxray.view.adapter.ItemAdapter;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -29,6 +31,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
+    private BoxViewModel viewModel;
     private LiveData<Box> liveBox;
     private static final String TAG = "Boxray";
 
@@ -36,8 +39,11 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        viewModel = factory.create(BoxViewModel.class);
+
         if(getArguments() != null) {
-            liveBox = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBoxByID(getArguments().getInt("ID"));
+            liveBox = viewModel.getBoxByID(getArguments().getInt("ID"));
         }
 
     }

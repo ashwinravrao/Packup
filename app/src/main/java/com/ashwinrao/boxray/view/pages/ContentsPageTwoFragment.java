@@ -17,6 +17,7 @@ import com.ashwinrao.boxray.databinding.FragmentContentsPageTwoBinding;
 import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.view.adapter.ItemAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -48,7 +49,10 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
         itemsMLD = new MutableLiveData<>();
-        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
+
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        viewModel = factory.create(BoxViewModel.class);
+
         appTheme = getActivity().getTheme();
         viewForSnackbar = getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container);
     }

@@ -14,30 +14,28 @@ import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 
 public class AddActivity extends AppCompatActivity {
 
-    private BoxViewModel viewModel;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
-        getViewModel(getApplication());
+//        getViewModel(getApplication());
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if (fragment == null) {
             fragment = new AddFragment();
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
-    public BoxViewModel getViewModel() {
-        return this.viewModel;
-    }
-
-    private void getViewModel(Application application) {
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(application);
-        this.viewModel = factory.create(BoxViewModel.class);
-    }
+//    public BoxViewModel getViewModel() {
+//        return this.viewModel;
+//    }
+//
+//    private void getViewModel(Application application) {
+//        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(application);
+//        this.viewModel = factory.create(BoxViewModel.class);
+//    }
 
     public View getFragmentContainerView() {
         return this.getWindow().getDecorView().findViewById(R.id.fragment_container);

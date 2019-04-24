@@ -18,6 +18,7 @@ import com.ashwinrao.boxray.view.pages.DetailsPageOneFragment;
 import com.ashwinrao.boxray.view.pages.NumberPageFourFragment;
 import com.ashwinrao.boxray.view.pages.PhotoPageThreeFragment;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,14 @@ public class AddFragment extends Fragment {
         super.onCreate(savedInstanceState);
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         appTheme = getActivity().getTheme();
-        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
-        viewModel.recreateBox();
+
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        viewModel = factory.create(BoxViewModel.class);
+
+        // If creation is not due to configuration change, start fresh with a new box to build
+        if(savedInstanceState == null) {
+            viewModel.recreateBox();
+        }
     }
 
     private void addPages() {
@@ -56,12 +63,18 @@ public class AddFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentAddBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        final FragmentAddBinding binding =
+                DataBindingUtil.inflate(inflater, R.layout.fragment_add, container, false);
 
         addPages();
 
-        final CustomFragmentStatePagerAdapter adapter = new CustomFragmentStatePagerAdapter(fragmentManager, fragments);
+        final CustomFragmentStatePagerAdapter adapter =
+                new CustomFragmentStatePagerAdapter(fragmentManager, fragments);
+
         final ViewPager viewPager = binding.viewpager;
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4); // to retain page fields in memory
@@ -69,7 +82,7 @@ public class AddFragment extends Fragment {
         addViewPagerIndicator(binding.indicators, 0, fragments.size());
         viewPager.addOnPageChangeListener(pageChangeListener(binding.indicators, fragments.size()));
 
-        configureIndicatorBehaviorOnSoftKeyboardOpen(binding);
+        configureIndicatorBehaviorOnSoftKeyboardOpen(binding);  // prevent dots indicator from panning
 
         viewModel.getShouldGoToInitialPage().observe(this, new Observer<Boolean>() {
             @Override
@@ -105,6 +118,7 @@ public class AddFragment extends Fragment {
         }
     }
 
+    // Add dots dynamically to the containing ViewGroup, based on the number of pages defined in onCreateView()
     private void addViewPagerIndicator(@NonNull ViewGroup dotsContainer, int position, int numFragments) {
         TextView[] dots = new TextView[numFragments];
         dotsContainer.removeAllViews();
@@ -123,6 +137,7 @@ public class AddFragment extends Fragment {
         }
     }
 
+    // Change highlighted indicator dot depending on selected page index
     private ViewPager.OnPageChangeListener pageChangeListener(@NonNull final ViewGroup container, final int numFragments) {
         return new ViewPager.OnPageChangeListener() {
             @Override

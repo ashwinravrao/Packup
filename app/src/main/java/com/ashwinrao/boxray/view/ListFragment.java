@@ -18,6 +18,8 @@ import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
+import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
@@ -43,6 +45,7 @@ public class ListFragment extends Fragment {
     private RecyclerView recyclerView;
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
+    private BoxViewModel viewModel;
 
 
     @Override
@@ -50,7 +53,10 @@ public class ListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        boxesLD = ((MainActivity) Objects.requireNonNull(getActivity())).getViewModel().getBoxes();
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        viewModel = factory.create(BoxViewModel.class);
+
+        boxesLD = viewModel.getBoxes();
     }
 
     @Nullable
@@ -69,7 +75,7 @@ public class ListFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
                 switch(item.getItemId()) {
                     case R.id.toolbar_search:
-                        ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_search, true,true);
+//                        ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_search, true,true);
                         return true;
                 }
                 return true;
@@ -80,13 +86,6 @@ public class ListFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Objects.requireNonNull(getActivity())
-//                        .getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-//                        .replace(R.id.fragment_container, new AddFragment())
-//                        .addToBackStack(null)
-//                        .commit();
                 Intent intent = new Intent(getActivity(), AddActivity.class);
                 startActivity(intent);
             }
@@ -119,10 +118,10 @@ public class ListFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()) {
             case R.id.bottom_bar_about:
-                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_about, true, true);
+//                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_about, true, true);
                 return true;
             case R.id.bottom_bar_settings:
-                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_settings, true, true);
+//                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_settings, true, true);
                 return true;
         }
         return true;

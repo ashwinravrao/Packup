@@ -15,6 +15,7 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentDetailsPageOneBinding;
 import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,9 +38,12 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         nameErrorSet = false;
-        viewModel = ((AddActivity) Objects.requireNonNull(getActivity())).getViewModel();
-        appTheme = getActivity().getTheme();
+        appTheme = Objects.requireNonNull(getActivity()).getTheme();
+
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
+        viewModel = factory.create(BoxViewModel.class);
     }
 
     @Nullable
