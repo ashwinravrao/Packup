@@ -6,10 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.ashwinrao.boxray.Boxray;
+import com.ashwinrao.boxray.data.Box;
+import com.ashwinrao.boxray.data.BoxRepository;
+
 public class BoxViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     private static BoxViewModelFactory instance;
-    private Application application;
+    private final BoxRepository repo;
 
     public static synchronized BoxViewModelFactory getInstance(@NonNull Application application) {
         if(instance == null) {
@@ -19,14 +23,13 @@ public class BoxViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     }
 
     private BoxViewModelFactory(@NonNull Application application) {
-        super();
-        this.application = application;
+        this.repo = ((Boxray) application).getRepository();
     }
 
     @SuppressWarnings("unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new BoxViewModel(application);
+        return (T) new BoxViewModel(repo);
     }
 }

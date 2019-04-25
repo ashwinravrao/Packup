@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentDetailsPageOneBinding;
-import com.ashwinrao.boxray.view.AddActivity;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
@@ -26,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
@@ -42,8 +42,8 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         nameErrorSet = false;
         appTheme = Objects.requireNonNull(getActivity()).getTheme();
 
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = factory.create(BoxViewModel.class);
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
     }
 
     @Nullable
@@ -57,6 +57,10 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         setFieldError(binding.nameField, getString(R.string.label_required));
         for(TextInputLayout field : fields) {
             watchField(field);
+        }
+
+        if(savedInstanceState != null) {
+            repopulateFields(fields);
         }
 
         // Apply text appearance for floating hint (must be done at runtime to override default impl)
@@ -118,6 +122,17 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         til.setError(message);
         til.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.warningRed, appTheme)));
         this.nameErrorSet = true;
+    }
+
+    private void repopulateFields(@NonNull final TextInputLayout[] fields) {
+        if(viewModel.getCurrentBox().getName() != null) {
+            nameErrorSet = false;
+            fields[0].setErrorEnabled(false);
+        }
+        Objects.requireNonNull(fields[0].getEditText()).setText(viewModel.getCurrentBox().getName());
+        Objects.requireNonNull(fields[1].getEditText()).setText(viewModel.getCurrentBox().getSource());
+        Objects.requireNonNull(fields[2].getEditText()).setText(viewModel.getCurrentBox().getDestination());
+        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getCurrentBox().getNotes());
     }
 
     @Override

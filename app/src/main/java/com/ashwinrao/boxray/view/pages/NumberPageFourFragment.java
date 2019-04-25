@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class NumberPageFourFragment extends Fragment {
 
@@ -29,7 +30,7 @@ public class NumberPageFourFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = factory.create(BoxViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
     }
 
     @Nullable

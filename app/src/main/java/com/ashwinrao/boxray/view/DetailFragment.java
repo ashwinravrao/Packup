@@ -6,8 +6,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
@@ -26,6 +24,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 
@@ -40,7 +39,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         super.onCreate(savedInstanceState);
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = factory.create(BoxViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
 
         if(getArguments() != null) {
             liveBox = viewModel.getBoxByID(getArguments().getInt("ID"));
@@ -56,13 +55,6 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         Toolbar toolbar = binding.toolbar;
         toolbar.inflateMenu(R.menu.menu_toolbar_detail);
         toolbar.setOnMenuItemClickListener(this);
-
-//        Spinner[] spinners = {binding.sourceSpinner, binding.destinationSpinner};
-//        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.source_destination_array, android.R.layout.simple_spinner_item);
-//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        for (Spinner spinner : spinners) {
-//            spinner.setAdapter(arrayAdapter);
-//        }
 
         toolbar.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,13 +80,6 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         return binding.getRoot();
     }
 
-    /**
-     * This method will be invoked when a menu item is clicked if the item itself did
-     * not already handle the event.
-     *
-     * @param item {@link MenuItem} that was clicked
-     * @return <code>true</code> if the event was handled, <code>false</code> otherwise.
-     */
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         switch(item.getItemId()) {

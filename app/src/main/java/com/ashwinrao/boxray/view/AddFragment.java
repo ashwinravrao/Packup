@@ -2,8 +2,6 @@ package com.ashwinrao.boxray.view;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +28,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 public class AddFragment extends Fragment {
@@ -45,13 +44,8 @@ public class AddFragment extends Fragment {
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         appTheme = getActivity().getTheme();
 
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = factory.create(BoxViewModel.class);
-
-        // If creation is not due to configuration change, start fresh with a new box to build
-        if(savedInstanceState == null) {
-            viewModel.recreateBox();
-        }
+        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
     }
 
     private void addPages() {

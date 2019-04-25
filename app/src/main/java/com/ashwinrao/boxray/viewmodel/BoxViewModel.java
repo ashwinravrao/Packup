@@ -1,8 +1,5 @@
 package com.ashwinrao.boxray.viewmodel;
 
-import android.app.Application;
-
-import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.data.BoxRepository;
 
@@ -15,32 +12,29 @@ import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
 
-    private Box box;
-    private final BoxRepository repository;
-    private MutableLiveData<Boolean> shouldGoToInitialPage;
-    private MutableLiveData<Boolean> isAddComplete;
+    private Box box = new Box();
+    private final BoxRepository repo;
+    private MutableLiveData<Boolean> shouldGoToInitialPage = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isAddComplete = new MutableLiveData<>();
 
-    public BoxViewModel(@NonNull Application application) {
-        repository = ((Boxray) application).getRepository();
-        shouldGoToInitialPage = new MutableLiveData<>();
-        isAddComplete = new MutableLiveData<>();
-        recreateBox();
+    public BoxViewModel(@NonNull BoxRepository repo) {
+        this.repo = repo;
     }
 
-    public void recreateBox() {
-        box = new Box();
-    }
+//    public void createBox() {
+//        box = new Box();
+//    }
 
     public Box getCurrentBox() {
         return box;
     }
 
     public LiveData<List<Box>> getBoxes() {
-        return repository.getBoxes();
+        return repo.getBoxes();
     }
 
     public LiveData<Box> getBoxByID(int id) {
-        return repository.getBoxByID(id);
+        return repo.getBoxByID(id);
     }
 
     public LiveData<Boolean> getShouldGoToInitialPage() {
@@ -53,18 +47,10 @@ public class BoxViewModel extends ViewModel {
 
     public void verifySaveRequirements() {
         if (box.getName() != null) {
-            repository.saveBox(box);
+            repo.saveBox(box);
             isAddComplete.setValue(true);
         } else {
             shouldGoToInitialPage.setValue(true);
         }
-    }
-
-    public void setIsAddComplete(boolean isAddComplete) {
-        this.isAddComplete.setValue(isAddComplete);
-    }
-
-    public void setShouldGoToInitialPage(boolean shouldGoToInitialPage) {
-        this.shouldGoToInitialPage.setValue(shouldGoToInitialPage);
     }
 }

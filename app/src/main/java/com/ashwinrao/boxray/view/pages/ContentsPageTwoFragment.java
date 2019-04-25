@@ -32,6 +32,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,7 +52,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         itemsMLD = new MutableLiveData<>();
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = factory.create(BoxViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
 
         appTheme = getActivity().getTheme();
         viewForSnackbar = getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container);
@@ -63,7 +64,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         final FragmentContentsPageTwoBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_contents_page_two, container, false);
 
         configureToolbar(binding.toolbar);
-        configureItemRecyclerView(binding.itemRecyclerView);
+        configureItemRecyclerView(binding.itemRecyclerView, savedInstanceState);
         configureItemField(binding.itemField);
         return binding.getRoot();
     }
@@ -74,7 +75,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         toolbar.setOnMenuItemClickListener(this);
     }
 
-    private void configureItemRecyclerView(@NonNull final RecyclerView rv) {
+    private void configureItemRecyclerView(@NonNull final RecyclerView rv, @Nullable Bundle savedInstanceState) {
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
         itemAdapter = new ItemAdapter(Objects.requireNonNull(getActivity()), viewForSnackbar, itemsMLD, items, true);
         rv.setAdapter(itemAdapter);
@@ -87,6 +88,13 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
                 viewModel.getCurrentBox().setContents(strings);
             }
         });
+
+        if(savedInstanceState != null) {
+            items = viewModel.getCurrentBox().getContents();
+            itemsMLD.setValue(items);
+            itemAdapter.setItems(items);
+            rv.setAdapter(itemAdapter);
+        }
     }
 
     private void configureItemField(@NonNull final TextInputLayout itemField) {
