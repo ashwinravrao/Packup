@@ -139,7 +139,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
     }
 
     private void saveItem(String item) {
-        items.add(item);
+        items.add(0, item);
         itemsMLD.setValue(items);
     }
 

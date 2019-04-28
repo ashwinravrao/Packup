@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
@@ -63,17 +65,16 @@ public class ListFragment extends Fragment {
         ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(appBar);
 
         Toolbar toolbar = binding.toolbar;
-        toolbar.setTitle(R.string.toolbar_title_home);
+        toolbar.setTitle(R.string.toolbar_title_all);
         toolbar.inflateMenu(R.menu.menu_toolbar_list);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch(item.getItemId()) {
-                    case R.id.toolbar_search:
-//                        ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_search, true,true);
-                        return true;
-                }
+            if(item.getItemId() == R.id.toolbar_search) {
+                // do stuff
                 return true;
+            }
+            return true;
             }
         });
 

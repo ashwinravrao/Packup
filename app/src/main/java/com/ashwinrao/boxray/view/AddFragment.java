@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
+import com.ashwinrao.boxray.util.AddBoxCompletionListener;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.pages.ContentsPageTwoFragment;
 import com.ashwinrao.boxray.view.pages.DetailsPageOneFragment;
@@ -27,16 +28,16 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-public class AddFragment extends Fragment {
+public class AddFragment extends Fragment implements AddBoxCompletionListener {
 
     private List<Fragment> fragments = new ArrayList<>();
     private BoxViewModel viewModel;
     private FragmentManager fragmentManager;
     private Resources.Theme appTheme;
+    private ViewPager viewPager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +47,7 @@ public class AddFragment extends Fragment {
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
         viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
+        viewModel.setCompletionListener(this);
     }
 
     private void addPages() {
@@ -69,7 +71,7 @@ public class AddFragment extends Fragment {
         final CustomFragmentStatePagerAdapter adapter =
                 new CustomFragmentStatePagerAdapter(fragmentManager, fragments);
 
-        final ViewPager viewPager = binding.viewpager;
+        viewPager = binding.viewpager;
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(4); // to retain page fields in memory
 
@@ -78,19 +80,19 @@ public class AddFragment extends Fragment {
 
         configureIndicatorBehaviorOnSoftKeyboardOpen(binding);  // prevent dots indicator from panning
 
-        viewModel.getShouldGoToInitialPage().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) viewPager.setCurrentItem(0);
-            }
-        });
-
-        viewModel.getIsAddComplete().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if (aBoolean) Objects.requireNonNull(getActivity()).finish();
-            }
-        });
+//        viewModel.getShouldGoToInitialPage().observe(this, new Observer<Boolean>() {
+//            @Override
+//            public void onChanged(Boolean aBoolean) {
+//                if (aBoolean) viewPager.setCurrentItem(0);
+//            }
+//        });
+//
+//        viewModel.getIsAddComplete().observe(this, new Observer<Boolean>() {
+//            @Override
+//            public void onChanged(Boolean aBoolean) {
+//                if (aBoolean) Objects.requireNonNull(getActivity()).finish();
+//            }
+//        });
 
         return binding.getRoot();
     }
@@ -149,5 +151,19 @@ public class AddFragment extends Fragment {
 
             }
         };
+    }
+
+    @Override
+    public void returnToFirstPage(boolean shouldReturn) {
+        if(shouldReturn) {
+            viewPager.setCurrentItem(0);
+        }
+    }
+
+    @Override
+    public void finishParentActivity(boolean shouldFinish) {
+        if(shouldFinish) {
+            Objects.requireNonNull(getActivity()).finish();
+        }
     }
 }
