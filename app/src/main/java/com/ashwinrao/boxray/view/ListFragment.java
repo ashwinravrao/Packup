@@ -161,9 +161,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
                     @Override
                     public void onClick(View v) {
                         restoreDefaultAppBar();
-                        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
                         listAdapter.setBoxes(localBoxes);
-                        listAdapter.setToolbarTitleListener(ListFragment.this);
                         recyclerView.setAdapter(listAdapter);
                     }
                 });
