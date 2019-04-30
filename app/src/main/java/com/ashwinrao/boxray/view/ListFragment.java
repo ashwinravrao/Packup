@@ -40,8 +40,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ListFragment extends Fragment implements ContextualAppBarListener {
 
     private ListAdapter listAdapter;
+    private List<Box> localBoxes;
     private LiveData<List<Box>> boxesLD;
     private FragmentListBinding binding;
+    private RecyclerView recyclerView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,9 +86,9 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
             }
         });
 
-        final RecyclerView recyclerView = binding.recyclerView;
+        recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()), boxesLD.getValue());
+        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
         listAdapter.setToolbarTitleListener(this);
         recyclerView.setAdapter(listAdapter);
 
@@ -94,6 +96,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
             @Override
             public void onChanged(List<Box> boxes) {
                 if (boxes != null) {
+                    localBoxes = new ArrayList<>(boxes);
                     listAdapter.setBoxes(boxes);
                 } else {
                     listAdapter.setBoxes(new ArrayList<Box>());
@@ -158,7 +161,10 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
                     @Override
                     public void onClick(View v) {
                         restoreDefaultAppBar();
-                        listAdapter.disableBulkEditMode();
+                        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
+                        listAdapter.setBoxes(localBoxes);
+                        listAdapter.setToolbarTitleListener(ListFragment.this);
+                        recyclerView.setAdapter(listAdapter);
                     }
                 });
             }

@@ -14,7 +14,10 @@ import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,14 +29,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         private Context context;
         private List<Box> boxes;
         private List<Box> selected = new ArrayList<>();
-        private List<BoxViewHolder> viewHolders = new ArrayList<>();
         private boolean bulkEditEnabled = false;
         private ContextualAppBarListener listener;
-        private ViewGroup viewHolderRoot;
 
-        public ListAdapter(@NonNull Context context, @Nullable List<Box> boxes) {
+        public ListAdapter(@NonNull Context context) {
             this.context = context;
-            this.boxes = boxes;
         }
 
         public void setBoxes(List<Box> boxes) {
@@ -44,21 +44,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
             this.listener = listener;
         }
 
-        public void disableBulkEditMode() {
-            for(int i = 0; i < selected.size(); i++) {
-                viewHolders.get(i).binding.rootViewGroup.setBackground(context.getDrawable(R.drawable.background_box_viewholder));
-            }
-            selected.clear();
-            bulkEditEnabled = false;
-        }
-
         @NonNull
         @Override
         public BoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             ViewholderBoxBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_box, parent, false);
-            BoxViewHolder vh = new BoxViewHolder(binding);
-            viewHolders.add(vh);
-            return vh;
+            return new BoxViewHolder(binding);
         }
 
         @Override
@@ -91,7 +81,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
             public BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
                 super(binding.getRoot());
                 this.binding = binding;
-                viewHolderRoot = binding.rootViewGroup;
                 this.binding.getRoot().setOnClickListener(this);
                 this.binding.getRoot().setOnLongClickListener(this);
             }
