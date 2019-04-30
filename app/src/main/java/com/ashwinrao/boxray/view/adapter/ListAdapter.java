@@ -9,10 +9,11 @@ import android.view.ViewGroup;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.ViewholderBoxBinding;
+import com.ashwinrao.boxray.util.ContextualAppBarListener;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
-import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -24,23 +25,40 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
         private Context context;
         private List<Box> boxes;
-        private View viewForSnackbar;
+        private List<Box> selected = new ArrayList<>();
+        private List<BoxViewHolder> viewHolders = new ArrayList<>();
+        private boolean bulkEditEnabled = false;
+        private ContextualAppBarListener listener;
+        private ViewGroup viewHolderRoot;
 
-        public ListAdapter(@NonNull Context context, @NonNull View viewForSnackbar, @Nullable List<Box> boxes) {
+        public ListAdapter(@NonNull Context context, @Nullable List<Box> boxes) {
             this.context = context;
             this.boxes = boxes;
-            this.viewForSnackbar = viewForSnackbar;
         }
 
         public void setBoxes(List<Box> boxes) {
             this.boxes = boxes;
         }
 
+        public void setToolbarTitleListener(ContextualAppBarListener listener) {
+            this.listener = listener;
+        }
+
+        public void disableBulkEditMode() {
+            for(int i = 0; i < selected.size(); i++) {
+                viewHolders.get(i).binding.rootViewGroup.setBackground(context.getDrawable(R.drawable.background_box_viewholder));
+            }
+            selected.clear();
+            bulkEditEnabled = false;
+        }
+
         @NonNull
         @Override
         public BoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             ViewholderBoxBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_box, parent, false);
-            return new BoxViewHolder(binding);
+            BoxViewHolder vh = new BoxViewHolder(binding);
+            viewHolders.add(vh);
+            return vh;
         }
 
         @Override
@@ -56,30 +74,56 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
             return boxes == null ? 0 : boxes.size();
         }
 
-        public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private void toggleSelection(@NonNull ViewGroup root, @NonNull Box box) {
+            if(selected.contains(box)) {
+                root.setBackground(context.getDrawable(R.drawable.background_box_viewholder));
+                selected.remove(box);
+            } else {
+                root.setBackground(context.getDrawable(R.drawable.background_box_viewholder_selected));
+                selected.add(box);
+            }
+        }
+
+        public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
             private ViewholderBoxBinding binding;
 
             public BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
                 super(binding.getRoot());
                 this.binding = binding;
+                viewHolderRoot = binding.rootViewGroup;
                 this.binding.getRoot().setOnClickListener(this);
+                this.binding.getRoot().setOnLongClickListener(this);
             }
 
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
-                DetailFragment detail = new DetailFragment();
-                detail.setArguments(bundle);
+                if(!bulkEditEnabled) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
+                    DetailFragment detail = new DetailFragment();
+                    detail.setArguments(bundle);
 
-                ((MainActivity) context)
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                        .replace(R.id.fragment_container, detail)
-                        .commit();
+                    ((MainActivity) context)
+                            .getSupportFragmentManager()
+                            .beginTransaction()
+                            .addToBackStack(null)
+                            .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
+                            .replace(R.id.fragment_container, detail)
+                            .commit();
+                } else {
+                    toggleSelection(binding.rootViewGroup, boxes.get(getAdapterPosition()));
+                }
+            }
+
+            @Override
+            public boolean onLongClick(View v) {
+                if(!bulkEditEnabled) {
+                    listener.overlayContextualAppBar();
+                    toggleSelection(binding.rootViewGroup, boxes.get(getAdapterPosition()));
+                    bulkEditEnabled = true;
+                }
+                return true;
             }
         }
 }

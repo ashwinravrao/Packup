@@ -60,7 +60,13 @@
     <string name="new_home">New Home</string>
     <string name="source_info_tag">From</string>
     <string name="destination_info_tag">To</string>
-    <string name="load_truck">Load Truck</string>
+    <string name="title_load_truck">Load Truck</string>
+    <string name="title_CAB_box_list">%d boxes selected</string>
+    <string name="title_select_multiple">Select multiple boxes</string>
+    <string name="title_bulk_edit">Bulk edit</string>
+    <string name="description_back_arrow">Go back</string>
+    <string name="title_toolbar_select_boxes">Select boxes</string>
+    <string name="title_delete">Delete</string>
 
     <!-- Choices for Home Fragment Spinner -->
     <string-array name="home_frag_spinner_choices">

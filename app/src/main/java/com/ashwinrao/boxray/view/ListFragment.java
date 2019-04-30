@@ -8,17 +8,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
+import android.widget.ImageView;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
+import com.ashwinrao.boxray.util.ContextualAppBarListener;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +37,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements ContextualAppBarListener {
 
-    private static final String TAG = "FAB";
-    private RecyclerView recyclerView;
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
-    private BoxViewModel viewModel;
-
+    private FragmentListBinding binding;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,30 +49,29 @@ public class ListFragment extends Fragment {
         setHasOptionsMenu(true);
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
-
+        final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
         boxesLD = viewModel.getBoxes();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
 
         BottomAppBar appBar = binding.bottomAppBar;
         ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(appBar);
 
-        Toolbar toolbar = binding.toolbar;
+        final Toolbar toolbar = binding.defaultToolbar;
         toolbar.setTitle(R.string.toolbar_title_all);
         toolbar.inflateMenu(R.menu.menu_toolbar_list);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-            if(item.getItemId() == R.id.toolbar_search) {
-                // do stuff
-                return true;
-            }
-            return true;
+                if (item.getItemId() == R.id.toolbar_search) {
+                    Snackbar.make(Objects.requireNonNull(getView()), "Searching", Snackbar.LENGTH_LONG).show();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -87,16 +84,20 @@ public class ListFragment extends Fragment {
             }
         });
 
-        recyclerView = binding.recyclerView;
+        final RecyclerView recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()), getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container), boxesLD.getValue());
+        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()), boxesLD.getValue());
+        listAdapter.setToolbarTitleListener(this);
         recyclerView.setAdapter(listAdapter);
 
         boxesLD.observe(this, new Observer<List<Box>>() {
             @Override
             public void onChanged(List<Box> boxes) {
-                if(boxes != null) { listAdapter.setBoxes(boxes); }
-                else { listAdapter.setBoxes(new ArrayList<Box>()); }
+                if (boxes != null) {
+                    listAdapter.setBoxes(boxes);
+                } else {
+                    listAdapter.setBoxes(new ArrayList<Box>());
+                }
                 recyclerView.setAdapter(listAdapter);
             }
         });
@@ -112,14 +113,61 @@ public class ListFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.bottom_bar_about:
-//                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_about, true, true);
+                // todo: inflate "About" fragment layout
                 return true;
             case R.id.bottom_bar_settings:
-//                ((MainActivity) Objects.requireNonNull(getActivity())).customToast(R.string.title_settings, true, true);
+                // todo: start "Settings" activity
                 return true;
         }
-        return true;
+        return false;
+    }
+
+    @Override
+    public void overlayContextualAppBar() {
+        binding.contextualAppBar.setVisibility(View.VISIBLE);
+
+        final Toolbar toolbar = binding.contextualToolbar;
+        if (toolbar != null) {
+            toolbar.getMenu().clear();
+            toolbar.inflateMenu(R.menu.menu_contextual_list);
+            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.toolbar_load_truck:
+                            Snackbar.make(Objects.requireNonNull(getView()),
+                                    "Loading truck",
+                                    Snackbar.LENGTH_LONG).show();
+                            return true;
+                        case R.id.toolbar_delete:
+                            Snackbar.make(Objects.requireNonNull(getView()),
+                                    "Deleted",
+                                    Snackbar.LENGTH_LONG).show();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+
+            final ImageView backArrow = toolbar.findViewById(R.id.back_arrow);
+            if (backArrow != null) {
+                backArrow.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        restoreDefaultAppBar();
+                        listAdapter.disableBulkEditMode();
+                    }
+                });
+            }
+        }
+
+    }
+
+    @Override
+    public void restoreDefaultAppBar() {
+        binding.contextualAppBar.setVisibility(View.GONE);
     }
 }

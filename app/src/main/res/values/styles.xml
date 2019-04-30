@@ -26,6 +26,11 @@
         <item name="android:backgroundTint">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="AppTheme.ContextualAppBarOverlay" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:textColorPrimary">@color/iconAndTextColor</item>
+        <item name="android:backgroundTint">@color/colorPrimaryDarker</item>
+    </style>
+
     <style name="AppTheme.HintText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/colorAccent</item>
     </style>
