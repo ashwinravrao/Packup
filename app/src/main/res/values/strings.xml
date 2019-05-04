@@ -67,6 +67,11 @@
     <string name="description_back_arrow">Go back</string>
     <string name="title_toolbar_select_boxes">Select boxes</string>
     <string name="title_delete">Delete</string>
+    <string name="dialog_title_load_truck">Where\'s your truck headed?</string>
+    <string name="dialog_message_load_truck">Enter the address for your new home in the box below. You will be notified upon arrival that your boxes are ready to be unloaded in the app.</string>
+    <string name="dialog_title_save_address_load_truck">Save</string>
+    <string name="dialog_title_cancel_load_truck">Cancel</string>
+    <string name="description_load_truck_dialog_image">Moving Truck</string>
 
     <!-- Choices for Home Fragment Spinner -->
     <string-array name="home_frag_spinner_choices">

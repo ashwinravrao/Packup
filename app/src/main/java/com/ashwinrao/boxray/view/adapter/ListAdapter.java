@@ -14,13 +14,9 @@ import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,7 +25,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         private Context context;
         private List<Box> boxes;
         private List<Box> selected = new ArrayList<>();
-        private boolean bulkEditEnabled = false;
+        private boolean multiSelectMode = false;
         private ContextualAppBarListener listener;
 
         public ListAdapter(@NonNull Context context) {
@@ -42,6 +38,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
         public void setToolbarTitleListener(ContextualAppBarListener listener) {
             this.listener = listener;
+        }
+
+        public void disableBulkEdit() {
+            selected.clear();
+            multiSelectMode = !multiSelectMode;
         }
 
         @NonNull
@@ -87,7 +88,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
             @Override
             public void onClick(View v) {
-                if(!bulkEditEnabled) {
+                if(!multiSelectMode) {
                     Bundle bundle = new Bundle();
                     bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
                     DetailFragment detail = new DetailFragment();
@@ -107,10 +108,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
             @Override
             public boolean onLongClick(View v) {
-                if(!bulkEditEnabled) {
+                if(!multiSelectMode) {
                     listener.overlayContextualAppBar();
                     toggleSelection(binding.rootViewGroup, boxes.get(getAdapterPosition()));
-                    bulkEditEnabled = true;
+                    multiSelectMode = !multiSelectMode;
                 }
                 return true;
             }

@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
 import com.ashwinrao.boxray.util.ContextualAppBarListener;
+import com.ashwinrao.boxray.util.LoadTruckDialog;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
@@ -44,6 +46,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
     private LiveData<List<Box>> boxesLD;
     private FragmentListBinding binding;
     private RecyclerView recyclerView;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -140,9 +143,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.toolbar_load_truck:
-                            Snackbar.make(Objects.requireNonNull(getView()),
-                                    "Loading truck",
-                                    Snackbar.LENGTH_LONG).show();
+                            new LoadTruckDialog().build(Objects.requireNonNull(getActivity()), R.layout.dialog_load_truck, R.string.dialog_title_save_address_load_truck, R.string.dialog_title_cancel_load_truck, loadTruckDialogPositiveClickListener(), loadTruckDialogNegativeClickListener());
                             return true;
                         case R.id.toolbar_delete:
                             Snackbar.make(Objects.requireNonNull(getView()),
@@ -161,6 +162,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
                     @Override
                     public void onClick(View v) {
                         restoreDefaultAppBar();
+                        listAdapter.disableBulkEdit();
                         listAdapter.setBoxes(localBoxes);
                         recyclerView.setAdapter(listAdapter);
                     }
@@ -170,8 +172,28 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
 
     }
 
+    private DialogInterface.OnClickListener loadTruckDialogPositiveClickListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Snackbar.make(Objects.requireNonNull(getView()), "Saving", Snackbar.LENGTH_LONG).show();    // todo: replace with save address for geofencing
+            }
+        };
+    }
+
+    private DialogInterface.OnClickListener loadTruckDialogNegativeClickListener() {
+        return new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        };
+    }
+
     @Override
     public void restoreDefaultAppBar() {
         binding.contextualAppBar.setVisibility(View.GONE);
     }
+
+
 }

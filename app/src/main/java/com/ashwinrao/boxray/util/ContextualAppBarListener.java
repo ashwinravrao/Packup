@@ -5,4 +5,5 @@ public interface ContextualAppBarListener {
     void overlayContextualAppBar();
 
     void restoreDefaultAppBar();
+
 }

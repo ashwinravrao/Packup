@@ -5,7 +5,7 @@
         android:width="1dp"
         android:color="@color/boxVHBorder">
     </stroke>
-    <solid android:color="@color/boxVHBorder"/>
+    <solid android:color="@color/boxVHBackgroundSelected" />
     <corners
         android:radius="5dp">
     </corners>

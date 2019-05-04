@@ -11,15 +11,18 @@ import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(fragment == null) {
             fragment = new ListFragment();
         }
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)

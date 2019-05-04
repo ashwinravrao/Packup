@@ -68,4 +68,10 @@
         <item name="android:textSize">60sp</item>
     </style>
 
+    <style name="AppTheme.DialogButtons" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/iconAndTextColor</item>
+        <!--<item name="android:textColorPrimary">@color/iconAndTextColor</item>-->
+    </style>
+
 </resources>
