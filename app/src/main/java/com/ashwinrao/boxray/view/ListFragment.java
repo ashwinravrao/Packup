@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
+import com.ashwinrao.boxray.util.BackNavigationListener;
 import com.ashwinrao.boxray.util.ContextualAppBarListener;
 import com.ashwinrao.boxray.util.LoadTruckDialog;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
@@ -39,7 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class ListFragment extends Fragment implements ContextualAppBarListener {
+public class ListFragment extends Fragment implements ContextualAppBarListener, BackNavigationListener {
 
     private ListAdapter listAdapter;
     private List<Box> localBoxes;
@@ -52,6 +53,10 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+        // Register "this" as a BackNavigationListener instance with the hosting activity
+        ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
         final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
@@ -161,16 +166,21 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
                 backArrow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        restoreDefaultAppBar();
-                        listAdapter.disableBulkEdit();
-                        listAdapter.setBoxes(localBoxes);
-                        recyclerView.setAdapter(listAdapter);
+                        resetMultiSelectMode();
                     }
                 });
             }
         }
 
     }
+
+    private void resetMultiSelectMode() {
+        restoreDefaultAppBar();
+        listAdapter.disableBulkEdit();
+        listAdapter.setBoxes(localBoxes);
+        recyclerView.setAdapter(listAdapter);
+    }
+
 
     private DialogInterface.OnClickListener loadTruckDialogPositiveClickListener() {
         return new DialogInterface.OnClickListener() {
@@ -196,4 +206,14 @@ public class ListFragment extends Fragment implements ContextualAppBarListener {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        resetMultiSelectMode();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
+    }
 }
