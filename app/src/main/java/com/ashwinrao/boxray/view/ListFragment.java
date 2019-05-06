@@ -47,6 +47,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
     private LiveData<List<Box>> boxesLD;
     private FragmentListBinding binding;
     private RecyclerView recyclerView;
+    private boolean inMultiSelectMode;
 
 
     @Override
@@ -54,9 +55,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        // Register "this" as a BackNavigationListener instance with the hosting activity
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-
 
         final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
         final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
@@ -97,7 +96,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
-        listAdapter.setToolbarTitleListener(this);
+        listAdapter.registerToolBarListener(this);
         recyclerView.setAdapter(listAdapter);
 
         boxesLD.observe(this, new Observer<List<Box>>() {
@@ -176,7 +175,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
 
     private void resetMultiSelectMode() {
         restoreDefaultAppBar();
-        listAdapter.disableBulkEdit();
+        listAdapter.disableMultiSelectMode();
         listAdapter.setBoxes(localBoxes);
         recyclerView.setAdapter(listAdapter);
     }

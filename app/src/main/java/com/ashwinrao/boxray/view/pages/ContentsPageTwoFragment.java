@@ -105,35 +105,32 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         Objects.requireNonNull(itemField.getEditText()).setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         // Add item to recycler view on "Return" key press
-        itemField.getEditText().setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (v.getText().toString().length() >= 1) {
-                        saveItem(Objects.requireNonNull(itemField.getEditText().getText()).toString());
-                        v.setText(null);
-                    } else {
-                        itemField.setErrorEnabled(true);
-                        itemField.setError("Make sure to name your item");
-                        itemField.getEditText().addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            }
+        itemField.getEditText().setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (v.getText().toString().length() >= 1) {
+                    saveItem(Objects.requireNonNull(itemField.getEditText().getText()).toString());
+                    v.setText(null);
+                } else {
+                    itemField.setErrorEnabled(true);
+                    itemField.setError("Make sure to name your item");
+                    itemField.getEditText().addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                itemField.setErrorEnabled(false);
-                            }
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            itemField.setErrorEnabled(false);
+                        }
 
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                            }
-                        });
-                    }
-                    return true;
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
                 }
-                return false;
+                return true;
             }
+            return false;
         });
 
     }

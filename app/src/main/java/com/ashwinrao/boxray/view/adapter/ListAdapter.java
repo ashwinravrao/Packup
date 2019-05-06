@@ -36,11 +36,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
             this.boxes = boxes;
         }
 
-        public void setToolbarTitleListener(ContextualAppBarListener listener) {
+        public void registerToolBarListener(ContextualAppBarListener listener) {
             this.listener = listener;
         }
 
-        public void disableBulkEdit() {
+        public void disableMultiSelectMode() {
             selected.clear();
             multiSelectMode = !multiSelectMode;
         }
