@@ -6,21 +6,17 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+@Singleton
 public class BoxRepository {
 
     private BoxDao dao;
-    private static BoxRepository instance;
-//    private BoxDatabase database;
 
-    public static BoxRepository getInstance(BoxDatabase db) {
-        if(instance == null) {
-            instance = new BoxRepository(db);
-        }
-        return instance;
-    }
-
-    private BoxRepository(BoxDatabase db) {
-        dao = db.mDao();
+    @Inject
+    public BoxRepository(BoxDatabase database) {
+        dao = database.dao();
     }
 
     public LiveData<List<Box>> getBoxes() {

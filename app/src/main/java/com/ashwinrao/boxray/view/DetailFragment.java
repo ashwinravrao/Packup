@@ -1,18 +1,18 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentDetailBinding;
 import com.ashwinrao.boxray.view.adapter.ItemAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
@@ -24,27 +24,34 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import javax.inject.Inject;
 
 
 public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
-    private BoxViewModel viewModel;
     private LiveData<Box> liveBox;
     private static final String TAG = "Boxray";
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
-
+        final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
         if(getArguments() != null) {
             liveBox = viewModel.getBoxByID(getArguments().getInt("ID"));
         }
+    }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Nullable

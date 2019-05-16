@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view.pages;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentContentsPageTwoBinding;
 import com.ashwinrao.boxray.view.AddActivity;
@@ -32,9 +34,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import javax.inject.Inject;
 
 public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
@@ -45,17 +50,23 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
     private BoxViewModel viewModel;
     private Resources.Theme appTheme;
 
+    @Inject
+    ViewModelProvider.Factory factory;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         items = new ArrayList<>();
         itemsMLD = new MutableLiveData<>();
-
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
         viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
-
         appTheme = getActivity().getTheme();
         viewForSnackbar = getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Nullable

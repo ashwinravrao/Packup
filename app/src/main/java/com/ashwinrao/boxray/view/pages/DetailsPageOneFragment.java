@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view.pages;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentDetailsPageOneBinding;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
@@ -25,25 +27,33 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+
+import javax.inject.Inject;
 
 public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private static final String TAG = "Boxray";
-
     private boolean nameErrorSet;
     private BoxViewModel viewModel;
     private Resources.Theme appTheme;
 
+    @Inject
+    ViewModelProvider.Factory factory;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         nameErrorSet = false;
         appTheme = Objects.requireNonNull(getActivity()).getTheme();
-
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
         viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Nullable

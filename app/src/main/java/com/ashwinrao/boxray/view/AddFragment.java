@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
 import com.ashwinrao.boxray.util.AddBoxCompletionListener;
@@ -28,26 +30,35 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
+
+import javax.inject.Inject;
 
 public class AddFragment extends Fragment implements AddBoxCompletionListener {
 
     private List<Fragment> fragments = new ArrayList<>();
-    private BoxViewModel viewModel;
     private FragmentManager fragmentManager;
     private Resources.Theme appTheme;
     private ViewPager viewPager;
+
+    @Inject
+    ViewModelProvider.Factory factory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
         appTheme = getActivity().getTheme();
-
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(getActivity().getApplication());
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
+        final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
         viewModel.setCompletionListener(this);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     private void addPages() {

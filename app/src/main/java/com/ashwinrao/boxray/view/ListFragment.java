@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
@@ -35,9 +37,12 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import javax.inject.Inject;
 
 
 public class ListFragment extends Fragment implements ContextualAppBarListener, BackNavigationListener {
@@ -49,17 +54,22 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
     private RecyclerView recyclerView;
     private boolean inMultiSelectMode;
 
+    @Inject
+    ViewModelProvider.Factory factory;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
         final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
         boxesLD = viewModel.getBoxes();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Nullable

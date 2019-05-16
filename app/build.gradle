@@ -20,6 +20,7 @@ android {
         enabled = true
     }
 
+    // for OkHttp
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -27,18 +28,15 @@ android {
 }
 
 dependencies {
-    def lifecycle_version = "2.1.0-alpha04"
-    def room_version = "2.1.0-alpha04"
-    // alpha05 throws "...failed to read get kotlin metadata..." error @ compile
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    // ViewModel and LiveData
-    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    // Dagger 2
+    implementation 'com.google.dagger:dagger:2.15'
+    implementation 'com.google.dagger:dagger-android:2.15'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.15'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.15'
 
-    // Room
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-
-    // Google Maps API
+    // Google Maps
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.0.0'
 
@@ -48,13 +46,15 @@ dependencies {
     // Gson
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    // Else
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    // Jetpack
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01'
+    implementation 'androidx.room:room-runtime:2.1.0-beta01'
+    annotationProcessor 'androidx.room:room-compiler:2.1.0-beta01'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha06'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
     testImplementation 'junit:junit:4.13-beta-2'
-    androidTestImplementation 'androidx.test:runner:1.2.0-alpha05'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha05'
+    androidTestImplementation 'androidx.test:runner:1.2.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-beta01'
 }

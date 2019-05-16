@@ -7,7 +7,6 @@ import com.ashwinrao.boxray.util.AddBoxCompletionListener;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -17,7 +16,7 @@ public class BoxViewModel extends ViewModel {
     private final BoxRepository repo;
     private AddBoxCompletionListener listener;
 
-    public BoxViewModel(@NonNull BoxRepository repo) {
+    BoxViewModel(BoxRepository repo) {
         this.repo = repo;
     }
 

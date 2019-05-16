@@ -1,11 +1,13 @@
 package com.ashwinrao.boxray.view.pages;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentNumberPageFourBinding;
 import com.ashwinrao.boxray.view.AddActivity;
@@ -19,18 +21,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+
+import javax.inject.Inject;
 
 public class NumberPageFourFragment extends Fragment {
 
     private BoxViewModel viewModel;
 
+    @Inject
+    ViewModelProvider.Factory factory;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        final BoxViewModelFactory factory = BoxViewModelFactory.getInstance(Objects.requireNonNull(getActivity()).getApplication());
         viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
     @Nullable
