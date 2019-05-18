@@ -101,25 +101,19 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
                     case "name":
                         if(s.toString().length() > 0) {
                             if (nameErrorSet) field.setErrorEnabled(false);
-                            viewModel.getBuilder().setName(s.toString());
-//                            viewModel.getCurrentBox().setName(s.toString());
-                        } else {
+                            viewModel.getBox().setName(s.toString()); } else {
                             setFieldError(field, getString(R.string.message_error_name_field_reprompt));
-                            viewModel.getBuilder().setName(null);
-//                            viewModel.getCurrentBox().setName(null);
+                            viewModel.getBox().setName(null);
                         }
                         break;
                     case "source":
-                        viewModel.getBuilder().setSource(s.toString());
-//                        viewModel.getCurrentBox().setSource(s.toString());
+                        viewModel.getBox().setSource(s.toString());
                         break;
                     case "destination":
-                        viewModel.getBuilder().setDestination(s.toString());
-//                        viewModel.getCurrentBox().setDestination(s.toString());
+                        viewModel.getBox().setDestination(s.toString());
                         break;
                     case "note":
-                        viewModel.getBuilder().setNotes(s.toString());
-//                        viewModel.getCurrentBox().setNotes(s.toString());
+                        viewModel.getBox().setNotes(s.toString());
                         break;
                     default:
                         Log.e(TAG, "DetailsPageOneFragment: watchField(): TextWatcher: afterTextChanged: error retrieving TextInputLayout tag");
@@ -136,14 +130,14 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     }
 
     private void repopulateFields(@NonNull final TextInputLayout[] fields) {
-        if(viewModel.getBuilder().getName() != null) {
+        if(viewModel.getBox().getName() != null) {
             nameErrorSet = false;
             fields[0].setErrorEnabled(false);
         }
-        Objects.requireNonNull(fields[0].getEditText()).setText(viewModel.getBuilder().getName());
-        Objects.requireNonNull(fields[1].getEditText()).setText(viewModel.getBuilder().getSource());
-        Objects.requireNonNull(fields[2].getEditText()).setText(viewModel.getBuilder().getDestination());
-        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getBuilder().getNotes());
+        Objects.requireNonNull(fields[0].getEditText()).setText(viewModel.getBox().getName());
+        Objects.requireNonNull(fields[1].getEditText()).setText(viewModel.getBox().getSource());
+        Objects.requireNonNull(fields[2].getEditText()).setText(viewModel.getBox().getDestination());
+        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getBox().getNotes());
     }
 
     @Override

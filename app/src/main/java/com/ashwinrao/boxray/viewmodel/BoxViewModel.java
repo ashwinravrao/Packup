@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
 
-    private Box.Builder builder = new Box.Builder();
+    private Box box = new Box();
     private final BoxRepository repo;
     private AddBoxCompletionListener listener;
 
@@ -26,8 +26,8 @@ public class BoxViewModel extends ViewModel {
         this.listener = listener;
     }
 
-    public Box.Builder getBuilder() {
-        return this.builder;
+    public Box getBox() {
+        return this.box;
     }
 
 
@@ -42,9 +42,8 @@ public class BoxViewModel extends ViewModel {
     }
 
     public void saveBox() {
-        Box unvalidatedBox = this.builder.build();
-        if(new InputValidator(unvalidatedBox).validate()) {
-            repo.saveBox(unvalidatedBox);
+        if(new InputValidator(this.box).validate()) {
+            repo.saveBox(this.box);
             listener.finishParentActivity(true);
         } else {
             listener.returnToFirstPage(true);
