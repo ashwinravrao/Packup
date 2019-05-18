@@ -48,7 +48,6 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
     private MutableLiveData<List<String>> itemsMLD;
     private ItemAdapter itemAdapter;
     private BoxViewModel viewModel;
-    private Resources.Theme appTheme;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -59,7 +58,6 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         items = new ArrayList<>();
         itemsMLD = new MutableLiveData<>();
         viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
-        appTheme = getActivity().getTheme();
         viewForSnackbar = getActivity().getWindow().getDecorView().findViewById(R.id.fragment_container);
     }
 
@@ -91,17 +89,14 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
         itemAdapter = new ItemAdapter(Objects.requireNonNull(getActivity()), viewForSnackbar, itemsMLD, items, true);
         rv.setAdapter(itemAdapter);
 
-        itemsMLD.observe(this, new Observer<List<String>>() {
-            @Override
-            public void onChanged(List<String> strings) {
-                itemAdapter.setItems(strings);
-                rv.setAdapter(itemAdapter);
-                viewModel.getCurrentBox().setContents(strings);
-            }
+        itemsMLD.observe(this, strings -> {
+            itemAdapter.setItems(strings);
+            rv.setAdapter(itemAdapter);
+            viewModel.getBuilder().setContents(strings);
         });
 
         if(savedInstanceState != null) {
-            items = viewModel.getCurrentBox().getContents();
+            items = viewModel.getBuilder().getContents();
             itemsMLD.setValue(items);
             itemAdapter.setItems(items);
             rv.setAdapter(itemAdapter);
@@ -111,7 +106,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
     private void configureItemField(@NonNull final TextInputLayout itemField) {
 
         itemField.setHintTextAppearance(R.style.AppTheme_HintText);
-        itemField.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, appTheme));
+        itemField.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
 
         Objects.requireNonNull(itemField.getEditText()).setImeOptions(EditorInfo.IME_ACTION_DONE);
 
@@ -167,7 +162,7 @@ public class ContentsPageTwoFragment extends Fragment implements Toolbar.OnMenuI
                         itemAdapter.setItems(items);
                     }
                 })
-                .setActionTextColor(getResources().getColor(R.color.colorAccent, appTheme))
+                .setActionTextColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()))
                 .show();
     }
 

@@ -49,27 +49,13 @@ public class NumberPageFourFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentNumberPageFourBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_number_page_four, container, false);
-
         binding.toolbar.setTitle(getString(R.string.title_page_four_number));
-
         configureFinishButton(binding.finishButton);
-
         return binding.getRoot();
     }
 
     private void configureFinishButton(@NonNull Button button) {
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                viewModel.getCurrentBox().setId(generateRandomInteger());  // todo replace with sequential numbering scheme
-                viewModel.verifySaveRequirements();
-            }
-        });
-    }
-
-    private int generateRandomInteger() {
-        Random r = new Random();
-        return r.nextInt(100);
+        button.setOnClickListener(v -> viewModel.saveBox());
     }
 
 }

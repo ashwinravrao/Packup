@@ -27,11 +27,8 @@ public class PhotoPageThreeFragment extends Fragment implements Toolbar.OnMenuIt
 
         configureToolbar(binding.toolbar);
 
-        binding.photoPlaceholder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.photoPlaceholder.setOnClickListener(v -> {
                 Snackbar.make(Objects.requireNonNull(getView()), "Opening camera intent ...", Snackbar.LENGTH_LONG).show(); // todo replace
-            }
         });
 
         return binding.getRoot();

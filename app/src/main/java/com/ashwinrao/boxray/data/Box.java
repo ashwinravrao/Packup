@@ -35,8 +35,15 @@ public class Box {
     @ColumnInfo(name = "favorite")
     private boolean favorite;
 
-    public Box() {
-        this.createdDate = new Date();
+    public Box(int id, String name, String source, String destination, String notes, Date createdDate, List<String> contents, boolean favorite) {
+        this.id = id;
+        this.name = name;
+        this.source = source;
+        this.destination = destination;
+        this.notes = notes;
+        this.createdDate = createdDate;
+        this.contents = contents;
+        this.favorite = favorite;
     }
 
     public List<String> getContents() {
@@ -102,4 +109,95 @@ public class Box {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+
+    public static class Builder {
+
+        private int id;
+        private String name;
+        private String source;
+        private String destination;
+        private String notes;
+        private Date createdDate;
+        private List<String> contents;
+        private boolean favorite;
+
+        public Builder() {
+            this.createdDate = new Date();
+        }
+
+        public Builder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder setSource(String source) {
+            this.source = source;
+            return this;
+        }
+
+        public Builder setDestination(String destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        public Builder setNotes(String notes) {
+            this.notes = notes;
+            return this;
+        }
+
+        public Builder setContents(List<String> contents) {
+            this.contents = contents;
+            return this;
+        }
+
+        public Builder setFavorite(boolean favorite) {
+            this.favorite = favorite;
+            return this;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getSource() {
+            return source;
+        }
+
+        public String getDestination() {
+            return destination;
+        }
+
+        public String getNotes() {
+            return notes;
+        }
+
+        public Date getCreatedDate() {
+            return createdDate;
+        }
+
+        public List<String> getContents() {
+            return contents;
+        }
+
+        public boolean isFavorite() {
+            return favorite;
+        }
+
+        public Box build() {
+            return new Box(this.id, this.name, this.source, this.destination, this.notes, this.createdDate, this.contents, this.favorite);
+        }
+
+
+    }
+
+
 }

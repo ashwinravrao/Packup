@@ -2,7 +2,6 @@ package com.ashwinrao.boxray.view.pages;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,7 +15,6 @@ import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentDetailsPageOneBinding;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,7 +35,6 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     private static final String TAG = "Boxray";
     private boolean nameErrorSet;
     private BoxViewModel viewModel;
-    private Resources.Theme appTheme;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -46,8 +43,7 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         nameErrorSet = false;
-        appTheme = Objects.requireNonNull(getActivity()).getTheme();
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
+        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
     }
 
     @Override
@@ -77,7 +73,7 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         final TextInputLayout[] tils = {binding.nameField, binding.sourceField, binding.destinationField, binding.notesField};
         for (TextInputLayout til : tils) {
             til.setHintTextAppearance(R.style.AppTheme_HintText);
-            til.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, appTheme));
+            til.setBoxStrokeColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
         }
 
         return binding.getRoot();
@@ -105,20 +101,25 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
                     case "name":
                         if(s.toString().length() > 0) {
                             if (nameErrorSet) field.setErrorEnabled(false);
-                            viewModel.getCurrentBox().setName(s.toString());
+                            viewModel.getBuilder().setName(s.toString());
+//                            viewModel.getCurrentBox().setName(s.toString());
                         } else {
                             setFieldError(field, getString(R.string.message_error_name_field_reprompt));
-                            viewModel.getCurrentBox().setName(null);
+                            viewModel.getBuilder().setName(null);
+//                            viewModel.getCurrentBox().setName(null);
                         }
                         break;
                     case "source":
-                        viewModel.getCurrentBox().setSource(s.toString());
+                        viewModel.getBuilder().setSource(s.toString());
+//                        viewModel.getCurrentBox().setSource(s.toString());
                         break;
                     case "destination":
-                        viewModel.getCurrentBox().setDestination(s.toString());
+                        viewModel.getBuilder().setDestination(s.toString());
+//                        viewModel.getCurrentBox().setDestination(s.toString());
                         break;
                     case "note":
-                        viewModel.getCurrentBox().setNotes(s.toString());
+                        viewModel.getBuilder().setNotes(s.toString());
+//                        viewModel.getCurrentBox().setNotes(s.toString());
                         break;
                     default:
                         Log.e(TAG, "DetailsPageOneFragment: watchField(): TextWatcher: afterTextChanged: error retrieving TextInputLayout tag");
@@ -130,19 +131,19 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
     private void setFieldError(@NonNull TextInputLayout til, String message) {
         til.setErrorEnabled(true);
         til.setError(message);
-        til.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.warningRed, appTheme)));
+        til.setErrorTextColor(ColorStateList.valueOf(getResources().getColor(R.color.warningRed, Objects.requireNonNull(getActivity()).getTheme())));
         this.nameErrorSet = true;
     }
 
     private void repopulateFields(@NonNull final TextInputLayout[] fields) {
-        if(viewModel.getCurrentBox().getName() != null) {
+        if(viewModel.getBuilder().getName() != null) {
             nameErrorSet = false;
             fields[0].setErrorEnabled(false);
         }
-        Objects.requireNonNull(fields[0].getEditText()).setText(viewModel.getCurrentBox().getName());
-        Objects.requireNonNull(fields[1].getEditText()).setText(viewModel.getCurrentBox().getSource());
-        Objects.requireNonNull(fields[2].getEditText()).setText(viewModel.getCurrentBox().getDestination());
-        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getCurrentBox().getNotes());
+        Objects.requireNonNull(fields[0].getEditText()).setText(viewModel.getBuilder().getName());
+        Objects.requireNonNull(fields[1].getEditText()).setText(viewModel.getBuilder().getSource());
+        Objects.requireNonNull(fields[2].getEditText()).setText(viewModel.getBuilder().getDestination());
+        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getBuilder().getNotes());
     }
 
     @Override
