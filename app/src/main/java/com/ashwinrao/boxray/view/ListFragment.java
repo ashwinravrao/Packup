@@ -10,6 +10,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.ashwinrao.boxray.Boxray;
@@ -18,10 +20,9 @@ import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
 import com.ashwinrao.boxray.util.BackNavigationListener;
 import com.ashwinrao.boxray.util.ContextualAppBarListener;
-import com.ashwinrao.boxray.util.LoadTruckDialog;
+import com.ashwinrao.boxray.util.DestinationDialog;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -83,24 +84,18 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         final Toolbar toolbar = binding.defaultToolbar;
         toolbar.setTitle(R.string.toolbar_title_all);
         toolbar.inflateMenu(R.menu.menu_toolbar_list);
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
+        toolbar.setOnMenuItemClickListener(item -> {
                 if (item.getItemId() == R.id.toolbar_search) {
                     Snackbar.make(Objects.requireNonNull(getView()), "Searching", Snackbar.LENGTH_LONG).show();
                     return true;
                 }
                 return false;
-            }
         });
 
         ExtendedFloatingActionButton fab = binding.fabExtended;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        fab.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), AddActivity.class);
                 startActivity(intent);
-            }
         });
 
         recyclerView = binding.recyclerView;
@@ -109,17 +104,14 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         listAdapter.registerToolBarListener(this);
         recyclerView.setAdapter(listAdapter);
 
-        boxesLD.observe(this, new Observer<List<Box>>() {
-            @Override
-            public void onChanged(List<Box> boxes) {
-                if (boxes != null) {
-                    localBoxes = new ArrayList<>(boxes);
-                    listAdapter.setBoxes(boxes);
-                } else {
-                    listAdapter.setBoxes(new ArrayList<Box>());
-                }
-                recyclerView.setAdapter(listAdapter);
+        boxesLD.observe(this, boxes -> {
+            if (boxes != null) {
+                localBoxes = new ArrayList<>(boxes);
+                listAdapter.setBoxes(boxes);
+            } else {
+                listAdapter.setBoxes(new ArrayList<Box>());
             }
+            recyclerView.setAdapter(listAdapter);
         });
 
         return binding.getRoot();
@@ -152,35 +144,42 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         if (toolbar != null) {
             toolbar.getMenu().clear();
             toolbar.inflateMenu(R.menu.menu_contextual_list);
-            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.toolbar_load_truck:
-                            new LoadTruckDialog().build(Objects.requireNonNull(getActivity()), R.layout.dialog_load_truck, R.string.dialog_title_save_address_load_truck, R.string.dialog_title_cancel_load_truck, loadTruckDialogPositiveClickListener(), loadTruckDialogNegativeClickListener());
-                            return true;
-                        case R.id.toolbar_delete:
-                            Snackbar.make(Objects.requireNonNull(getView()),
-                                    "Deleted",
-                                    Snackbar.LENGTH_LONG).show();
-                            return true;
-                        default:
-                            return false;
-                    }
+            toolbar.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.toolbar_load_truck:
+                        buildDestinationDialog();
+                        return true;
+                    case R.id.toolbar_delete:
+                        Snackbar.make(Objects.requireNonNull(getView()),
+                                "Deleted",
+                                Snackbar.LENGTH_LONG).show();
+                        return true;
+                    default:
+                        return false;
                 }
             });
 
             final ImageView backArrow = toolbar.findViewById(R.id.back_arrow);
             if (backArrow != null) {
-                backArrow.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        resetMultiSelectMode();
-                    }
-                });
+                backArrow.setOnClickListener(v -> resetMultiSelectMode());
             }
         }
 
+    }
+
+    private void buildDestinationDialog() {
+        DestinationDialog dialog = new DestinationDialog(getActivity(), R.style.AppTheme_DialogButtons);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.dialog_load_truck_positive), dialogPositive());
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_load_truck_negative), dialogNegative());
+        dialog.create();
+        dialog.show();
+        modifyDialog(dialog);
+    }
+
+    private void modifyDialog(DestinationDialog dialog) {
+        Objects.requireNonNull(dialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
     }
 
     private void resetMultiSelectMode() {
@@ -191,7 +190,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
     }
 
 
-    private DialogInterface.OnClickListener loadTruckDialogPositiveClickListener() {
+    private DialogInterface.OnClickListener dialogPositive() {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -200,7 +199,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         };
     }
 
-    private DialogInterface.OnClickListener loadTruckDialogNegativeClickListener() {
+    private DialogInterface.OnClickListener dialogNegative() {
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

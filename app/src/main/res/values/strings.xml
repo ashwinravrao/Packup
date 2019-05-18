@@ -72,6 +72,8 @@
     <string name="description_load_truck_dialog_image">Moving Truck</string>
     <string name="dialog_message_load_truck">Enter your new home address below. You\'ll receive a notification to sync your in-app and physical boxes when you arrive!</string>
     <string name="dialog_title_load_truck">Ready to move?</string>
+    <string name="dialog_load_truck_positive">Save</string>
+    <string name="dialog_load_truck_negative">Cancel</string>
 
     <!-- Choices for Home Fragment Spinner -->
     <string-array name="home_frag_spinner_choices">

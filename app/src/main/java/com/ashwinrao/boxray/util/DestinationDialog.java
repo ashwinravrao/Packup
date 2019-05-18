@@ -1,22 +1,19 @@
 package com.ashwinrao.boxray.util;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 
 import com.ashwinrao.boxray.R;
@@ -34,7 +31,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -43,61 +39,47 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class LoadTruckDialog implements Callback {
+public class DestinationDialog extends AlertDialog implements Callback {
 
     private Context context;
-    private View dialogView;
-    private GoogleMap googleMap;
-    private static final String TAG = "LoadTruckDialog";
+    private View contentView;
+    private GoogleMap map;
 
-    public void build(@NonNull final Context context,
-                             @Nullable final Integer customViewLayoutId,
-                             int positiveButtonTitleString,
-                             int negativeButtonTitleString,
-                             @Nullable DialogInterface.OnClickListener positiveButtonClickListener,
-                             @Nullable DialogInterface.OnClickListener negativeButtonClickListener) {
+    private static final String TAG = "DestinationDialog";
 
+    @SuppressLint("InflateParams")  // no parent (root) view to embed in
+    public DestinationDialog(Context context, int overrideThemeResId) {
+        super(context, overrideThemeResId);
         this.context = context;
+        contentView = LayoutInflater.from(context).inflate(R.layout.dialog_load_truck, null);
+        setView(contentView);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppTheme_DialogButtons);
+        final MapView mapView = contentView.findViewById(R.id.map_view);
+        final EditText addressField = contentView.findViewById(R.id.search_edit_text);
+        final ImageView clearButton = contentView.findViewById(R.id.clear_address_button);
 
-        if(customViewLayoutId != null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            dialogView = inflater.inflate(customViewLayoutId, null);
-            builder.setView(dialogView);
-        }
+        initializeMap(context, mapView);
+        initializeAddressField(addressField, clearButton, new OkHttpClient());
+    }
 
-        if(positiveButtonClickListener != null) {
-            builder.setPositiveButton(context.getString(positiveButtonTitleString), positiveButtonClickListener);
-        }
-
-        if(negativeButtonClickListener != null) {
-            builder.setNegativeButton(context.getString(negativeButtonTitleString), negativeButtonClickListener);
-        }
-
-        AlertDialog dialog = builder.create();
-
-        final EditText search = dialogView.findViewById(R.id.search_edit_text);
-        final ImageView clearAddressButton = dialogView.findViewById(R.id.clear_address_button);
-        final MapView mapView = dialogView.findViewById(R.id.map_view);
-
+    private void initializeMap(Context context, MapView mapView) {
         MapsInitializer.initialize(context);
-
-        mapView.onCreate(dialog.onSaveInstanceState());
+        mapView.onCreate(null);
         mapView.onResume();
-
         mapView.getMapAsync((GoogleMap googleMap) -> {
-            this.googleMap = googleMap;
+            map = googleMap;
             resetMap(googleMap, false);
         });
+    }
 
-        clearAddressButton.setOnClickListener(v -> {
-            search.setText("");
+    private void initializeAddressField(EditText field, ImageView button, OkHttpClient client) {
+        button.setOnClickListener(v -> {
+            field.setText("");
             hideSoftKeyboard();
             v.setVisibility(View.GONE);
         });
 
-        search.addTextChangedListener(new TextWatcher() {
+        field.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
@@ -107,19 +89,18 @@ public class LoadTruckDialog implements Callback {
             @Override
             public void afterTextChanged(Editable s) {
                 if(s.toString().length() == 0) {
-                    clearAddressButton.setVisibility(View.GONE);
-                    resetMap(googleMap, true);
+                    button.setVisibility(View.GONE);
+                    resetMap(map, true);
                 } else if (s.toString().length() > 0) {
-                    clearAddressButton.setVisibility(View.VISIBLE);
+                    button.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-        search.setOnEditorActionListener((v, actionId, event) -> {
+        field.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
                 if (v.getText().toString().length() > 0) {
                     try {
-                        OkHttpClient client = new OkHttpClient();
                         Request request = new Request.Builder().url(getUrl(v.getText().toString(), context.getString(R.string.mapbox_access_token))).build();
                         client.newCall(request).enqueue(this);
                     } catch (NullPointerException e) {
@@ -133,34 +114,6 @@ public class LoadTruckDialog implements Callback {
             }
             return false;
         });
-
-        dialog.show();
-
-        Objects.requireNonNull(dialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-        Button[] buttons = {dialog.getButton(AlertDialog.BUTTON_POSITIVE), dialog.getButton(AlertDialog.BUTTON_NEGATIVE)};
-        for (Button button : buttons) {
-            button.setTextColor(context.getResources().getColor(R.color.colorAccent, context.getTheme()));
-        }
-    }
-
-    private void hideSoftKeyboard() {
-        if(dialogView != null) {
-            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(dialogView.getWindowToken(), 0);
-        }
-    }
-
-    private void resetMap(@NonNull GoogleMap googleMap, boolean animation) {
-        LatLng latLng = new LatLng(41.881832, -87.623177);  // centered on US
-        googleMap.getUiSettings().setAllGesturesEnabled(false);
-        googleMap.clear();
-        if(animation) {
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 1);
-            googleMap.animateCamera(cameraUpdate);
-        } else {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        }
     }
 
     private String getUrl(@NonNull String searchText, @NonNull String apiToken) throws NullPointerException {
@@ -168,6 +121,25 @@ public class LoadTruckDialog implements Callback {
         urlBuilder.addPathSegment(searchText + ".json");
         urlBuilder.addQueryParameter("access_token", apiToken);
         return urlBuilder.build().toString();
+    }
+
+    private void hideSoftKeyboard() {
+        if(contentView != null) {
+            InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(contentView.getWindowToken(), 0);
+        }
+    }
+
+    private void resetMap(GoogleMap map, boolean showAnimation) {
+        LatLng latLng = new LatLng(41.881832, -87.623177);  // center on US (Chicago)
+        map.getUiSettings().setAllGesturesEnabled(false);
+        map.clear();
+        if(showAnimation) {
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 1);
+            map.animateCamera(cameraUpdate);
+        } else {
+            map.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
     }
 
     @Override
@@ -184,9 +156,9 @@ public class LoadTruckDialog implements Callback {
                 LatLng latLng = new LatLng(center.getDouble(1), center.getDouble(0));
 
                 ((MainActivity) context).runOnUiThread(() -> {
-                    googleMap.addMarker(new MarkerOptions().position(latLng));
+                    map.addMarker(new MarkerOptions().position(latLng));
                     CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-                    googleMap.animateCamera(update);
+                    map.animateCamera(update);
                 });
 
             } catch (NullPointerException npe) {
