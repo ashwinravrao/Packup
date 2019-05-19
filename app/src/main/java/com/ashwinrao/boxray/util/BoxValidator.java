@@ -2,11 +2,11 @@ package com.ashwinrao.boxray.util;
 
 import com.ashwinrao.boxray.data.Box;
 
-public class InputValidator {
+public class BoxValidator {
 
     private Box box;
 
-    public InputValidator(Box box) {
+    public BoxValidator(Box box) {
         this.box = box;
     }
 

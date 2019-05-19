@@ -4,8 +4,7 @@ package com.ashwinrao.boxray.viewmodel;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.data.BoxRepository;
 import com.ashwinrao.boxray.util.AddBoxCompletionListener;
-import com.ashwinrao.boxray.util.InputValidator;
-import com.ashwinrao.boxray.util.Utilities;
+import com.ashwinrao.boxray.util.BoxValidator;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class BoxViewModel extends ViewModel {
     }
 
     public void saveBox() {
-        if(new InputValidator(this.box).validate()) {
+        if(new BoxValidator(this.box).validate()) {
             repo.saveBox(this.box);
             listener.finishParentActivity(true);
         } else {
