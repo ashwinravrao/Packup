@@ -10,7 +10,7 @@
     <string name="fragment_search_title">Search</string>
     <string name="title_about">About</string>
     <string name="bottom_bar_fab_title">Add Box</string>
-    <string name="toolbar_title_all">All Boxes</string>
+    <string name="toolbar_title_all">Boxes</string>
     <string name="title_help">Help</string>
     <string name="help_placeholder">Your help dialog will go here</string>
     <string name="title_page_one_details">Make a label</string>
@@ -74,6 +74,15 @@
     <string name="dialog_title_load_truck">Ready to move?</string>
     <string name="dialog_load_truck_positive">Save</string>
     <string name="dialog_load_truck_negative">Cancel</string>
+
+    <!-- Navigation Drawer (ListFragment) -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="menu_item_home">Home</string>
+    <string name="menu_item_settings">Settings</string>
 
     <!-- Choices for Home Fragment Spinner -->
     <string-array name="home_frag_spinner_choices">

@@ -4,226 +4,234 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="box"
-            type="com.ashwinrao.boxray.data.Box"/>
+            type="com.ashwinrao.boxray.data.Box" />
     </data>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nested_scroll_view"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="ifContentScrolls"
-        android:isScrollContainer="true"
-        android:background="@color/colorPrimary"
-        android:elevation="50dp">
+        android:elevation="50dp"
+        android:background="@color/colorPrimaryDark"
+        android:fitsSystemWindows="true">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:isScrollContainer="true"
+            android:overScrollMode="ifContentScrolls">
 
-            <FrameLayout
-                android:id="@+id/toolbar_and_image"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/saved_image"
+                <FrameLayout
+                    android:id="@+id/toolbar_and_image"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:src="@drawable/ic_hazelnut_spread"
-                    android:padding="32dp"
-                    android:background="@color/colorAccent"
-                    android:foreground="#40000000"
-                    android:contentDescription="@string/saved_image_description" />
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
-                        android:id="@+id/close_button"
+                        android:id="@+id/saved_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:background="@color/colorAccent"
+                        android:contentDescription="@string/saved_image_description"
+                        android:foreground="#40000000"
+                        android:padding="32dp"
+                        android:src="@drawable/ic_hazelnut_spread" />
+
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            app:popupTheme="@style/AppTheme.PopUpOverlay">
+
+                            <ImageView
+                                android:id="@+id/close_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:contentDescription="@string/close_button_description"
+                                android:src="@drawable/ic_close" />
+
+                        </androidx.appcompat.widget.Toolbar>
+
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/box_name"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    android:text="@{box.name}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar_and_image"
+                    tools:text="Jamie\'s Sweaters" />
+
+                <TextView
+                    android:id="@+id/box_number"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    android:background="@drawable/background_box_number"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="5dp"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBaseline_toBaselineOf="@id/box_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="Box # 22" />
+
+                <LinearLayout
+                    android:id="@+id/note_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/box_name">
+
+                    <ImageView
+                        android:id="@+id/notes_icon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_notepad" />
+
+                    <TextView
+                        android:id="@+id/box_note"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="32dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="@{box.notes}"
+                        android:textColor="@color/iconAndTextColor"
+                        android:textSize="16sp"
+                        tools:text="Throw away the torn ones" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/source_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/note_container">
+
+                    <ImageView
+                        android:id="@+id/source_icon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:scaleX="-1"
+                        android:src="@drawable/ic_moving_truck" />
+
+                    <TextView
+                        android:id="@+id/box_source"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="32dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="@{box.source}"
+                        android:textColor="@color/iconAndTextColor"
+                        android:textSize="16sp"
+                        tools:text="Living Room" />
+
+                    <TextView
+                        android:id="@+id/source_info_tag"
+                        style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_close"
-                        android:contentDescription="@string/close_button_description" />
+                        android:background="@drawable/background_source_destination_info_tag"
+                        android:paddingStart="12dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/source_info_tag"
+                        android:textColor="@color/iconAndTextColor" />
 
-                </androidx.appcompat.widget.Toolbar>
+                </LinearLayout>
 
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/box_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{box.name}"
-                tools:text="Jamie\'s Sweaters"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_margin="32dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/toolbar_and_image" />
-
-            <TextView
-                android:id="@+id/box_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="Box # 22"
-                android:background="@drawable/background_box_number"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                app:layout_constraintBaseline_toBaselineOf="@id/box_name"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:textColor="@android:color/white"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="5dp"
-                android:layout_margin="32dp"/>
-
-            <LinearLayout
-                android:id="@+id/note_container"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/box_name"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="32dp">
-
-                <ImageView
-                    android:id="@+id/notes_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_notepad" />
-
-                <TextView
-                    android:id="@+id/box_note"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                <LinearLayout
+                    android:id="@+id/destination_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:textSize="16sp"
-                    tools:text="Throw away the torn ones"
-                    android:text="@{box.notes}"
-                    android:textColor="@color/iconAndTextColor" />
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="32dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/source_container">
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/destination_icon"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_moving_truck" />
 
-            <LinearLayout
-                android:id="@+id/source_container"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/note_container"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="24dp">
+                    <TextView
+                        android:id="@+id/box_destination"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="32dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:text="@{box.destination}"
+                        android:textColor="@color/iconAndTextColor"
+                        android:textSize="16sp"
+                        tools:text="Storage Unit" />
 
-                <ImageView
-                    android:id="@+id/source_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:scaleX="-1"
-                    android:src="@drawable/ic_moving_truck"/>
+                    <TextView
+                        android:id="@+id/destination_info_tag"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/background_source_destination_info_tag"
+                        android:paddingStart="19dp"
+                        android:paddingTop="4dp"
+                        android:paddingEnd="19dp"
+                        android:paddingBottom="5dp"
+                        android:text="@string/destination_info_tag"
+                        android:textColor="@color/iconAndTextColor" />
 
-                <TextView
-                    android:id="@+id/box_source"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:background="@android:color/transparent"
-                    android:textSize="16sp"
-                    android:layout_gravity="center"
-                    tools:text="Living Room"
-                    android:text="@{box.source}"
-                    android:textColor="@color/iconAndTextColor" />
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:overScrollMode="ifContentScrolls"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/destination_container" />
 
-                <TextView
-                    android:id="@+id/source_info_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_source_destination_info_tag"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/iconAndTextColor"
-                    android:text="@string/source_info_tag"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="5dp"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            <LinearLayout
-                android:id="@+id/destination_container"
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/source_container"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="24dp">
-
-                <ImageView
-                    android:id="@+id/destination_icon"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_moving_truck" />
-
-                <TextView
-                    android:id="@+id/box_destination"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:background="@android:color/transparent"
-                    android:textSize="16sp"
-                    android:layout_gravity="center"
-                    tools:text="Storage Unit"
-                    android:text="@{box.destination}"
-                    android:textColor="@color/iconAndTextColor" />
-
-                <TextView
-                    android:id="@+id/destination_info_tag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/background_source_destination_info_tag"
-                    style="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/iconAndTextColor"
-                    android:text="@string/destination_info_tag"
-                    android:paddingStart="19dp"
-                    android:paddingEnd="19dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="5dp"/>
-
-            </LinearLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/destination_container"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:layout_marginTop="32dp"
-                android:overScrollMode="ifContentScrolls"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

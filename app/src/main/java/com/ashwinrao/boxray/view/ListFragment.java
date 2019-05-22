@@ -11,20 +11,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
 import com.ashwinrao.boxray.util.BackNavigationListener;
-import com.ashwinrao.boxray.util.ContextualAppBarListener;
 import com.ashwinrao.boxray.util.DestinationDialog;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -33,11 +30,14 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,14 +46,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import javax.inject.Inject;
 
 
-public class ListFragment extends Fragment implements ContextualAppBarListener, BackNavigationListener {
+public class ListFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, BackNavigationListener {
 
     private ListAdapter listAdapter;
     private List<Box> localBoxes;
     private LiveData<List<Box>> boxesLD;
     private FragmentListBinding binding;
     private RecyclerView recyclerView;
-    private boolean inMultiSelectMode;
+    private DrawerLayout drawer;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -63,7 +63,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-        final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
+        final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         boxesLD = viewModel.getBoxes();
     }
 
@@ -78,30 +78,29 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
 
-        BottomAppBar appBar = binding.bottomAppBar;
-        ((MainActivity) Objects.requireNonNull(getActivity())).setSupportActionBar(appBar);
+        AppCompatActivity parent = ((MainActivity) getActivity());
+        Toolbar toolbar = binding.includeAppBar.toolbar;
+        toolbar.setTitle(getString(R.string.toolbar_title_all));
+        if(parent != null) parent.setSupportActionBar(toolbar);
 
-        final Toolbar toolbar = binding.defaultToolbar;
-        toolbar.setTitle(R.string.toolbar_title_all);
-        toolbar.inflateMenu(R.menu.menu_toolbar_list);
-        toolbar.setOnMenuItemClickListener(item -> {
-                if (item.getItemId() == R.id.toolbar_search) {
-                    Snackbar.make(Objects.requireNonNull(getView()), "Searching", Snackbar.LENGTH_LONG).show();
-                    return true;
-                }
-                return false;
-        });
+        drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
 
-        ExtendedFloatingActionButton fab = binding.fabExtended;
+        FloatingActionButton fab = binding.includeAppBar.fab;
         fab.setOnClickListener(v -> {
                 Intent intent = new Intent(getActivity(), AddActivity.class);
                 startActivity(intent);
         });
 
-        recyclerView = binding.recyclerView;
+        recyclerView = binding.includeAppBar.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
-        listAdapter.registerToolBarListener(this);
+//        listAdapter.registerToolBarListener(this);
         recyclerView.setAdapter(listAdapter);
 
         boxesLD.observe(this, boxes -> {
@@ -120,51 +119,26 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_bottom_bar, menu);
+        inflater.inflate(R.menu.menu_toolbar_list, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.bottom_bar_about:
-                // todo: inflate "About" fragment layout
-                return true;
-            case R.id.bottom_bar_settings:
-                // todo: start "Settings" activity
-                return true;
+        if (item.getItemId() == R.id.toolbar_search) {
+            return true;
         }
-        return false;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
-    public void overlayContextualAppBar() {
-        binding.contextualAppBar.setVisibility(View.VISIBLE);
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.home) {
+            // Handle the camera action
+        } else if (item.getItemId() == R.id.settings) {
 
-        final Toolbar toolbar = binding.contextualToolbar;
-        if (toolbar != null) {
-            toolbar.getMenu().clear();
-            toolbar.inflateMenu(R.menu.menu_contextual_list);
-            toolbar.setOnMenuItemClickListener(item -> {
-                switch (item.getItemId()) {
-                    case R.id.toolbar_load_truck:
-                        buildDestinationDialog();
-                        return true;
-                    case R.id.toolbar_delete:
-                        Snackbar.make(Objects.requireNonNull(getView()),
-                                "Deleted",
-                                Snackbar.LENGTH_LONG).show();
-                        return true;
-                    default:
-                        return false;
-                }
-            });
-
-            final ImageView backArrow = toolbar.findViewById(R.id.back_arrow);
-            if (backArrow != null) {
-                backArrow.setOnClickListener(v -> resetMultiSelectMode());
-            }
         }
-
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     private void buildDestinationDialog() {
@@ -183,7 +157,7 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
     }
 
     private void resetMultiSelectMode() {
-        restoreDefaultAppBar();
+//        restoreDefaultAppBar();
         listAdapter.disableMultiSelectMode();
         listAdapter.setBoxes(localBoxes);
         recyclerView.setAdapter(listAdapter);
@@ -191,32 +165,27 @@ public class ListFragment extends Fragment implements ContextualAppBarListener, 
 
 
     private DialogInterface.OnClickListener dialogPositive() {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Snackbar.make(Objects.requireNonNull(getView()), "Saving", Snackbar.LENGTH_LONG).show();    // todo: replace with save address for geofencing
-            }
+        return (dialog, which) -> {
+            Snackbar.make(Objects.requireNonNull(getView()), "Saving", Snackbar.LENGTH_LONG).show();    // todo: replace with save address for geofencing
         };
     }
 
     private DialogInterface.OnClickListener dialogNegative() {
-        return new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        };
+        return (dialog, which) -> dialog.cancel();
     }
 
-    @Override
-    public void restoreDefaultAppBar() {
-        binding.contextualAppBar.setVisibility(View.GONE);
-    }
+//    @Override
+//    public void restoreDefaultAppBar() {
+//        binding.contextualAppBar.setVisibility(View.GONE);
+//    }
 
 
     @Override
     public void onBackPressed() {
-        resetMultiSelectMode();
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+//        resetMultiSelectMode();
     }
 
     @Override
