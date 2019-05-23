@@ -5,9 +5,21 @@
     tools:context=".activity.MainActivity">
 
     <item
+        android:id="@+id/toolbar_search_by_image"
+        android:icon="@drawable/ic_search_by_img"
+        android:title="@string/title_search_by_img"
+        app:showAsAction="ifRoom"/>
+
+    <item
         android:id="@+id/toolbar_search"
         android:icon="@drawable/ic_search"
         android:title="@string/title_search"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView" />
+
+    <item
+        android:id="@+id/toolbar_sort"
+        android:title="Sort"
+        app:showAsAction="never"/>
 
 </menu>

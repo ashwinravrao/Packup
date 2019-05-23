@@ -19,6 +19,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|snap"
+                app:titleTextColor="@color/iconAndTextColor"
                 app:popupTheme="@style/AppTheme.PopUpOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>

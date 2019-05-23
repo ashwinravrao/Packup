@@ -7,9 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="actionOverflowButtonStyle">@style/AppTheme.OverflowButtonStyle</item>
+        <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowStyle</item>
         <!--<item name="android:windowLightStatusBar">true</item>-->
-        <item name="android:colorEdgeEffect">@color/colorPrimaryDarker</item>
+        <item name="android:colorEdgeEffect">@color/imageFilter</item>
 
         <!--<item name="windowActionBar">false</item>-->
         <!--<item name="windowActionModeOverlay">true</item>-->
@@ -20,12 +22,18 @@
         <item name="android:tint">@color/iconAndTextColor</item>
     </style>
 
+    <style name="AppTheme.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/iconAndTextColor</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.PopUpOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopUpOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:colorBackground">@color/windowBackground</item>
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 

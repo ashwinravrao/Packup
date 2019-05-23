@@ -4,7 +4,7 @@
     <stroke
         android:width="2dp"
         android:dashWidth="10dp"
-        android:color="@color/colorPrimaryDarker"
+        android:color="@color/imageFilter"
         android:dashGap="3dp"/>
     <corners
         android:topLeftRadius="10dp"
