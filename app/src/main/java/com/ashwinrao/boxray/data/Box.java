@@ -24,8 +24,8 @@ public class Box {
     @ColumnInfo(name = "destination")
     private String destination;
 
-    @ColumnInfo(name = "notes")
-    private String notes;
+    @ColumnInfo(name = "description")
+    private String description;
 
     @ColumnInfo(name = "created")
     private Date createdDate;
@@ -59,8 +59,8 @@ public class Box {
         this.destination = destination;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setCreatedDate(Date createdDate) {
@@ -74,7 +74,7 @@ public class Box {
     public void setContents(List<String> contents) {
         this.contents = contents;
         if(this.contents == null || this.contents.size() == 0) {
-            setNumItems("Empty box");
+            setNumItems("No items");
         } else {
             setNumItems(String.format(Locale.US, "%d items", this.contents.size()));
         }
@@ -100,8 +100,8 @@ public class Box {
         return destination;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getDescription() {
+        return description == null ? "No description" : description;
     }
 
     public Date getCreatedDate() {

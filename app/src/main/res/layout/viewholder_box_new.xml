@@ -9,13 +9,71 @@
             type="com.ashwinrao.boxray.data.Box"/>
     </data>
 
+    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="216dp">-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/box_name"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--android:text="@{Box.name}"-->
+            <!--tools:text="Phone Chargers"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Title"-->
+            <!--android:layout_margin="16dp"/>-->
+
+        <!--<androidx.appcompat.widget.Toolbar-->
+            <!--android:id="@+id/toolbar"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent"-->
+            <!--app:popupTheme="@style/AppTheme.PopUpOverlay"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--tools:text="# 7"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:layout_marginBottom="32dp"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="@{@string/placeholder_box_number(Box.id)}"-->
+            <!--android:textColor="@color/text_color_secondary_view_holder"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginBottom="32dp"-->
+            <!--tools:text="7 items"-->
+            <!--android:textColor="@color/text_color_secondary_view_holder"-->
+            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
+            <!--android:text="@{Box.numItems}"/>-->
+
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="@color/colorPrimaryDark"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:cardBackgroundColor="#EEEEEE"
+        app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="5dp"
-        app:cardElevation="3dp">
+        app:cardElevation="5dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -45,6 +103,57 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:popupTheme="@style/AppTheme.PopUpOverlay"/>
 
+            <LinearLayout
+                android:id="@+id/content_previews"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/box_name"
+                app:layout_constraintBottom_toTopOf="@id/description">
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/placeholder_content_preview"/>
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/placeholder_content_preview"/>
+
+                <ImageView
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/placeholder_content_preview"/>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="72dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="8dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
+                        android:textColor="@color/text_color_secondary_view_holder"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:text="+ 4 more"/>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,68 +162,25 @@
                 tools:text="# 7"
                 android:layout_margin="16dp"
                 android:layout_gravity="center"
+                android:textColor="@color/text_color_secondary_view_holder"
                 android:text="@{@string/placeholder_box_number(Box.id)}"
-                android:textColor="@color/vhSecondaryTextColor"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
             <TextView
+                android:id="@+id/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_margin="16dp"
-                tools:text="7 items"
-                android:textColor="@color/vhSecondaryTextColor"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="16dp"
+                tools:text="Random iPhone/iPad chargers"
+                android:textColor="@color/text_color_secondary_view_holder"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:text="@{Box.numItems}"/>
+                android:text="@{Box.description}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="232dp"-->
-    <!--android:background="@android:color/white">-->
-
-    <!--<androidx.appcompat.widget.Toolbar-->
-    <!--android:id="@+id/toolbar"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="?attr/actionBarSize"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--app:popupTheme="@style/AppTheme.PopUpOverlay"/>-->
-
-    <!--<TextView-->
-    <!--android:id="@+id/box_name"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="@{Box.name}"-->
-    <!--tools:text="James' Bed Linens"-->
-    <!--android:textSize="18sp"-->
-    <!--android:textAppearance="@style/TextAppearance.AppCompat.Title"-->
-    <!--android:textColor="@color/iconAndTextColor"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--android:layout_margin="16dp"/>-->
-    <!---->
-    <!--<LinearLayout-->
-    <!--android:id="@+id/item_preview_container"-->
-    <!--android:orientation="horizontal"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@id/box_name"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--android:layout_margin="16dp">-->
-    <!---->
-    <!--<ImageView-->
-    <!--android:layout_width="128dp"-->
-    <!--android:layout_height="128dp" />-->
-    <!---->
-    <!--</LinearLayout>-->
-
-
-    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </layout>

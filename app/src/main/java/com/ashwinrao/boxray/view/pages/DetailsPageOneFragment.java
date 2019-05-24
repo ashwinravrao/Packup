@@ -113,7 +113,7 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
                         viewModel.getBox().setDestination(s.toString());
                         break;
                     case "note":
-                        viewModel.getBox().setNotes(s.toString());
+                        viewModel.getBox().setDescription(s.toString());
                         break;
                     default:
                         Log.e(TAG, "DetailsPageOneFragment: watchField(): TextWatcher: afterTextChanged: error retrieving TextInputLayout tag");
@@ -137,7 +137,7 @@ public class DetailsPageOneFragment extends Fragment implements Toolbar.OnMenuIt
         Objects.requireNonNull(fields[0].getEditText()).setText(viewModel.getBox().getName());
         Objects.requireNonNull(fields[1].getEditText()).setText(viewModel.getBox().getSource());
         Objects.requireNonNull(fields[2].getEditText()).setText(viewModel.getBox().getDestination());
-        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getBox().getNotes());
+        Objects.requireNonNull(fields[3].getEditText()).setText(viewModel.getBox().getDescription());
     }
 
     @Override

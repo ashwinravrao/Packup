@@ -47,11 +47,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(getSupportFragmentManager().getFragments().get(0).getClass() == ListFragment.class) {
-            if(listener != null) {
+            if (listener != null) {
                 listener.onBackPressed();
             }
-        } else {
-            super.onBackPressed();
         }
+        super.onBackPressed();
     }
 }

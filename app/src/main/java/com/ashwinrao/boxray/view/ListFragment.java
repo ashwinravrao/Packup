@@ -108,6 +108,7 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
         final RecyclerView recyclerView = binding.includeAppBar.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(recyclerView);
+//        addDivider(recyclerView);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
         listAdapter.registerListChangeListener(this);
         recyclerView.setAdapter(listAdapter);

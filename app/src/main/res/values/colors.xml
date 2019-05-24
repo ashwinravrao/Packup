@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<color name="colorPrimary">#EBCFB2</color>-->
-    <!--<color name="colorPrimaryDark">#D6BDA2</color>-->
-    <!--<color name="colorAccent">#4E4E4E</color>-->
 
-    <color name="colorPrimary">#DBDBDB</color>
-    <color name="colorPrimaryDark">#CECECE</color>
+    <!--Cardboard Brown Palette-->
+    <!--<color name="colorPrimary">#EBCFB2</color>-->
+    <!--<color name="colorPrimaryDark">#B89E82</color>-->
+    <!--<color name="colorAccent">#5F5C39</color>-->
+    <!--<color name="background_window">#F0DCC7</color>-->
+    <!--<color name="border_view_holder">#50A1887F</color>-->
+    <!--<color name="card_background">#EBCFB2</color>-->
+
+    <!-- Dark Envelope Gray Palette -->
+    <!--<color name="colorPrimary">#EEEEEE</color>-->
+    <!--<color name="colorPrimaryDark">#D7D7D7</color>-->
+    <!--<color name="colorAccent">#1788D3</color>-->
+
+     Envelope Gray Palette
+    <color name="colorPrimary">#EEEEEE</color>
+    <color name="colorPrimaryDark">#E3E3E3</color>
+    <!--<color name="colorPrimary">#FEFEFE</color>-->
+    <!--<color name="colorPrimaryDark">#EEEEEE</color>-->
     <color name="colorAccent">#1788D3</color>
 
-    <color name="imageFilter">#BFBFBF</color>
-    <!--<color name="windowBackground">#F0DCC7</color>-->
-    <color name="windowBackground">#E3E3E3</color>
-    <!--<color name="windowBackground">#FFFFFF</color>-->
-    <!--<color name="iconAndTextColor">#4E4E4E</color>-->
+    <color name="filter_image_preview">#BFBFBF</color>
+    <color name="background_window">#FFFFFF</color>
     <color name="iconAndTextColor">#000000</color>
+    <color name="border_view_holder">#264E4E4E</color>
+    <color name="text_color_secondary_view_holder">#878787</color>
+    <color name="card_background">#FEFEFE</color>
+
+    <!-- Other Palettes -->
     <color name="toastBackground">#804E4E4E</color>
     <color name="warningRed">#DC143C</color>
-    <color name="boxVHBorder">#264E4E4E</color>
-    <!--<color name="boxVHBackground">#E3E3E3</color>-->
-    <color name="vhSecondaryTextColor">#878787</color>
     <color name="moving_truck_icon_wheel">#455A64</color>
-
+    <color name="top_row_view_holder">#4E4E4E</color>
 
 
 </resources>

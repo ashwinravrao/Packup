@@ -79,7 +79,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
             public void onChanged(Box box) {
                 binding.setBox(box);
                 binding.boxNumber.setText(getString(R.string.title_detail_box_number, box.getId()));
-                if(box.getNotes() == null) binding.noteContainer.setVisibility(View.GONE);
+                if(box.getDescription() == null) binding.noteContainer.setVisibility(View.GONE);
                 adapter.setItems(box.getContents());
                 binding.recyclerView.setAdapter(adapter);
             }
