@@ -4,23 +4,21 @@
     <!--<color name="colorPrimaryDark">#D6BDA2</color>-->
     <!--<color name="colorAccent">#4E4E4E</color>-->
 
-    <color name="colorPrimary">#D9C3AA</color>
-    <color name="colorPrimaryDark">#C3AC94</color>
-    <color name="colorAccent">#5F5C39</color>
+    <color name="colorPrimary">#DBDBDB</color>
+    <color name="colorPrimaryDark">#CECECE</color>
+    <color name="colorAccent">#1788D3</color>
 
     <color name="imageFilter">#BFBFBF</color>
     <!--<color name="windowBackground">#F0DCC7</color>-->
-    <color name="windowBackground">#E8DBCC</color>
-    <color name="cardBackground">#D6BDA2</color>
-    <color name="iconAndTextColor">#4E4E4E</color>
+    <color name="windowBackground">#E3E3E3</color>
+    <!--<color name="windowBackground">#FFFFFF</color>-->
+    <!--<color name="iconAndTextColor">#4E4E4E</color>-->
+    <color name="iconAndTextColor">#000000</color>
     <color name="toastBackground">#804E4E4E</color>
-    <color name="pageDeselected">#804E4E4E</color>
     <color name="warningRed">#DC143C</color>
-    <color name="confirmGreen">#33A532</color>
-    <color name="boxVHBorder">#50000000</color>
-    <color name="boxVHBackground">#D6BDA2</color>
-    <color name="boxVHBackgroundSelected">#331788D3</color>
-    <color name="boxVHNumber">#996C6C6C</color>
+    <color name="boxVHBorder">#264E4E4E</color>
+    <!--<color name="boxVHBackground">#E3E3E3</color>-->
+    <color name="vhSecondaryTextColor">#878787</color>
     <color name="moving_truck_icon_wheel">#455A64</color>
 
 

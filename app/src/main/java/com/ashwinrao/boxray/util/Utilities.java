@@ -6,7 +6,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
-import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -16,7 +15,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 public class Utilities {

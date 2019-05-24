@@ -19,4 +19,17 @@ public class AsyncTasks {
             return null;
         }
     }
+
+    public static class Delete extends AsyncTask<Box, Void, Boolean> {
+
+        private BoxDao dao;
+
+        public Delete(BoxDao dao) { this.dao = dao; }
+
+        @Override
+        protected Boolean doInBackground(Box... boxes) {
+            dao.delete(boxes[0]);
+            return true;
+        }
+    }
 }

@@ -5,12 +5,6 @@
     tools:context=".activity.MainActivity">
 
     <item
-        android:id="@+id/toolbar_search_by_image"
-        android:icon="@drawable/ic_search_by_img"
-        android:title="@string/title_search_by_img"
-        app:showAsAction="ifRoom"/>
-
-    <item
         android:id="@+id/toolbar_search"
         android:icon="@drawable/ic_search"
         android:title="@string/title_search"
@@ -19,7 +13,13 @@
 
     <item
         android:id="@+id/toolbar_sort"
-        android:title="Sort"
+        android:title="@string/title_sort"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/toolbar_scan"
+        android:icon="@drawable/ic_search_by_img"
+        android:title="@string/title_scan_box"
         app:showAsAction="never"/>
 
 </menu>

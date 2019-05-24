@@ -1,27 +1,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Boxray</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="fragment_list_title">List of Boxes</string>
-    <string name="title_list">List</string>
-    <string name="title_settings">Settings</string>
     <string name="title_search">Search</string>
-    <string name="fragment_search_title">Search</string>
-    <string name="title_about">About</string>
-    <string name="bottom_bar_fab_title">Add Box</string>
     <string name="toolbar_title_all">Boxes</string>
-    <string name="title_help">Help</string>
-    <string name="help_placeholder">Your help dialog will go here</string>
     <string name="title_page_one_details">Make a label</string>
     <string name="label_page_one_details" tools:ignore="TypographyEllipsis">Let\'s start by creating a virtual label for your new box. Details like the name of your box, where it\'s going and where items are from will all be used to generate this unique virtual label.</string>
     <string name="hint_box_name">Name</string>
     <string name="hint_box_source">Source</string>
     <string name="hint_box_destination">Destination</string>
     <string name="hint_box_notes">Notes</string>
-    <string name="title_add_note">Add Note</string>
-    <string name="title_more_fields">More Fields</string>
-    <string name="hint_box_category">Category</string>
     <string name="title_save_draft">Save Draft</string>
     <string name="message_draft_saved">Draft saved</string>
     <string name="label_required">Required</string>
@@ -29,14 +15,11 @@
     <string name="title_clear_all">Clear All</string>
     <string name="label_page_two_contents">Perfect! You can start adding items to your new box. As you place each item inside, give it a unique and descriptive name. This will come in handy after the box has arrived and you\'re looking for a particular item.</string>
     <string name="hint_item">Item</string>
-    <string name="message_add_note">Add note alert dialog goes here</string>
     <string name="snackbar_item_deleted">Item deleted</string>
     <string name="message_undo">Undo</string>
     <string name="message_items_cleared">Items cleared</string>
     <string name="todo">TODO</string>
     <string name="label_page_three_photo">Now let\'s take a picture of your box and its items. If you haven\'t added any yet, make sure to do so before taking a photo of your box. You can skip this step and edit your box later when you have more items.</string>
-    <string name="tap_to">tap here to</string>
-    <string name="take_photo">take photo</string>
     <string name="title_page_three_photo">Take a photo</string>
     <string name="title_retake_photo">Retake photo</string>
     <string name="message_photo_tip">Hold your phone out above your open box and take a photo. Make sure that the edges of your box are clear and visible. Tap the top-right menu button to retake your photo!</string>
@@ -44,32 +27,14 @@
     <string name="label_page_four_number">Okay, last step! Mark the following number on your box on at least 2 surfaces. This is how you\'ll be able to keep track of what\'s in this box.</string>
     <string name="message_number_tip">Try and use big, bold letters (preferably with a dark colored and heavy marker). The idea is you want to be able to identify your box from 10 to 15 feet away!</string>
     <string name="title_page_four_number">Mark your box</string>
-    <string name="title_show_me">Show Me</string>
-    <string name="box_num_items_placeholder">%1$d items</string>
-    <string name="title_finish">Finish</string>
-    <string name="title_save">save</string>
     <string name="title_finish_button">finish</string>
     <string name="message_error_name_field_reprompt">Your box needs a name</string>
     <string name="title_detail_box_number">Box # %d</string>
-    <string name="text_view_add_a_note">Add a note</string>
-    <string name="name_field">name</string>
     <string name="title_edit_box">Edit Box</string>
     <string name="close_button_description">Close</string>
     <string name="saved_image_description">Box Image</string>
-    <string name="old_home">Old Home</string>
-    <string name="new_home">New Home</string>
     <string name="source_info_tag">From</string>
     <string name="destination_info_tag">To</string>
-    <string name="title_load_truck">Load Truck</string>
-    <string name="title_CAB_box_list">%d boxes selected</string>
-    <string name="title_select_multiple">Select multiple boxes</string>
-    <string name="title_bulk_edit">Bulk edit</string>
-    <string name="description_back_arrow">Go back</string>
-    <string name="title_toolbar_select_boxes">Select boxes</string>
-    <string name="title_delete">Delete</string>
-    <string name="dialog_title_save_address_load_truck">Save</string>
-    <string name="dialog_title_cancel_load_truck">Cancel</string>
-    <string name="description_load_truck_dialog_image">Moving Truck</string>
     <string name="dialog_message_load_truck">Enter your new home address below. You\'ll receive a notification to sync your in-app and physical boxes when you arrive!</string>
     <string name="dialog_title_load_truck">Ready to move?</string>
     <string name="dialog_load_truck_positive">Save</string>
@@ -83,14 +48,11 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="menu_item_home">Home</string>
     <string name="menu_item_settings">Settings</string>
-    <string name="placeholder_box_number">#%d</string>
-    <string name="title_search_by_img">Search by image</string>
+    <string name="placeholder_box_number"># %d</string>
+    <string name="title_scan_box">Scan box</string>
+    <string name="title_sort">Sort by…</string>
+    <string name="title_edit">Edit</string>
+    <string name="title_delete">Delete</string>
 
     <!-- Choices for Home Fragment Spinner -->
-    <string-array name="home_frag_spinner_choices">
-        <item>All</item>
-        <item>Packed</item>
-        <item>Moving</item>
-        <item>Arrived</item>
-    </string-array>
 </resources>

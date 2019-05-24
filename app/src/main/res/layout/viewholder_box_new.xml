@@ -6,16 +6,16 @@
     <data>
         <variable
             name="Box"
-            type="com.ashwinrao.boxray.data.Box" />
+            type="com.ashwinrao.boxray.data.Box"/>
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:cardBackgroundColor="@color/cardBackground"
+        app:cardBackgroundColor="#EEEEEE"
         app:cardCornerRadius="5dp"
-        app:cardElevation="5dp">
+        app:cardElevation="3dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -27,18 +27,94 @@
             android:layout_height="match_parent">
 
             <TextView
+                android:id="@+id/box_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@{Box.name}"
+                tools:text="Phone Chargers"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:layout_margin="16dp"/>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/AppTheme.PopUpOverlay"/>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="# 7"
                 android:layout_margin="16dp"
-                tools:text="#27"
+                android:layout_gravity="center"
                 android:text="@{@string/placeholder_box_number(Box.id)}"
-                android:textSize="22sp"
-                android:textStyle="bold"/>
+                android:textColor="@color/vhSecondaryTextColor"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="16dp"
+                tools:text="7 items"
+                android:textColor="@color/vhSecondaryTextColor"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:text="@{Box.numItems}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="232dp"-->
+    <!--android:background="@android:color/white">-->
+
+    <!--<androidx.appcompat.widget.Toolbar-->
+    <!--android:id="@+id/toolbar"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="?attr/actionBarSize"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--app:popupTheme="@style/AppTheme.PopUpOverlay"/>-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/box_name"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="@{Box.name}"-->
+    <!--tools:text="James' Bed Linens"-->
+    <!--android:textSize="18sp"-->
+    <!--android:textAppearance="@style/TextAppearance.AppCompat.Title"-->
+    <!--android:textColor="@color/iconAndTextColor"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--android:layout_margin="16dp"/>-->
+    <!---->
+    <!--<LinearLayout-->
+    <!--android:id="@+id/item_preview_container"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@id/box_name"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--android:layout_margin="16dp">-->
+    <!---->
+    <!--<ImageView-->
+    <!--android:layout_width="128dp"-->
+    <!--android:layout_height="128dp" />-->
+    <!---->
+    <!--</LinearLayout>-->
+
+
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </layout>

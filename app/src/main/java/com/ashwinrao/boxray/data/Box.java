@@ -2,6 +2,7 @@ package com.ashwinrao.boxray.data;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -35,6 +36,9 @@ public class Box {
     @ColumnInfo(name = "favorite")
     private boolean favorite;
 
+    @ColumnInfo(name = "numItems")
+    private String numItems;
+
     public Box() {
         this.createdDate = new Date();
     }
@@ -63,8 +67,17 @@ public class Box {
         this.createdDate = createdDate;
     }
 
+    public void setNumItems(String numItems) {
+        this.numItems = numItems;
+    }
+
     public void setContents(List<String> contents) {
         this.contents = contents;
+        if(this.contents == null || this.contents.size() == 0) {
+            setNumItems("Empty box");
+        } else {
+            setNumItems(String.format(Locale.US, "%d items", this.contents.size()));
+        }
     }
 
     public void setFavorite(boolean favorite) {
@@ -97,6 +110,10 @@ public class Box {
 
     public List<String> getContents() {
         return contents;
+    }
+
+    public String getNumItems() {
+        return this.numItems == null ? "Empty box" : this.numItems;
     }
 
     public boolean isFavorite() {

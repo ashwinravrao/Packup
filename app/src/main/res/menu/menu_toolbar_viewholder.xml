@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/toolbar_load_truck"
-        android:title="@string/title_load_truck"
-        android:icon="@drawable/ic_load_truck"
-        app:showAsAction="ifRoom"/>
+        android:id="@+id/toolbar_edit"
+        android:title="@string/title_edit"
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/toolbar_delete"

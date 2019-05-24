@@ -48,4 +48,8 @@ public class BoxViewModel extends ViewModel {
             listener.returnToFirstPage(true);
         }
     }
+
+    public void delete(Box box) {
+        repo.delete(box);
+    }
 }

@@ -8,18 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/windowBackground</item>
-        <item name="actionOverflowButtonStyle">@style/AppTheme.OverflowButtonStyle</item>
+        <!--<item name="actionOverflowButtonStyle">@style/AppTheme.OverflowButtonStyle</item>-->
         <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowStyle</item>
         <!--<item name="android:windowLightStatusBar">true</item>-->
         <item name="android:colorEdgeEffect">@color/imageFilter</item>
+        <item name="windowActionBarOverlay">true</item>
 
         <!--<item name="windowActionBar">false</item>-->
         <!--<item name="windowActionModeOverlay">true</item>-->
 
-    </style>
-
-    <style name="AppTheme.OverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">@color/iconAndTextColor</item>
     </style>
 
     <style name="AppTheme.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
@@ -32,7 +29,7 @@
     </style>
 
     <style name="AppTheme.PopUpOverlay" parent="ThemeOverlay.AppCompat.Light">
-        <item name="android:colorBackground">@color/windowBackground</item>
+        <item name="android:colorBackground">@android:color/white</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -47,10 +44,6 @@
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.HintText.NameField" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/confirmGreen</item>
-    </style>
-
     <style name="AppTheme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="android:textColor">@color/iconAndTextColor</item>
         <item name="android:textColorHint">@color/colorAccent</item>
@@ -58,31 +51,6 @@
         <item name="colorControlNormal">@color/iconAndTextColor</item>
         <item name="colorControlActivated">@color/iconAndTextColor</item>
         <item name="colorControlHighlight">@color/iconAndTextColor</item>
-    </style>
-
-    <style name="AppTheme.BoxVH.TextAppearance" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:padding">4dp</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">@color/iconAndTextColor</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="AppTheme.BoxVH.TextAppearance.NumItems">
-        <item name="android:layout_marginTop">52dp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="AppTheme.BoxVH.TextAppearance.Number">
-        <item name="android:layout_gravity">center_vertical|end</item>
-        <item name="android:layout_marginStart">0dp</item>
-        <item name="android:layout_marginTop">0dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:textColor">@color/boxVHNumber</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textSize">60sp</item>
     </style>
 
     <style name="AppTheme.DialogButtons" parent="Theme.MaterialComponents.Light.Dialog">

@@ -28,4 +28,8 @@ public class BoxRepository {
     public void saveBox(Box box) {
         new AsyncTasks.Insert(dao).execute(box);
     }
+
+    public void delete(Box box) {
+        new AsyncTasks.Delete(dao).execute(box);
+    }
 }

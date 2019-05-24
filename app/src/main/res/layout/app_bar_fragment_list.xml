@@ -20,6 +20,7 @@
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|snap"
                 app:titleTextColor="@color/iconAndTextColor"
+                app:collapseIcon="@drawable/ic_collapse_back_icon"
                 app:popupTheme="@style/AppTheme.PopUpOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
