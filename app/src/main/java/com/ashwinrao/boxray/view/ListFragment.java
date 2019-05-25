@@ -47,7 +47,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -108,7 +107,6 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
         final RecyclerView recyclerView = binding.includeAppBar.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(recyclerView);
-//        addDivider(recyclerView);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
         listAdapter.registerListChangeListener(this);
         recyclerView.setAdapter(listAdapter);

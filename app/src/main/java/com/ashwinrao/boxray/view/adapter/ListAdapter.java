@@ -2,6 +2,7 @@ package com.ashwinrao.boxray.view.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.ashwinrao.boxray.view.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -32,6 +34,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     private List<Box> boxes;
     private List<Box> boxesCopy;
     private ListChangeListener listener;
+
+    private static final String TAG = "ListAdapter";
 
     public ListAdapter(@NonNull Context context) {
         this.context = context;
@@ -61,6 +65,25 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         Box box = boxes.get(position);
         holder.binding.setBox(box);
+        holder.binding.contentPreviewContainer.removeAllViews();
+
+        final List<String> contents = new ArrayList<>();
+        if(box.getContents() != null) {
+            contents.addAll(box.getContents());
+        }
+
+        int numPreviews = contents.size() > 3 ? 3 : contents.size();
+        if(contents.size() <= 3) {
+            holder.binding.xMoreItems.setVisibility(View.GONE);
+        } else {
+            holder.binding.xMoreItemsText.setText(String.format(Locale.US, "+ %d more", contents.size() - 3));
+        }
+
+        for(int i = 0; i < numPreviews; i++) {
+            Log.e(TAG, "onBindViewHolder: " + numPreviews);
+            LayoutInflater.from(context).inflate(R.layout.content_preview, holder.binding.contentPreviewContainer);
+        }
+
     }
 
     @Override
@@ -113,6 +136,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
             toolbar.setOverflowIcon(context.getResources().getDrawable(R.drawable.ic_vh_overflow, context.getTheme()));
             toolbar.inflateMenu(R.menu.menu_toolbar_viewholder);
             toolbar.setOnMenuItemClickListener(this);
+
             this.binding.getRoot().setOnClickListener(this);
         }
 
