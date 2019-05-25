@@ -1,9 +1,12 @@
 package com.ashwinrao.boxray.util;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.data.BoxDao;
+
+import java.util.List;
 
 public class AsyncTasks {
 
@@ -20,16 +23,16 @@ public class AsyncTasks {
         }
     }
 
-    public static class Delete extends AsyncTask<Box, Void, Boolean> {
+    public static class Delete extends AsyncTask<Box, Void, Void> {
 
         private BoxDao dao;
 
         public Delete(BoxDao dao) { this.dao = dao; }
 
         @Override
-        protected Boolean doInBackground(Box... boxes) {
+        protected Void doInBackground(Box... boxes) {
             dao.delete(boxes[0]);
-            return true;
+            return null;
         }
     }
 }

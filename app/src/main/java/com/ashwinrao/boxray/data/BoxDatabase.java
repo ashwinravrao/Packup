@@ -4,7 +4,7 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = Box.class, version = 1, exportSchema = false)
+@Database(entities = Box.class, version = 2, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class BoxDatabase extends RoomDatabase {
 

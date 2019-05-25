@@ -7,4 +7,6 @@ public interface ListChangeListener {
     void edit(Box box);
 
     void delete(Box box);
+
+    void save(Box box);
 }

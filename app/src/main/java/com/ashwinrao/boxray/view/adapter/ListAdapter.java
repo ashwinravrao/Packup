@@ -9,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ListView;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.ViewholderBoxNewBinding;
 import com.ashwinrao.boxray.util.ListChangeListener;
+import com.ashwinrao.boxray.util.PropertiesFilter;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
 
@@ -65,8 +65,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         Box box = boxes.get(position);
         holder.binding.setBox(box);
-        holder.binding.contentPreviewContainer.removeAllViews();
+        addContentPreviews(box, holder.binding);
+    }
 
+    private void addContentPreviews(Box box, ViewholderBoxNewBinding binding) {
+        binding.contentPreviewContainer.removeAllViews();
         final List<String> contents = new ArrayList<>();
         if(box.getContents() != null) {
             contents.addAll(box.getContents());
@@ -74,16 +77,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
         int numPreviews = contents.size() > 3 ? 3 : contents.size();
         if(contents.size() <= 3) {
-            holder.binding.xMoreItems.setVisibility(View.GONE);
+            binding.xMoreItems.setVisibility(View.GONE);
         } else {
-            holder.binding.xMoreItemsText.setText(String.format(Locale.US, "+ %d more", contents.size() - 3));
+            binding.xMoreItemsText.setText(String.format(Locale.US, "+ %d more", contents.size() - 3));
         }
 
         for(int i = 0; i < numPreviews; i++) {
             Log.e(TAG, "onBindViewHolder: " + numPreviews);
-            LayoutInflater.from(context).inflate(R.layout.content_preview, holder.binding.contentPreviewContainer);
+            LayoutInflater.from(context).inflate(R.layout.content_preview, binding.contentPreviewContainer);
         }
-
     }
 
     @Override
@@ -100,17 +102,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            List<Box> filtered = new ArrayList<>();
-            if(constraint == null || constraint.length() < 1) {
-                filtered.addAll(boxesCopy);
-            } else {
-                String filterText = constraint.toString().toLowerCase().trim();
-                for(Box box : boxesCopy) {
-                    if(box.getName().toLowerCase().contains(filterText)) {
-                        filtered.add(box);
-                    }
-                }
-            }
+            List<Box> filtered;
+            PropertiesFilter pf = new PropertiesFilter(boxesCopy);
+            filtered = pf.filter(constraint, true, true, true);
+
             FilterResults results = new FilterResults();
             results.values = filtered;
             return results;
@@ -125,17 +120,17 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         }
     };
 
-    public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, Toolbar.OnMenuItemClickListener {
+    public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ViewholderBoxNewBinding binding;
 
         public BoxViewHolder(@NonNull ViewholderBoxNewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            Toolbar toolbar = this.binding.toolbar;
-            toolbar.setOverflowIcon(context.getResources().getDrawable(R.drawable.ic_vh_overflow, context.getTheme()));
-            toolbar.inflateMenu(R.menu.menu_toolbar_viewholder);
-            toolbar.setOnMenuItemClickListener(this);
+//            Toolbar toolbar = this.binding.toolbar;
+//            toolbar.setOverflowIcon(context.getResources().getDrawable(R.drawable.ic_vh_overflow, context.getTheme()));
+//            toolbar.inflateMenu(R.menu.menu_toolbar_viewholder);
+//            toolbar.setOnMenuItemClickListener(this);
 
             this.binding.getRoot().setOnClickListener(this);
         }
@@ -156,19 +151,19 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
                     .commit();
         }
 
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.toolbar_edit:
-                    if(listener != null) { listener.edit(boxes.get(getAdapterPosition())); }
-                    notifyItemChanged(getAdapterPosition());
-                    return true;
-                case R.id.toolbar_delete:
-                    if(listener != null) { listener.delete(boxes.get(getAdapterPosition())); }
-                    notifyItemChanged(getAdapterPosition());
-                    return true;
-            }
-            return false;
-        }
+//        @Override
+//        public boolean onMenuItemClick(MenuItem item) {
+//            switch (item.getItemId()) {
+//                case R.id.toolbar_edit:
+//                    if(listener != null) { listener.edit(boxes.get(getAdapterPosition())); }
+//                    notifyItemChanged(getAdapterPosition());
+//                    return true;
+//                case R.id.toolbar_delete:
+//                    if(listener != null) { listener.delete(boxes.get(getAdapterPosition())); }
+//                    notifyItemRemoved(getAdapterPosition());
+//                    return true;
+//            }
+//            return false;
+//        }
     }
 }

@@ -46,7 +46,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -112,7 +111,7 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
         recyclerView.setAdapter(listAdapter);
 
         boxesLD.observe(this, boxes -> {
-            if (boxes != null) {
+            if(boxes != null) {
                 listAdapter.setBoxes(boxes);
             } else {
                 listAdapter.setBoxes(new ArrayList<>());
@@ -123,10 +122,6 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
         return binding.getRoot();
     }
 
-    private void addDivider(RecyclerView recyclerView) {
-        DividerItemDecoration divider = new DividerItemDecoration(Objects.requireNonNull(getActivity()), DividerItemDecoration.HORIZONTAL);
-        recyclerView.addItemDecoration(divider);
-    }
 
     private void addItemDecoration(RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -251,5 +246,10 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
     @Override
     public void delete(Box box) {
         viewModel.delete(box);
+    }
+
+    @Override
+    public void save(Box box) {
+        viewModel.save(box);
     }
 }

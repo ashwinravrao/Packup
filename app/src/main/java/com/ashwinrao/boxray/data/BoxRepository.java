@@ -1,8 +1,12 @@
 package com.ashwinrao.boxray.data;
 
+import android.util.Log;
+
 import com.ashwinrao.boxray.util.AsyncTasks;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.LiveData;
 
@@ -11,6 +15,8 @@ import javax.inject.Singleton;
 
 @Singleton
 public class BoxRepository {
+
+    private static final String TAG = "BoxRepository";
 
     private BoxDao dao;
 

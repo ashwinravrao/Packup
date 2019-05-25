@@ -95,13 +95,13 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_margin="16dp"/>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:popupTheme="@style/AppTheme.PopUpOverlay"/>
+            <!--<androidx.appcompat.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent"-->
+                <!--app:popupTheme="@style/AppTheme.PopUpOverlay"/>-->
 
             <LinearLayout
                 android:id="@+id/content_preview_container"

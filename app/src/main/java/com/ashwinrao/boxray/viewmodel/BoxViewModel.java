@@ -49,6 +49,10 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
+    public void save(Box box) {
+        repo.saveBox(box);
+    }
+
     public void delete(Box box) {
         repo.delete(box);
     }
