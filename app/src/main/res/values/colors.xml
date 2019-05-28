@@ -27,6 +27,7 @@
     <color name="border_view_holder">#264E4E4E</color>
     <color name="text_color_secondary_view_holder">#878787</color>
     <color name="card_background">#FEFEFE</color>
+    <color name="shutter_button">#990D35</color>
 
     <!-- Other Palettes -->
     <color name="moving_truck_icon_wheel">#455A64</color>

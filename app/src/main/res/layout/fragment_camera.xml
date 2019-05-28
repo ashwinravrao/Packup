@@ -50,6 +50,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/shutter"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:cardCornerRadius="50dp"
+                app:cardElevation="0dp"
+                app:contentPadding="5dp"
+                android:layout_gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="0dp"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/shutter_button"
+                    tools:ignore="KeyboardInaccessibleWidget" />
+
+            </androidx.cardview.widget.CardView>
+
         </FrameLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

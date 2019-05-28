@@ -2,18 +2,20 @@ package com.ashwinrao.boxray.view;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
@@ -21,6 +23,8 @@ import com.ashwinrao.boxray.databinding.FragmentCameraBinding;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.camerakit.CameraKitView;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -29,6 +33,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private BoxViewModel viewModel;
     private CameraKitView camera;
+
+    private static final String TAG = "CameraFragment";
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -51,7 +57,25 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         FragmentCameraBinding binding = FragmentCameraBinding.inflate(inflater);
         camera = binding.camera;
         setupToolbar(binding.toolbar);
+        setupShutterButton(binding.shutter.findViewById(R.id.button));
         return binding.getRoot();
+    }
+
+    private void setupShutterButton(CardView button) {
+        button.setOnClickListener(view -> camera.captureImage((cameraKitView, bytes) -> {
+            final File savedPhoto = new File(Objects.requireNonNull(getActivity()).getExternalMediaDirs()[0],System.currentTimeMillis() + ".jpg");
+
+            try {
+                FileOutputStream outputStream = new FileOutputStream(savedPhoto.getAbsolutePath());
+                outputStream.write(bytes);
+                outputStream.close();
+                Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
+                toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
+                toast.show();
+            } catch (java.io.IOException e) {
+                Log.e(TAG, "setupShutterButton: " + e.getMessage());
+            }
+        }));
     }
 
     private void setupToolbar(Toolbar toolbar) {
