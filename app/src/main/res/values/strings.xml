@@ -2,33 +2,9 @@
     <string name="app_name">Boxray</string>
     <string name="title_search">Search</string>
     <string name="toolbar_title_all">Boxes</string>
-    <string name="title_page_one_details">Make a label</string>
-    <string name="label_page_one_details" tools:ignore="TypographyEllipsis">Let\'s start by creating a virtual label for your new box. Details like the name of your box, where it\'s going and where items are from will all be used to generate this unique virtual label.</string>
-    <string name="hint_box_name">Name</string>
-    <string name="hint_box_source">Source</string>
-    <string name="hint_box_destination">Destination</string>
-    <string name="hint_box_notes">Notes</string>
-    <string name="title_save_draft">Save Draft</string>
-    <string name="message_draft_saved">Draft saved</string>
-    <string name="label_required">Required</string>
-    <string name="title_page_two_items">Fill your box</string>
-    <string name="title_clear_all">Clear All</string>
-    <string name="label_page_two_contents">Perfect! You can start adding items to your new box. As you place each item inside, give it a unique and descriptive name. This will come in handy after the box has arrived and you\'re looking for a particular item.</string>
-    <string name="hint_item">Item</string>
     <string name="snackbar_item_deleted">Item deleted</string>
     <string name="message_undo">Undo</string>
-    <string name="message_items_cleared">Items cleared</string>
     <string name="todo">TODO</string>
-    <string name="label_page_three_photo">Now let\'s take a picture of your box and its items. If you haven\'t added any yet, make sure to do so before taking a photo of your box. You can skip this step and edit your box later when you have more items.</string>
-    <string name="title_page_three_photo">Take a photo</string>
-    <string name="title_retake_photo">Retake photo</string>
-    <string name="message_photo_tip">Hold your phone out above your open box and take a photo. Make sure that the edges of your box are clear and visible. Tap the top-right menu button to retake your photo!</string>
-    <string name="message_tip_title">Tip:</string>
-    <string name="label_page_four_number">Okay, last step! Mark the following number on your box on at least 2 surfaces. This is how you\'ll be able to keep track of what\'s in this box.</string>
-    <string name="message_number_tip">Try and use big, bold letters (preferably with a dark colored and heavy marker). The idea is you want to be able to identify your box from 10 to 15 feet away!</string>
-    <string name="title_page_four_number">Mark your box</string>
-    <string name="title_finish_button">finish</string>
-    <string name="message_error_name_field_reprompt">Your box needs a name</string>
     <string name="title_detail_box_number">Box # %d</string>
     <string name="title_edit_box">Edit Box</string>
     <string name="close_button_description">Close</string>
@@ -51,8 +27,11 @@
     <string name="placeholder_box_number"># %d</string>
     <string name="title_scan_box">Scan box</string>
     <string name="title_sort">Sort by…</string>
-    <string name="title_edit">Edit</string>
-    <string name="title_delete">Delete</string>
+    <string name="toolbar_done">Done</string>
+    <string name="heading_label">Box</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_description">Description</string>
+    <string name="heading_things">Stuff</string>
 
     <!-- Choices for Home Fragment Spinner -->
 </resources>

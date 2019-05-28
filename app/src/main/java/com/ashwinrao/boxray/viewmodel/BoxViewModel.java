@@ -40,12 +40,12 @@ public class BoxViewModel extends ViewModel {
         return repo.getBoxes();
     }
 
-    public void saveBox() {
+    public boolean saveBox() {
         if(new BoxValidator(this.box).validate()) {
             repo.saveBox(this.box);
-            listener.finishParentActivity(true);
+            return true;
         } else {
-            listener.returnToFirstPage(true);
+            return false;
         }
     }
 

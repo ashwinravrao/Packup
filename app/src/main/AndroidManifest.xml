@@ -32,10 +32,13 @@
         </activity>
 
         <activity android:name=".view.AddActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.AddActivity"
             android:windowSoftInputMode="adjustPan">
 
         </activity>
+
+        <activity android:name=".view.CameraActivity"
+            android:theme="@style/AppTheme.CameraActivity"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

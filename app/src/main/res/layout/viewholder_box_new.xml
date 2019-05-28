@@ -9,64 +9,6 @@
             type="com.ashwinrao.boxray.data.Box"/>
     </data>
 
-    <!--<androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="216dp">-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/box_name"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--android:text="@{Box.name}"-->
-            <!--tools:text="Phone Chargers"-->
-            <!--android:textAppearance="@style/TextAppearance.AppCompat.Title"-->
-            <!--android:layout_margin="16dp"/>-->
-
-        <!--<androidx.appcompat.widget.Toolbar-->
-            <!--android:id="@+id/toolbar"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="?attr/actionBarSize"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:popupTheme="@style/AppTheme.PopUpOverlay"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--tools:text="# 7"-->
-            <!--android:layout_marginEnd="16dp"-->
-            <!--android:layout_marginBottom="32dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--android:text="@{@string/placeholder_box_number(Box.id)}"-->
-            <!--android:textColor="@color/text_color_secondary_view_holder"-->
-            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>-->
-
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--android:layout_marginStart="16dp"-->
-            <!--android:layout_marginBottom="32dp"-->
-            <!--tools:text="7 items"-->
-            <!--android:textColor="@color/text_color_secondary_view_holder"-->
-            <!--android:textAppearance="@style/TextAppearance.AppCompat.Body1"-->
-            <!--android:text="@{Box.numItems}"/>-->
-
-        <!--<View-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="1dp"-->
-            <!--android:background="@color/colorPrimaryDark"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"/>-->
-
-    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
-
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
@@ -94,14 +36,6 @@
                 tools:text="Phone Chargers"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:layout_margin="16dp"/>
-
-            <!--<androidx.appcompat.widget.Toolbar-->
-                <!--android:id="@+id/toolbar"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="?attr/actionBarSize"-->
-                <!--app:layout_constraintEnd_toEndOf="parent"-->
-                <!--app:layout_constraintTop_toTopOf="parent"-->
-                <!--app:popupTheme="@style/AppTheme.PopUpOverlay"/>-->
 
             <LinearLayout
                 android:id="@+id/content_preview_container"

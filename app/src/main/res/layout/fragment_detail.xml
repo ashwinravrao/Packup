@@ -30,7 +30,7 @@
                 android:layout_height="match_parent">
 
                 <FrameLayout
-                    android:id="@+id/toolbar_and_image"
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +72,7 @@
                     android:layout_margin="32dp"
                     android:text="@{box.name}"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar_and_image"
+                    app:layout_constraintTop_toBottomOf="@id/header"
                     tools:text="Jamie\'s Sweaters" />
 
                 <TextView

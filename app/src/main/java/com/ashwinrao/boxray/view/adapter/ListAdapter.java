@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -127,11 +125,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         public BoxViewHolder(@NonNull ViewholderBoxNewBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-//            Toolbar toolbar = this.binding.toolbar;
-//            toolbar.setOverflowIcon(context.getResources().getDrawable(R.drawable.ic_vh_overflow, context.getTheme()));
-//            toolbar.inflateMenu(R.menu.menu_toolbar_viewholder);
-//            toolbar.setOnMenuItemClickListener(this);
-
             this.binding.getRoot().setOnClickListener(this);
         }
 
@@ -150,20 +143,5 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
                     .replace(R.id.fragment_container, detail)
                     .commit();
         }
-
-//        @Override
-//        public boolean onMenuItemClick(MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.toolbar_edit:
-//                    if(listener != null) { listener.edit(boxes.get(getAdapterPosition())); }
-//                    notifyItemChanged(getAdapterPosition());
-//                    return true;
-//                case R.id.toolbar_delete:
-//                    if(listener != null) { listener.delete(boxes.get(getAdapterPosition())); }
-//                    notifyItemRemoved(getAdapterPosition());
-//                    return true;
-//            }
-//            return false;
-//        }
     }
 }

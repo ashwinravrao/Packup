@@ -29,8 +29,6 @@
     <color name="card_background">#FEFEFE</color>
 
     <!-- Other Palettes -->
-    <color name="toastBackground">#804E4E4E</color>
-    <color name="warningRed">#DC143C</color>
     <color name="moving_truck_icon_wheel">#455A64</color>
     <color name="top_row_view_holder">#4E4E4E</color>
 
