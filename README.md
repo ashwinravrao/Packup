@@ -9,5 +9,4 @@ Built using...
 - Data Binding
 - Android Jetpack
 - CameraX
-- Google Maps SDK
-- Mapbox geocoding REST API
+- Glide
