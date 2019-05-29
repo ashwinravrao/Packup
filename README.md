@@ -8,5 +8,5 @@ Built using...
 - Dagger 2
 - Data Binding
 - Android Jetpack
-- Google Maps API
-- RESTful geocoding APIs
+- CameraX
+- Glide
