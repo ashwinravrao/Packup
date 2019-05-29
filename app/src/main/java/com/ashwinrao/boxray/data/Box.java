@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,8 +73,13 @@ public class Box {
     }
 
     public void setContents(List<String> contents) {
-        this.contents = contents;
-        if(this.contents == null || this.contents.size() == 0) {
+        if(this.contents == null) {
+            this.contents = new ArrayList<>();
+        }
+
+        this.contents.addAll(contents);
+
+        if(this.contents.size() == 0) {
             setNumItems("No items");
         } else {
             setNumItems(String.format(Locale.US, "%d items", this.contents.size()));

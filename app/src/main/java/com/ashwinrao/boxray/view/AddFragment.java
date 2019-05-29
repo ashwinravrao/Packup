@@ -1,13 +1,10 @@
 package com.ashwinrao.boxray.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +27,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -82,37 +77,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        addItemDecoration(recyclerView);
-        adapter = new ThumbnailAdapter(getContext(), (int) Utilities.dpToPx(Objects.requireNonNull(getContext()), 200f), (int) Utilities.dpToPx(getContext(), 200f));
+        Utilities.addItemDecoration(getContext(), recyclerView, 2);
+        adapter = new ThumbnailAdapter(getContext(), Utilities.dpToPx(Objects.requireNonNull(getContext()), 150f), Utilities.dpToPx(getContext(), 150f));
         recyclerView.setAdapter(adapter);
-    }
-
-    private void addItemDecoration(RecyclerView recyclerView) {
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                int position = parent.getChildAdapterPosition(view);
-                int spanCount = 2;
-                int spacing = (int) Utilities.dpToPx(Objects.requireNonNull(getActivity()), 16f);
-
-                if (position >= 0) {
-                    int column = position % spanCount;
-
-                    outRect.left = spacing - column * spacing / spanCount;
-                    outRect.right = (column + 1) * spacing / spanCount;
-
-                    if (position < spanCount) {
-                        outRect.top = spacing;
-                    }
-                    outRect.bottom = spacing;
-                } else {
-                    outRect.left = 0;
-                    outRect.right = 0;
-                    outRect.top = 0;
-                    outRect.bottom = 0;
-                }
-            }
-        });
     }
 
     private void setupSwitches(SwitchCompat[] switches) {
@@ -220,6 +187,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 if(paths != null) {
                     adapter.setPaths(paths);
                     recyclerView.setAdapter(adapter);
+                    viewModel.getBox().setContents(paths);
                 }
             }
         }

@@ -135,12 +135,11 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
             parent.addView(textureView, 0);
 
             textureView.setSurfaceTexture(output.getSurfaceTexture());
-//                updateTransform();
         });
 
         final ImageCaptureConfig imageCaptureConfig = new ImageCaptureConfig.Builder()
                 .setTargetAspectRatio(screenAspectRatio)
-                .setCaptureMode(ImageCapture.CaptureMode.MAX_QUALITY)
+                .setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
                 .setTargetResolution(screenSize)
                 .build();
 
@@ -158,9 +157,10 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
                 @Override
                 public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
-                    String customMessage = "Image capture failed: " + message;
-                    Toast.makeText(getContext(), customMessage, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, customMessage);
+                    Toast toast = Toast.makeText(getActivity(), "Image capture failed", Toast.LENGTH_SHORT);
+                    toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
+                    toast.show();
+                    Log.e(TAG, message);
                 }
             });
         });

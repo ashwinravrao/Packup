@@ -2,8 +2,8 @@ package com.ashwinrao.boxray.view.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -14,6 +14,7 @@ import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.ViewholderBoxNewBinding;
 import com.ashwinrao.boxray.util.ListChangeListener;
 import com.ashwinrao.boxray.util.PropertiesFilter;
+import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
 
@@ -23,6 +24,7 @@ import java.util.Locale;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -63,26 +65,26 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         Box box = boxes.get(position);
         holder.binding.setBox(box);
-        addContentPreviews(box, holder.binding);
-    }
 
-    private void addContentPreviews(Box box, ViewholderBoxNewBinding binding) {
-        binding.contentPreviewContainer.removeAllViews();
-        final List<String> contents = new ArrayList<>();
-        if(box.getContents() != null) {
-            contents.addAll(box.getContents());
-        }
+        RecyclerView recyclerView = holder.binding.recyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false));
+        Utilities.simpleItemDecoration(context, recyclerView, false);
+        ThumbnailAdapter adapter = new ThumbnailAdapter(context, Utilities.dpToPx(context, 64f), Utilities.dpToPx(context, 64f));
+        adapter.setPaths(box.getContents().subList(0, 3));
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                holder.onClick(rv);
+                return true;
+            }
+        });
 
-        int numPreviews = contents.size() > 3 ? 3 : contents.size();
-        if(contents.size() <= 3) {
-            binding.xMoreItems.setVisibility(View.GONE);
+        // update x-items more TextView
+        if(box.getContents().size() > 3) {
+            holder.binding.xMoreItemsText.setText(String.format(Locale.US, "+ %d\nmore", box.getContents().size() - 3));
         } else {
-            binding.xMoreItemsText.setText(String.format(Locale.US, "+ %d more", contents.size() - 3));
-        }
-
-        for(int i = 0; i < numPreviews; i++) {
-            Log.e(TAG, "onBindViewHolder: " + numPreviews);
-            LayoutInflater.from(context).inflate(R.layout.content_preview, binding.contentPreviewContainer);
+            holder.binding.xMoreItemsText.setVisibility(View.GONE);
         }
     }
 
