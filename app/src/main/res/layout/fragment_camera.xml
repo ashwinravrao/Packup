@@ -26,20 +26,14 @@
 
         </FrameLayout>
 
-        <com.camerakit.CameraKitView
-            android:id="@+id/camera"
+        <TextureView
+            android:id="@+id/preview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:adjustViewBounds="true"
-            android:keepScreenOn="true"
-            app:camera_facing="back"
-            app:camera_flash="auto"
-            app:camera_focus="continuous"
-            app:camera_permissions="camera"
-            app:layout_constraintTop_toBottomOf="@id/header"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/footer"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/footer"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header" />
 
         <FrameLayout
             android:id="@+id/footer"

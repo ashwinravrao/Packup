@@ -3,9 +3,11 @@ package com.ashwinrao.boxray.view;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,8 +17,11 @@ import android.widget.EditText;
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
+import com.ashwinrao.boxray.util.Utilities;
+import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -25,6 +30,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -32,11 +39,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import javax.inject.Inject;
 
+import static android.app.Activity.RESULT_OK;
+
 public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private boolean nameError;
     private BoxViewModel viewModel;
     private FragmentAddBinding binding;
+    private RecyclerView recyclerView;
+    private ThumbnailAdapter adapter;
+
+    private static final String TAG = "Boxray";
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -57,6 +70,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAddBinding.inflate(inflater);
+        recyclerView = binding.recyclerView;
         setupToolbar(binding.toolbar);
         setupNameField(binding.nameEditText);
         setupDescriptionField(binding.descriptionEditText);
@@ -67,8 +81,38 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     }
 
     private void setupRecyclerView(RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3, RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        addItemDecoration(recyclerView);
+        adapter = new ThumbnailAdapter(getContext(), (int) Utilities.dpToPx(Objects.requireNonNull(getContext()), 200f), (int) Utilities.dpToPx(getContext(), 200f));
+        recyclerView.setAdapter(adapter);
+    }
 
+    private void addItemDecoration(RecyclerView recyclerView) {
+        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                int position = parent.getChildAdapterPosition(view);
+                int spanCount = 2;
+                int spacing = (int) Utilities.dpToPx(Objects.requireNonNull(getActivity()), 16f);
+
+                if (position >= 0) {
+                    int column = position % spanCount;
+
+                    outRect.left = spacing - column * spacing / spanCount;
+                    outRect.right = (column + 1) * spacing / spanCount;
+
+                    if (position < spanCount) {
+                        outRect.top = spacing;
+                    }
+                    outRect.bottom = spacing;
+                } else {
+                    outRect.left = 0;
+                    outRect.right = 0;
+                    outRect.top = 0;
+                    outRect.bottom = 0;
+                }
+            }
+        });
     }
 
     private void setupSwitches(SwitchCompat[] switches) {
@@ -78,8 +122,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                     viewModel.getBox().setFavorite(isChecked);
                 } else {
                     buttonView.setChecked(false);
-                    Intent intent = new Intent(getContext(), CameraActivity.class);
-                    startActivity(intent);
+                    Intent intent = new Intent(getActivity(), CameraActivity.class);
+                    startActivityForResult(intent, 1);
                 }
             });
         }
@@ -132,21 +176,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                     .setTitle("Discard current box?")
                     .setMessage("You may have unsaved changes. Are you sure you want to leave and discard this box?")
                     .setCancelable(false)
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Objects.requireNonNull(getActivity()).finish();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                        }
-                    })
+                    .setPositiveButton("Yes", (dialog1, which) -> Objects.requireNonNull(getActivity()).finish())
+                    .setNegativeButton("No", (dialog12, which) -> dialog12.cancel())
                     .create();
-//            dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.top_row_view_holder, Objects.requireNonNull(getActivity()).getTheme()));
-//            dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(android.R.color.holo_red_light, getActivity().getTheme()));
             dialog.show();
         });
     }
@@ -177,5 +209,19 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             }
         }
         return false;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                List<String> paths = data.getStringArrayListExtra("paths");
+                if(paths != null) {
+                    adapter.setPaths(paths);
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+        }
     }
 }

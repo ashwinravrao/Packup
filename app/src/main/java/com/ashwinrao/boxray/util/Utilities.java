@@ -3,9 +3,6 @@ package com.ashwinrao.boxray.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.Build;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,30 +16,9 @@ import androidx.fragment.app.FragmentActivity;
 
 public class Utilities {
 
-    @SuppressWarnings("deprecation")
-    public static Spanned fromHtml(String html){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY);
-        } else {
-            return Html.fromHtml(html);
-        }
-    }
-
-    // Convenience method to calculate pixel offsets from the density independent variety
     public static float dpToPx(Context context, float dp) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
-
-    /**
-     * @param activity (required)
-     * @param originalSoftInputMode (optional)
-     *
-     * Temporarily toggles application's soft input mode for the lifespan of the calling fragment.
-     * This is done by storing the current soft input mode, temporarily setting it to adjust nothing,
-     * and restoring the original value onDestroy().
-     *
-     * @return original Android Manifest soft input mode
-     */
 
     public static int applyFragmentSoftInput(FragmentActivity activity, @Nullable Integer originalSoftInputMode) {
         FragmentActivity act = Objects.requireNonNull(activity);
