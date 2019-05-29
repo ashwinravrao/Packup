@@ -8,5 +8,6 @@ Built using...
 - Dagger 2
 - Data Binding
 - Android Jetpack
-- Google Maps API
-- RESTful geocoding APIs
+- CameraX
+- Google Maps SDK
+- Mapbox geocoding REST API
