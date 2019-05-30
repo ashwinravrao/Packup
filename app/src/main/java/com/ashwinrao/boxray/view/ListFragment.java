@@ -21,7 +21,6 @@ import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
 import com.ashwinrao.boxray.util.BackNavigationListener;
 import com.ashwinrao.boxray.util.DestinationDialog;
-import com.ashwinrao.boxray.util.ListChangeListener;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
@@ -52,7 +51,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import javax.inject.Inject;
 
 
-public class ListFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, BackNavigationListener, ListChangeListener {
+public class ListFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, BackNavigationListener {
 
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
@@ -97,17 +96,10 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-        FloatingActionButton fab = binding.includeAppBar.fab;
-        fab.setOnClickListener(v -> {
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                startActivity(intent);
-        });
-
         final RecyclerView recyclerView = binding.includeAppBar.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(recyclerView);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
-        listAdapter.registerListChangeListener(this);
         recyclerView.setAdapter(listAdapter);
 
         boxesLD.observe(this, boxes -> {
@@ -117,6 +109,12 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
                 listAdapter.setBoxes(new ArrayList<>());
             }
             recyclerView.setAdapter(listAdapter);
+        });
+
+        FloatingActionButton fab = binding.includeAppBar.fab;
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddActivity.class);
+            startActivity(intent);
         });
 
         return binding.getRoot();
@@ -236,20 +234,5 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
     public void onDestroy() {
         super.onDestroy();
         ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
-    }
-
-    @Override
-    public void edit(Box box) {
-        Toast.makeText(getActivity(), "Todo: implement editing", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void delete(Box box) {
-        viewModel.delete(box);
-    }
-
-    @Override
-    public void save(Box box) {
-        viewModel.save(box);
     }
 }

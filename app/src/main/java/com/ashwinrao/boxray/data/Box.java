@@ -34,6 +34,9 @@ public class Box {
     @ColumnInfo(name = "contents")
     private List<String> contents;
 
+    @ColumnInfo(name = "preview_image")
+    private String previewImage;
+
     @ColumnInfo(name = "favorite")
     private boolean favorite;
 
@@ -81,9 +84,15 @@ public class Box {
 
         if(this.contents.size() == 0) {
             setNumItems("No items");
+        } else if(this.contents.size() == 1) {
+            setNumItems("1 item");
         } else {
             setNumItems(String.format(Locale.US, "%d items", this.contents.size()));
         }
+    }
+
+    public void setPreviewImage(String previewImage) {
+        this.previewImage = previewImage;
     }
 
     public void setFavorite(boolean favorite) {
@@ -124,5 +133,9 @@ public class Box {
 
     public boolean isFavorite() {
         return favorite;
+    }
+
+    public String getPreviewImage() {
+        return previewImage;
     }
 }

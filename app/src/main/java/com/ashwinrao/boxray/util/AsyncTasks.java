@@ -1,12 +1,9 @@
 package com.ashwinrao.boxray.util;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.data.BoxDao;
-
-import java.util.List;
 
 public class AsyncTasks {
 
@@ -35,4 +32,5 @@ public class AsyncTasks {
             return null;
         }
     }
+
 }

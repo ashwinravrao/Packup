@@ -4,15 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="Box"
-            type="com.ashwinrao.boxray.data.Box"/>
+            type="com.ashwinrao.boxray.data.Box" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="300dp"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp">
@@ -20,7 +21,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_box_viewholder"/>
+            android:background="@drawable/background_box_viewholder" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,84 +31,84 @@
                 android:id="@+id/box_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@{Box.name}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="@{Box.name}"
-                tools:text="Phone Chargers"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:layout_margin="16dp"/>
-
-            <!--<LinearLayout-->
-                <!--android:id="@+id/content_preview_container"-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:layout_constraintHorizontal_bias="0"-->
-                <!--android:layout_marginEnd="16dp"-->
-                <!--android:layout_marginStart="20dp"-->
-                <!--app:layout_constraintStart_toStartOf="parent"-->
-                <!--app:layout_constraintTop_toBottomOf="@id/box_name"-->
-                <!--app:layout_constraintBottom_toTopOf="@id/description"/>-->
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:orientation="horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:overScrollMode="never"
-                app:layout_constraintTop_toBottomOf="@id/box_name"
-                app:layout_constraintBottom_toTopOf="@id/description"
-                app:layout_constraintStart_toStartOf="parent" />
+                tools:text="Coffee Kit" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/x_more_items"
-                android:layout_width="72dp"
-                android:layout_height="72dp"
-                app:layout_constraintStart_toEndOf="@id/recycler_view"
-                app:layout_constraintTop_toTopOf="@id/recycler_view"
-                app:layout_constraintBottom_toBottomOf="@id/recycler_view"
-                app:cardElevation="0dp">
+                android:id="@+id/preview_image_card"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toTopOf="@id/bottom_text_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/box_name">
 
-                <TextView
-                    android:id="@+id/x_more_items_text"
-                    android:layout_width="48dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/text_color_secondary_view_holder"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:text="+ 4 more"
-                    tools:ignore="RtlCompat" />
+                <ImageView
+                    android:id="@+id/preview_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
             </androidx.cardview.widget.CardView>
 
             <TextView
+                android:id="@+id/box_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="# 7"
-                android:layout_margin="16dp"
-                android:layout_gravity="center"
-                android:textColor="@color/text_color_secondary_view_holder"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
                 android:text="@{@string/placeholder_box_number(Box.id)}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textStyle="bold"
+                android:textColor="@color/colorAccent"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="# 7" />
 
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/bottom_text_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="16dp"
-                tools:text="Random iPhone/iPad chargers"
-                android:textColor="@color/text_color_secondary_view_holder"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:text="@{Box.description}"/>
+                android:layout_marginEnd="20dp">
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    android:text="@{Box.description}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/text_color_secondary_view_holder"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:text="Bodum Chambord and accessories and stuff" />
+
+                <TextView
+                    android:id="@+id/num_items"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:text="@{Box.numItems}"
+                    android:textAlignment="viewEnd"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/text_color_secondary_view_holder"
+                    tools:text="25 items" />
+
+            </LinearLayout>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

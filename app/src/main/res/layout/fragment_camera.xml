@@ -11,7 +11,7 @@
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/top_row_view_holder"
+            android:background="@color/iconAndTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -39,7 +39,7 @@
             android:id="@+id/footer"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:background="@color/top_row_view_holder"
+            android:background="@color/iconAndTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -62,7 +62,7 @@
                     app:cardElevation="0dp"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
-                    app:cardBackgroundColor="@color/shutter_button"
+                    app:cardBackgroundColor="@android:color/white"
                     tools:ignore="KeyboardInaccessibleWidget" />
 
             </androidx.cardview.widget.CardView>

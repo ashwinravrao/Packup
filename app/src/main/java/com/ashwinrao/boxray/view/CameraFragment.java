@@ -26,7 +26,6 @@ import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -49,11 +48,9 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private TextureView textureView;
     private CardView shutterButton;
 
-//    private String[] paths;
     private ArrayList<String> paths = new ArrayList<>();
 
-    private final int REQUEST_CODE_PERMISSIONS = 10;
-    private String[] REQUIRED_PERMISSIONS = {Manifest.permission.CAMERA};
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 5; // value is arbitrary
 
     private static final String TAG = "Boxray";
 
@@ -79,15 +76,20 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         textureView = binding.preview;
         setupToolbar(binding.toolbar);
         shutterButton = binding.shutter.findViewById(R.id.button);
+        checkPermissionsBeforeBindingTextureView();
+        return binding.getRoot();
+    }
 
-        // Request camera permissions
-        if (allPermissionsGranted()) {
+    private void checkPermissionsBeforeBindingTextureView() {
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            // Permission has already been granted, no need to ask
             textureView.post(this::startCamera);
         } else {
-            ActivityCompat.requestPermissions(
-                    Objects.requireNonNull(getActivity()), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS);
+            // Permission has not been granted, ask for permission
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    CAMERA_PERMISSION_REQUEST_CODE);
         }
-        return binding.getRoot();
     }
 
     private void setupToolbar(Toolbar toolbar) {
@@ -168,30 +170,26 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         CameraX.bindToLifecycle(getActivity(), preview, imageCapture);
     }
 
+    public static int getCameraPermissionRequestCode() {
+        return CAMERA_PERMISSION_REQUEST_CODE;
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                textureView.post(() -> startCamera());
+        if(requestCode == getCameraPermissionRequestCode()) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission was granted
+                textureView.post(this::startCamera);
             } else {
-                Toast.makeText(getContext(), "Permissions not granted by the user.", Toast.LENGTH_SHORT).show();
+                // Permission was denied
+                // Notify the user the camera functionality will not be available
+                Toast.makeText(getActivity(), "You will not be able to take photos unless you grant permission to use the camera.", Toast.LENGTH_SHORT).show();
                 Objects.requireNonNull(getActivity()).finish();
             }
+
         }
     }
-
-    private boolean allPermissionsGranted() {
-        for (String permission : REQUIRED_PERMISSIONS) {
-            if (ContextCompat.checkSelfPermission(
-                    Objects.requireNonNull(getContext()), permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
-
 
 }

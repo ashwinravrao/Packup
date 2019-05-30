@@ -1,24 +1,15 @@
 package com.ashwinrao.boxray.view.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.media.ThumbnailUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.ViewholderThumbnailBinding;
 import com.ashwinrao.boxray.util.Utilities;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,10 +44,10 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<ThumbnailAdapter.Thum
         String path = paths.get(position);
         Glide.with(context)
                 .load(new File(path))
-                .thumbnail(0.005f)  // downsample to 0.05% original image resolution for thumbnail
-                .override(width + Utilities.dpToPx(context, 16f),  // wider to account for RV decoration
+                .thumbnail(0.01f)  // downsample to 1% of original image resolution for thumbnail
+                .override(width + Utilities.dpToPx(context, 16f),
                         height)
-                .centerCrop()   // for proper scaling in the receiving view
+                .centerCrop()
                 .into(holder.binding.thumbnail);
     }
 

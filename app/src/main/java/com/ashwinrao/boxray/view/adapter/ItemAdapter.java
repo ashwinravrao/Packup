@@ -55,25 +55,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
     private void handleItemRemoval(@NonNull View view, final int position) {
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final String item = items.get(position);
-                items.remove(position);
-                notifyItemRemoved(position);
-                fragmentItems.setValue(items);
-                Snackbar.make(viewForSnackbar, context.getString(R.string.snackbar_item_deleted), Snackbar.LENGTH_LONG)
-                        .setAction(context.getString(R.string.message_undo), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                items.add(position, item);
-                                notifyItemInserted(position);
-                                fragmentItems.setValue(items);
-                            }
-                        })
-                        .setActionTextColor(context.getColor(R.color.colorAccent))
-                        .show();
-            }
+        view.setOnClickListener(v -> {
+            final String item = items.get(position);
+            items.remove(position);
+            notifyItemRemoved(position);
+            fragmentItems.setValue(items);
+            Snackbar.make(viewForSnackbar, context.getString(R.string.snackbar_item_deleted), Snackbar.LENGTH_LONG)
+                    .setAction(context.getString(R.string.message_undo), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            items.add(position, item);
+                            notifyItemInserted(position);
+                            fragmentItems.setValue(items);
+                        }
+                    })
+                    .setActionTextColor(context.getColor(R.color.colorAccent))
+                    .show();
         });
     }
 
