@@ -15,6 +15,14 @@ import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,19 +42,20 @@ import androidx.lifecycle.ViewModelProviders;
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentCameraBinding;
+import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
-    private BoxViewModel viewModel;
     private TextureView textureView;
     private CardView shutterButton;
+    private ImageView thumbnail;
+    private LinearLayout confirmation;
 
     private ArrayList<String> paths = new ArrayList<>();
 
@@ -54,19 +63,9 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private static final String TAG = "Boxray";
 
-    @Inject
-    ViewModelProvider.Factory factory;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
     }
 
     @Nullable
@@ -74,10 +73,17 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentCameraBinding binding = FragmentCameraBinding.inflate(inflater);
         textureView = binding.preview;
-        setupToolbar(binding.toolbar);
+//        setupToolbar(binding.toolbar);
         shutterButton = binding.shutter.findViewById(R.id.button);
+        setupDoneButton(binding.doneButton);
         checkPermissionsBeforeBindingTextureView();
         return binding.getRoot();
+    }
+
+    private void setupDoneButton(ImageView doneButton) {
+        doneButton.setOnClickListener(view -> {
+            finishUpActivity();
+        });
     }
 
     private void checkPermissionsBeforeBindingTextureView() {
@@ -94,8 +100,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private void setupToolbar(Toolbar toolbar) {
         toolbar.setTitle("");
-        toolbar.inflateMenu(R.menu.toolbar_camera);
-        toolbar.setOnMenuItemClickListener(this);
+//        toolbar.inflateMenu(R.menu.toolbar_camera);
+//        toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(view -> {
             finishUpActivity();
         });
@@ -152,6 +158,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                 @Override
                 public void onImageSaved(@NonNull File file) {
                     paths.add(file.getAbsolutePath());
+
+                    // Notify user of saved image
                     Toast toast = Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT);
                     toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
                     toast.show();

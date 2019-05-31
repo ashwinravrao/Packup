@@ -1,12 +1,9 @@
 package com.ashwinrao.boxray.view;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,11 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.databinding.ContentPreviewBinding;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
 import com.ashwinrao.boxray.util.BackNavigationListener;
 import com.ashwinrao.boxray.util.StartCameraListener;
@@ -36,8 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -56,8 +50,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     private FragmentAddBinding binding;
     private RecyclerView recyclerView;
     private ThumbnailAdapter adapter;
-
-    private static final String TAG = "Boxray";
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -86,6 +78,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         setupDescriptionField(binding.descriptionEditText);
         setupSwitches(new SwitchCompat[]{binding.prioritySwitch, binding.reviewAfterSwitch});
         setupRecyclerView(binding.recyclerView);
+        setupPseudoEFAB(binding.pseudoEFAB);
         return binding.getRoot();
     }
 
@@ -110,6 +103,13 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         editor.apply();
     }
 
+    private void setupPseudoEFAB(CardView pseudoEFAB) {
+        pseudoEFAB.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), CameraActivity.class);
+            startActivityForResult(intent, 1);
+        });
+    }
+
     private void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         Utilities.addItemDecoration(getContext(), recyclerView, 2);
@@ -122,11 +122,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             s.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if(s.getId() == R.id.priority_switch) {
                     viewModel.getBox().setFavorite(isChecked);
-                } else {
-                    // todo replace with dedicated camera start button
-                    buttonView.setChecked(false);
-                    Intent intent = new Intent(getActivity(), CameraActivity.class);
-                    startActivityForResult(intent, 1);
                 }
             });
         }
@@ -175,7 +170,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     }
 
     private void setupToolbar(Toolbar toolbar) {
-        toolbar.setTitle("");
         toolbar.inflateMenu(R.menu.toolbar_add);
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(v -> {
@@ -235,6 +229,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 List<String> paths = data.getStringArrayListExtra("paths");
                 if(paths != null) {
                     fieldsUnsaved[2] = true;
+                    binding.thingsHeading.setVisibility(View.VISIBLE);
                     adapter.setPaths(paths);
                     recyclerView.setAdapter(adapter);
                     viewModel.getBox().setContents(paths);

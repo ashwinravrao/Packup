@@ -16,6 +16,5 @@ public interface AppComponent {
     void inject(ListFragment fragment);
     void inject(DetailFragment fragment);
     void inject(AddFragment fragment);
-    void inject(CameraFragment fragment);
 
 }

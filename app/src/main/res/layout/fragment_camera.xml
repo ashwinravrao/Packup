@@ -7,24 +7,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/header"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="@color/iconAndTextColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <!--<FrameLayout-->
+            <!--android:id="@+id/header"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:background="@color/iconAndTextColor"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent">-->
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:navigationContentDescription="Close"
-                app:navigationIcon="@drawable/ic_close"
-                app:popupTheme="@style/AppTheme.PopUpOverlay" />
+            <!--<androidx.appcompat.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="?attr/actionBarSize"-->
+                <!--app:navigationContentDescription="Close"-->
+                <!--app:navigationIcon="@drawable/ic_close"-->
+                <!--app:popupTheme="@style/AppTheme.PopUpOverlay" />-->
 
-        </FrameLayout>
+        <!--</FrameLayout>-->
 
         <TextureView
             android:id="@+id/preview"
@@ -33,7 +33,7 @@
             app:layout_constraintBottom_toTopOf="@id/footer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/footer"
@@ -43,6 +43,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_tune"
+                android:layout_marginStart="60dp"
+                android:layout_gravity="center_vertical|start"/>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/shutter"
@@ -66,6 +74,14 @@
                     tools:ignore="KeyboardInaccessibleWidget" />
 
             </androidx.cardview.widget.CardView>
+
+            <ImageView
+                android:id="@+id/done_button"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_done_all"
+                android:layout_marginEnd="60dp"
+                android:layout_gravity="end|center_vertical"/>
 
         </FrameLayout>
 

@@ -29,8 +29,8 @@
     <string name="title_sort">Sort by…</string>
     <string name="toolbar_done">Done</string>
     <string name="heading_label">Box</string>
-    <string name="hint_name">Name</string>
-    <string name="hint_description">Description</string>
+    <string name="hint_name">Box name</string>
+    <string name="hint_description">Short description</string>
     <string name="heading_things">Stuff</string>
 
     <!-- Choices for Home Fragment Spinner -->
