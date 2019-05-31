@@ -19,7 +19,9 @@ import android.widget.Toast;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
+import com.ashwinrao.boxray.databinding.ContentPreviewBinding;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
+import com.ashwinrao.boxray.util.BackNavigationListener;
 import com.ashwinrao.boxray.util.StartCameraListener;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
@@ -46,15 +48,14 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, StartCameraListener {
+public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, StartCameraListener, BackNavigationListener {
 
     private boolean nameError;
+    private boolean[] fieldsUnsaved = new boolean[]{false, false, false};
     private BoxViewModel viewModel;
     private FragmentAddBinding binding;
     private RecyclerView recyclerView;
     private ThumbnailAdapter adapter;
-
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 5; // value is arbitrary
 
     private static final String TAG = "Boxray";
 
@@ -70,6 +71,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
     }
 
@@ -130,44 +132,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         }
     }
 
-//    private void startCameraFromThis() {
-//        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.CAMERA)
-//                == PackageManager.PERMISSION_GRANTED) {
-//
-//            // Permission has already been granted, no need to ask
-//            Intent intent = new Intent(getActivity(), CameraActivity.class);
-//            startActivityForResult(intent, 1);
-//        } else {
-//
-//            // Permission has not been granted, ask for permission
-//            requestPermissions(new String[]{Manifest.permission.CAMERA},
-//                    CAMERA_PERMISSION_REQUEST_CODE);
-//
-//        }
-//    }
-
-//    public static int getCameraPermissionRequestCode() {
-//        return CAMERA_PERMISSION_REQUEST_CODE;
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if(requestCode == getCameraPermissionRequestCode()) {
-//            if (grantResults.length > 0
-//                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//                // Permission was granted
-//                startCameraFromThis();
-//            } else {
-//                // Permission was denied
-//                // Notify the user the camera functionality will not be available
-//                Toast.makeText(getActivity(), "You will not be able to take photos unless you grant permission to use the camera.", Toast.LENGTH_SHORT).show();
-//            }
-//
-//        }
-//    }
-
     private void setupDescriptionField(EditText editText) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -180,8 +144,10 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             public void afterTextChanged(Editable s) {
                 if(s.toString().length() > 0) {
                     viewModel.getBox().setDescription(s.toString());
+                    fieldsUnsaved[1] = true;
                 } else {
                     viewModel.getBox().setDescription(null);
+                    fieldsUnsaved[1] = false;
                 }
             }
         });
@@ -199,8 +165,10 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             public void afterTextChanged(Editable s) {
                 if(s.toString().length() > 0) {
                     viewModel.getBox().setName(s.toString());
+                    fieldsUnsaved[0] = true;
                 } else {
                     viewModel.getBox().setName(null);
+                    fieldsUnsaved[0] = false;
                 }
             }
         });
@@ -211,15 +179,23 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         toolbar.inflateMenu(R.menu.toolbar_add);
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(v -> {
-            AlertDialog dialog = new AlertDialog.Builder(getContext())
-                    .setTitle("Discard current box?")
-                    .setMessage("You may have unsaved changes. Are you sure you want to leave and discard this box?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes", (dialog1, which) -> Objects.requireNonNull(getActivity()).finish())
-                    .setNegativeButton("No", (dialog12, which) -> dialog12.cancel())
-                    .create();
-            dialog.show();
+            AlertDialog dialog = createUnsavedChangesDialog(getContext());
+            if(fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
+                dialog.show();
+            } else {
+                Objects.requireNonNull(getActivity()).finish();
+            }
         });
+    }
+
+    private AlertDialog createUnsavedChangesDialog(Context context) {
+        return new AlertDialog.Builder(context)
+                .setTitle("Discard current box?")
+                .setMessage("You have made unsaved changes to this box. Are you sure you want to leave? You cannot undo this action.")
+                .setCancelable(false)
+                .setPositiveButton("Yes", (dialog1, which) -> Objects.requireNonNull(getActivity()).finish())
+                .setNegativeButton("No", (dialog12, which) -> dialog12.cancel())
+                .create();
     }
 
     @Override
@@ -258,6 +234,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             if(resultCode == RESULT_OK) {
                 List<String> paths = data.getStringArrayListExtra("paths");
                 if(paths != null) {
+                    fieldsUnsaved[2] = true;
                     adapter.setPaths(paths);
                     recyclerView.setAdapter(adapter);
                     viewModel.getBox().setContents(paths);
@@ -270,5 +247,15 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     public void startCamera() {
         Intent intent = new Intent(getActivity(), CameraActivity.class);
         startActivityForResult(intent, 1);
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog dialog = createUnsavedChangesDialog(getContext());
+        if(fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
+            dialog.show();
+        } else {
+            Objects.requireNonNull(getActivity()).finish();
+        }
     }
 }

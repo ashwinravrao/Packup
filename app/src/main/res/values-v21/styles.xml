@@ -16,7 +16,7 @@
     <style name="AppTheme.CameraActivity">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/top_row_view_holder</item>
+        <item name="android:statusBarColor">@color/iconAndTextColor</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>
