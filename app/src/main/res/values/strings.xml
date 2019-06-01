@@ -32,6 +32,7 @@
     <string name="hint_name">Box name</string>
     <string name="hint_description">Short description</string>
     <string name="heading_things">Stuff</string>
+    <string name="preview_instructions">Tap on a thing below to set it as your box preview image.</string>
 
     <!-- Choices for Home Fragment Spinner -->
 </resources>

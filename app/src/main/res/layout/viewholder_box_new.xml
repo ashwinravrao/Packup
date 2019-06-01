@@ -72,6 +72,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="# 7" />
 
+            <ImageView
+                android:id="@+id/timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/box_name"
+                app:layout_constraintBottom_toBottomOf="@id/box_name"
+                app:layout_constraintHorizontal_bias="0"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:src="@drawable/ic_timer"/>
+
             <LinearLayout
                 android:id="@+id/bottom_text_container"
                 android:layout_width="match_parent"

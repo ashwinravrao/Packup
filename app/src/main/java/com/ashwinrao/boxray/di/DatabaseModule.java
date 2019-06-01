@@ -8,7 +8,7 @@ import androidx.room.Room;
 import com.ashwinrao.boxray.data.BoxDao;
 import com.ashwinrao.boxray.data.BoxDatabase;
 import com.ashwinrao.boxray.data.BoxRepository;
-import com.ashwinrao.boxray.viewmodel.BoxViewModelFactory;
+import com.ashwinrao.boxray.viewmodel.ViewModelFactory;
 
 import javax.inject.Singleton;
 
@@ -49,7 +49,7 @@ public class DatabaseModule {
     @Provides
     @Singleton
     ViewModelProvider.Factory provideViewModelFactory(BoxRepository repository) {
-        return new BoxViewModelFactory(repository);
+        return new ViewModelFactory(repository);
     }
 
 }

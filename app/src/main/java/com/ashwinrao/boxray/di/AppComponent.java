@@ -1,7 +1,6 @@
 package com.ashwinrao.boxray.di;
 
 import com.ashwinrao.boxray.view.AddFragment;
-import com.ashwinrao.boxray.view.CameraFragment;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.ListFragment;
 

@@ -52,6 +52,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         final Box box = boxes.get(position);
         holder.binding.setBox(box);
+        if(box.isFavorite()) { holder.binding.timer.setVisibility(View.VISIBLE); }
 
         // last content image, todo replace with dedicated preview path
         final String previewPath = box.getContents().get(box.getContents().size()-1);

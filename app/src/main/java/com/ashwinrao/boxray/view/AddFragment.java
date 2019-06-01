@@ -76,7 +76,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         setupNameField(binding.nameEditText);
         setBoxNumber(binding.boxNumber);
         setupDescriptionField(binding.descriptionEditText);
-        setupSwitches(new SwitchCompat[]{binding.prioritySwitch, binding.reviewAfterSwitch});
+        setupSwitches(binding.prioritySwitch);
         setupRecyclerView(binding.recyclerView);
         setupPseudoEFAB(binding.pseudoEFAB);
         return binding.getRoot();
@@ -117,14 +117,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         recyclerView.setAdapter(adapter);
     }
 
-    private void setupSwitches(SwitchCompat[] switches) {
-        for(SwitchCompat s : switches) {
-            s.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if(s.getId() == R.id.priority_switch) {
-                    viewModel.getBox().setFavorite(isChecked);
-                }
-            });
-        }
+    private void setupSwitches(SwitchCompat priority) {
+        priority.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.getBox().setFavorite(isChecked));
     }
 
     private void setupDescriptionField(EditText editText) {
@@ -229,8 +223,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 List<String> paths = data.getStringArrayListExtra("paths");
                 if(paths != null) {
                     fieldsUnsaved[2] = true;
-                    binding.thingsHeading.setVisibility(View.VISIBLE);
                     adapter.setPaths(paths);
+                    if(binding.previewInstructions.getVisibility() == View.INVISIBLE) { binding.previewInstructions.setVisibility(View.VISIBLE); }
+                    if(binding.emptyBox.getVisibility() == View.VISIBLE) { binding.emptyBox.setVisibility(View.GONE); }
                     recyclerView.setAdapter(adapter);
                     viewModel.getBox().setContents(paths);
                 }

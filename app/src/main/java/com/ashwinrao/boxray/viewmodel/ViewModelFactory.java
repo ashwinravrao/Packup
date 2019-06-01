@@ -11,12 +11,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton
-public class BoxViewModelFactory implements ViewModelProvider.Factory {
+public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final BoxRepository repo;
 
     @Inject
-    public BoxViewModelFactory(@NonNull BoxRepository repo) {
+    public ViewModelFactory(@NonNull BoxRepository repo) {
         this.repo = repo;
     }
 
@@ -24,6 +24,10 @@ public class BoxViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        return (T) new BoxViewModel(repo);
+        if(modelClass.isAssignableFrom(BoxViewModel.class)) {
+            return (T) new BoxViewModel(repo);
+        } else {
+            throw new IllegalArgumentException("ViewModel could not be loaded");
+        }
     }
 }

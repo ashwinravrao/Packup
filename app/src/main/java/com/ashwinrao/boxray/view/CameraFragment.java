@@ -1,11 +1,16 @@
 package com.ashwinrao.boxray.view;
 
 import android.Manifest;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Rational;
@@ -15,14 +20,10 @@ import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,26 +37,26 @@ import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentCameraBinding;
-import com.ashwinrao.boxray.util.Utilities;
-import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.bumptech.glide.Glide;
+import com.ashwinrao.boxray.util.BackNavigationListener;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
+import static android.content.Context.VIBRATOR_SERVICE;
+
+
+public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavigationListener {
 
     private TextureView textureView;
     private CardView shutterButton;
     private ImageView thumbnail;
     private LinearLayout confirmation;
+    private FrameLayout flashOverlay;
+
+    private VibrationEffect vibrationEffect;
 
     private ArrayList<String> paths = new ArrayList<>();
 
@@ -66,6 +67,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
     }
 
     @Nullable
@@ -73,10 +75,11 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentCameraBinding binding = FragmentCameraBinding.inflate(inflater);
         textureView = binding.preview;
-//        setupToolbar(binding.toolbar);
+        flashOverlay = binding.flashOverlay;
         shutterButton = binding.shutter.findViewById(R.id.button);
         setupDoneButton(binding.doneButton);
         checkPermissionsBeforeBindingTextureView();
+
         return binding.getRoot();
     }
 
@@ -98,25 +101,18 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         }
     }
 
-    private void setupToolbar(Toolbar toolbar) {
-        toolbar.setTitle("");
-//        toolbar.inflateMenu(R.menu.toolbar_camera);
-//        toolbar.setOnMenuItemClickListener(this);
-        toolbar.setNavigationOnClickListener(view -> {
-            finishUpActivity();
-        });
-    }
-
     private void finishUpActivity() {
-        Intent intent = new Intent();
-        intent.putStringArrayListExtra("paths", paths);
-        Objects.requireNonNull(getActivity()).setResult(Activity.RESULT_OK, intent);
-        getActivity().finish();
+        if(paths.size() > 0) {
+            Intent intent = new Intent();
+            intent.putStringArrayListExtra("paths", paths);
+            Objects.requireNonNull(getActivity()).setResult(Activity.RESULT_OK, intent);
+        }
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.toolbar_done) {
+        if (item.getItemId() == R.id.toolbar_done) {
             finishUpActivity();
             return true;
         }
@@ -153,14 +149,27 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
         shutterButton.setOnClickListener(v -> {
+
+            // todo reduce file size before saving ... also maybe store photos in external dir for MediaScanner access?
             final File file = new File(Objects.requireNonNull(getActivity()).getExternalMediaDirs()[0], System.currentTimeMillis() + ".jpg");
             imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
+
                 @Override
                 public void onImageSaved(@NonNull File file) {
                     paths.add(file.getAbsolutePath());
 
+                    // Provide vibration feedback (check for API deprecation)
+                    if(android.os.Build.VERSION.SDK_INT >= 26) {
+                        ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(50);
+                    }
+
+                    // Provide visual feedback (flash screen)
+//                    setFlashAnimation(300);
+
                     // Notify user of saved image
-                    Toast toast = Toast.makeText(getActivity(), "Saved", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getContext(), "Saved!", Toast.LENGTH_SHORT);
                     toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
                     toast.show();
                 }
@@ -175,7 +184,14 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
             });
         });
 
-        CameraX.bindToLifecycle(getActivity(), preview, imageCapture);
+        CameraX.bindToLifecycle(this, preview, imageCapture);   // changed lifecycle owner from hosting activity
+    }
+
+    private void setFlashAnimation(int duration) {
+        ObjectAnimator anim = ObjectAnimator.ofInt(flashOverlay, "backgroundColor", Color.TRANSPARENT, Color.WHITE, Color.TRANSPARENT);
+        anim.setDuration(duration);
+        anim.setEvaluator(new ArgbEvaluator());
+        anim.start();
     }
 
     public static int getCameraPermissionRequestCode() {
@@ -185,7 +201,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == getCameraPermissionRequestCode()) {
+        if (requestCode == getCameraPermissionRequestCode()) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission was granted
@@ -200,4 +216,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        finishUpActivity();
+    }
 }
