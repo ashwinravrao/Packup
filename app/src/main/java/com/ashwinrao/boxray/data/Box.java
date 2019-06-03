@@ -43,6 +43,9 @@ public class Box {
     @ColumnInfo(name = "numItems")
     private String numItems;
 
+    @ColumnInfo(name = "priority")
+    private boolean priority;
+
     public Box() {
         this.createdDate = new Date();
     }
@@ -99,6 +102,10 @@ public class Box {
         this.favorite = favorite;
     }
 
+    public void setPriority(boolean priority) {
+        this.priority = priority;
+    }
+
     public int getId() {
         return id;
     }
@@ -137,5 +144,9 @@ public class Box {
 
     public String getPreviewImage() {
         return previewImage;
+    }
+
+    public boolean isPriority() {
+        return priority;
     }
 }

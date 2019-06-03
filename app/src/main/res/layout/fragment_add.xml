@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="boxNum"
+            type="Integer" />
+
+        <variable
+            name="numItems"
+            type="String" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,61 +33,91 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:id="@+id/navigation_header_container"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:navigationContentDescription="Close"
-                    app:navigationIcon="@drawable/ic_close"
-                    android:background="@color/colorAccent"
-                    app:popupTheme="@style/AppTheme.PopUpOverlay"
+                    android:layout_height="160dp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="New Box"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                        android:textColor="@android:color/white"
-                        android:layout_gravity="center"
-                        android:id="@+id/toolbar_title" />
+                    <FrameLayout
+                        android:id="@+id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                </androidx.appcompat.widget.Toolbar>
+                        <ImageView
+                            android:id="@+id/saved_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:background="@color/colorAccent"
+                            android:contentDescription="@string/saved_image_description"
+                            android:padding="32dp" />
+
+                        <androidx.appcompat.widget.Toolbar
+                            android:id="@+id/toolbar"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            app:navigationContentDescription="Close"
+                            app:navigationIcon="@drawable/ic_close"
+                            app:popupTheme="@style/AppTheme.PopUpOverlay" />
+
+                    </FrameLayout>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:layout_gravity="center|bottom"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardBackgroundColor="@color/colorPrimary"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_this_side_up" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
                 <TextView
                     android:id="@+id/label_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="48dp"
-                    android:text="Label"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/box_heading"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
+                    app:layout_constraintTop_toBottomOf="@id/navigation_header_container" />
 
                 <TextView
                     android:id="@+id/box_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
                     android:layout_marginEnd="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@{String.format(@string/placeholder_box_number, boxNum)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/top_row_view_holder"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar"
-                    tools:text="# 42" />
+                    app:layout_constraintTop_toBottomOf="@id/navigation_header_container"
+                    tools:text="# 1" />
 
                 <EditText
                     android:id="@+id/name_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="28dp"
                     android:hint="@string/hint_name"
                     android:inputType="textCapWords"
@@ -93,7 +134,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="28dp"
                     android:hint="@string/hint_description"
                     android:inputType="textCapSentences"
@@ -107,75 +148,37 @@
 
                 <LinearLayout
                     android:id="@+id/unpack_first_option_container"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
-                    app:layout_constraintTop_toBottomOf="@id/description_edit_text"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:layout_constraintTop_toBottomOf="@id/description_edit_text">
 
                     <TextView
                         android:id="@+id/favorite_text_view"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                        android:text="Unpack right away" />
+                        android:layout_weight="1"
+                        android:text="@string/priority_switch_title"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/priority_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:checked="false"/>
+                        android:checked="false" />
 
                 </LinearLayout>
 
-                <!--<LinearLayout-->
-                    <!--android:id="@+id/review_after_option_container"-->
-                    <!--android:orientation="horizontal"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@id/unpack_first_option_container"-->
-                    <!--android:layout_marginStart="32dp"-->
-                    <!--android:layout_marginEnd="32dp"-->
-                    <!--android:layout_marginTop="16dp">-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/review_after_text_view"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_weight="1"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textAppearance="@style/TextAppearance.AppCompat.Subhead"-->
-                        <!--android:text="Review photos individually" />-->
-
-                    <!--<androidx.appcompat.widget.SwitchCompat-->
-                        <!--android:id="@+id/review_after_switch"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:checked="false"/>-->
-
-                <!--</LinearLayout>-->
-
-                <ImageView
-                    android:id="@+id/empty_box"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="32dp"
-                    android:src="@drawable/ic_packing"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/things_heading" />
-
                 <TextView
-                    android:id="@+id/things_heading"
+                    android:id="@+id/stuff_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="48dp"
-                    android:text="Things"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/stuff_heading"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
@@ -183,75 +186,62 @@
                     app:layout_constraintTop_toBottomOf="@id/unpack_first_option_container" />
 
                 <TextView
-                    android:id="@+id/preview_instructions"
+                    android:id="@+id/num_items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/things_heading"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:text="@{numItems}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/text_color_secondary_view_holder"
+                    app:layout_constraintBottom_toBottomOf="@id/stuff_heading"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0"
-                    android:visibility="invisible"
-                    android:text="@string/preview_instructions"/>
+                    app:layout_constraintTop_toTopOf="@id/stuff_heading"
+                    tools:text="No items" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
                     android:layout_marginTop="16dp"
                     android:overScrollMode="never"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     app:layout_constraintEnd_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/preview_instructions"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stuff_heading" />
+
+                <LinearLayout
+                    android:id="@+id/add_stuff_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/stuff_heading">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:background="@color/background_window"
+                        android:src="@drawable/ic_list_add" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/tap_to_add"
+                        android:textAllCaps="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        android:textColor="@color/border_view_holder"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/pseudo_EFAB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="50dp"
-            app:cardBackgroundColor="@color/colorAccent"
-            app:contentPadding="16dp"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            app:cardElevation="5dp"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="24dp"
-            android:layout_marginEnd="16dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_add_default"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add Things"
-                    android:layout_marginStart="4dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:layout_gravity="center_vertical"
-                    android:textColor="@android:color/white"/>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
 </layout>

@@ -10,53 +10,10 @@
             type="com.ashwinrao.boxray.data.Box" />
     </data>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:cardBackgroundColor="@color/card_background"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="5dp">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/background_box_viewholder" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/box_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@{Box.name}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="Coffee Kit" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/preview_image_card"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="16dp"
-                app:cardBackgroundColor="@color/colorPrimaryDark"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="0dp"
-                app:layout_constraintBottom_toTopOf="@id/bottom_text_container"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/box_name">
-
-                <ImageView
-                    android:id="@+id/preview_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </androidx.cardview.widget.CardView>
+            android:layout_height="100dp"
+            android:background="@drawable/background_box_viewholder">
 
             <TextView
                 android:id="@+id/box_number"
@@ -65,25 +22,40 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:text="@{@string/placeholder_box_number(Box.id)}"
-                android:textStyle="bold"
-                android:textColor="@color/colorAccent"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/iconAndTextColor"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="# 7" />
 
-            <ImageView
-                android:id="@+id/timer"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@id/box_name"
-                app:layout_constraintBottom_toBottomOf="@id/box_name"
-                app:layout_constraintHorizontal_bias="0"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
-                android:visibility="gone"
-                android:src="@drawable/ic_timer"/>
+                android:layout_margin="16dp">
+
+                <ImageView
+                    android:id="@+id/timer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_timer"/>
+
+                <TextView
+                    android:id="@+id/box_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{Box.name}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    tools:text="Coffee Kit" />
+
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:id="@+id/bottom_text_container"
@@ -92,9 +64,9 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginEnd="20dp">
+                android:layout_marginEnd="16dp">
 
                 <TextView
                     android:id="@+id/description"
@@ -121,10 +93,6 @@
 
             </LinearLayout>
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
 
 </layout>

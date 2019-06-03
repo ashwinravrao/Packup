@@ -1,13 +1,9 @@
 package com.ashwinrao.boxray.view;
 
 import android.Manifest;
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -20,10 +16,7 @@ import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -52,11 +45,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private TextureView textureView;
     private CardView shutterButton;
-    private ImageView thumbnail;
-    private LinearLayout confirmation;
-    private FrameLayout flashOverlay;
-
-    private VibrationEffect vibrationEffect;
 
     private ArrayList<String> paths = new ArrayList<>();
 
@@ -75,7 +63,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         FragmentCameraBinding binding = FragmentCameraBinding.inflate(inflater);
         textureView = binding.preview;
-        flashOverlay = binding.flashOverlay;
         shutterButton = binding.shutter.findViewById(R.id.button);
         setupDoneButton(binding.doneButton);
         checkPermissionsBeforeBindingTextureView();
@@ -165,9 +152,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                         ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(50);
                     }
 
-                    // Provide visual feedback (flash screen)
-//                    setFlashAnimation(300);
-
                     // Notify user of saved image
                     Toast toast = Toast.makeText(getContext(), "Saved!", Toast.LENGTH_SHORT);
                     toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
@@ -185,13 +169,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         });
 
         CameraX.bindToLifecycle(this, preview, imageCapture);   // changed lifecycle owner from hosting activity
-    }
-
-    private void setFlashAnimation(int duration) {
-        ObjectAnimator anim = ObjectAnimator.ofInt(flashOverlay, "backgroundColor", Color.TRANSPARENT, Color.WHITE, Color.TRANSPARENT);
-        anim.setDuration(duration);
-        anim.setEvaluator(new ArgbEvaluator());
-        anim.start();
     }
 
     public static int getCameraPermissionRequestCode() {

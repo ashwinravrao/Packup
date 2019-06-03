@@ -13,8 +13,7 @@ public class FilenameCreator {
             input = input.replaceAll("\\s+", "");   // spaces
             input = input.replaceAll("\\W+", "");   // special characters
             input = input + ".jpeg";
-            return input;
         }
-        return null;
+        return input;
     }
 }

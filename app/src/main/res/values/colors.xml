@@ -21,13 +21,13 @@
     <!--<color name="colorPrimaryDark">#EEEEEE</color>-->
     <color name="colorAccent">#1788D3</color>
 
+    <color name="colorPrimaryLight">#F5F5F5</color>
     <color name="filter_image_preview">#BFBFBF</color>
     <color name="background_window">#FFFFFF</color>
     <color name="iconAndTextColor">#000000</color>
     <color name="border_view_holder">#264E4E4E</color>
     <color name="text_color_secondary_view_holder">#878787</color>
-    <color name="card_background">#FEFEFE</color>
-    <color name="shutter_button">#990D35</color>
+    <color name="star_gold">#FFD700</color>
 
     <!-- Other Palettes -->
     <color name="moving_truck_icon_wheel">#455A64</color>

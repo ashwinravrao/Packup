@@ -7,17 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.ImageView;
 
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
-import com.ashwinrao.boxray.databinding.ViewholderBoxNewBinding;
+import com.ashwinrao.boxray.databinding.ViewholderBoxBinding;
 import com.ashwinrao.boxray.util.PropertiesFilter;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.MainActivity;
-import com.bumptech.glide.Glide;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +41,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     @NonNull
     @Override
     public BoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ViewholderBoxNewBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_box_new, parent, false);
+        ViewholderBoxBinding binding = DataBindingUtil.inflate(LayoutInflater.from(context), R.layout.viewholder_box, parent, false);
         return new BoxViewHolder(binding);
     }
 
@@ -52,17 +49,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         final Box box = boxes.get(position);
         holder.binding.setBox(box);
-        if(box.isFavorite()) { holder.binding.timer.setVisibility(View.VISIBLE); }
-
-        // last content image, todo replace with dedicated preview path
-        final String previewPath = box.getContents().get(box.getContents().size()-1);
-        final ImageView preview = holder.binding.previewImage;
-        Glide.with(context)
-                .load(new File(previewPath))
-                .thumbnail(0.01f)  // downsample to 1% of original image resolution for thumbnail
-                .override(preview.getWidth(), preview.getHeight())
-                .centerCrop()
-                .into(preview);
+        if(box.isPriority()) { holder.binding.timer.setVisibility(View.VISIBLE); }
     }
 
     @Override
@@ -99,9 +86,9 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
     public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ViewholderBoxNewBinding binding;
+        private ViewholderBoxBinding binding;
 
-        public BoxViewHolder(@NonNull ViewholderBoxNewBinding binding) {
+        public BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);

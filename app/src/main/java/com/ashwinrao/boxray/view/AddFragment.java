@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
@@ -23,7 +25,6 @@ import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -71,24 +71,38 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAddBinding.inflate(inflater);
+        binding.setBoxNum(getBoxNumber());
+        binding.setNumItems("No items");
         recyclerView = binding.recyclerView;
         setupToolbar(binding.toolbar);
         setupNameField(binding.nameEditText);
-        setBoxNumber(binding.boxNumber);
         setupDescriptionField(binding.descriptionEditText);
-        setupSwitches(binding.prioritySwitch);
         setupRecyclerView(binding.recyclerView);
-        setupPseudoEFAB(binding.pseudoEFAB);
+        setupAddStuffButton(binding.addStuffButton);
+//        setupFavoriteButton(binding.favoriteButton);
+        setupUnpackSwitch(binding.prioritySwitch);
         return binding.getRoot();
     }
 
-    private void setBoxNumber(TextView textView) {
+    private void setupUnpackSwitch(SwitchCompat unpackSwitch) {
+        unpackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.getBox().setPriority(isChecked);
+        });
+    }
+
+    private void setupFavoriteButton(ImageButton button) {
+        button.setOnClickListener(view -> {
+            button.setSelected(!button.isSelected());
+            viewModel.getBox().setFavorite(button.isSelected());
+        });
+    }
+
+    private int getBoxNumber() {
         String key = "next_available_id";
         SharedPreferences sharedPref = Objects.requireNonNull(getActivity()).getPreferences(Context.MODE_PRIVATE);
 
         // Retrieve next available id for this box
-        int nextAvailableId = sharedPref.getInt(key, 1);
-        textView.setText(String.format(Locale.US, getString(R.string.placeholder_box_number), nextAvailableId));
+        return sharedPref.getInt(key, 1);
     }
 
 
@@ -103,10 +117,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         editor.apply();
     }
 
-    private void setupPseudoEFAB(CardView pseudoEFAB) {
-        pseudoEFAB.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), CameraActivity.class);
-            startActivityForResult(intent, 1);
+    private void setupAddStuffButton(LinearLayout button) {
+        button.setOnClickListener(view -> {
+            startCamera();
         });
     }
 
@@ -114,11 +127,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         Utilities.addItemDecoration(getContext(), recyclerView, 2);
         adapter = new ThumbnailAdapter(getContext(), Utilities.dpToPx(Objects.requireNonNull(getContext()), 150f), Utilities.dpToPx(getContext(), 150f));
+        adapter.registerStartCameraListener(this);
         recyclerView.setAdapter(adapter);
-    }
-
-    private void setupSwitches(SwitchCompat priority) {
-        priority.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.getBox().setFavorite(isChecked));
     }
 
     private void setupDescriptionField(EditText editText) {
@@ -178,8 +188,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     private AlertDialog createUnsavedChangesDialog(Context context) {
         return new AlertDialog.Builder(context)
-                .setTitle("Discard current box?")
-                .setMessage("You have made unsaved changes to this box. Are you sure you want to leave? You cannot undo this action.")
+                .setTitle(getResources().getString(R.string.dialog_discard_box_title))
+                .setMessage(getResources().getString(R.string.dialog_discard_box_message))
                 .setCancelable(false)
                 .setPositiveButton("Yes", (dialog1, which) -> Objects.requireNonNull(getActivity()).finish())
                 .setNegativeButton("No", (dialog12, which) -> dialog12.cancel())
@@ -189,27 +199,34 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if(item.getItemId() == R.id.toolbar_done) {
-            if(viewModel.saveBox()) {
-                saveBoxNumber();
+            if(viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
+                Toast.makeText(getActivity(), "Box is empty, nothing to save", Toast.LENGTH_SHORT).show();
                 Objects.requireNonNull(getActivity()).finish();
-                return true;
             } else {
-                nameError = true;
-                binding.nameEditText.setError("Give your box a name");
-                binding.nameEditText.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                if (viewModel.saveBox()) {
+                    saveBoxNumber();
+                    Objects.requireNonNull(getActivity()).finish();
+                    return true;
+                } else {
+                    nameError = true;
+                    binding.nameEditText.setError("Give your box a name");
+                    binding.nameEditText.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        nameError = false;
-                        binding.nameEditText.setError(null);
-                    }
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            nameError = false;
+                            binding.nameEditText.setError(null);
+                        }
 
-                    @Override
-                    public void afterTextChanged(Editable s) { }
-                });
-                return true;
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+                    return true;
+                }
             }
         }
         return false;
@@ -222,12 +239,12 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             if(resultCode == RESULT_OK) {
                 List<String> paths = data.getStringArrayListExtra("paths");
                 if(paths != null) {
+                    if(binding.addStuffButton.getVisibility() == View.VISIBLE) { binding.addStuffButton.setVisibility(View.GONE); }
                     fieldsUnsaved[2] = true;
                     adapter.setPaths(paths);
-                    if(binding.previewInstructions.getVisibility() == View.INVISIBLE) { binding.previewInstructions.setVisibility(View.VISIBLE); }
-                    if(binding.emptyBox.getVisibility() == View.VISIBLE) { binding.emptyBox.setVisibility(View.GONE); }
                     recyclerView.setAdapter(adapter);
                     viewModel.getBox().setContents(paths);
+                    binding.setNumItems(viewModel.getBox().getNumItems());
                 }
             }
         }
