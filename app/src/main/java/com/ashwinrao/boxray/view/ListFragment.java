@@ -57,6 +57,7 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
     private LiveData<List<Box>> boxesLD;
     private DrawerLayout drawer;
     private BoxViewModel viewModel;
+    private FloatingActionButton fab;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -111,15 +112,23 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
             recyclerView.setAdapter(listAdapter);
         });
 
-        FloatingActionButton fab = binding.includeAppBar.fab;
+        fab = binding.includeAppBar.fab;
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddActivity.class);
             startActivity(intent);
+            v.setEnabled(false);
         });
 
         return binding.getRoot();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(!fab.isEnabled()) {
+            fab.setEnabled(true);
+        }
+    }
 
     private void addItemDecoration(RecyclerView recyclerView) {
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
