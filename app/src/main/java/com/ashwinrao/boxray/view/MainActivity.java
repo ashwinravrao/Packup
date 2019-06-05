@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getFragments().get(0).getClass() == ListFragment.class) {
+        final Class topFragment = getSupportFragmentManager().getFragments().get(0).getClass();
+        if(topFragment == ListFragment.class) {
             if (listener != null) {
                 listener.onBackPressed();
             }

@@ -137,7 +137,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
         shutterButton.setOnClickListener(v -> {
 
-            // todo reduce file size before saving ... also maybe store photos in external dir for MediaScanner access?
             final File file = new File(Objects.requireNonNull(getActivity()).getExternalMediaDirs()[0], System.currentTimeMillis() + ".jpg");
             imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
 
@@ -153,7 +152,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                     }
 
                     // Notify user of saved image
-                    Toast toast = Toast.makeText(getContext(), "Saved!", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
                     toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
                     toast.show();
                 }
@@ -168,7 +167,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
             });
         });
 
-        CameraX.bindToLifecycle(this, preview, imageCapture);   // changed lifecycle owner from hosting activity
+        CameraX.bindToLifecycle(this, preview, imageCapture);
     }
 
     public static int getCameraPermissionRequestCode() {
