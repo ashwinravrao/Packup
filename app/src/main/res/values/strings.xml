@@ -53,5 +53,7 @@
     <string name="add_stuff">stuff</string>
     <string name="dialog_empty_box_title">Empty box</string>
     <string name="dialog_empty_box_message">This box is empty. Consider adding at least one item before saving.</string>
+    <string name="toolbar_skip">SKIP</string>
+    <string name="item_name">Item name</string>
 
 </resources>

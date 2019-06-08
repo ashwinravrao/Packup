@@ -1,6 +1,6 @@
 package com.ashwinrao.boxray.util;
 
-public interface BackNavigationListener {
+public interface BackNavigationCallback {
 
     void onBackPressed();
 }

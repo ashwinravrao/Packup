@@ -19,8 +19,8 @@ import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
-import com.ashwinrao.boxray.util.BackNavigationListener;
-import com.ashwinrao.boxray.util.DestinationDialog;
+import com.ashwinrao.boxray.util.BackNavigationCallback;
+import com.ashwinrao.boxray.view.dialog.DestinationDialog;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
@@ -51,7 +51,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import javax.inject.Inject;
 
 
-public class ListFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, BackNavigationListener {
+public class ListFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, BackNavigationCallback {
 
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;

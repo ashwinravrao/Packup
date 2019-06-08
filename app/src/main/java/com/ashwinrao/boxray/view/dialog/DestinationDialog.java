@@ -1,4 +1,4 @@
-package com.ashwinrao.boxray.util;
+package com.ashwinrao.boxray.view.dialog;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

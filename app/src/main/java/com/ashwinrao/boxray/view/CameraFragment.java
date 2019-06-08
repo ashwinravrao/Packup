@@ -1,8 +1,7 @@
 package com.ashwinrao.boxray.view;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -30,32 +29,48 @@ import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentCameraBinding;
-import com.ashwinrao.boxray.util.BackNavigationListener;
+import com.ashwinrao.boxray.util.BackNavigationCallback;
+import com.ashwinrao.boxray.viewmodel.CameraViewModel;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import javax.inject.Inject;
+
 import static android.content.Context.VIBRATOR_SERVICE;
 
 
-public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavigationListener {
+public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavigationCallback {
 
     private TextureView textureView;
     private CardView shutterButton;
-
+    private CameraViewModel viewModel;
     private ArrayList<String> paths = new ArrayList<>();
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 5; // value is arbitrary
-
     private static final String TAG = "Boxray";
+
+    @Inject
+    ViewModelProvider.Factory factory;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+//        ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(CameraViewModel.class);
     }
 
     @Nullable
@@ -89,12 +104,10 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     }
 
     private void finishUpActivity() {
-        if(paths.size() > 0) {
-            Intent intent = new Intent();
-            intent.putStringArrayListExtra("paths", paths);
-            Objects.requireNonNull(getActivity()).setResult(Activity.RESULT_OK, intent);
-        }
-        Objects.requireNonNull(getActivity()).finish();
+        if (paths.size() > 0) viewModel.setImagePaths(paths);
+        Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().remove(this).commit();  // works but not efficient
+
     }
 
     @Override
@@ -145,7 +158,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                     paths.add(file.getAbsolutePath());
 
                     // Provide vibration feedback (check for API deprecation)
-                    if(android.os.Build.VERSION.SDK_INT >= 26) {
+                    if (android.os.Build.VERSION.SDK_INT >= 26) {
                         ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
                     } else {
                         ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(50);

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.boxray.databinding.ViewholderAddItemBinding;
 import com.ashwinrao.boxray.databinding.ViewholderThumbnailBinding;
-import com.ashwinrao.boxray.util.StartCameraListener;
+import com.ashwinrao.boxray.util.StartCameraCallback;
 import com.ashwinrao.boxray.util.Utilities;
 import com.bumptech.glide.Glide;
 
@@ -23,13 +23,13 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private int width;
     private int height;
     private Context context;
-    private StartCameraListener cameraListener;
+    private StartCameraCallback cameraListener;
     private List<String> paths = new ArrayList<>();
 
     private final int THUMBNAIL_VIEW_TYPE = 0;
     private final int BUTTON_VIEW_TYPE = 1;
 
-    public void registerStartCameraListener(StartCameraListener listener) {
+    public void registerStartCameraListener(StartCameraCallback listener) {
         this.cameraListener = listener;
     }
 
@@ -40,7 +40,9 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void setPaths(List<String> paths) {
-        if(this.paths.size() > 0) { this.paths.remove(this.paths.size()-1); } // remove button placeholder
+        if (this.paths.size() > 0) {
+            this.paths.remove(this.paths.size() - 1);
+        }
         this.paths.addAll(paths);
         this.paths.add("button");
     }
@@ -49,7 +51,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        if(viewType == THUMBNAIL_VIEW_TYPE) {
+        if (viewType == THUMBNAIL_VIEW_TYPE) {
             final ViewholderThumbnailBinding binding = ViewholderThumbnailBinding.inflate(LayoutInflater.from(context));
             return new ThumbnailVH(binding);
         } else {
@@ -61,7 +63,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder.getItemViewType() == THUMBNAIL_VIEW_TYPE) {
+        if (holder.getItemViewType() == THUMBNAIL_VIEW_TYPE) {
             ThumbnailVH viewholder = (ThumbnailVH) holder;
             String path = paths.get(position);
             Glide.with(context)
@@ -76,7 +78,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemViewType(int position) {
-        if(position == paths.size()-1) {
+        if (position == paths.size() - 1) {
             return BUTTON_VIEW_TYPE;
         } else {
             return THUMBNAIL_VIEW_TYPE;
@@ -110,7 +112,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public void onClick(View v) {
-            if(cameraListener != null) {
+            if (cameraListener != null) {
                 cameraListener.startCamera();
             }
         }
