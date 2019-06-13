@@ -2,17 +2,11 @@ package com.ashwinrao.boxray.util;
 
 public class FilenameCreator {
 
-    private String input;
-
-    public FilenameCreator(String input) {
-        this.input = input;
-    }
-
-    public String create() {
+    public static String create(String input) {
         if(input != null) {
             input = input.replaceAll("\\s+", "");   // spaces
             input = input.replaceAll("\\W+", "");   // special characters
-            input = input + ".jpeg";
+            input = "/" + input + ".jpeg";
         }
         return input;
     }

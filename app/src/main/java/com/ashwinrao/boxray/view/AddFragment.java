@@ -13,18 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
-import com.ashwinrao.boxray.util.BackNavigationCallback;
-import com.ashwinrao.boxray.util.StartCameraCallback;
+import com.ashwinrao.boxray.util.BackNavCallback;
+import com.ashwinrao.boxray.util.CameraInitCallback;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.ashwinrao.boxray.viewmodel.CameraViewModel;
+import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -37,7 +35,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -47,19 +44,18 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, StartCameraCallback, BackNavigationCallback {
+public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, CameraInitCallback, BackNavCallback {
 
     private boolean nameError;
     private boolean[] fieldsUnsaved = new boolean[]{false, false, false};
     private BoxViewModel viewModel;
-    private CameraViewModel cameraViewModel;
+    private PhotoViewModel photoViewModel;
     private FragmentAddBinding binding;
+    private RecyclerView recyclerView;
     private ThumbnailAdapter adapter;
-    private List<String> localPathsCopy;
-    private List<String> recentPaths = new ArrayList<>();
+//    private List<String> localPathsCopy;
 
     private final String PREF_ID_KEY = "next_available_id";
-
     private static final String TAG = "AddFragment";
 
     @Inject
@@ -74,13 +70,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // callbacks
         ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-
-        // viewmodels
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        cameraViewModel = ViewModelProviders.of(getActivity(), factory).get(CameraViewModel.class);
+        photoViewModel = ViewModelProviders.of(getActivity(), factory).get(PhotoViewModel.class);
     }
 
     @Nullable
@@ -90,14 +82,13 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
         // data binding
         binding.setBoxNum(getBoxNumber());
-        binding.setNumItems("No items");
+        binding.setNumItems(getString(R.string.num_items_default));
 
         // widgets
         setupToolbar(binding.toolbar);
         setupNameField(binding.nameEditText);
         setupDescriptionField(binding.descriptionEditText);
         setupRecyclerView(binding.recyclerView);
-        setupAddStuffButton(binding.addStuffButton);
         setupPrioritySwitch(binding.prioritySwitch);
 
         return binding.getRoot();
@@ -128,29 +119,13 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         editor.apply();  // .apply() >= .commit()
     }
 
-    private void setupAddStuffButton(ImageView button) {
-        button.setOnClickListener(view -> {
-            startCamera();
-            view.setEnabled(false);  // to prevent multi-tap
-        });
-    }
-
     private void setupRecyclerView(RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         Utilities.addItemDecoration(getContext(), recyclerView, 2);
-
         adapter = new ThumbnailAdapter(getContext(), Utilities.dpToPx(Objects.requireNonNull(getContext()), 150f), Utilities.dpToPx(getContext(), 150f));
         adapter.registerStartCameraListener(this);
         recyclerView.setAdapter(adapter);
-
-        // Bug fix: registering observer to lifecycle owner (activity) prevents data duplication
-        cameraViewModel.getImagePaths().observe(Objects.requireNonNull(getActivity()), strings -> {
-            adapter.setPaths(strings);
-            recyclerView.setAdapter(adapter);
-            if (strings.size() > 0) {
-                designateFilledBox(strings);
-            }
-        });
     }
 
     private void setupDescriptionField(EditText editText) {
@@ -217,13 +192,15 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 .setTitle(getString(R.string.dialog_discard_box_title))
                 .setMessage(getString(R.string.dialog_discard_box_message))
                 .setCancelable(false)
-                .setPositiveButton("Yes", (dialog1, which) -> {
-                    for (String path : localPathsCopy) {
-                        new File(path).delete();
+                .setPositiveButton(getResources().getString(R.string.yes), (dialog1, which) -> {
+                    if(photoViewModel.getPaths() != null) {
+                        for (String path : photoViewModel.getPaths()) {
+                            new File(path).delete();
+                        }
                     }
                     Objects.requireNonNull(getActivity()).finish();
                 })
-                .setNegativeButton("No", (dialog12, which) -> dialog12.cancel())
+                .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
                 .create();
     }
 
@@ -232,10 +209,10 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 .setTitle(getString(R.string.dialog_empty_box_title))
                 .setMessage(getResources().getString(R.string.dialog_empty_box_message))
                 .setCancelable(false)
-                .setPositiveButton("OK", (dialog1, which) -> {
+                .setPositiveButton(getResources().getString(R.string.ok), (dialog1, which) -> {
                     dialog1.cancel();
                 })
-                .setNegativeButton("Discard", (dialog12, which) -> Objects.requireNonNull(getActivity()).finish())
+                .setNegativeButton(getResources().getString(R.string.discard), (dialog12, which) -> Objects.requireNonNull(getActivity()).finish())
                 .create();
     }
 
@@ -252,7 +229,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                     return true;
                 } else {
                     nameError = true;
-                    binding.nameEditText.setError("Give your box a name");
+                    binding.nameEditText.setError(getResources().getString(R.string.name_field_error_message));
                     binding.nameEditText.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -275,22 +252,47 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         return false;
     }
 
-    private void designateFilledBox(List<String> paths) {
-        viewModel.getBox().setContents(paths);
-        localPathsCopy = paths;
-        binding.addStuffButton.setVisibility(View.GONE);
-        binding.setNumItems(viewModel.getBox().getNumItems());
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if(photoViewModel.getPaths() != null) {
+//            viewModel.getBox().setContents(photoViewModel.getPaths());
+//            adapter.setPaths(photoViewModel.getPaths());
+//            recyclerView.setAdapter(adapter);
+//        }
+//    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                ArrayList<String> paths = data.getStringArrayListExtra("paths");
+                if(paths != null) {
+                    fieldsUnsaved[2] = true;
+                    adapter.setPaths(paths);
+                    recyclerView.setAdapter(adapter);
+                    photoViewModel.setPaths(paths);
+                    Log.d(TAG, "onActivityResult: num photos saved to photoViewModel: " + photoViewModel.getPaths().size());
+                    viewModel.getBox().setContents(paths);
+                    binding.setNumItems(viewModel.getBox().getNumItems());
+                }
+
+//                photoViewModel.setPaths(paths);
+//                Objects.requireNonNull(getActivity())
+//                        .getSupportFragmentManager()
+//                        .beginTransaction()
+//                        .addToBackStack(null)
+//                        .replace(R.id.fragment_container, new PhotoReviewFragment())
+//                        .commit();
+            }
+        }
     }
 
     @Override
     public void startCamera() {
-        Objects.requireNonNull(getActivity())
-                .getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack("AddFragment")
-                .replace(R.id.fragment_container,
-                        new CameraFragment())
-                .commit();
+        Intent intent = new Intent(getActivity(), CameraActivity.class);
+        startActivityForResult(intent, 1);
     }
 
     @Override

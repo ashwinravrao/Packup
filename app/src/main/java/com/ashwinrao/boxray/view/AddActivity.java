@@ -9,11 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.util.BackNavigationCallback;
+import com.ashwinrao.boxray.util.BackNavCallback;
 
 public class AddActivity extends AppCompatActivity {
 
-    private BackNavigationCallback listener = null;
+    private BackNavCallback listener = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class AddActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
-    public void registerBackNavigationListener(@NonNull BackNavigationCallback listener) {
+    public void registerBackNavigationListener(@NonNull BackNavCallback listener) {
         this.listener = listener;
     }
 

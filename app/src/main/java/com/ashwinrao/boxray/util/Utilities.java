@@ -3,7 +3,9 @@ package com.ashwinrao.boxray.util;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.ashwinrao.boxray.view.AddActivity;
 
 public class Utilities {
 

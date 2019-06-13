@@ -1,7 +1,8 @@
 package com.ashwinrao.boxray.view;
 
 import android.Manifest;
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -29,48 +30,32 @@ import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentCameraBinding;
-import com.ashwinrao.boxray.util.BackNavigationCallback;
-import com.ashwinrao.boxray.viewmodel.CameraViewModel;
+import com.ashwinrao.boxray.util.BackNavCallback;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import javax.inject.Inject;
-
 import static android.content.Context.VIBRATOR_SERVICE;
 
 
-public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavigationCallback {
+public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavCallback {
 
     private TextureView textureView;
     private CardView shutterButton;
-    private CameraViewModel viewModel;
     private ArrayList<String> paths = new ArrayList<>();
 
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 5; // value is arbitrary
-    private static final String TAG = "Boxray";
+    private static final int CAMERA_PERMISSION_REQUEST_CODE = 5;
+    private static final String TAG = "CameraFragment";
 
-    @Inject
-    ViewModelProvider.Factory factory;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-        viewModel = ViewModelProviders.of(getActivity(), factory).get(CameraViewModel.class);
+        ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
     }
 
     @Nullable
@@ -81,7 +66,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         shutterButton = binding.shutter.findViewById(R.id.button);
         setupDoneButton(binding.doneButton);
         checkPermissionsBeforeBindingTextureView();
-
         return binding.getRoot();
     }
 
@@ -104,10 +88,12 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     }
 
     private void finishUpActivity() {
-        if (paths.size() > 0) viewModel.setImagePaths(paths);
-        Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-//        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction().remove(this).commit();  // works but not efficient
-
+        if (paths.size() > 0) {
+            Intent intent = new Intent();
+            intent.putStringArrayListExtra("paths", paths);
+            Objects.requireNonNull(getActivity()).setResult(Activity.RESULT_OK, intent);
+        }
+        Objects.requireNonNull(getActivity()).finish();
     }
 
     @Override
@@ -156,6 +142,14 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                 @Override
                 public void onImageSaved(@NonNull File file) {
                     paths.add(file.getAbsolutePath());
+//                    try {
+//                        Log.d(TAG, "onImageSaved: " + Objects.requireNonNull(getActivity()).getExternalMediaDirs()[0].getPath());
+//                        Log.d(TAG, "onImageSaved: path: " + file.getPath());
+//                        Log.d(TAG, "onImageSaved: abs path: " + file.getAbsolutePath());
+//                        Log.d(TAG, "onImageSaved: canonical path: " + file.getCanonicalPath());
+//                    } catch (IOException e) {
+//                        Log.e(TAG, "onImageSaved: " + e.getMessage());
+//                    }
 
                     // Provide vibration feedback (check for API deprecation)
                     if (android.os.Build.VERSION.SDK_INT >= 26) {
@@ -172,7 +166,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
                 @Override
                 public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
-                    Toast toast = Toast.makeText(getActivity(), "Image capture failed", Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT);
                     toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
                     toast.show();
                     Log.e(TAG, message);
@@ -183,7 +177,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         CameraX.bindToLifecycle(this, preview, imageCapture);
     }
 
-    public static int getCameraPermissionRequestCode() {
+    private static int getCameraPermissionRequestCode() {
         return CAMERA_PERMISSION_REQUEST_CODE;
     }
 
@@ -208,5 +202,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Override
     public void onBackPressed() {
         finishUpActivity();
+
     }
 }

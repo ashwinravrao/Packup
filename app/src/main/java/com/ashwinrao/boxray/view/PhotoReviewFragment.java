@@ -1,5 +1,6 @@
 package com.ashwinrao.boxray.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -8,30 +9,47 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentPhotoReviewBinding;
-import com.ashwinrao.boxray.view.adapter.PhotoReviewAdapter;
+import com.ashwinrao.boxray.util.PaginationCallback;
+import com.ashwinrao.boxray.view.adapter.PhotoReviewPagerAdapter;
+import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
+import javax.inject.Inject;
 
+public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback {
+
+    private ViewPager viewPager;
+    private PhotoViewModel viewModel;
+    private PhotoReviewPagerAdapter adapter;
     private List<String> paths = new ArrayList<>();
+
+    @Inject
+    ViewModelProvider.Factory factory;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(getArguments() != null) {
-            if(getArguments().getStringArrayList("paths") != null) {
-                paths.addAll(getArguments().getStringArrayList("paths"));
-            }
-        }
+        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(PhotoViewModel.class);
+        paths.addAll(viewModel.getPaths());
     }
 
     @Nullable
@@ -47,10 +65,26 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
         toolbar.setTitle("");
         toolbar.inflateMenu(R.menu.photo_review);
         toolbar.setOnMenuItemClickListener(this);
+        toolbar.setNavigationOnClickListener(v -> {
+            createUnsavedChangesDialog(getContext()).show();
+        });
+    }
+
+    private AlertDialog createUnsavedChangesDialog(Context context) {
+        return new AlertDialog.Builder(context)
+                .setTitle(getString(R.string.dialog_exit_photo_review_title))
+                .setMessage(getString(R.string.dialog_exit_photo_review_message))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.yes), (dialog1, which) -> {
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                })
+                .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
+                .create();
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        final PhotoReviewAdapter adapter = new PhotoReviewAdapter(getContext(), paths);
+        this.viewPager = viewPager;
+        adapter = new PhotoReviewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), paths.size(), this);
         viewPager.setAdapter(adapter);
     }
 
@@ -65,5 +99,17 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void progress() {
+        int nextItem = viewPager.getCurrentItem() == adapter.getCount() ? viewPager.getCurrentItem() : viewPager.getCurrentItem()+1;
+        viewPager.setCurrentItem(nextItem);
+    }
+
+    @Override
+    public void regress() {
+        int previousItem = viewPager.getCurrentItem() == 0 ? 0 : viewPager.getCurrentItem()-1;
+        viewPager.setCurrentItem(previousItem);
     }
 }

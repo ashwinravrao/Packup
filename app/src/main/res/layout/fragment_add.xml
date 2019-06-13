@@ -33,83 +33,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <androidx.coordinatorlayout.widget.CoordinatorLayout
-                    android:id="@+id/navigation_header_container"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorAccent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <FrameLayout
-                        android:id="@+id/header"
-                        android:layout_width="match_parent"
-                        android:layout_height="160dp">
-
-                        <ImageView
-                            android:id="@+id/saved_image"
-                            android:layout_width="match_parent"
-                            android:layout_height="100dp"
-                            android:background="@color/colorAccent"
-                            android:contentDescription="@string/saved_image_description"
-                            android:padding="32dp" />
-
-                        <androidx.appcompat.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            app:navigationContentDescription="Close"
-                            app:navigationIcon="@drawable/ic_close"
-                            app:popupTheme="@style/AppTheme.PopUpOverlay" />
-
-                    </FrameLayout>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="110dp"
-                        android:layout_height="110dp"
-                        android:layout_gravity="center|bottom"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        app:cardBackgroundColor="@color/colorPrimary"
-                        app:cardCornerRadius="100dp"
-                        app:cardElevation="0dp">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/ic_this_side_up" />
-
-                    </androidx.cardview.widget.CardView>
-
-                </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationContentDescription="Close"
+                    app:navigationIcon="@drawable/ic_close"
+                    app:popupTheme="@style/AppTheme.PopUpOverlay" />
 
                 <TextView
                     android:id="@+id/label_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="48dp"
                     android:text="@string/box_heading"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/navigation_header_container" />
+                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
                 <TextView
                     android:id="@+id/box_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
                     android:layout_marginEnd="32dp"
-                    android:layout_marginTop="24dp"
                     android:text="@{String.format(@string/placeholder_box_number, boxNum)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/top_row_view_holder"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/navigation_header_container"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"
                     tools:text="# 1" />
 
                 <EditText
@@ -150,57 +110,59 @@
                     android:id="@+id/high_priority_switch_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginTop="48dp"
                     android:text="@string/priority_switch_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/description_edit_text"
-                    android:layout_margin="32dp"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+                    app:layout_constraintTop_toBottomOf="@id/description_edit_text" />
 
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/priority_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/high_priority_switch_title"
+                    android:checked="false"
                     app:layout_constraintBottom_toBottomOf="@id/high_priority_switch_title"
-                    android:checked="false" />
-
-                <TextView
-                    android:id="@+id/custom_icon_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/custom_icon"
-                    android:layout_margin="32dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/high_priority_switch_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                <TextView
-                    android:id="@+id/choose_icon_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/select_button"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"
-                    android:textAllCaps="true"
-                    android:textColor="@color/colorAccent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/custom_icon_text_view"
-                    app:layout_constraintBottom_toBottomOf="@id/custom_icon_text_view"
-                    android:layout_margin="32dp"/>
+                    app:layout_constraintTop_toTopOf="@id/high_priority_switch_title" />
+
+                <!--<TextView-->
+                <!--android:id="@+id/custom_icon_text_view"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="32dp"-->
+                <!--android:text="@string/custom_icon"-->
+                <!--android:textAppearance="@style/TextAppearance.AppCompat.Subhead"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@id/high_priority_switch_title" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/choose_icon_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="32dp"-->
+                <!--android:text="@string/select_button"-->
+                <!--android:textAllCaps="true"-->
+                <!--android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Colored"-->
+                <!--android:textColor="@color/colorAccent"-->
+                <!--app:layout_constraintBottom_toBottomOf="@id/custom_icon_text_view"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="@id/custom_icon_text_view" />-->
 
                 <TextView
-                    android:id="@+id/stuff_heading"
+                    android:id="@+id/contents_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="40dp"
-                    android:text="@string/stuff_heading"
+                    android:layout_marginTop="48dp"
+                    android:text="@string/contents_heading"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:textColor="@color/colorAccent"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/custom_icon_text_view" />
+                    app:layout_constraintTop_toBottomOf="@id/high_priority_switch_title" />
 
                 <TextView
                     android:id="@+id/num_items"
@@ -210,10 +172,10 @@
                     android:text="@{numItems}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/text_color_secondary_view_holder"
-                    app:layout_constraintBottom_toBottomOf="@id/stuff_heading"
+                    app:layout_constraintBottom_toBottomOf="@id/contents_heading"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/stuff_heading"
-                    tools:text="No items" />
+                    app:layout_constraintTop_toTopOf="@id/contents_heading"
+                    tools:text="Nothing" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -225,61 +187,11 @@
                     android:paddingEnd="16dp"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/stuff_heading" />
-
-                <ImageView
-                    android:id="@+id/add_stuff_button"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/stuff_heading"
-                    android:layout_marginTop="48dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:src="@drawable/ic_add_vh"/>
+                    app:layout_constraintTop_toBottomOf="@id/contents_heading" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
-
-        <!--<androidx.cardview.widget.CardView-->
-            <!--android:id="@+id/efab"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:cardBackgroundColor="@color/colorAccent"-->
-            <!--app:cardCornerRadius="100dp"-->
-            <!--android:layout_gravity="bottom|center"-->
-            <!--android:layout_margin="24dp"-->
-            <!--app:contentPadding="8dp">-->
-
-            <!--<LinearLayout-->
-                <!--android:orientation="horizontal"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_gravity="center">-->
-
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:src="@drawable/ic_add_default"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:layout_marginEnd="4dp"/>-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="@string/add_stuff"-->
-                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Borderless.Colored"-->
-                    <!--android:textColor="@android:color/white"-->
-                    <!--android:paddingEnd="8dp"-->
-                    <!--android:layout_gravity="center"-->
-                    <!--android:textAlignment="center"-->
-                    <!--tools:ignore="RtlSymmetry" />-->
-
-            <!--</LinearLayout>-->
-
-        <!--</androidx.cardview.widget.CardView>-->
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -6,68 +6,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay"
             app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/AppTheme.PopUpOverlay" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopUpOverlay"
+                app:navigationIcon="@drawable/ic_close_dark"/>
+
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="?attr/actionBarSize"
-            android:layout_marginBottom="?attr/actionBarSize"
-            android:background="@android:color/black"
-            app:layout_constraintBottom_toTopOf="@id/item_name_container"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-        <FrameLayout
-            android:id="@+id/item_name_container"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/black"
+            android:background="@color/background_window"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
-
-                <EditText
-                    android:id="@+id/item_name_edit_text"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|start"
-                    android:layout_marginTop="2dp"
-                    android:layout_weight="1"
-                    android:backgroundTint="@android:color/white"
-                    android:hint="Item name"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white" />
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="0.1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_save" />
-
-            </LinearLayout>
-
-        </FrameLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

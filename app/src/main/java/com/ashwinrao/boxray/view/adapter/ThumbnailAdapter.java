@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.boxray.databinding.ViewholderAddItemBinding;
 import com.ashwinrao.boxray.databinding.ViewholderThumbnailBinding;
-import com.ashwinrao.boxray.util.StartCameraCallback;
+import com.ashwinrao.boxray.util.CameraInitCallback;
 import com.ashwinrao.boxray.util.Utilities;
 import com.bumptech.glide.Glide;
 
@@ -23,13 +23,13 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private int width;
     private int height;
     private Context context;
-    private StartCameraCallback cameraListener;
+    private CameraInitCallback cameraListener;
     private List<String> paths = new ArrayList<>();
 
     private final int THUMBNAIL_VIEW_TYPE = 0;
     private final int BUTTON_VIEW_TYPE = 1;
 
-    public void registerStartCameraListener(StartCameraCallback listener) {
+    public void registerStartCameraListener(CameraInitCallback listener) {
         this.cameraListener = listener;
     }
 
@@ -37,6 +37,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.context = context;
         this.width = width;
         this.height = height;
+        this.paths.add("button");
     }
 
     public void setPaths(List<String> paths) {

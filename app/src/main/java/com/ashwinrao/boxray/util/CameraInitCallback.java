@@ -1,6 +1,6 @@
 package com.ashwinrao.boxray.util;
 
-public interface StartCameraCallback {
+public interface CameraInitCallback {
 
     void startCamera();
 }

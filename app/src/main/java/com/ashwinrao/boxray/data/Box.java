@@ -79,14 +79,15 @@ public class Box {
     }
 
     public void setContents(List<String> contents) {
-        if(this.contents == null) {
-            this.contents = new ArrayList<>();
-        }
-
-        this.contents.addAll(contents);
+//        if(this.contents == null) {
+//            this.contents = new ArrayList<>();
+//        }
+//
+//        this.contents.addAll(contents);
+        this.contents = contents;
 
         if(this.contents.size() == 0) {
-            setNumItems("No items");
+            setNumItems("Nothing");
         } else if(this.contents.size() == 1) {
             setNumItems("1 item");
         } else {

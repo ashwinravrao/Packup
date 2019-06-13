@@ -5,7 +5,6 @@
     <item
         android:id="@+id/toolbar_skip"
         android:title="@string/toolbar_skip"
-        android:icon="@drawable/ic_skip"
         app:showAsAction="always"/>
 
 </menu>

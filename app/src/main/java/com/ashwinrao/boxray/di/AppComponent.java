@@ -4,6 +4,8 @@ import com.ashwinrao.boxray.view.AddFragment;
 import com.ashwinrao.boxray.view.CameraFragment;
 import com.ashwinrao.boxray.view.DetailFragment;
 import com.ashwinrao.boxray.view.ListFragment;
+import com.ashwinrao.boxray.view.PhotoReviewFragment;
+import com.ashwinrao.boxray.view.ReviewPageFragment;
 
 import javax.inject.Singleton;
 
@@ -16,6 +18,6 @@ public interface AppComponent {
     void inject(ListFragment fragment);
     void inject(DetailFragment fragment);
     void inject(AddFragment fragment);
-    void inject(CameraFragment fragment);
-
+    void inject(ReviewPageFragment fragment);
+    void inject(PhotoReviewFragment fragment);
 }

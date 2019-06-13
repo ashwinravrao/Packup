@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.ashwinrao.boxray.R;
-import com.ashwinrao.boxray.util.BackNavigationCallback;
+import com.ashwinrao.boxray.util.BackNavCallback;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BackNavigationCallback listener = null;
+    private BackNavCallback listener = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void registerBackNavigationListener(@NonNull BackNavigationCallback listener) {
+    public void registerBackNavigationListener(@NonNull BackNavCallback listener) {
         this.listener = listener;
     }
 
