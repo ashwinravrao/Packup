@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
+    <data>
+        <variable
+            name="boxNum"
+            type="Integer" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -21,7 +28,7 @@
                 app:layout_scrollFlags="scroll|snap"
                 app:titleTextColor="@color/iconAndTextColor"
                 app:collapseIcon="@drawable/ic_collapse_back_icon"
-                app:popupTheme="@style/AppTheme.PopUpOverlay" />
+                app:popupTheme="@style/AppTheme.PopUpOverlay"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,13 +38,18 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@drawable/ic_add_default" />
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/list_fab"
+            android:textColor="@android:color/white"
+            app:icon="@drawable/ic_add_default"
+            app:iconTint="@android:color/white"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </layout>

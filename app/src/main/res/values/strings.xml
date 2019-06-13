@@ -36,10 +36,10 @@
     <string name="title_scan_box">Scan box</string>
     <string name="title_sort">Sort by…</string>
     <string name="toolbar_done">Done</string>
-    <string name="hint_name">Name</string>
-    <string name="hint_description">Short description</string>
+    <string name="hint_name">ex. Ceramic Bowls</string>
+    <string name="hint_description">ex. Take to the storage unit</string>
     <string name="stuff_heading">Stuff</string>
-    <string name="priority_switch_title">High unpack priority</string>
+    <string name="priority_switch_title">Priority unpacking</string>
     <string name="details_heading">Details</string>
     <string name="box_heading">New box</string>
     <string name="toolbar_title_new_box">New Box #%d</string>
@@ -55,7 +55,7 @@
     <string name="dialog_empty_box_message">This box is empty. Consider adding at least one item before saving.</string>
     <string name="toolbar_skip">SKIP</string>
     <string name="item_name_hint">Item name</string>
-    <string name="num_items_default">Nothing</string>
+    <string name="num_items_default">Nothing yet</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Ok</string>
@@ -64,5 +64,10 @@
     <string name="dialog_exit_photo_review_title">Exit photo review</string>
     <string name="dialog_exit_photo_review_message">Are you sure you want to exit the photo review? Your items will revert to their default names. This action cannot be undone.</string>
     <string name="contents_heading">Filled with</string>
+    <string name="list_fab">Add Box</string>
+    <string name="add_box_toolbar_title">Box # %d</string>
+    <string name="name_heading">Name</string>
+    <string name="description_heading">Short description</string>
+    <string name="fab_fill_box">Fill Box</string>
 
 </resources>

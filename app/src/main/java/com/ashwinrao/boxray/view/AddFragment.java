@@ -1,7 +1,9 @@
 package com.ashwinrao.boxray.view;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.ashwinrao.boxray.Boxray;
@@ -23,6 +26,7 @@ import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,6 +38,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -46,14 +52,13 @@ import static android.app.Activity.RESULT_OK;
 
 public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, CameraInitCallback, BackNavCallback {
 
-    private boolean nameError;
     private boolean[] fieldsUnsaved = new boolean[]{false, false, false};
     private BoxViewModel viewModel;
     private PhotoViewModel photoViewModel;
     private FragmentAddBinding binding;
     private RecyclerView recyclerView;
     private ThumbnailAdapter adapter;
-//    private List<String> localPathsCopy;
+    private List<String> compoundedItems = new ArrayList<>();
 
     private final String PREF_ID_KEY = "next_available_id";
     private static final String TAG = "AddFragment";
@@ -70,7 +75,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+        ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         photoViewModel = ViewModelProviders.of(getActivity(), factory).get(PhotoViewModel.class);
     }
@@ -90,8 +95,32 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         setupDescriptionField(binding.descriptionEditText);
         setupRecyclerView(binding.recyclerView);
         setupPrioritySwitch(binding.prioritySwitch);
+        setupFillBoxFab(binding.fillBoxFab);
+        setupNestedScrollFabInteraction(binding.nestedScrollView, binding.fillBoxFab);
 
         return binding.getRoot();
+    }
+
+    private void setupNestedScrollFabInteraction(NestedScrollView nestedScrollView, ExtendedFloatingActionButton fillBoxFab) {
+        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+            if(scrollY > oldScrollY && fillBoxFab.getVisibility() == View.VISIBLE) {
+                fillBoxFab.hide();
+            } if(scrollY < oldScrollY && fillBoxFab.getVisibility() != View.VISIBLE) {
+                fillBoxFab.show();
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
+    }
+
+    private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
+        fab.setOnClickListener(view -> {
+            startCamera();
+        });
     }
 
     private void setupPrioritySwitch(SwitchCompat unpackSwitch) {
@@ -104,6 +133,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         return activity.getPreferences(Context.MODE_PRIVATE);
     }
 
+    // todo consider moving to db for access
     private int getBoxNumber() {
         // Retrieve next available id
         return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
@@ -178,17 +208,16 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         toolbar.inflateMenu(R.menu.toolbar_add);
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(v -> {
-            AlertDialog dialog = createUnsavedChangesDialog(getContext());
             if (fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
-                dialog.show();
+                createUnsavedChangesDialog(getContext());
             } else {
-                Objects.requireNonNull(getActivity()).finish();
+                Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
             }
         });
     }
 
-    private AlertDialog createUnsavedChangesDialog(Context context) {
-        return new AlertDialog.Builder(context)
+    private void createUnsavedChangesDialog(Context context) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(getString(R.string.dialog_discard_box_title))
                 .setMessage(getString(R.string.dialog_discard_box_message))
                 .setCancelable(false)
@@ -198,37 +227,42 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                             new File(path).delete();
                         }
                     }
-                    Objects.requireNonNull(getActivity()).finish();
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
                 })
                 .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
                 .create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
     }
 
-    private AlertDialog createEmptyBoxDialog(Context context) {
-        return new AlertDialog.Builder(context)
+    private void createEmptyBoxDialog(Context context) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
                 .setTitle(getString(R.string.dialog_empty_box_title))
                 .setMessage(getResources().getString(R.string.dialog_empty_box_message))
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.ok), (dialog1, which) -> {
                     dialog1.cancel();
                 })
-                .setNegativeButton(getResources().getString(R.string.discard), (dialog12, which) -> Objects.requireNonNull(getActivity()).finish())
+                .setNegativeButton(getResources().getString(R.string.discard), (dialog12, which) -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack())
                 .create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.toolbar_done) {
             if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
-                createEmptyBoxDialog(getContext()).show();
+                createEmptyBoxDialog(getContext());
                 return true;
             } else {
                 if (viewModel.saveBox()) {
                     saveBoxNumber();
-                    Objects.requireNonNull(getActivity()).finish();
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
                     return true;
                 } else {
-                    nameError = true;
                     binding.nameEditText.setError(getResources().getString(R.string.name_field_error_message));
                     binding.nameEditText.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -237,7 +271,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            nameError = false;
                             binding.nameEditText.setError(null);
                         }
 
@@ -252,16 +285,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         return false;
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        if(photoViewModel.getPaths() != null) {
-//            viewModel.getBox().setContents(photoViewModel.getPaths());
-//            adapter.setPaths(photoViewModel.getPaths());
-//            recyclerView.setAdapter(adapter);
-//        }
-//    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -269,12 +292,12 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             if(resultCode == RESULT_OK) {
                 ArrayList<String> paths = data.getStringArrayListExtra("paths");
                 if(paths != null) {
+                    compoundedItems.addAll(paths);
                     fieldsUnsaved[2] = true;
                     adapter.setPaths(paths);
                     recyclerView.setAdapter(adapter);
                     photoViewModel.setPaths(paths);
-                    Log.d(TAG, "onActivityResult: num photos saved to photoViewModel: " + photoViewModel.getPaths().size());
-                    viewModel.getBox().setContents(paths);
+                    viewModel.getBox().setContents(compoundedItems);
                     binding.setNumItems(viewModel.getBox().getNumItems());
                 }
 
@@ -297,9 +320,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     @Override
     public void onBackPressed() {
-        AlertDialog dialog = createUnsavedChangesDialog(getContext());
         if (fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
-            dialog.show();
+            createUnsavedChangesDialog(getContext());
         } else {
             Objects.requireNonNull(getActivity()).finish();
         }

@@ -24,6 +24,7 @@ import com.ashwinrao.boxray.view.dialog.DestinationDialog;
 import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,6 +40,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -47,17 +49,17 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.TransitionManager;
 
 import javax.inject.Inject;
 
 
-public class ListFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener, BackNavCallback {
+public class ListFragment extends Fragment implements BackNavCallback {
 
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
-    private DrawerLayout drawer;
-    private BoxViewModel viewModel;
-    private FloatingActionButton fab;
+    private ExtendedFloatingActionButton fab;
+    private FragmentListBinding binding;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -67,7 +69,7 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         boxesLD = viewModel.getBoxes();
     }
 
@@ -80,22 +82,13 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentListBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
 
         AppCompatActivity parent = ((MainActivity) getActivity());
         Toolbar toolbar = binding.includeAppBar.toolbar;
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
         toolbar.setTitle(getString(R.string.toolbar_title_all));
         if(parent != null) parent.setSupportActionBar(toolbar);
-
-        drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        navigationView.setCheckedItem(R.id.home);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
 
         final RecyclerView recyclerView = binding.includeAppBar.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -114,8 +107,17 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
 
         fab = binding.includeAppBar.fab;
         fab.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddActivity.class);
-            startActivity(intent);
+//            Intent intent = new Intent(getActivity(), AddActivity.class);
+//            startActivity(intent);
+
+            getActivity()
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
+                    .replace(R.id.fragment_container, new AddFragment())
+                    .commit();
+
             v.setEnabled(false);
         });
 
@@ -136,7 +138,7 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 int position = parent.getChildAdapterPosition(view);
                 int spanCount = 1;
-                int spacing = (int) Utilities.dpToPx(Objects.requireNonNull(getActivity()), 16f);
+                int spacing = Utilities.dpToPx(Objects.requireNonNull(getActivity()), 16f);
 
                 if (position >= 0) {
                     int column = position % spanCount;
@@ -191,6 +193,10 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch(item.getItemId()) {
+            case R.id.toolbar_search:
+                TransitionManager.beginDelayedTransition(binding.includeAppBar.toolbar);
+                MenuItemCompat.expandActionView(item);
+                return true;
             case R.id.toolbar_scan:
                 Toast.makeText(getActivity(), "Todo: implement searching by image (CV)", Toast.LENGTH_SHORT).show();
                 return true;
@@ -202,46 +208,11 @@ public class ListFragment extends Fragment implements NavigationView.OnNavigatio
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void buildDestinationDialog() {
-        DestinationDialog dialog = new DestinationDialog(getActivity(), R.style.AppTheme_DialogButtons);
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.dialog_load_truck_positive), dialogPositive());
-        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dialog_load_truck_negative), dialogNegative());
-        dialog.create();
-        dialog.show();
-        modifyDialog(dialog);
-    }
-
-    private void modifyDialog(DestinationDialog dialog) {
-        Objects.requireNonNull(dialog.getWindow()).setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.colorAccent, Objects.requireNonNull(getActivity()).getTheme()));
-    }
-
-    private DialogInterface.OnClickListener dialogPositive() {
-        return (dialog, which) -> {
-            Snackbar.make(Objects.requireNonNull(getView()), "Saving", Snackbar.LENGTH_LONG).show();    // todo: replace with save address for geofencing
-        };
-    }
-
-    private DialogInterface.OnClickListener dialogNegative() {
-        return (dialog, which) -> dialog.cancel();
-    }
+    public void onBackPressed() { }
 
     @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
     }
 }
