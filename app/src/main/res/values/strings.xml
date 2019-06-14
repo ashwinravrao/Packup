@@ -36,8 +36,8 @@
     <string name="title_scan_box">Scan box</string>
     <string name="title_sort">Sort by…</string>
     <string name="toolbar_done">Done</string>
-    <string name="hint_name">ex. Ceramic Bowls</string>
-    <string name="hint_description">ex. Take to the storage unit</string>
+    <string name="hint_name">Old Toys</string>
+    <string name="hint_description">Beanie babies and Bionicles</string>
     <string name="stuff_heading">Stuff</string>
     <string name="priority_switch_title">Priority unpacking</string>
     <string name="details_heading">Details</string>

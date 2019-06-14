@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -19,6 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentPhotoReviewBinding;
+import com.ashwinrao.boxray.util.BackNavCallback;
 import com.ashwinrao.boxray.util.PaginationCallback;
 import com.ashwinrao.boxray.view.adapter.PhotoReviewPagerAdapter;
 import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
@@ -29,10 +31,9 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback {
+public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback, BackNavCallback {
 
     private ViewPager viewPager;
-    private PhotoViewModel viewModel;
     private PhotoReviewPagerAdapter adapter;
     private List<String> paths = new ArrayList<>();
 
@@ -48,7 +49,9 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(PhotoViewModel.class);
+        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this.getClass(), this);
+        Objects.requireNonNull(getActivity()).getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), android.R.color.black));
+        final PhotoViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(PhotoViewModel.class);
         paths.addAll(viewModel.getPaths());
     }
 
@@ -59,6 +62,13 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
         setupToolbar(binding.toolbar);
         setupViewPager(binding.viewPager);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Objects.requireNonNull(getActivity()).getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+        ((AddActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener(this.getClass());
     }
 
     private void setupToolbar(Toolbar toolbar) {
@@ -84,7 +94,7 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
 
     private void setupViewPager(ViewPager viewPager) {
         this.viewPager = viewPager;
-        adapter = new PhotoReviewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), paths.size(), this);
+        adapter = new PhotoReviewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), paths.size(), this, paths);
         viewPager.setAdapter(adapter);
     }
 
@@ -111,5 +121,10 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
     public void regress() {
         int previousItem = viewPager.getCurrentItem() == 0 ? 0 : viewPager.getCurrentItem()-1;
         viewPager.setCurrentItem(previousItem);
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishUp();
     }
 }

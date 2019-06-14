@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
@@ -75,7 +76,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this.getClass(), this);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         photoViewModel = ViewModelProviders.of(getActivity(), factory).get(PhotoViewModel.class);
     }
@@ -103,9 +104,10 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     private void setupNestedScrollFabInteraction(NestedScrollView nestedScrollView, ExtendedFloatingActionButton fillBoxFab) {
         nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if(scrollY > oldScrollY && fillBoxFab.getVisibility() == View.VISIBLE) {
+            if (scrollY > oldScrollY && fillBoxFab.getVisibility() == View.VISIBLE) {
                 fillBoxFab.hide();
-            } if(scrollY < oldScrollY && fillBoxFab.getVisibility() != View.VISIBLE) {
+            }
+            if (scrollY < oldScrollY && fillBoxFab.getVisibility() != View.VISIBLE) {
                 fillBoxFab.show();
             }
         });
@@ -114,7 +116,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
+        ((AddActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener(this.getClass());
     }
 
     private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
@@ -211,7 +213,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             if (fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
                 createUnsavedChangesDialog(getContext());
             } else {
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                Objects.requireNonNull(getActivity()).finish();
             }
         });
     }
@@ -222,12 +224,12 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 .setMessage(getString(R.string.dialog_discard_box_message))
                 .setCancelable(false)
                 .setPositiveButton(getResources().getString(R.string.yes), (dialog1, which) -> {
-                    if(photoViewModel.getPaths() != null) {
+                    if (photoViewModel.getPaths() != null) {
                         for (String path : photoViewModel.getPaths()) {
                             new File(path).delete();
                         }
                     }
-                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                    Objects.requireNonNull(getActivity()).finish();
                 })
                 .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
                 .create();
@@ -244,7 +246,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 .setPositiveButton(getResources().getString(R.string.ok), (dialog1, which) -> {
                     dialog1.cancel();
                 })
-                .setNegativeButton(getResources().getString(R.string.discard), (dialog12, which) -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack())
+                .setNegativeButton(getResources().getString(R.string.discard), (dialog12, which) -> Objects.requireNonNull(getActivity()).finish())
                 .create();
         dialog.show();
         dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
@@ -260,7 +262,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             } else {
                 if (viewModel.saveBox()) {
                     saveBoxNumber();
-                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                    Objects.requireNonNull(getActivity()).finish();
                     return true;
                 } else {
                     binding.nameEditText.setError(getResources().getString(R.string.name_field_error_message));
@@ -286,28 +288,50 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        updateItems();
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                ArrayList<String> paths = data.getStringArrayListExtra("paths");
-                if(paths != null) {
-                    compoundedItems.addAll(paths);
-                    fieldsUnsaved[2] = true;
-                    adapter.setPaths(paths);
-                    recyclerView.setAdapter(adapter);
+            if (resultCode == RESULT_OK) {
+                final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
+                if (paths != null) {
                     photoViewModel.setPaths(paths);
-                    viewModel.getBox().setContents(compoundedItems);
-                    binding.setNumItems(viewModel.getBox().getNumItems());
                 }
 
-//                photoViewModel.setPaths(paths);
-//                Objects.requireNonNull(getActivity())
-//                        .getSupportFragmentManager()
-//                        .beginTransaction()
-//                        .addToBackStack(null)
-//                        .replace(R.id.fragment_container, new PhotoReviewFragment())
-//                        .commit();
+                Objects.requireNonNull(getActivity())
+                        .getSupportFragmentManager()
+                        .beginTransaction()
+                        .addToBackStack(null)
+                        .setCustomAnimations(0, 0, 0, R.anim.slide_down_out)
+                        .replace(R.id.fragment_container, new PhotoReviewFragment())
+                        .commit();
+            }
+        }
+    }
+
+    private void updateItems() {
+        if (photoViewModel.getPaths() != null && !photoViewModel.getPaths().equals(compoundedItems)) {
+            compoundedItems.addAll(photoViewModel.getPaths());
+        }
+        if (compoundedItems.size() > 0) {
+            fieldsUnsaved[2] = true;
+            adapter.setPaths(compoundedItems);
+            recyclerView.setAdapter(adapter);
+            viewModel.getBox().setContents(compoundedItems);
+            binding.setNumItems(viewModel.getBox().getNumItems());
+            togglePhotoDependentViewVisibilities(new TextView[]{binding.contentsHeading, binding.numItems});
+        }
+    }
+
+    private void togglePhotoDependentViewVisibilities(TextView[] textViews) {
+        for (TextView textView : textViews) {
+            if (textView.getVisibility() == View.GONE || textView.getVisibility() == View.INVISIBLE) {
+                textView.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -315,6 +339,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void startCamera() {
         Intent intent = new Intent(getActivity(), CameraActivity.class);
+        photoViewModel.clearPaths();
         startActivityForResult(intent, 1);
     }
 

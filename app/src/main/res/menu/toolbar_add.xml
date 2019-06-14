@@ -5,7 +5,7 @@
     <item
         android:id="@+id/toolbar_done"
         android:title="@string/toolbar_done"
-        android:icon="@drawable/ic_done_dark"
+        android:icon="@drawable/ic_done"
         app:showAsAction="always"/>
 
 </menu>

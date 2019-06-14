@@ -107,16 +107,16 @@ public class ListFragment extends Fragment implements BackNavCallback {
 
         fab = binding.includeAppBar.fab;
         fab.setOnClickListener(v -> {
-//            Intent intent = new Intent(getActivity(), AddActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(getActivity(), AddActivity.class);
+            startActivity(intent);
 
-            getActivity()
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
-                    .replace(R.id.fragment_container, new AddFragment())
-                    .commit();
+//            getActivity()
+//                    .getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .addToBackStack(null)
+//                    .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
+//                    .replace(R.id.fragment_container, new AddFragment())
+//                    .commit();
 
             v.setEnabled(false);
         });

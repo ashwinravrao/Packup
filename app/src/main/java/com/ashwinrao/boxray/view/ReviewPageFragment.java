@@ -40,7 +40,6 @@ public class ReviewPageFragment extends Fragment {
     private String path;
     private File file;
     private PhotoViewModel viewModel;
-    private List<String> paths;
     private CircularProgressDrawable progress;
 
     private static final String TAG = "ReviewPageFragment";
@@ -70,11 +69,9 @@ public class ReviewPageFragment extends Fragment {
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(PhotoViewModel.class);
         if (getArguments() != null) {
             position = getArguments().getInt("position");
-            paths = getArguments().getStringArrayList("paths");
+            path = getArguments().getString("path");
+            file = viewModel.getFileWithPath(path);
         }
-        path = paths.get(position);
-        file = new File(path);
-//        viewModel.setCurrentViewPagerPosition(position);
         this.progress = new CircularProgressDrawable(Objects.requireNonNull(getContext()));
     }
 

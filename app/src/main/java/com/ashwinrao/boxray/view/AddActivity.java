@@ -1,7 +1,6 @@
 package com.ashwinrao.boxray.view;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,9 +10,13 @@ import androidx.fragment.app.Fragment;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.util.BackNavCallback;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class AddActivity extends AppCompatActivity {
 
-    private BackNavCallback listener = null;
+    private HashMap<Class, BackNavCallback> listeners = new HashMap<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -27,25 +30,28 @@ public class AddActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
-    public void registerBackNavigationListener(@NonNull BackNavCallback listener) {
-        this.listener = listener;
+    public void registerBackNavigationListener(@NonNull Class name, @NonNull BackNavCallback listener) {
+        listeners.put(name, listener);
     }
 
-    public void unregisterBackNavigationListener() {
-        this.listener = null;
-    }
-
-    public View getFragmentContainerView() {
-        return this.getWindow().getDecorView().findViewById(R.id.fragment_container);
+    public void unregisterBackNavigationListener(@NonNull Class name) {
+        listeners.remove(name);
     }
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getFragments().get(0).getClass() == AddFragment.class) {
-            if (listener != null) {
-                listener.onBackPressed();
+        // todo solve why this doesn't work
+        boolean wasIntercepted = false;
+        final Iterator iter = listeners.entrySet().iterator();
+        while(iter.hasNext()) {
+            Map.Entry pair = (Map.Entry) iter.next();
+            if(getSupportFragmentManager().getFragments().get(0).getClass() == pair.getKey()) {
+                wasIntercepted = true;
+                ((BackNavCallback) pair.getValue()).onBackPressed();
             }
-        } else {
+            iter.remove();
+        }
+        if(!wasIntercepted) {
             super.onBackPressed();
         }
     }

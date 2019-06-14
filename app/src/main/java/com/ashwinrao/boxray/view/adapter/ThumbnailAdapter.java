@@ -43,7 +43,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 //        if (this.paths.size() > 0) {
 //            this.paths.remove(this.paths.size() - 1);
 //        }
-        this.paths.addAll(paths);
+        this.paths = paths;
 //        this.paths.add("button");
     }
 

@@ -25,6 +25,11 @@ public class PhotoViewModel extends ViewModel {
         }
     }
 
+    public void clearPaths() {
+        this.paths.clear();
+        this.files.clear();
+    }
+
     public List<File> getFiles() {
         return this.files;
     }
@@ -39,6 +44,7 @@ public class PhotoViewModel extends ViewModel {
     }
 
     public void setPathAtPosition(int position, String newPath) {
+        paths.remove(position);
         paths.add(position, newPath);
     }
 
