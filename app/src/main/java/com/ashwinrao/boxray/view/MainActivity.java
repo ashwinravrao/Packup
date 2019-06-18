@@ -39,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
         this.listener = null;
     }
 
-    public View getFragmentContainerView() {
-        return this.getWindow().getDecorView().findViewById(R.id.fragment_container);
-    }
-
     @Override
     public void onBackPressed() {
         final Class topFragment = getSupportFragmentManager().getFragments().get(0).getClass();

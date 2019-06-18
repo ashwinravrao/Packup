@@ -1,29 +1,24 @@
 package com.ashwinrao.boxray.data;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Fts4;
 import androidx.room.PrimaryKey;
 
+@Fts4
 @Entity(tableName = "boxes")
 public class Box {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "rowid")
     private int id;
 
     @ColumnInfo(name = "name")
     private String name;
-
-    @ColumnInfo(name = "source")
-    private String source;
-
-    @ColumnInfo(name = "destination")
-    private String destination;
 
     @ColumnInfo(name = "description")
     private String description;
@@ -33,12 +28,6 @@ public class Box {
 
     @ColumnInfo(name = "contents")
     private List<String> contents;
-
-    @ColumnInfo(name = "preview_image")
-    private String previewImage;
-
-    @ColumnInfo(name = "favorite")
-    private boolean favorite;
 
     @ColumnInfo(name = "numItems")
     private String numItems;
@@ -58,14 +47,6 @@ public class Box {
         this.name = name;
     }
 
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -79,13 +60,7 @@ public class Box {
     }
 
     public void setContents(List<String> contents) {
-//        if(this.contents == null) {
-//            this.contents = new ArrayList<>();
-//        }
-//
-//        this.contents.addAll(contents);
         this.contents = contents;
-
         if(this.contents.size() == 0) {
             setNumItems("Nothing");
         } else if(this.contents.size() == 1) {
@@ -93,14 +68,6 @@ public class Box {
         } else {
             setNumItems(String.format(Locale.US, "%d items", this.contents.size()));
         }
-    }
-
-    public void setPreviewImage(String previewImage) {
-        this.previewImage = previewImage;
-    }
-
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
     }
 
     public void setPriority(boolean priority) {
@@ -113,14 +80,6 @@ public class Box {
 
     public String getName() {
         return name;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public String getDestination() {
-        return destination;
     }
 
     public String getDescription() {
@@ -137,14 +96,6 @@ public class Box {
 
     public String getNumItems() {
         return this.numItems == null ? "Empty box" : this.numItems;
-    }
-
-    public boolean isFavorite() {
-        return favorite;
-    }
-
-    public String getPreviewImage() {
-        return previewImage;
     }
 
     public boolean isPriority() {

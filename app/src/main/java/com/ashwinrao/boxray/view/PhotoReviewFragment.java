@@ -20,7 +20,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentPhotoReviewBinding;
-import com.ashwinrao.boxray.util.BackNavCallback;
 import com.ashwinrao.boxray.util.PaginationCallback;
 import com.ashwinrao.boxray.view.adapter.PhotoReviewPagerAdapter;
 import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
@@ -31,7 +30,7 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback, BackNavCallback {
+public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback {
 
     private ViewPager viewPager;
     private PhotoReviewPagerAdapter adapter;
@@ -49,7 +48,6 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this.getClass(), this);
         Objects.requireNonNull(getActivity()).getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), android.R.color.black));
         final PhotoViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(PhotoViewModel.class);
         paths.addAll(viewModel.getPaths());
@@ -68,7 +66,6 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
     public void onDestroyView() {
         super.onDestroyView();
         Objects.requireNonNull(getActivity()).getWindow().setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-        ((AddActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener(this.getClass());
     }
 
     private void setupToolbar(Toolbar toolbar) {
@@ -121,10 +118,5 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
     public void regress() {
         int previousItem = viewPager.getCurrentItem() == 0 ? 0 : viewPager.getCurrentItem()-1;
         viewPager.setCurrentItem(previousItem);
-    }
-
-    @Override
-    public void onBackPressed() {
-        finishUp();
     }
 }

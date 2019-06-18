@@ -1,12 +1,8 @@
 package com.ashwinrao.boxray.data;
 
-import android.util.Log;
-
 import com.ashwinrao.boxray.util.AsyncTasks;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import androidx.lifecycle.LiveData;
 

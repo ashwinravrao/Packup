@@ -24,15 +24,15 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentReviewPageBinding;
 import com.ashwinrao.boxray.util.FilenameCreator;
 import com.ashwinrao.boxray.util.PaginationCallback;
-import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
+
+import static com.ashwinrao.boxray.util.KeyboardUtil.hideSoftKeyboard;
 
 public class ReviewPageFragment extends Fragment {
 
@@ -108,12 +108,12 @@ public class ReviewPageFragment extends Fragment {
                 if (v.getText().toString().length() > 0) {
                     if(renameFile(v.getText().toString())) {
                         Toast.makeText(getContext(), "Image renamed", Toast.LENGTH_SHORT).show();
-                        if (listener != null) listener.progress();
+                        if (listener != null) { listener.progress(); }
                     } else {
                         Toast.makeText(getContext(), "Oops, something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }
-                Utilities.hideSoftKeyboard(Objects.requireNonNull(getContext()), editText.getRootView());
+                hideSoftKeyboard(Objects.requireNonNull(getContext()), editText.getRootView());
                 return true;
             }
             return false;

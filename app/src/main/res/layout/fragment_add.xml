@@ -43,18 +43,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:elevation="2dp"
-                    app:navigationContentDescription="Close"
                     app:navigationIcon="@drawable/ic_close"
                     app:popupTheme="@style/AppTheme.PopUpOverlay">
 
-                    <TextView
-                        android:id="@+id/toolbar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@{String.format(@string/add_box_toolbar_title, boxNum)}"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                        android:textColor="@android:color/white"/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/toolbar_title"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:text="@{String.format(@string/add_box_toolbar_title, boxNum)}"-->
+                        <!--android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"-->
+                        <!--android:textColor="@android:color/white"/>-->
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -70,6 +69,18 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/name_heading"
+                    app:layout_constraintBottom_toBottomOf="@id/name_heading"
+                    android:layout_marginEnd="32dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textStyle="bold"
+                    tools:text="# 17"
+                    android:text="@{String.format(@string/placeholder_box_number, boxNum)}"/>
 
                 <EditText
                     android:id="@+id/name_edit_text"
@@ -188,7 +199,7 @@
             android:id="@+id/fill_box_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
+            android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             app:icon="@drawable/ic_fill"
             app:iconTint="@android:color/white"

@@ -1,7 +1,6 @@
 package com.ashwinrao.boxray.view;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,12 +8,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,7 +20,6 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
 import com.ashwinrao.boxray.util.BackNavCallback;
 import com.ashwinrao.boxray.util.CameraInitCallback;
-import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
@@ -50,6 +46,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
+import static com.ashwinrao.boxray.util.Decorations.addItemDecoration;
+import static com.ashwinrao.boxray.util.UnitConversion.dpToPx;
 
 public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, CameraInitCallback, BackNavCallback {
 
@@ -76,7 +74,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this.getClass(), this);
+        ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         photoViewModel = ViewModelProviders.of(getActivity(), factory).get(PhotoViewModel.class);
     }
@@ -111,12 +109,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 fillBoxFab.show();
             }
         });
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ((AddActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener(this.getClass());
     }
 
     private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
@@ -154,8 +146,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     private void setupRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        Utilities.addItemDecoration(getContext(), recyclerView, 2);
-        adapter = new ThumbnailAdapter(getContext(), Utilities.dpToPx(Objects.requireNonNull(getContext()), 150f), Utilities.dpToPx(getContext(), 150f));
+        addItemDecoration(getContext(), recyclerView, 2);
+        adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
         adapter.registerStartCameraListener(this);
         recyclerView.setAdapter(adapter);
     }
@@ -319,7 +311,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             compoundedItems.addAll(photoViewModel.getPaths());
         }
         if (compoundedItems.size() > 0) {
-            fieldsUnsaved[2] = true;
             adapter.setPaths(compoundedItems);
             recyclerView.setAdapter(adapter);
             viewModel.getBox().setContents(compoundedItems);

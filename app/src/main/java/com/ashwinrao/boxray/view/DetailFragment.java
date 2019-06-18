@@ -1,6 +1,7 @@
 package com.ashwinrao.boxray.view;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -11,43 +12,38 @@ import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentDetailBinding;
-import com.ashwinrao.boxray.view.adapter.ItemAdapter;
+import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
-import androidx.databinding.DataBindingUtil;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import javax.inject.Inject;
+
+import static com.ashwinrao.boxray.util.Decorations.addItemDecoration;
+import static com.ashwinrao.boxray.util.UnitConversion.dpToPx;
 
 
 public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
-    private LiveData<Box> liveBox;
-    private static final String TAG = "Boxray";
+    private Box box;
+    private int boxId = 0;
+    private BoxViewModel viewModel;
+    private ThumbnailAdapter adapter;
+    private RecyclerView recyclerView;
 
     @Inject
     ViewModelProvider.Factory factory;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        final BoxViewModel viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
-        if(getArguments() != null) {
-            liveBox = viewModel.getBoxByID(getArguments().getInt("ID"));
-        }
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -55,46 +51,68 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        if(getArguments() != null) {
+            boxId = getArguments().getInt("ID", 0);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentDetailBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_detail, container, false);
-
-        Toolbar toolbar = binding.toolbar;
-        toolbar.inflateMenu(R.menu.menu_toolbar_detail);
-        toolbar.setOnMenuItemClickListener(this);
-
-        toolbar.findViewById(R.id.close_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-            }
-        });
-
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        final ItemAdapter adapter = new ItemAdapter(getActivity(), ((MainActivity) Objects.requireNonNull(getActivity())).getFragmentContainerView(), null, null, false);
-
-        liveBox.observe(this, new Observer<Box>() {
-            @Override
-            public void onChanged(Box box) {
-                binding.setBox(box);
-                binding.boxNumber.setText(getString(R.string.title_detail_box_number, box.getId()));
-                if(box.getDescription() == null) binding.noteContainer.setVisibility(View.GONE);
-                adapter.setItems(box.getContents());
-                binding.recyclerView.setAdapter(adapter);
-            }
-        });
-
+        final FragmentDetailBinding binding = FragmentDetailBinding.inflate(inflater);
+        setupToolbar(binding.toolbar);
+        setupRecyclerView(binding, binding.recyclerView);
         return binding.getRoot();
+    }
+
+    private void setupToolbar(Toolbar toolbar) {
+        toolbar.inflateMenu(R.menu.toolbar_detail);
+        toolbar.setOnMenuItemClickListener(this);
+        toolbar.setNavigationOnClickListener(view -> {
+            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+        });
+    }
+
+    private void setupRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {
+        this.recyclerView = rv;
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        addItemDecoration(getContext(), recyclerView, 2);
+        adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
+        recyclerView.setAdapter(adapter);
+        viewModel.getBoxByID(boxId).observe(this, box -> {
+            this.box = box;
+            binding.setBox(box);
+            adapter.setPaths(box.getContents());
+            recyclerView.setAdapter(adapter);
+        });
+    }
+
+    private void createDeleteConfirmationDialog(@NonNull Context context) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle(getString(R.string.dialog_delete_existing_box_title))
+                .setMessage(getString(R.string.dialog_delete_existing_box_message))
+                .setCancelable(false)
+                .setPositiveButton(getResources().getString(R.string.delete), (dialog1, which) -> {
+                    viewModel.delete(box);
+                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
+                })
+                .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
+                .create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context, R.color.colorAccent));
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_dark));
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch(item.getItemId()) {
-            case R.id.edit:
-                Snackbar.make(getView(), "Editing mode", Snackbar.LENGTH_SHORT).show();
-                return true;
+        if(item.getItemId() == R.id.delete) {
+            createDeleteConfirmationDialog(Objects.requireNonNull(getContext()));
+            return true;
         }
         return true;
-    };
+    }
 }

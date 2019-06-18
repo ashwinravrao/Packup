@@ -13,8 +13,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/background_window"
         android:elevation="50dp"
-        android:background="@color/colorPrimaryDark"
         android:fitsSystemWindows="true">
 
         <androidx.core.widget.NestedScrollView
@@ -22,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
+            android:fillViewport="true"
             android:isScrollContainer="true"
             android:overScrollMode="ifContentScrolls">
 
@@ -29,209 +30,168 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <FrameLayout
-                    android:id="@+id/header"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/colorPrimary"
+                    android:elevation="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/saved_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:background="@color/colorAccent"
-                        android:contentDescription="@string/saved_image_description"
-                        android:foreground="#40000000"
-                        android:padding="32dp"
-                        android:src="@drawable/ic_hazelnut_spread" />
-
-                        <androidx.appcompat.widget.Toolbar
-                            android:id="@+id/toolbar"
-                            android:layout_width="match_parent"
-                            android:layout_height="?attr/actionBarSize"
-                            app:popupTheme="@style/AppTheme.PopUpOverlay">
-
-                            <ImageView
-                                android:id="@+id/close_button"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:contentDescription="@string/close_button_description"
-                                android:src="@drawable/ic_close" />
-
-                        </androidx.appcompat.widget.Toolbar>
-
-                </FrameLayout>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationIcon="@drawable/ic_close_dark"
+                    app:popupTheme="@style/AppTheme.PopUpOverlay"/>
 
                 <TextView
-                    android:id="@+id/box_name"
-                    style="@style/TextAppearance.AppCompat.Title"
+                    android:id="@+id/name_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="32dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:text="@string/name_heading"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="32dp"
+                    android:text="@{String.format(@string/placeholder_box_number, box.id)}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/name_heading"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/name_heading"
+                    tools:text="# 17" />
+
+                <EditText
+                    android:id="@+id/name_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="28dp"
+                    android:hint="@string/hint_name"
                     android:text="@{box.name}"
+                    android:inputType="textCapWords"
+                    android:textColor="@color/iconAndTextColor"
+                    android:textColorHint="@color/text_color_secondary_view_holder"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/header"
-                    tools:text="Jamie\'s Sweaters" />
+                    app:layout_constraintTop_toBottomOf="@id/name_heading"
+                    tools:ignore="Autofill" />
 
                 <TextView
-                    android:id="@+id/box_number"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:id="@+id/description_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="32dp"
-                    android:background="@drawable/background_box_number"
-                    android:paddingStart="12dp"
-                    android:paddingTop="4dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="5dp"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBaseline_toBaselineOf="@id/box_name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    tools:text="Box # 22" />
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/description_heading"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/name_edit_text" />
 
-                <LinearLayout
-                    android:id="@+id/note_container"
+                <EditText
+                    android:id="@+id/description_edit_text"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="28dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="28dp"
+                    android:hint="@string/hint_description"
+                    android:text="@{box.description}"
+                    android:inputType="textCapSentences"
+                    android:textColor="@color/iconAndTextColor"
+                    android:textColorHint="@color/text_color_secondary_view_holder"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/description_heading"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/high_priority_switch_title"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="32dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="@string/priority_switch_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/box_name">
+                    app:layout_constraintTop_toBottomOf="@id/description_edit_text" />
 
-                    <ImageView
-                        android:id="@+id/notes_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_notepad" />
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/priority_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="24dp"
+                    android:checked="@{box.priority}"
+                    app:layout_constraintBottom_toBottomOf="@id/high_priority_switch_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/high_priority_switch_title" />
 
-                    <TextView
-                        android:id="@+id/box_note"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="32dp"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:text="@{box.description}"
-                        android:textColor="@color/iconAndTextColor"
-                        android:textSize="16sp"
-                        tools:text="Throw away the torn ones" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/source_container"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/contents_heading"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="32dp"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="48dp"
+                    android:text="@string/contents_heading"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/colorAccent"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/note_container">
+                    app:layout_constraintTop_toBottomOf="@id/high_priority_switch_title" />
 
-                    <ImageView
-                        android:id="@+id/source_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:scaleX="-1"
-                        android:src="@drawable/ic_moving_truck" />
-
-                    <TextView
-                        android:id="@+id/box_source"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="32dp"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:text="@{box.source}"
-                        android:textColor="@color/iconAndTextColor"
-                        android:textSize="16sp"
-                        tools:text="Living Room" />
-
-                    <TextView
-                        android:id="@+id/source_info_tag"
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/background_source_destination_info_tag"
-                        android:paddingStart="12dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="12dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/source_info_tag"
-                        android:textColor="@color/iconAndTextColor" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/destination_container"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/num_items"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
                     android:layout_marginEnd="32dp"
-                    android:orientation="horizontal"
+                    android:text="@{box.numItems}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/text_color_secondary_view_holder"
+                    app:layout_constraintBottom_toBottomOf="@id/contents_heading"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/source_container">
-
-                    <ImageView
-                        android:id="@+id/destination_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/ic_moving_truck" />
-
-                    <TextView
-                        android:id="@+id/box_destination"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="32dp"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:text="@{box.destination}"
-                        android:textColor="@color/iconAndTextColor"
-                        android:textSize="16sp"
-                        tools:text="Storage Unit" />
-
-                    <TextView
-                        android:id="@+id/destination_info_tag"
-                        style="@style/TextAppearance.AppCompat.Body1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/background_source_destination_info_tag"
-                        android:paddingStart="19dp"
-                        android:paddingTop="4dp"
-                        android:paddingEnd="19dp"
-                        android:paddingBottom="5dp"
-                        android:text="@string/destination_info_tag"
-                        android:textColor="@color/iconAndTextColor" />
-
-                </LinearLayout>
+                    app:layout_constraintTop_toTopOf="@id/contents_heading"
+                    tools:text="Nothing yet" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:overScrollMode="ifContentScrolls"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:overScrollMode="never"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/destination_container" />
+                    app:layout_constraintTop_toBottomOf="@id/contents_heading" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fill_box_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:backgroundTint="@color/colorAccent"
+            android:text="@string/fab_fill_box"
+            android:textColor="@android:color/white"
+            app:icon="@drawable/ic_fill"
+            android:visibility="gone"
+            app:iconTint="@android:color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -16,24 +16,15 @@ public interface BoxDao {
      * @return An observable collection of all boxes from {@link BoxDatabase}.
      */
 
-    @Query("SELECT * FROM boxes ORDER BY created DESC")
+    @Query("SELECT *, `rowid` FROM boxes ORDER BY created DESC")
     LiveData<List<Box>> getBoxes();
-
-
-    /**
-     * @return An observable collection of boxes from {@link BoxDatabase}
-     * that have been saved as favorites.
-     */
-
-    @Query("SELECT * FROM boxes WHERE favorite = 1")
-    LiveData<List<Box>> getFavoriteBoxes();
 
 
     /**
      * @return An observable box (with specified name field) from {@link BoxDatabase}.
      */
 
-    @Query("SELECT * FROM boxes WHERE name = :name")
+    @Query("SELECT *, `rowid` FROM boxes WHERE name = :name")
     LiveData<Box> getBoxByName(String name);
 
 
@@ -41,7 +32,7 @@ public interface BoxDao {
      * @return An observable box (with specified id field) from {@link BoxDatabase}.
      */
 
-    @Query("SELECT * FROM boxes WHERE id = :id")
+    @Query("SELECT *, `rowid` FROM boxes WHERE rowid = :id")
     LiveData<Box> getBoxById(int id);
 
 

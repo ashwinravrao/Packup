@@ -1,7 +1,6 @@
 package com.ashwinrao.boxray.view;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Toast;
 
@@ -20,14 +18,9 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
 import com.ashwinrao.boxray.databinding.FragmentListBinding;
 import com.ashwinrao.boxray.util.BackNavCallback;
-import com.ashwinrao.boxray.view.dialog.DestinationDialog;
-import com.ashwinrao.boxray.util.Utilities;
 import com.ashwinrao.boxray.view.adapter.ListAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +28,10 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -53,16 +42,24 @@ import androidx.transition.TransitionManager;
 
 import javax.inject.Inject;
 
+import static com.ashwinrao.boxray.util.UnitConversion.dpToPx;
+
 
 public class ListFragment extends Fragment implements BackNavCallback {
 
+    private Toolbar toolbar;
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
     private ExtendedFloatingActionButton fab;
-    private FragmentListBinding binding;
 
     @Inject
     ViewModelProvider.Factory factory;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,29 +70,31 @@ public class ListFragment extends Fragment implements BackNavCallback {
         boxesLD = viewModel.getBoxes();
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        ((Boxray) context.getApplicationContext()).getAppComponent().inject(this);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list, container, false);
-
+        final FragmentListBinding binding = FragmentListBinding.inflate(inflater);
         AppCompatActivity parent = ((MainActivity) getActivity());
-        Toolbar toolbar = binding.includeAppBar.toolbar;
-        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
-        toolbar.setTitle(getString(R.string.toolbar_title_all));
-        if(parent != null) parent.setSupportActionBar(toolbar);
+        setupToolbar(Objects.requireNonNull(parent), binding.toolbar);
+        setupRecyclerView(binding.recyclerView);
+        setupEFAB(binding.fab);
+        return binding.getRoot();
+    }
 
-        final RecyclerView recyclerView = binding.includeAppBar.recyclerView;
+    private void setupEFAB(@NonNull ExtendedFloatingActionButton efab) {
+        fab = efab;
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddActivity.class);
+            startActivity(intent);
+            v.setEnabled(false);
+        });
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(recyclerView);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
         recyclerView.setAdapter(listAdapter);
-
         boxesLD.observe(this, boxes -> {
             if(boxes != null) {
                 listAdapter.setBoxes(boxes);
@@ -104,24 +103,13 @@ public class ListFragment extends Fragment implements BackNavCallback {
             }
             recyclerView.setAdapter(listAdapter);
         });
+    }
 
-        fab = binding.includeAppBar.fab;
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddActivity.class);
-            startActivity(intent);
-
-//            getActivity()
-//                    .getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .addToBackStack(null)
-//                    .setCustomAnimations(R.anim.slide_up_in, R.anim.stay_still, R.anim.stay_still, R.anim.slide_down_out)
-//                    .replace(R.id.fragment_container, new AddFragment())
-//                    .commit();
-
-            v.setEnabled(false);
-        });
-
-        return binding.getRoot();
+    private void setupToolbar(@NonNull AppCompatActivity parent, @NonNull Toolbar toolbar) {
+        this.toolbar = toolbar;
+        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
+        toolbar.setTitle(getString(R.string.toolbar_title_all));
+        parent.setSupportActionBar(toolbar);
     }
 
     @Override
@@ -138,7 +126,7 @@ public class ListFragment extends Fragment implements BackNavCallback {
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 int position = parent.getChildAdapterPosition(view);
                 int spanCount = 1;
-                int spacing = Utilities.dpToPx(Objects.requireNonNull(getActivity()), 16f);
+                int spacing = dpToPx(Objects.requireNonNull(getActivity()), 16f);
 
                 if (position >= 0) {
                     int column = position % spanCount;
@@ -174,7 +162,7 @@ public class ListFragment extends Fragment implements BackNavCallback {
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setQueryHint("Search boxes");
-        searchView.setPadding((int) Utilities.dpToPx(Objects.requireNonNull(getActivity()), -16f), 0, 0, (int) Utilities.dpToPx(getActivity(), -1f));
+        searchView.setPadding(dpToPx(Objects.requireNonNull(getActivity()), -16f), 0, 0, dpToPx(getActivity(), -1f));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -194,7 +182,7 @@ public class ListFragment extends Fragment implements BackNavCallback {
 
         switch(item.getItemId()) {
             case R.id.toolbar_search:
-                TransitionManager.beginDelayedTransition(binding.includeAppBar.toolbar);
+                TransitionManager.beginDelayedTransition(toolbar);
                 MenuItemCompat.expandActionView(item);
                 return true;
             case R.id.toolbar_scan:

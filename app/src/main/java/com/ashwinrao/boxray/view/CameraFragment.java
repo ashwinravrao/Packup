@@ -142,14 +142,6 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                 @Override
                 public void onImageSaved(@NonNull File file) {
                     paths.add(file.getAbsolutePath());
-//                    try {
-//                        Log.d(TAG, "onImageSaved: " + Objects.requireNonNull(getActivity()).getExternalMediaDirs()[0].getPath());
-//                        Log.d(TAG, "onImageSaved: path: " + file.getPath());
-//                        Log.d(TAG, "onImageSaved: abs path: " + file.getAbsolutePath());
-//                        Log.d(TAG, "onImageSaved: canonical path: " + file.getCanonicalPath());
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "onImageSaved: " + e.getMessage());
-//                    }
 
                     // Provide vibration feedback (check for API deprecation)
                     if (android.os.Build.VERSION.SDK_INT >= 26) {

@@ -2,21 +2,20 @@ package com.ashwinrao.boxray.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ashwinrao.boxray.databinding.ViewholderAddItemBinding;
 import com.ashwinrao.boxray.databinding.ViewholderThumbnailBinding;
 import com.ashwinrao.boxray.util.CameraInitCallback;
-import com.ashwinrao.boxray.util.Utilities;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.ashwinrao.boxray.util.UnitConversion.dpToPx;
 
 public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -71,7 +70,7 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Glide.with(context)
                 .load(new File(path))
                 .thumbnail(0.01f)  // downsample to 1% of original image resolution for thumbnail
-                .override(width + Utilities.dpToPx(context, 16f),
+                .override(width + dpToPx(context, 16f),
                         height)
                 .centerCrop()
                 .into(viewholder.binding.thumbnail);
