@@ -105,6 +105,7 @@ public class ReviewPageFragment extends Fragment {
     private void setupNameField(@NonNull EditText editText) {
         editText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_NEXT) {
+                hideSoftKeyboard(Objects.requireNonNull(getContext()), editText.getRootView());
                 if (v.getText().toString().length() > 0) {
                     if(renameFile(v.getText().toString())) {
                         Toast.makeText(getContext(), "Image renamed", Toast.LENGTH_SHORT).show();
@@ -113,7 +114,6 @@ public class ReviewPageFragment extends Fragment {
                         Toast.makeText(getContext(), "Oops, something went wrong", Toast.LENGTH_SHORT).show();
                     }
                 }
-                hideSoftKeyboard(Objects.requireNonNull(getContext()), editText.getRootView());
                 return true;
             }
             return false;

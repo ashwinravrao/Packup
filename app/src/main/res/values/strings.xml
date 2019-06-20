@@ -58,13 +58,13 @@
     <string name="num_items_default">Nothing yet</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="discard">Discard</string>
     <string name="name_field_error_message">Give your box a name</string>
     <string name="dialog_exit_photo_review_title">Exit photo review</string>
     <string name="dialog_exit_photo_review_message">Are you sure you want to exit the photo review? Your items will revert to their default names. This action cannot be undone.</string>
     <string name="contents_heading">Filled with</string>
-    <string name="list_fab">Add Box</string>
+    <string name="list_fab">New Box</string>
     <string name="add_box_toolbar_title">New Box # %d</string>
     <string name="name_heading">Box name</string>
     <string name="description_heading">Short description</string>

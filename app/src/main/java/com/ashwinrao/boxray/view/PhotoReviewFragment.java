@@ -101,7 +101,7 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.toolbar_skip) {
+        if(item.getItemId() == R.id.toolbar_done) {
             finishUp();
             return true;
         }

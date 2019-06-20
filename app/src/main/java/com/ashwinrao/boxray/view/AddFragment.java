@@ -20,6 +20,7 @@ import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.databinding.FragmentAddBinding;
 import com.ashwinrao.boxray.util.BackNavCallback;
 import com.ashwinrao.boxray.util.CameraInitCallback;
+import com.ashwinrao.boxray.util.ConfirmationDialog;
 import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
 import com.ashwinrao.boxray.viewmodel.PhotoViewModel;
@@ -51,7 +52,6 @@ import static com.ashwinrao.boxray.util.UnitConversion.dpToPx;
 
 public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, CameraInitCallback, BackNavCallback {
 
-    private boolean[] fieldsUnsaved = new boolean[]{false, false, false};
     private BoxViewModel viewModel;
     private PhotoViewModel photoViewModel;
     private FragmentAddBinding binding;
@@ -112,22 +112,17 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     }
 
     private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
-        fab.setOnClickListener(view -> {
-            startCamera();
-        });
+        fab.setOnClickListener(view -> startCamera());
     }
 
     private void setupPrioritySwitch(SwitchCompat unpackSwitch) {
-        unpackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            viewModel.getBox().setPriority(isChecked);
-        });
+        unpackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.getBox().setPriority(isChecked));
     }
 
     private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
         return activity.getPreferences(Context.MODE_PRIVATE);
     }
 
-    // todo consider moving to db for access
     private int getBoxNumber() {
         // Retrieve next available id
         return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
@@ -164,13 +159,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 0) {
-                    viewModel.getBox().setDescription(s.toString());
-                    fieldsUnsaved[1] = true;
-                } else {
-                    viewModel.getBox().setDescription(null);
-                    fieldsUnsaved[1] = false;
-                }
+                final String description = s.toString().length() > 0 ? s.toString() : null;
+                viewModel.getBox().setDescription(description);
             }
         });
     }
@@ -187,13 +177,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 0) {
-                    viewModel.getBox().setName(s.toString());
-                    fieldsUnsaved[0] = true;
-                } else {
-                    viewModel.getBox().setName(null);
-                    fieldsUnsaved[0] = false;
-                }
+                final String name = s.toString().length() > 0 ? s.toString() : null;
+                viewModel.getBox().setName(name);
             }
         });
     }
@@ -202,54 +187,15 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         toolbar.inflateMenu(R.menu.toolbar_add);
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(v -> {
-            if (fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
-                createUnsavedChangesDialog(getContext());
-            } else {
-                Objects.requireNonNull(getActivity()).finish();
-            }
+            closeWithConfirmation();
         });
-    }
-
-    private void createUnsavedChangesDialog(Context context) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle(getString(R.string.dialog_discard_box_title))
-                .setMessage(getString(R.string.dialog_discard_box_message))
-                .setCancelable(false)
-                .setPositiveButton(getResources().getString(R.string.yes), (dialog1, which) -> {
-                    if (photoViewModel.getPaths() != null) {
-                        for (String path : photoViewModel.getPaths()) {
-                            new File(path).delete();
-                        }
-                    }
-                    Objects.requireNonNull(getActivity()).finish();
-                })
-                .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
-                .create();
-        dialog.show();
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-    }
-
-    private void createEmptyBoxDialog(Context context) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle(getString(R.string.dialog_empty_box_title))
-                .setMessage(getResources().getString(R.string.dialog_empty_box_message))
-                .setCancelable(false)
-                .setPositiveButton(getResources().getString(R.string.ok), (dialog1, which) -> {
-                    dialog1.cancel();
-                })
-                .setNegativeButton(getResources().getString(R.string.discard), (dialog12, which) -> Objects.requireNonNull(getActivity()).finish())
-                .create();
-        dialog.show();
-        dialog.getButton(DialogInterface.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.toolbar_done) {
             if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
-                createEmptyBoxDialog(getContext());
+                showEmptyBoxDialog();
                 return true;
             } else {
                 if (viewModel.saveBox()) {
@@ -334,12 +280,54 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         startActivityForResult(intent, 1);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (fieldsUnsaved[0] || fieldsUnsaved[1] || fieldsUnsaved[2]) {
-            createUnsavedChangesDialog(getContext());
+    private void closeWithConfirmation() {
+        if (viewModel.areChangesUnsaved()) {
+            showUnsavedChangesDialog();
         } else {
             Objects.requireNonNull(getActivity()).finish();
         }
+    }
+
+    private void showUnsavedChangesDialog() {
+        ConfirmationDialog.make(getContext(), new String[]{
+                getString(R.string.dialog_discard_box_title),
+                getString(R.string.dialog_discard_box_message),
+                getString(R.string.yes),
+                getString(R.string.no)}, false, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
+                ContextCompat.getColor(Objects.requireNonNull(getContext()), android.R.color.holo_red_dark)}, dialogInterface -> {
+            if (photoViewModel.getPaths() != null) {
+                for (String path : photoViewModel.getPaths()) {
+                    new File(path).delete();
+                }
+            }
+            Objects.requireNonNull(getActivity()).finish();
+            return null;
+        }, dialogInterface -> {
+            dialogInterface.cancel();
+            return null;
+        });
+    }
+
+    private void showEmptyBoxDialog() {
+        ConfirmationDialog.make(getContext(), new String[]{
+                        getString(R.string.dialog_empty_box_title),
+                        getString(R.string.dialog_empty_box_message),
+                        getString(R.string.ok),
+                        getString(R.string.discard)},
+                false,
+                new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
+                        ContextCompat.getColor(getContext(), R.color.colorAccent)},
+                dialogInterface -> {
+                    dialogInterface.cancel();
+                    return null;
+                }, dialogInterface -> {
+                    Objects.requireNonNull(getActivity()).finish();
+                    return null;
+                });
+    }
+
+    @Override
+    public void onBackPressed() {
+        closeWithConfirmation();
     }
 }

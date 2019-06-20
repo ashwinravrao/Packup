@@ -39,6 +39,10 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
+    public boolean areChangesUnsaved() {
+        return box.getName() != null || box.getDescription() != null || box.getContents() != null;
+    }
+
     public void save(Box box) {
         repo.saveBox(box);
     }
