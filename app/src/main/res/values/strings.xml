@@ -70,9 +70,11 @@
     <string name="description_heading">Short description</string>
     <string name="fab_fill_box">Fill Box</string>
     <string name="title_edit">Edit</string>
-    <string name="title_delete">Delete</string>
+    <string name="title_delete">Discard</string>
     <string name="dialog_delete_existing_box_title">Delete this box?</string>
     <string name="dialog_delete_existing_box_message">Are you sure you want to delete this box? You cannot undo this action.</string>
     <string name="delete">Delete</string>
+    <string name="high_priority_text">There are high priority items in this box. Unpack as soon as possible!</string>
+    <string name="edit">Edit</string>
 
 </resources>

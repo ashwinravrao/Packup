@@ -292,7 +292,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         ConfirmationDialog.make(getContext(), new String[]{
                 getString(R.string.dialog_discard_box_title),
                 getString(R.string.dialog_discard_box_message),
-                getString(R.string.yes),
+                getString(R.string.discard),
                 getString(R.string.no)}, false, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
                 ContextCompat.getColor(Objects.requireNonNull(getContext()), android.R.color.holo_red_dark)}, dialogInterface -> {
             if (photoViewModel.getPaths() != null) {

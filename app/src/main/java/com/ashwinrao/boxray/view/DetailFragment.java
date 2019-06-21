@@ -2,18 +2,23 @@ package com.ashwinrao.boxray.view;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
 import com.ashwinrao.boxray.data.Box;
-import com.ashwinrao.boxray.databinding.FragmentDetailBinding;
+import com.ashwinrao.boxray.databinding.FragmentDetailAltBinding;
 import com.ashwinrao.boxray.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.boxray.viewmodel.BoxViewModel;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.Objects;
 
@@ -23,6 +28,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -41,6 +47,8 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private BoxViewModel viewModel;
     private ThumbnailAdapter adapter;
     private RecyclerView recyclerView;
+
+    private static final String TAG = "Boxray";
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -63,9 +71,10 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentDetailBinding binding = FragmentDetailBinding.inflate(inflater);
+        final FragmentDetailAltBinding binding = FragmentDetailAltBinding.inflate(inflater);
         setupToolbar(binding.toolbar);
         setupRecyclerView(binding, binding.recyclerView);
+//        setupFloatingActionButton(binding.efab);
         return binding.getRoot();
     }
 
@@ -77,7 +86,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         });
     }
 
-    private void setupRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {
+    private void setupRecyclerView(@NonNull FragmentDetailAltBinding binding, @NonNull RecyclerView rv) {
         this.recyclerView = rv;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         addItemDecoration(getContext(), recyclerView, 2);
@@ -86,6 +95,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         viewModel.getBoxByID(boxId).observe(this, box -> {
             this.box = box;
             binding.setBox(box);
+            binding.priority.setVisibility(box.isPriority() ? View.VISIBLE : View.GONE);
             adapter.setPaths(box.getContents());
             recyclerView.setAdapter(adapter);
         });
@@ -109,9 +119,15 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.delete) {
-            createDeleteConfirmationDialog(Objects.requireNonNull(getContext()));
-            return true;
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Intent intent = new Intent(getActivity(), AddActivity.class);
+                intent.putExtra("ID", boxId);
+                startActivity(intent);
+                return true;
+            case R.id.delete:
+                createDeleteConfirmationDialog(Objects.requireNonNull(getContext()));
+                return true;
         }
         return true;
     }
