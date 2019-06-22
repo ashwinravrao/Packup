@@ -40,7 +40,7 @@ public class BoxViewModel extends ViewModel {
     }
 
     public boolean areChangesUnsaved() {
-        return box.getName() != null || box.getDescription() != null || box.getContents() != null;
+        return box.getName() != null || !box.getDescription().equals("No description") || box.getContents() != null;
     }
 
     public void save(Box box) {

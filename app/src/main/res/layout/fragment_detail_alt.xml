@@ -13,7 +13,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_window"
+        android:background="@color/colorPrimaryLight"
         android:elevation="50dp"
         android:fitsSystemWindows="true">
 
@@ -21,7 +21,7 @@
             android:id="@+id/nested_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/white"
+            android:background="@color/colorPrimaryLight"
             android:fillViewport="true"
             android:isScrollContainer="true"
             android:overScrollMode="ifContentScrolls">
@@ -42,109 +42,111 @@
                     app:navigationIcon="@drawable/ic_close_dark"
                     app:popupTheme="@style/AppTheme.PopUpOverlay" />
 
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="40dp"
-                    android:text="@{box.name}"
-                    tools:text="Gardening Tools"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
-                    android:text="@{String.format(@string/placeholder_box_number, box.id)}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/name"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/name"
-                    tools:text="# 17" />
-
-                <LinearLayout
-                    android:id="@+id/description_priority_container"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/detail_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginTop="48dp"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_margin="32dp"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/name">
+                    app:layout_constraintEnd_toEndOf="parent">
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{box.name}"
+                        tools:text="Gardening Tools"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{String.format(@string/placeholder_box_number, box.id)}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                        app:layout_constraintBottom_toBottomOf="@id/name"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/name"
+                        tools:text="# 17" />
 
                     <LinearLayout
-                        android:id="@+id/description"
+                        android:id="@+id/description_card"
+                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="36dp"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/name"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.2"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:src="@drawable/ic_note"
-                            android:layout_marginEnd="32dp"
-                            tools:ignore="ContentDescription" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:src="@drawable/ic_note"/>
 
                         <TextView
-                            android:id="@+id/description_text"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@{box.description}"
-                            tools:text="No description"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                            android:textStyle="normal" />
+                            android:textColor="@color/top_row_view_holder"
+                            tools:text="Clay pots and stuff from the parking lot shed. Give away the ones you don't want and throw away the ones you do. o.O"
+                            android:layout_marginStart="16dp"/>
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/priority"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:id="@+id/priority_card"
                         android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/description_card"
                         android:layout_marginTop="32dp">
 
                         <ImageView
-                            android:layout_width="0dp"
-                            android:layout_weight="0.2"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/ic_priority"
-                            android:layout_marginEnd="32dp"
-                            tools:ignore="ContentDescription" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_priority"/>
 
                         <TextView
-                            android:id="@+id/priority_text"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/high_priority_text"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                            android:textStyle="normal" />
+                            android:textColor="@android:color/holo_red_dark"
+                            android:layout_marginStart="16dp"
+                            android:text="@string/high_priority_text"/>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                    <TextView
+                        android:id="@+id/num_items"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/description_card"
+                        android:layout_marginTop="32dp"
+                        android:textColor="@color/top_row_view_holder"
+                        tools:text="27 items"
+                        android:text="@{box.numItems}"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="16dp"
                     android:overScrollMode="never"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/description_priority_container" />
+                    app:layout_constraintTop_toBottomOf="@id/detail_card" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -2,7 +2,6 @@ package com.ashwinrao.boxray.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -261,7 +259,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             recyclerView.setAdapter(adapter);
             viewModel.getBox().setContents(compoundedItems);
             binding.setNumItems(viewModel.getBox().getNumItems());
-            togglePhotoDependentViewVisibilities(new TextView[]{binding.contentsHeading, binding.numItems});
+//            togglePhotoDependentViewVisibilities(new TextView[]{binding.contentsHeading, binding.numItems});
         }
     }
 

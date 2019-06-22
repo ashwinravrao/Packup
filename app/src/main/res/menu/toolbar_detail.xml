@@ -6,7 +6,7 @@
         android:id="@+id/edit"
         android:title="@string/edit"
         android:icon="@drawable/ic_edit"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never"/>
 
     <item
         android:id="@+id/delete"
