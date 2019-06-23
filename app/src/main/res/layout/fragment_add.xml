@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="box"
+            type="com.ashwinrao.boxray.data.Box"/>
+
+        <variable
             name="boxNum"
             type="Integer" />
 

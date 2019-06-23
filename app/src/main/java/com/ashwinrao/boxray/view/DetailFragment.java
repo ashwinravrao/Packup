@@ -3,10 +3,12 @@ package com.ashwinrao.boxray.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ashwinrao.boxray.Boxray;
 import com.ashwinrao.boxray.R;
@@ -66,6 +68,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         final FragmentDetailAltBinding binding = FragmentDetailAltBinding.inflate(inflater);
         setupToolbar(binding.toolbar);
         setupRecyclerView(binding, binding.recyclerView);
+        setupBottomNavigation(binding.deleteButton, binding.editButton);
         return binding.getRoot();
     }
 
@@ -86,9 +89,19 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         viewModel.getBoxByID(boxId).observe(this, box -> {
             this.box = box;
             binding.setBox(box);
-//            binding.priority.setVisibility(box.isPriority() ? View.VISIBLE : View.GONE);
-            adapter.setPaths(box.getContents());
-            recyclerView.setAdapter(adapter);
+            new Handler().post(() -> {
+                adapter.setPaths(box.getContents());
+                recyclerView.setAdapter(adapter);
+            });
+        });
+    }
+
+    private void setupBottomNavigation(@NonNull ImageView delete, @NonNull ImageView edit) {
+        delete.setOnClickListener(view -> showDeleteConfirmationDialog());
+        edit.setOnClickListener(view -> {
+            Intent intent = new Intent(getActivity(), AddActivity.class);
+            intent.putExtra("ID", boxId);
+            startActivity(intent);
         });
     }
 
@@ -115,15 +128,8 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.edit:
-                Intent intent = new Intent(getActivity(), AddActivity.class);
-                intent.putExtra("ID", boxId);
-                startActivity(intent);
-                return true;
-            case R.id.delete:
-                showDeleteConfirmationDialog();
-                return true;
+        if (item.getItemId() == R.id.archive) {
+            return true;
         }
         return true;
     }

@@ -181,10 +181,6 @@ public class ListFragment extends Fragment implements BackNavCallback {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         switch(item.getItemId()) {
-            case R.id.toolbar_search:
-                TransitionManager.beginDelayedTransition(toolbar);
-                MenuItemCompat.expandActionView(item);
-                return true;
             case R.id.toolbar_scan:
                 Toast.makeText(getActivity(), "Todo: implement searching by image (CV)", Toast.LENGTH_SHORT).show();
                 return true;

@@ -5,6 +5,11 @@
     tools:context=".activity.MainActivity">
 
     <item
+        android:id="@+id/toolbar_archived"
+        android:title="@string/archived"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/toolbar_search"
         android:icon="@drawable/ic_search"
         android:title="@string/title_search"
