@@ -78,7 +78,13 @@ public class ListFragment extends Fragment implements BackNavCallback {
         setupToolbar(Objects.requireNonNull(parent), binding.toolbar);
         setupRecyclerView(binding.recyclerView);
         setupEFAB(binding.fab);
+        binding.bottomAppBar.setNavigationOnClickListener(view -> inflateBottomSheet());
         return binding.getRoot();
+    }
+
+    private void inflateBottomSheet() {
+        final BottomSheetFragment bottomSheet = new BottomSheetFragment();
+        bottomSheet.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), bottomSheet.getTag());
     }
 
     private void setupEFAB(@NonNull ExtendedFloatingActionButton efab) {
@@ -180,14 +186,14 @@ public class ListFragment extends Fragment implements BackNavCallback {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-        switch(item.getItemId()) {
-            case R.id.toolbar_scan:
-                Toast.makeText(getActivity(), "Todo: implement searching by image (CV)", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.toolbar_sort:
-                Toast.makeText(getActivity(), "Todo: implement sorting", Toast.LENGTH_SHORT).show();
-                return true;
-        }
+//        switch(item.getItemId()) {
+//            case R.id.toolbar_scan:
+//                Toast.makeText(getActivity(), "Todo: implement searching by image (CV)", Toast.LENGTH_SHORT).show();
+//                return true;
+//            case R.id.toolbar_sort:
+//                Toast.makeText(getActivity(), "Todo: implement sorting", Toast.LENGTH_SHORT).show();
+//                return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 

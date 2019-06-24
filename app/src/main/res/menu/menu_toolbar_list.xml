@@ -5,26 +5,10 @@
     tools:context=".activity.MainActivity">
 
     <item
-        android:id="@+id/toolbar_archived"
-        android:title="@string/archived"
-        app:showAsAction="never"/>
-
-    <item
         android:id="@+id/toolbar_search"
         android:icon="@drawable/ic_search"
         android:title="@string/title_search"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
-
-    <item
-        android:id="@+id/toolbar_sort"
-        android:title="@string/title_sort"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/toolbar_scan"
-        android:icon="@drawable/ic_search_by_img"
-        android:title="@string/title_scan_box"
-        app:showAsAction="never"/>
 
 </menu>

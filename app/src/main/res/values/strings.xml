@@ -84,5 +84,8 @@
     <string name="detail_heading">Details</string>
     <string name="content_heading">Contents</string>
     <string name="archived">Archived</string>
+    <string name="menu_item_dashboard">Dashboard</string>
+    <string name="menu_item_priority">Priority</string>
+    <string name="menu_item_boxes">Boxes</string>
 
 </resources>
