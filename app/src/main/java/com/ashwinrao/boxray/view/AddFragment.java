@@ -84,7 +84,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
         // data binding
         binding.setBoxNum(getBoxNumber());
-        binding.setNumItems(getString(R.string.num_items_default));
+        binding.setNumberOfItems(getString(R.string.num_items_default));
 
         // widgets
         setupToolbar(binding.toolbar);
@@ -258,7 +258,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             adapter.setPaths(compoundedItems);
             recyclerView.setAdapter(adapter);
             viewModel.getBox().setContents(compoundedItems);
-            binding.setNumItems(viewModel.getBox().getNumItems());
+            binding.setNumberOfItems(viewModel.getBox().getNumItems());
 //            togglePhotoDependentViewVisibilities(new TextView[]{binding.contentsHeading, binding.numItems});
         }
     }

@@ -14,7 +14,7 @@
             type="Integer" />
 
         <variable
-            name="numItems"
+            name="numberOfItems"
             type="String" />
     </data>
 
@@ -173,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="32dp"
-                    android:text="@{numItems}"
+                    android:text="@{numberOfItems}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/text_color_secondary_view_holder"
                     app:layout_constraintBottom_toBottomOf="@id/contents_heading"
@@ -202,7 +202,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
+            android:layout_margin="16dp"
             app:icon="@drawable/ic_fill"
             app:iconTint="@android:color/white"
             android:textColor="@android:color/white"
