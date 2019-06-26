@@ -1,16 +1,17 @@
-# Boxray Packing Organizer
+# Locrate Moving Manager
 
-Camera-based inventory app that enables users to effortlessly keep track of the contents of their boxes during a move. Currently users are able to fill their boxes by taking photos of their items in rapid succession, apply a short description and label tags, mark boxes for priority unpacking, and perform deep text searches. More advanced features are in development.
+Know what's inside your boxes during a move. Simply snap a photo of each item as you pack. When you're at your new home, scan the number written on the side of your box and see a gallery of items without ever having to cut any tape.
 
-This Android app is being built using all the latest libraries, design patterns and frameworks, including:
+Maybe you need something right away and don't want to make a mess looking for it. Or you want to unpack the essentials first and do the rest later. Whatever your reason, Locrate has you covered!
 
-- MVVM architectural pattern
-- Room for persistence
-- Repository pattern
-- Dagger 2 framework
-- Native data binding
-- Android Jetpack
+Locrate Moving Manager is built using some of the latest libraries, design patterns and frameworks, including:
+
+- MVVM
+- Room
+- Glide
 - CameraX
-- Glide for image loading
+- Dagger 2
+- Data binding
+- and Android Jetpack
 
-*Updated: 5/30/19*
+*Updated: 6/26/19*
