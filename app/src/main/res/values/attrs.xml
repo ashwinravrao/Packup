@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="bxry">
-        <attr name="cardbackgroundcolor" format="color"/>
-        <attr name="textcolor" format="color"/>
-        <attr name="cardnumbercolor" format="color"/>
-        <attr name="navigationviewcolor" format="color"/>
-    </declare-styleable>
-</resources>
