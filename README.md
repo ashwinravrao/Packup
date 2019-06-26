@@ -2,9 +2,9 @@
 
 Know what's inside your boxes during a move. Simply snap a photo of each item as you pack. When you're at your new home, scan the number written on the side of your box and see a gallery of items without ever having to cut any tape.
 
-Maybe you need something right away and don't want to make a mess looking for it. Or you want to unpack the essentials first and do the rest later. Whatever your reason, Locrate has you covered!
+Maybe you need something right away and don't want to make a mess looking for it. Or maybe you want to unpack the essentials first and do the rest later. Whatever your reason, Locrate has you covered!
 
-Locrate Moving Manager is built using some of the latest libraries, design patterns and frameworks, including:
+Locrate Moving Manager is built using some of the latest libraries and frameworks, including:
 
 - MVVM
 - Room
