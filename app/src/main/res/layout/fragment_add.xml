@@ -7,7 +7,7 @@
 
         <variable
             name="box"
-            type="com.ashwinrao.boxray.data.Box"/>
+            type="com.ashwinrao.locrate.data.Box"/>
 
         <variable
             name="boxNum"

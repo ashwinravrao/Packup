@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ashwinrao.boxray">
+    package="com.ashwinrao.locrate">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
@@ -11,7 +11,7 @@
 
 
     <application
-        android:name=".Boxray"
+        android:name="com.ashwinrao.locrate.Locrate"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -25,7 +25,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".view.MainActivity"
+            android:name="com.ashwinrao.locrate.view.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
@@ -36,13 +36,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.AddActivity"
+        <activity android:name="com.ashwinrao.locrate.view.AddActivity"
             android:theme="@style/AppTheme.AddActivity"
             android:windowSoftInputMode="adjustPan">
 
         </activity>
 
-        <activity android:name=".view.CameraActivity"
+        <activity android:name="com.ashwinrao.locrate.view.CameraActivity"
             android:theme="@style/AppTheme.CameraActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />

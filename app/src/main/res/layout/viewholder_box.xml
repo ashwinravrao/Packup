@@ -7,7 +7,7 @@
 
         <variable
             name="Box"
-            type="com.ashwinrao.boxray.data.Box" />
+            type="com.ashwinrao.locrate.data.Box" />
     </data>
 
         <androidx.constraintlayout.widget.ConstraintLayout

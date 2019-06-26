@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Application-Related -->
-    <string name="app_name">Boxray</string>
+    <string name="app_name">Locrate</string>
     <string name="title_search">Search</string>
     <string name="toolbar_title_all">Boxes</string>
 
