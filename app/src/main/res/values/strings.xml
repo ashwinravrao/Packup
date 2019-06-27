@@ -6,56 +6,26 @@
     <string name="toolbar_title_all">Boxes</string>
 
     <!-- DetailFragment (Old) -->
-    <string name="snackbar_item_deleted">Item deleted</string>
-    <string name="message_undo">Undo</string>
-    <string name="todo">TODO</string>
-    <string name="title_detail_box_number">Box # %d</string>
-    <string name="title_edit_box">Edit</string>
-    <string name="close_button_description">Close</string>
-    <string name="saved_image_description">Box Image</string>
-    <string name="source_info_tag">From</string>
-    <string name="destination_info_tag">To</string>
 
     <!-- DestinationDialog (Util) -->
     <string name="dialog_message_load_truck">Enter your new home address below. You\'ll receive a notification to sync your in-app and physical boxes when you arrive!</string>
     <string name="dialog_title_load_truck">Ready to move?</string>
-    <string name="dialog_load_truck_positive">Save</string>
-    <string name="dialog_load_truck_negative">Cancel</string>
 
     <!-- Navigation Drawer (ListFragment) -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="menu_item_home">Home</string>
-    <string name="menu_item_settings">Settings</string>
 
     <!-- AddFragment -->
     <string name="placeholder_box_number"># %d</string>
-    <string name="title_scan_box">Scan box</string>
-    <string name="title_sort">Sort by…</string>
     <string name="toolbar_done">Done</string>
-    <string name="hint_name">Luke\'s Old Toys</string>
-    <string name="hint_description">Store in the basement</string>
-    <string name="stuff_heading">Stuff</string>
+    <string name="hint_name">Short name</string>
+    <string name="hint_description">Short description</string>
     <string name="priority_switch_title">Priority unpacking</string>
-    <string name="details_heading">Details</string>
-    <string name="box_heading">New box</string>
-    <string name="toolbar_title_new_box">New Box #%d</string>
     <string name="dialog_discard_box_title">Discard current box</string>
     <string name="dialog_discard_box_message">Are you sure you want to leave? Your current box will be discarded. You cannot undo this action.</string>
-    <string name="tap_to_add">Tap to add</string>
-    <string name="custom_icon">Custom icon</string>
-    <string name="choose_button">choose</string>
-    <string name="set_button">set</string>
-    <string name="select_button">select</string>
-    <string name="add_stuff">stuff</string>
     <string name="dialog_empty_box_title">Empty box</string>
     <string name="dialog_empty_box_message">This box is empty. Consider adding at least one item before saving.</string>
-    <string name="toolbar_skip">SKIP</string>
     <string name="item_name_hint">Item name</string>
-    <string name="num_items_default">Nothing yet</string>
+    <string name="num_items_default">None</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
@@ -63,28 +33,20 @@
     <string name="name_field_error_message">Give your box a name</string>
     <string name="dialog_exit_photo_review_title">Exit photo review</string>
     <string name="dialog_exit_photo_review_message">Are you sure you want to exit the photo review? Your items will revert to their default names. This action cannot be undone.</string>
-    <string name="contents_heading">Filled with</string>
+    <string name="contents_heading">Contents</string>
     <string name="list_fab">New Box</string>
-    <string name="add_box_toolbar_title">New Box # %d</string>
-    <string name="name_heading">Box name</string>
-    <string name="description_heading">Short description</string>
+    <string name="name_heading">Name</string>
+    <string name="description_heading">Description</string>
     <string name="fab_fill_box">Fill Box</string>
-    <string name="title_edit">Edit</string>
-    <string name="title_delete">Discard</string>
     <string name="dialog_delete_existing_box_title">Delete this box?</string>
     <string name="dialog_delete_existing_box_message">Are you sure you want to delete this box? You cannot undo this action.</string>
     <string name="delete">Delete</string>
-    <string name="detail_toolbar_subtitle">Box # %d</string>
     <string name="high_priority_text">Marked for high priority unpacking</string>
-    <string name="normal_priority_text">Marked for normal priority unpacking</string>
-    <string name="edit">Edit</string>
     <string name="delete_button_content_description">Deletes the current box</string>
     <string name="edit_button_content_description">Edits the current box</string>
     <string name="archive">Archive</string>
     <string name="detail_heading">Details</string>
     <string name="content_heading">Contents</string>
-    <string name="archived">Archived</string>
-    <string name="menu_item_dashboard">Dashboard</string>
     <string name="menu_item_priority">Priority</string>
     <string name="menu_item_boxes">Boxes</string>
 

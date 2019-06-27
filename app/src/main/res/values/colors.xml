@@ -27,10 +27,8 @@
     <color name="iconAndTextColor">#000000</color>
     <color name="border_view_holder">#264E4E4E</color>
     <color name="text_color_secondary_view_holder">#878787</color>
-    <color name="star_gold">#FFD700</color>
 
     <!-- Other Palettes -->
-    <color name="moving_truck_icon_wheel">#455A64</color>
     <color name="top_row_view_holder">#4E4E4E</color>
 
     

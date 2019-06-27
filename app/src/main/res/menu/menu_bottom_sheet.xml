@@ -2,9 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="none">
-        <item
-            android:id="@+id/boxes"
-            android:title="@string/menu_item_boxes">
+        <item android:title="@string/menu_item_boxes">
 
             <menu>
 
@@ -14,7 +12,6 @@
                     android:title="@string/menu_item_home"/>
 
                 <item
-                    android:id="@+id/priority"
                     android:icon="@drawable/ic_priority_exclamation"
                     android:title="@string/menu_item_priority"/>
 
