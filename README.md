@@ -1,8 +1,8 @@
-# Locrate Moving Manager
+# Locrate Packing Helper
 
-Know what's inside your boxes during a move. Simply snap a photo of each item as you pack. When you're at your new home, scan the number written on the side of your box and see a gallery of items without ever having to cut any tape.
+Locrate is a convenient system for keeping track of your box contents during a move. Simply snap a photo of each item as you pack, and label your boxes using the auto generated id numbers. At your new home, scan the side of a box and instantly see a gallery of items inside. Unlike with other apps that rely on bar/QR codes that need to be printed and can fall off, Locrate uses machine learning to recognize hand-written labels! 
 
-Locrate Moving Manager is built using some of the latest libraries and frameworks, including:
+Locrate is built using some of the latest libraries and frameworks, including:
 
 - MVVM
 - Room
@@ -12,4 +12,4 @@ Locrate Moving Manager is built using some of the latest libraries and framework
 - Data binding
 - and Android Jetpack
 
-*Updated: 6/26/19*
+*Updated: 6/27/19*
