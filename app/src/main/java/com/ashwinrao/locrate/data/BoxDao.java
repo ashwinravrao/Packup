@@ -13,6 +13,13 @@ import androidx.room.Query;
 public interface BoxDao {
 
     /**
+     * @return A collection of all boxes from {@link BoxDatabase}.
+     */
+
+    @Query("SELECT *, `rowid` FROM boxes ORDER BY created DESC")
+    List<Box> listBoxes();
+
+    /**
      * @return An observable collection of all boxes from {@link BoxDatabase}.
      */
 

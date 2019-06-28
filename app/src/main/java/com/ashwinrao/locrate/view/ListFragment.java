@@ -18,8 +18,12 @@ import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.databinding.FragmentListBinding;
 import com.ashwinrao.locrate.util.BackNavCallback;
 import com.ashwinrao.locrate.view.adapter.ListAdapter;
+import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;
+import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
+import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import javax.inject.Inject;
 
@@ -73,7 +78,7 @@ public class ListFragment extends Fragment implements BackNavCallback {
         final FragmentListBinding binding = FragmentListBinding.inflate(inflater);
         AppCompatActivity parent = ((MainActivity) getActivity());
         setupToolbar(Objects.requireNonNull(parent), binding.toolbar);
-        setupRecyclerView(binding.recyclerView);
+        setupTabLayout(binding.listTabLayout, binding.listViewPager);
         setupEFAB(binding.fab);
         binding.bottomAppBar.setNavigationOnClickListener(view -> inflateBottomSheet());
         return binding.getRoot();
@@ -91,6 +96,14 @@ public class ListFragment extends Fragment implements BackNavCallback {
             startActivity(intent);
             v.setEnabled(false);
         });
+    }
+
+    private void setupTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
+        final ListPagerAdapter adapter = new ListPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+                new ListBoxesPageFragment(),
+                new ListItemsPageFragment());
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -111,7 +124,6 @@ public class ListFragment extends Fragment implements BackNavCallback {
     private void setupToolbar(@NonNull AppCompatActivity parent, @NonNull Toolbar toolbar) {
         this.toolbar = toolbar;
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
-        toolbar.setTitle(getString(R.string.toolbar_title_all));
         parent.setSupportActionBar(toolbar);
     }
 

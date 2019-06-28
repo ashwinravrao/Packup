@@ -1,0 +1,70 @@
+package com.ashwinrao.locrate.view.pages;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.ashwinrao.locrate.Locrate;
+import com.ashwinrao.locrate.databinding.FragmentListPageBinding;
+import com.ashwinrao.locrate.view.adapter.ListAdapter;
+import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+
+import java.util.ArrayList;
+import java.util.Objects;
+
+import javax.inject.Inject;
+
+import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
+
+public class ListBoxesPageFragment extends Fragment {
+
+    private BoxViewModel viewModel;
+
+    @Inject
+    ViewModelProvider.Factory factory;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        ((Locrate) context.getApplicationContext()).getAppComponent().inject(this);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final FragmentListPageBinding binding = FragmentListPageBinding.inflate(inflater);
+        setupRecyclerView(binding.recyclerView);
+        return binding.getRoot();
+    }
+
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addItemDecoration(getContext(), recyclerView, 1);
+        final ListAdapter listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
+        recyclerView.setAdapter(listAdapter);
+        viewModel.getBoxes().observe(this, boxes -> {
+            if(boxes != null) {
+                listAdapter.setBoxes(boxes);
+            } else {
+                listAdapter.setBoxes(new ArrayList<>());
+            }
+            recyclerView.setAdapter(listAdapter);
+        });
+    }
+}

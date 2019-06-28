@@ -4,6 +4,7 @@ import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.data.BoxRepository;
 import com.ashwinrao.locrate.util.BoxValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -37,6 +38,14 @@ public class BoxViewModel extends ViewModel {
         } else {
             return false;
         }
+    }
+
+    public List<String> getAllItemPaths() {
+        List<String> allItemPaths = new ArrayList<>();
+        for(Box box : repo.listBoxes()) {
+            allItemPaths.addAll(box.getContents());
+        }
+        return allItemPaths;
     }
 
     public boolean areChangesUnsaved() {

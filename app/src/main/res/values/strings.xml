@@ -3,7 +3,7 @@
     <!-- Application-Related -->
     <string name="app_name">Locrate</string>
     <string name="title_search">Search</string>
-    <string name="toolbar_title_all">Boxes</string>
+    <string name="toolbar_title_list">Home</string>
 
     <!-- DetailFragment (Old) -->
 
