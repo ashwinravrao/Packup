@@ -1,8 +1,7 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,10 +13,10 @@ import android.view.inputmethod.EditorInfo;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.databinding.FragmentListBinding;
 import com.ashwinrao.locrate.util.BackNavCallback;
-import com.ashwinrao.locrate.view.adapter.ListAdapter;
+import com.ashwinrao.locrate.view.activity.AddActivity;
+import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;
 import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
 import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
@@ -25,8 +24,6 @@ import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -35,11 +32,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import javax.inject.Inject;
@@ -49,9 +43,7 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class ListFragment extends Fragment implements BackNavCallback {
 
-    private Toolbar toolbar;
-    private ListAdapter listAdapter;
-    private LiveData<List<Box>> boxesLD;
+    private BoxViewModel viewModel;
     private ExtendedFloatingActionButton fab;
 
     @Inject
@@ -68,19 +60,17 @@ public class ListFragment extends Fragment implements BackNavCallback {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-        final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        boxesLD = viewModel.getBoxes();
+        viewModel = ViewModelProviders.of(getActivity(), factory).get(BoxViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentListBinding binding = FragmentListBinding.inflate(inflater);
-        AppCompatActivity parent = ((MainActivity) getActivity());
+        final AppCompatActivity parent = ((MainActivity) getActivity());
         setupToolbar(Objects.requireNonNull(parent), binding.toolbar);
         setupTabLayout(binding.listTabLayout, binding.listViewPager);
         setupEFAB(binding.fab);
-        binding.bottomAppBar.setNavigationOnClickListener(view -> inflateBottomSheet());
         return binding.getRoot();
     }
 
@@ -99,32 +89,17 @@ public class ListFragment extends Fragment implements BackNavCallback {
     }
 
     private void setupTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
-        final ListPagerAdapter adapter = new ListPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),
+        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(),
                 new ListBoxesPageFragment(),
                 new ListItemsPageFragment());
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        addItemDecoration(recyclerView);
-        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
-        recyclerView.setAdapter(listAdapter);
-        boxesLD.observe(this, boxes -> {
-            if(boxes != null) {
-                listAdapter.setBoxes(boxes);
-            } else {
-                listAdapter.setBoxes(new ArrayList<>());
-            }
-            recyclerView.setAdapter(listAdapter);
-        });
-    }
-
     private void setupToolbar(@NonNull AppCompatActivity parent, @NonNull Toolbar toolbar) {
-        this.toolbar = toolbar;
-        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
         parent.setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(view -> inflateBottomSheet());
+        toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
     }
 
     @Override
@@ -133,34 +108,6 @@ public class ListFragment extends Fragment implements BackNavCallback {
         if(!fab.isEnabled()) {
             fab.setEnabled(true);
         }
-    }
-
-    private void addItemDecoration(RecyclerView recyclerView) {
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                int position = parent.getChildAdapterPosition(view);
-                int spanCount = 1;
-                int spacing = dpToPx(Objects.requireNonNull(getActivity()), 16f);
-
-                if (position >= 0) {
-                    int column = position % spanCount;
-
-                    outRect.left = spacing - column * spacing / spanCount;
-                    outRect.right = (column + 1) * spacing / spanCount;
-
-                    if (position < spanCount) {
-                        outRect.top = spacing;
-                    }
-                    outRect.bottom = spacing;
-                } else {
-                    outRect.left = 0;
-                    outRect.right = 0;
-                    outRect.top = 0;
-                    outRect.bottom = 0;
-                }
-            }
-        });
     }
 
     @Override
@@ -186,24 +133,11 @@ public class ListFragment extends Fragment implements BackNavCallback {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                listAdapter.getFilter().filter(newText);
+//                listAdapter.getFilter().filter(newText);
+                // todo send newText to ListAdapter in ListBoxesPageFragment via callback
                 return false;
             }
         });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-//        switch(item.getItemId()) {
-//            case R.id.toolbar_scan:
-//                Toast.makeText(getActivity(), "Todo: implement searching by image (CV)", Toast.LENGTH_SHORT).show();
-//                return true;
-//            case R.id.toolbar_sort:
-//                Toast.makeText(getActivity(), "Todo: implement sorting", Toast.LENGTH_SHORT).show();
-//                return true;
-//        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.ashwinrao.locrate.di;
 
-import com.ashwinrao.locrate.view.AddFragment;
-import com.ashwinrao.locrate.view.DetailFragment;
-import com.ashwinrao.locrate.view.ListFragment;
-import com.ashwinrao.locrate.view.PhotoReviewFragment;
+import com.ashwinrao.locrate.view.fragment.AddFragment;
+import com.ashwinrao.locrate.view.fragment.DetailFragment;
+import com.ashwinrao.locrate.view.fragment.ListFragment;
+import com.ashwinrao.locrate.view.fragment.PhotoReviewFragment;
 import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
 import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
 import com.ashwinrao.locrate.view.pages.ReviewPageFragment;

@@ -25,7 +25,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name="com.ashwinrao.locrate.view.MainActivity"
+            android:name="com.ashwinrao.locrate.view.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan">
@@ -36,13 +36,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.ashwinrao.locrate.view.AddActivity"
+        <activity android:name="com.ashwinrao.locrate.view.activity.AddActivity"
             android:theme="@style/AppTheme.AddActivity"
             android:windowSoftInputMode="adjustPan">
 
         </activity>
 
-        <activity android:name="com.ashwinrao.locrate.view.CameraActivity"
+        <activity android:name="com.ashwinrao.locrate.view.activity.CameraActivity"
             android:theme="@style/AppTheme.CameraActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />

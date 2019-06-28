@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +15,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.databinding.FragmentDetailAltBinding;
 import com.ashwinrao.locrate.util.ConfirmationDialog;
+import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 

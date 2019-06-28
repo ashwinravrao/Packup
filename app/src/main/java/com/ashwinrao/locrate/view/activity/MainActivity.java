@@ -1,9 +1,11 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.activity;
 
 import android.os.Bundle;
 
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.util.BackNavCallback;
+import com.ashwinrao.locrate.view.fragment.AddFragment;
+import com.ashwinrao.locrate.view.fragment.ListFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

@@ -1,5 +1,7 @@
 package com.ashwinrao.locrate.view.adapter;
 
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,6 +18,10 @@ public class ListPagerAdapter extends FragmentStatePagerAdapter {
         super(fm);
         pages[0] = boxesPage;
         pages[1] = itemsPage;
+    }
+
+    public void setPages(@NonNull Fragment[] pages) {
+        this.pages = pages;
     }
 
     @NonNull

@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;

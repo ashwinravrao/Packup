@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,8 @@ import com.ashwinrao.locrate.databinding.FragmentAddBinding;
 import com.ashwinrao.locrate.util.BackNavCallback;
 import com.ashwinrao.locrate.util.CameraInitCallback;
 import com.ashwinrao.locrate.util.ConfirmationDialog;
+import com.ashwinrao.locrate.view.activity.AddActivity;
+import com.ashwinrao.locrate.view.activity.CameraActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;

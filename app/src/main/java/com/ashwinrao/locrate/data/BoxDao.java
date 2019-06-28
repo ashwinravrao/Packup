@@ -3,6 +3,7 @@ package com.ashwinrao.locrate.data;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -18,6 +19,9 @@ public interface BoxDao {
 
     @Query("SELECT *, `rowid` FROM boxes ORDER BY created DESC")
     List<Box> listBoxes();
+
+    @Query("SELECT contents FROM boxes ORDER BY created DESC")
+    LiveData<List<String>> getAllContents();
 
     /**
      * @return An observable collection of all boxes from {@link BoxDatabase}.

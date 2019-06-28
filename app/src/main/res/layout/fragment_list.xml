@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".view.MainActivity">
+        tools:context=".view.activity.MainActivity">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,7 +37,7 @@
                 app:title="@string/toolbar_title_list"
                 app:layout_scrollFlags="scroll|snap"
                 app:titleTextColor="@color/iconAndTextColor"
-                app:collapseIcon="@drawable/ic_collapse_back_icon"
+                app:navigationIcon="@drawable/ic_drawer_handle"
                 app:popupTheme="@style/AppTheme.PopUpOverlay"/>
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -66,24 +66,25 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bottom_app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:backgroundTint="?attr/colorPrimary"
-            app:fabAlignmentMode="center"
-            app:navigationIcon="@drawable/ic_drawer_handle">
+        <!--<com.google.android.material.bottomappbar.BottomAppBar-->
+            <!--android:id="@+id/bottom_app_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:backgroundTint="?attr/colorPrimary"-->
+            <!--app:fabAlignmentMode="center"-->
+            <!--app:navigationIcon="@drawable/ic_drawer_handle">-->
 
-        </com.google.android.material.bottomappbar.BottomAppBar>
+        <!--</com.google.android.material.bottomappbar.BottomAppBar>-->
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_anchor="@id/bottom_app_bar"
+            android:layout_gravity="bottom|end"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/list_fab"
+            android:layout_margin="@dimen/fab_margin"
             android:textColor="@android:color/white"
             app:icon="@drawable/ic_add_default"
             app:iconTint="@android:color/white"/>

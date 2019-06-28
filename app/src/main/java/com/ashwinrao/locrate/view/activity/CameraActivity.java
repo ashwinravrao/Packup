@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.activity;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.util.BackNavCallback;
+import com.ashwinrao.locrate.view.fragment.CameraFragment;
 
 public class CameraActivity extends AppCompatActivity {
 

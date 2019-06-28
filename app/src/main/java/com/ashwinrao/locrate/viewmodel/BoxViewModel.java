@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
@@ -40,12 +42,14 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
-    public List<String> getAllItemPaths() {
-        List<String> allItemPaths = new ArrayList<>();
-        for(Box box : repo.listBoxes()) {
-            allItemPaths.addAll(box.getContents());
-        }
-        return allItemPaths;
+    public LiveData<List<String>> getAllContents() {
+        return Transformations.switchMap(getBoxes(), value -> {
+            MutableLiveData<List<String>> mld = new MutableLiveData<>();
+            List<String> contents = new ArrayList<>();
+            for(Box box : value) contents.addAll(box.getContents());
+            mld.setValue(contents);
+            return mld;
+        });
     }
 
     public boolean areChangesUnsaved() {

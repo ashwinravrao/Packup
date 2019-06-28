@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.view;
+package com.ashwinrao.locrate.view.fragment;
 
 import android.Manifest;
 import android.app.Activity;
@@ -34,6 +34,7 @@ import androidx.fragment.app.Fragment;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentCameraBinding;
 import com.ashwinrao.locrate.util.BackNavCallback;
+import com.ashwinrao.locrate.view.activity.CameraActivity;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -12,8 +12,8 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
 import com.ashwinrao.locrate.util.PropertiesFilter;
-import com.ashwinrao.locrate.view.DetailFragment;
-import com.ashwinrao.locrate.view.MainActivity;
+import com.ashwinrao.locrate.view.fragment.DetailFragment;
+import com.ashwinrao.locrate.view.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

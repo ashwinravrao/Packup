@@ -2,7 +2,6 @@ package com.ashwinrao.locrate.view.pages;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -20,6 +20,8 @@ import com.ashwinrao.locrate.databinding.FragmentListPageBinding;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.inject.Inject;
@@ -29,7 +31,7 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class ListItemsPageFragment extends Fragment {
 
-    private BoxViewModel viewModel;
+    private LiveData<List<String>> allContents;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -43,7 +45,8 @@ public class ListItemsPageFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        allContents = viewModel.getAllContents();
     }
 
     @Nullable
@@ -59,9 +62,12 @@ public class ListItemsPageFragment extends Fragment {
         addItemDecoration(getContext(), recyclerView, 2);
         final ThumbnailAdapter adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
         recyclerView.setAdapter(adapter);
-
-        new Handler().post(() -> {
-            adapter.setPaths(viewModel.getAllItemPaths());
+        allContents.observe(this, strings -> {
+            if(strings != null) {
+                adapter.setPaths(strings);
+            } else {
+                adapter.setPaths(new ArrayList<>());
+            }
             recyclerView.setAdapter(adapter);
         });
     }
