@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.databinding.FragmentListPageBinding;
+import com.ashwinrao.locrate.util.OnScrollCallback;
 import com.ashwinrao.locrate.view.adapter.ListAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 
@@ -31,6 +32,7 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
 public class ListBoxesPageFragment extends Fragment {
 
+    private OnScrollCallback callback;
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
 
@@ -41,6 +43,10 @@ public class ListBoxesPageFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         ((Locrate) context.getApplicationContext()).getAppComponent().inject(this);
+    }
+
+    public void setScrollCallback(@NonNull OnScrollCallback callback) {
+        this.callback = callback;
     }
 
     @Override
@@ -59,6 +65,7 @@ public class ListBoxesPageFragment extends Fragment {
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+        if(callback != null) callback.onScroll(recyclerView.getScrollX(), recyclerView.getScrollY());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));

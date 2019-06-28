@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="boxNum"
             type="Integer" />
@@ -15,18 +16,11 @@
         android:fitsSystemWindows="true"
         tools:context=".view.activity.MainActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
@@ -34,60 +28,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:title="@string/toolbar_title_list"
-                app:layout_scrollFlags="scroll|snap"
-                app:titleTextColor="@color/iconAndTextColor"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:navigationIcon="@drawable/ic_drawer_handle"
-                app:popupTheme="@style/AppTheme.PopUpOverlay"/>
+                app:popupTheme="@style/AppTheme.PopUpOverlay"
+                app:title="@string/toolbar_title_list"
+                app:titleTextColor="@color/iconAndTextColor" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/list_tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/colorAccent"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/colorAccent"
+                app:tabTextColor="@color/text_color_secondary_view_holder" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/list_tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabGravity="fill"
-            app:tabMode="fixed"
-            app:layout_constraintTop_toBottomOf="@id/appbar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:background="@color/colorPrimary"
-            app:tabTextColor="@color/text_color_secondary_view_holder"
-            app:tabIndicatorColor="@color/colorAccent"
-            app:tabSelectedTextColor="@color/colorAccent"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/list_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/list_tab_layout"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <!--<com.google.android.material.bottomappbar.BottomAppBar-->
-            <!--android:id="@+id/bottom_app_bar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="bottom"-->
-            <!--android:backgroundTint="?attr/colorPrimary"-->
-            <!--app:fabAlignmentMode="center"-->
-            <!--app:navigationIcon="@drawable/ic_drawer_handle">-->
-
-        <!--</com.google.android.material.bottomappbar.BottomAppBar>-->
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
             android:backgroundTint="@color/colorAccent"
             android:text="@string/list_fab"
-            android:layout_margin="@dimen/fab_margin"
             android:textColor="@android:color/white"
             app:icon="@drawable/ic_add_default"
-            app:iconTint="@android:color/white"/>
+            app:iconTint="@android:color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

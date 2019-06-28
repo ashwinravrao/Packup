@@ -15,6 +15,7 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentListBinding;
 import com.ashwinrao.locrate.util.BackNavCallback;
+import com.ashwinrao.locrate.util.OnScrollCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;
@@ -41,8 +42,9 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 
-public class ListFragment extends Fragment implements BackNavCallback {
+public class ListFragment extends Fragment implements BackNavCallback, OnScrollCallback {
 
+    private TabLayout tabLayout;
     private BoxViewModel viewModel;
     private ExtendedFloatingActionButton fab;
 
@@ -89,9 +91,14 @@ public class ListFragment extends Fragment implements BackNavCallback {
     }
 
     private void setupTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
-        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(),
-                new ListBoxesPageFragment(),
-                new ListItemsPageFragment());
+        this.tabLayout = tabLayout;
+
+        final ListBoxesPageFragment boxesPage = new ListBoxesPageFragment();
+        final ListItemsPageFragment itemsPage = new ListItemsPageFragment();
+
+        boxesPage.setScrollCallback(this);
+
+        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
         viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -147,5 +154,11 @@ public class ListFragment extends Fragment implements BackNavCallback {
     public void onDestroyView() {
         super.onDestroyView();
         ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
+    }
+
+    @Override
+    public void onScroll(int x, int y) {
+//        tabLayout.setScrollX(x);
+//        tabLayout.setScrollY(y);
     }
 }
