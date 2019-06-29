@@ -63,6 +63,7 @@
             android:text="@string/list_fab"
             android:textColor="@android:color/white"
             app:icon="@drawable/ic_add_default"
+            app:layout_behavior=".util.ExtendedFABScrollBehavior"
             app:iconTint="@android:color/white" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

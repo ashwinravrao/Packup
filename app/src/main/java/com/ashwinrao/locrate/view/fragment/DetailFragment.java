@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.Box;
-import com.ashwinrao.locrate.databinding.FragmentDetailAltBinding;
+import com.ashwinrao.locrate.databinding.FragmentDetailBinding;
 import com.ashwinrao.locrate.util.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
@@ -66,7 +66,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentDetailAltBinding binding = FragmentDetailAltBinding.inflate(inflater);
+        final FragmentDetailBinding binding = FragmentDetailBinding.inflate(inflater);
         setupToolbar(binding.toolbar);
         setupRecyclerView(binding, binding.recyclerView);
         setupBottomNavigation(binding.deleteButton, binding.editButton);
@@ -81,7 +81,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         });
     }
 
-    private void setupRecyclerView(@NonNull FragmentDetailAltBinding binding, @NonNull RecyclerView rv) {
+    private void setupRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {
         this.recyclerView = rv;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         addItemDecoration(getContext(), recyclerView, 2);
