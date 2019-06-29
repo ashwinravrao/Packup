@@ -23,7 +23,7 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentReviewPageBinding;
 import com.ashwinrao.locrate.util.FilenameCreator;
-import com.ashwinrao.locrate.util.PaginationCallback;
+import com.ashwinrao.locrate.util.callback.PaginationCallback;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
 import com.bumptech.glide.Glide;
 

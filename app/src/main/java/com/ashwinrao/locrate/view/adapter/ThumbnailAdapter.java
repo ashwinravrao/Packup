@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.databinding.ViewholderThumbnailBinding;
-import com.ashwinrao.locrate.util.CameraInitCallback;
+import com.ashwinrao.locrate.util.callback.CameraInitCallback;
 import com.bumptech.glide.Glide;
 
 import java.io.File;

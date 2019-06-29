@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.ashwinrao.locrate.util.PaginationCallback;
+import com.ashwinrao.locrate.util.callback.PaginationCallback;
 import com.ashwinrao.locrate.view.pages.ReviewPageFragment;
 
 import java.util.List;

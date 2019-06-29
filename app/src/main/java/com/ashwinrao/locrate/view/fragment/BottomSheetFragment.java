@@ -3,6 +3,7 @@ package com.ashwinrao.locrate.view.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,8 @@ import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String TAG = "BottomSheetFragment";
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,16 +35,16 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Na
     }
 
     private String[] getUserDetails() {
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("userdata", Context.MODE_PRIVATE);
+        SharedPreferences pref = Objects.requireNonNull(getActivity()).getApplicationContext().getSharedPreferences("userdata", Context.MODE_PRIVATE);
         return new String[]{pref.getString("name", "Guest"), pref.getString("email", "Tap to sign in")};
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment current = Objects.requireNonNull(getActivity()).getSupportFragmentManager().getFragments().get(0);
         switch (item.getItemId()) {
             case R.id.home:
-                if(current.getClass() != ListFragment.class) {
+                final Fragment list = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("ListFragment");
+                if(list != null && !list.isVisible()) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListFragment()).commit();
                 }
                 this.dismiss();

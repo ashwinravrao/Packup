@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.util;
+package com.ashwinrao.locrate.util.callback;
 
 public interface PaginationCallback {
 

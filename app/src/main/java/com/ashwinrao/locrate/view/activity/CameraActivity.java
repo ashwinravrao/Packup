@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.util.BackNavCallback;
+import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.fragment.CameraFragment;
 
 public class CameraActivity extends AppCompatActivity {

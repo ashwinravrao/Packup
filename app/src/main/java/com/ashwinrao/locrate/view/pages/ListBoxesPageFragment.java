@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.databinding.FragmentListPageBinding;
-import com.ashwinrao.locrate.util.OnScrollCallback;
+import com.ashwinrao.locrate.util.callback.OnScrollCallback;
 import com.ashwinrao.locrate.view.adapter.ListAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 

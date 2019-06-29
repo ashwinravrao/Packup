@@ -20,7 +20,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentPhotoReviewBinding;
-import com.ashwinrao.locrate.util.PaginationCallback;
+import com.ashwinrao.locrate.util.callback.PaginationCallback;
 import com.ashwinrao.locrate.view.adapter.PhotoReviewPagerAdapter;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
 

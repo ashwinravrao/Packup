@@ -1,20 +1,7 @@
 <resources>
-
-    <!-- Application-Related -->
     <string name="app_name">Locrate</string>
     <string name="title_search">Search</string>
     <string name="toolbar_title_list">Home</string>
-
-    <!-- DetailFragment (Old) -->
-
-    <!-- DestinationDialog (Util) -->
-    <string name="dialog_message_load_truck">Enter your new home address below. You\'ll receive a notification to sync your in-app and physical boxes when you arrive!</string>
-    <string name="dialog_title_load_truck">Ready to move?</string>
-
-    <!-- Navigation Drawer (ListFragment) -->
-    <string name="menu_item_home">Home</string>
-
-    <!-- AddFragment -->
     <string name="placeholder_box_number"># %d</string>
     <string name="toolbar_done">Done</string>
     <string name="hint_name">Short name</string>
@@ -49,5 +36,5 @@
     <string name="content_heading">Contents</string>
     <string name="menu_item_priority">Priority</string>
     <string name="menu_item_boxes">Boxes</string>
-
+    <string name="menu_item_home">Home</string>
 </resources>
