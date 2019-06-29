@@ -31,6 +31,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.ashwinrao.locrate.BuildConfig;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentCameraBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
@@ -49,6 +50,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private CardView shutterButton;
     private ArrayList<String> paths = new ArrayList<>();
 
+    private static final String CV_KEY = BuildConfig.CV_Key;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 5;
     private static final String TAG = "CameraFragment";
 
