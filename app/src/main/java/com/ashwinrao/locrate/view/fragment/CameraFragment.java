@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -36,9 +37,26 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentCameraBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.activity.CameraActivity;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.services.vision.v1.Vision;
+import com.google.api.services.vision.v1.VisionRequestInitializer;
+import com.google.api.services.vision.v1.model.AnnotateImageRequest;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesRequest;
+import com.google.api.services.vision.v1.model.BatchAnnotateImagesResponse;
+import com.google.api.services.vision.v1.model.Feature;
+import com.google.api.services.vision.v1.model.Image;
+import com.google.api.services.vision.v1.model.TextAnnotation;
+
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -50,15 +68,21 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private CardView shutterButton;
     private ArrayList<String> paths = new ArrayList<>();
 
-    private static final String CV_KEY = BuildConfig.CV_Key;
+    private static final String CLOUD_VISION_KEY = BuildConfig.CV_Key;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 5;
     private static final String TAG = "CameraFragment";
 
+    private int useCase = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+
+        final Bundle args = getArguments();
+        if (args != null) {
+            useCase = args.getInt("useCase");
+        }
     }
 
     @Nullable
@@ -108,6 +132,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         return false;
     }
 
+
     private void startCamera() {
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -153,10 +178,65 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                         ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(50);
                     }
 
-                    // Notify user of saved image
-                    Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
-                    toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
-                    toast.show();
+                    if(useCase == 1) {
+
+                        AsyncTask.execute(() -> {
+                            try {
+                                Vision.Builder visionBuilder = new Vision.Builder(
+                                        new NetHttpTransport(),
+                                        new AndroidJsonFactory(),
+                                        null)
+                                        .setApplicationName("Locrate");
+                                visionBuilder.setVisionRequestInitializer(new VisionRequestInitializer(CLOUD_VISION_KEY));
+
+                                Vision vision = visionBuilder.build();
+
+                                InputStream inputStream = new FileInputStream(file);
+                                byte[] photoData = IOUtils.toByteArray(inputStream);
+                                inputStream.close();
+
+                                Image inputImage = new Image();
+                                inputImage.encodeContent(photoData);
+
+                                Feature desiredFeature = new Feature();
+                                desiredFeature.setType("TEXT_DETECTION");
+
+                                AnnotateImageRequest request = new AnnotateImageRequest();
+                                request.setImage(inputImage);
+                                request.setFeatures(Arrays.asList(desiredFeature));
+
+                                BatchAnnotateImagesRequest batchRequest = new BatchAnnotateImagesRequest();
+                                batchRequest.setRequests(Arrays.asList(request));
+
+                                BatchAnnotateImagesResponse batchResponse = vision.images().annotate(batchRequest).execute();
+
+                                TextAnnotation textAnnotation = batchResponse.getResponses().get(0).getFullTextAnnotation();
+                                Log.d(TAG, String.format("analyze: textAnnotation is null? %b", textAnnotation == null));
+                                Log.d(TAG, "onImageSaved: text annotation is: " + textAnnotation.getText());
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getContext(), textAnnotation.getText(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } catch (FileNotFoundException e) {
+                                Log.e(TAG, "run: file at path " + file.getAbsolutePath() + " not found");
+                            } catch (IOException ie) {
+                                Log.e(TAG, "run: IOException" + ie.getMessage());
+                            }
+                        });
+
+//                        final TextAnnotation annotation = new ImageAnalyzer(file.getAbsolutePath()).analyze();
+//                        Toast.makeText(getContext(), annotation.getText(), Toast.LENGTH_LONG).show();
+//                        finishUpActivity();
+                    } else {
+                        // Notify user of saved image
+                        Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
+                        toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
+                        toast.show();
+                    }
+
                 }
 
                 @Override

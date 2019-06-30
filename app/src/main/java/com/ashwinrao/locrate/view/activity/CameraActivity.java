@@ -19,7 +19,16 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CameraFragment(), "CameraFragment").commit();
+        if(savedInstanceState == null) {
+            CameraFragment fragment = new CameraFragment();
+            fragment.setArguments(getIntent().getExtras());
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,
+                            fragment,
+                            "CameraFragment")
+                    .commit();
+        }
     }
 
     public void registerBackNavigationListener(@NonNull BackNavCallback listener) {

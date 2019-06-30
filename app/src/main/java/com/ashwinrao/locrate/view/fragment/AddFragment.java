@@ -276,6 +276,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public void startCamera() {
         Intent intent = new Intent(getActivity(), CameraActivity.class);
+        intent.putExtra("useCase", 1);
         photoViewModel.clearPaths();
         startActivityForResult(intent, 1);
     }
