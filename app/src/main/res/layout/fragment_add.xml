@@ -6,23 +6,19 @@
     <data>
 
         <variable
-            name="box"
-            type="com.ashwinrao.locrate.data.Box"/>
-
-        <variable
-            name="boxNum"
+            name="boxNumber"
             type="Integer" />
 
         <variable
             name="numberOfItems"
             type="String" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background_window"
-        android:elevation="50dp"
         android:fitsSystemWindows="true">
 
         <androidx.core.widget.NestedScrollView
@@ -30,184 +26,300 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            android:isScrollContainer="true"
             android:fillViewport="true"
+            android:isScrollContainer="true"
             android:overScrollMode="ifContentScrolls">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/background_window">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:background="@color/colorAccent"
+                    android:elevation="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:elevation="2dp"
+                    app:menu="@menu/toolbar_add"
                     app:navigationIcon="@drawable/ic_close"
-                    app:popupTheme="@style/AppTheme.PopUpOverlay">
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/toolbar_title"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_gravity="center"-->
-                        <!--android:text="@{String.format(@string/add_box_toolbar_title, boxNum)}"-->
-                        <!--android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"-->
-                        <!--android:textColor="@android:color/white"/>-->
-
-                </androidx.appcompat.widget.Toolbar>
+                    app:popupTheme="@style/AppTheme.PopUpOverlay" />
 
                 <TextView
-                    android:id="@+id/name"
+                    android:id="@+id/label_section"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="32dp"
-                    android:text="@string/name_heading"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="bold"
+                    android:layout_marginTop="40dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/label_section_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
                 <TextView
+                    android:id="@+id/box_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/name"
-                    app:layout_constraintBottom_toBottomOf="@id/name"
-                    android:layout_marginEnd="32dp"
+                    android:layout_margin="32dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@{String.format(@string/box_number_placeholder, boxNumber)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textStyle="bold"
-                    tools:text="# 17"
-                    android:text="@{String.format(@string/placeholder_box_number, boxNum)}"/>
+                    app:layout_constraintBottom_toBottomOf="@id/label_section"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/label_section"
+                    tools:text="Box 16" />
 
                 <EditText
-                    android:id="@+id/name_edit_text"
+                    android:id="@+id/name_input_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
                     android:layout_marginEnd="28dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="32dp"
                     android:hint="@string/hint_name"
                     android:inputType="textCapWords"
                     android:textColor="@color/iconAndTextColor"
-                    android:textColorHint="@color/text_color_secondary_view_holder"
+                    android:textColorHint="@color/top_row_view_holder"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/name"
+                    app:layout_constraintTop_toBottomOf="@id/label_section"
                     tools:ignore="Autofill" />
 
-                <TextView
-                    android:id="@+id/description_heading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/description_heading"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/name_edit_text" />
-
                 <EditText
-                    android:id="@+id/description_edit_text"
+                    android:id="@+id/description_input_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="28dp"
                     android:hint="@string/hint_description"
-                    android:inputType="textCapSentences"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:textColor="@color/iconAndTextColor"
-                    android:textColorHint="@color/text_color_secondary_view_holder"
+                    android:textColorHint="@color/top_row_view_holder"
                     android:textSize="16sp"
+                    android:maxEms="250"
+                    android:maxLength="250"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/description_heading"
+                    app:layout_constraintTop_toBottomOf="@id/name_input_field"
                     tools:ignore="Autofill" />
 
+
+                <LinearLayout
+                    android:id="@+id/char_counter"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/description_input_field"
+                    app:layout_constraintTop_toBottomOf="@id/description_input_field">
+
+                    <TextView
+                        android:id="@+id/char_count"
+                        android:text="@string/char_count_default"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:id="@+id/char_limit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        android:text="@string/char_limit"/>
+
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/high_priority_switch_title"
+                    android:id="@+id/add_to_move_heading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginTop="48dp"
-                    android:text="@string/priority_switch_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/add_to_move_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/description_edit_text" />
+                    app:layout_constraintTop_toBottomOf="@id/char_counter" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/priority_switch"
-                    android:layout_width="wrap_content"
+                <HorizontalScrollView
+                    android:id="@+id/add_to_move_chip_group_container"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="24dp"
-                    android:checked="false"
-                    app:layout_constraintBottom_toBottomOf="@id/high_priority_switch_title"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="36dp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/high_priority_switch_title" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/add_to_move_heading">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/add_to_move_chip_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/new_move_chip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:chipStartPadding="8dp"
+                            app:chipEndPadding="8dp"
+                            app:chipIcon="@drawable/ic_add_default"
+                            app:chipIconTint="@color/iconAndTextColor"
+                            app:chipIconSize="20dp"
+                            android:text="@string/new_chip" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
 
                 <TextView
-                    android:id="@+id/contents_heading"
+                    android:id="@+id/contents_section"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="48dp"
-                    android:text="@string/contents_heading"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/colorAccent"
-                    android:textStyle="bold"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/contents_section_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/high_priority_switch_title" />
+                    app:layout_constraintTop_toBottomOf="@id/add_to_move_chip_group_container" />
 
                 <TextView
-                    android:id="@+id/num_items"
+                    android:id="@+id/contents_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="32dp"
+                    android:layout_margin="32dp"
                     android:text="@{numberOfItems}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_color_secondary_view_holder"
-                    app:layout_constraintBottom_toBottomOf="@id/contents_heading"
+                    android:alpha="0.7"
+                    app:layout_constraintBottom_toBottomOf="@id/contents_section"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/contents_heading"
-                    tools:text="None" />
+                    app:layout_constraintTop_toTopOf="@id/contents_section"
+                    tools:text="Empty" />
+
+                <RelativeLayout
+                    android:id="@+id/placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/contents_section"
+                    android:layout_marginBottom="96dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@drawable/background_add_items">
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:foregroundGravity="center"
+                        android:layout_centerInParent="true">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:gravity="center_vertical"
+                            android:paddingStart="32dp"
+                            android:text="@string/add_contents_instructions"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_smartphone_box"
+                            android:paddingTop="32dp"
+                            android:paddingBottom="32dp"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="32dp"
                     android:overScrollMode="never"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/contents_heading" />
+                    app:layout_constraintTop_toBottomOf="@id/contents_section"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_bias="0"
+                    android:layout_marginBottom="96dp"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fill_box_fab"
-            android:layout_width="wrap_content"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/detail_bnv"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:layout_margin="16dp"
-            app:icon="@drawable/ic_fill"
-            app:iconTint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:text="@string/fab_fill_box"
-            android:backgroundTint="@color/colorAccent"/>
+            android:layout_gravity="bottom"
+            android:background="@color/background_window"
+            android:elevation="5dp"
+            android:padding="16dp"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <!--<com.google.android.material.card.MaterialCardView-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="?attr/actionBarSize"-->
+                    <!--android:layout_marginEnd="16dp"-->
+                    <!--android:layout_weight="0.3"-->
+                    <!--app:cardBackgroundColor="@color/top_row_view_holder"-->
+                    <!--app:cardCornerRadius="5dp">-->
+
+                    <!--<ImageView-->
+                        <!--android:id="@+id/discard_button"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_gravity="center"-->
+                        <!--android:focusable="true"-->
+                        <!--android:padding="14dp"-->
+                        <!--android:src="@drawable/ic_delete" />-->
+
+                <!--</com.google.android.material.card.MaterialCardView>-->
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/save_button"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_weight="0.7"
+                    app:cardBackgroundColor="@color/colorAccent"
+                    app:cardCornerRadius="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/save_box"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                        android:textColor="@android:color/white" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

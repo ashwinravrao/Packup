@@ -4,15 +4,15 @@
     <string name="toolbar_title_list">Home</string>
     <string name="placeholder_box_number"># %d</string>
     <string name="toolbar_done">Done</string>
-    <string name="hint_name">Short name</string>
-    <string name="hint_description">Short description</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_description">Description</string>
     <string name="priority_switch_title">Priority unpacking</string>
     <string name="dialog_discard_box_title">Discard current box</string>
     <string name="dialog_discard_box_message">Are you sure you want to leave? Your current box will be discarded. You cannot undo this action.</string>
     <string name="dialog_empty_box_title">Empty box</string>
     <string name="dialog_empty_box_message">This box is empty. Consider adding at least one item before saving.</string>
     <string name="item_name_hint">Item name</string>
-    <string name="num_items_default">None</string>
+    <string name="num_items_default">Empty</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
@@ -37,4 +37,17 @@
     <string name="menu_item_priority">Priority</string>
     <string name="menu_item_boxes">Boxes</string>
     <string name="menu_item_home">Home</string>
+    <string name="save">Save</string>
+    <string name="save_box">Save Box</string>
+    <string name="about_section_title">About</string>
+    <string name="box_number_placeholder">Box %d</string>
+    <string name="helper_text_required">Required</string>
+    <string name="add_to_move_title">Add this box to one of your upcoming moves…</string>
+    <string name="new_chip">New Move</string>
+    <string name="contents_section_title">Contents</string>
+    <string name="char_limit">/ 250</string>
+    <string name="char_count_default">0</string>
+    <string name="contents_description">Each time you grab an item to pack, snap a photo first!</string>
+    <string name="add_contents_instructions">Snap a photo of each item as you place it in your physical box</string>
+    <string name="label_section_title">Label</string>
 </resources>

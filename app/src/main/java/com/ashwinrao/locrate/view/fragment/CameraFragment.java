@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -33,22 +32,13 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.ashwinrao.locrate.BuildConfig;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentCameraBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.activity.CameraActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.text.FirebaseVisionText;
-import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static android.content.Context.VIBRATOR_SERVICE;
@@ -60,21 +50,13 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private CardView shutterButton;
     private ArrayList<String> paths = new ArrayList<>();
 
-    private static final String CLOUD_VISION_KEY = BuildConfig.CV_Key;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 5;
     private static final String TAG = "CameraFragment";
-
-    private int useCase = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((CameraActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-
-        final Bundle args = getArguments();
-        if (args != null) {
-            useCase = args.getInt("useCase");
-        }
     }
 
     @Nullable
@@ -170,43 +152,10 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                         ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(50);
                     }
 
-                    if(useCase == 1) {
-                        try {
-                            final FirebaseVisionImage image = FirebaseVisionImage.fromFilePath(getContext(), Uri.fromFile(file));
-                            final FirebaseVisionTextRecognizer recognizer = FirebaseVision.getInstance().getOnDeviceTextRecognizer();
-                            recognizer.processImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
-                                @Override
-                                public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                    final List<FirebaseVisionText.TextBlock> blocks = firebaseVisionText.getTextBlocks();
-                                    if(blocks.size() == 0) {
-                                        Toast.makeText(getContext(), "No text found", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    for(int i = 0; i < blocks.size(); i++) {
-                                        final List<FirebaseVisionText.Line> lines = blocks.get(i).getLines();
-                                        for(int j = 0; j < lines.size(); j++) {
-                                            final List<FirebaseVisionText.Element> elements = lines.get(j).getElements();
-                                            for(int k = 0; k < elements.size(); k++) {
-                                                Toast.makeText(getContext(), elements.get(k).getText(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    }
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                        } catch (IOException e) {
-                            Log.e(TAG, "onImageSaved: " + e.getMessage());
-                        }
-                    } else {
-                        // Notify user of saved image
-                        Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
-                        toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
-                        toast.show();
-                    }
+                    // Notify user of saved image
+                    Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
+                    toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
+                    toast.show();
 
                 }
 

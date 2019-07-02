@@ -6,6 +6,6 @@
         android:id="@+id/toolbar_done"
         android:title="@string/toolbar_done"
         android:icon="@drawable/ic_done"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
 
 </menu>

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ashwinrao.locrate.Locrate;
@@ -25,13 +26,16 @@ import com.ashwinrao.locrate.view.activity.CameraActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SwitchCompat;
@@ -85,39 +89,76 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         binding = FragmentAddBinding.inflate(inflater);
 
         // data binding
-        binding.setBoxNum(getBoxNumber());
+        binding.setBoxNumber(getBoxNumber());
         binding.setNumberOfItems(getString(R.string.num_items_default));
 
         // widgets
         setupToolbar(binding.toolbar);
-        setupNameField(binding.nameEditText);
-        setupDescriptionField(binding.descriptionEditText);
+        setupNameField(binding.nameInputField);
+        setupDescriptionField(binding.descriptionInputField);
         setupRecyclerView(binding.recyclerView);
-        setupPrioritySwitch(binding.prioritySwitch);
-        setupFillBoxFab(binding.fillBoxFab);
-        setupNestedScrollFabInteraction(binding.nestedScrollView, binding.fillBoxFab);
+        setupSaveButton(binding.saveButton);
+//        setupDiscardButton(binding.discardButton);
+//        setupPrioritySwitch(binding.prioritySwitch);
+//        setupFillBoxFab(binding.fillBoxFab);
+        setupEmptyListPlaceholder(binding.placeholder);
+//        setupNestedScrollFabInteraction(binding.nestedScrollView, binding.fillBoxFab);
 
         return binding.getRoot();
     }
 
-    private void setupNestedScrollFabInteraction(NestedScrollView nestedScrollView, ExtendedFloatingActionButton fillBoxFab) {
-        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-            if (scrollY > oldScrollY && fillBoxFab.getVisibility() == View.VISIBLE) {
-                fillBoxFab.hide();
+    private void setupSaveButton(MaterialCardView saveButton) {
+        saveButton.setOnClickListener(view -> {
+            if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
+                showEmptyBoxDialog();
+            } else {
+                if (viewModel.saveBox()) {
+                    saveBoxNumber();
+                    Objects.requireNonNull(getActivity()).finish();
+                } else {
+                    Objects.requireNonNull(binding.nameInputField).setError(getResources().getString(R.string.name_field_error_message));
+                    binding.nameInputField.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            binding.nameInputField.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+                }
             }
-            if (scrollY < oldScrollY && fillBoxFab.getVisibility() != View.VISIBLE) {
-                fillBoxFab.show();
-            }
+
         });
     }
 
-    private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
-        fab.setOnClickListener(view -> startCamera());
+//    private void setupNestedScrollFabInteraction(NestedScrollView nestedScrollView, ExtendedFloatingActionButton fillBoxFab) {
+//        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
+//            if (scrollY > oldScrollY && fillBoxFab.getVisibility() == View.VISIBLE) {
+//                fillBoxFab.hide();
+//            }
+//            if (scrollY < oldScrollY && fillBoxFab.getVisibility() != View.VISIBLE) {
+//                fillBoxFab.show();
+//            }
+//        });
+//    }
+
+    private void setupEmptyListPlaceholder(RelativeLayout relativeLayout) {
+        relativeLayout.setOnClickListener(view -> startCamera());
     }
 
-    private void setupPrioritySwitch(SwitchCompat unpackSwitch) {
-        unpackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.getBox().setPriority(isChecked));
-    }
+//    private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
+//        fab.setOnClickListener(view -> startCamera());
+//    }
+//
+//    private void setupPrioritySwitch(SwitchCompat unpackSwitch) {
+//        unpackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.getBox().setPriority(isChecked));
+//    }
 
     private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
         return activity.getPreferences(Context.MODE_PRIVATE);
@@ -147,14 +188,15 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         recyclerView.setAdapter(adapter);
     }
 
-    private void setupDescriptionField(EditText editText) {
-        editText.addTextChangedListener(new TextWatcher() {
+    private void setupDescriptionField(@NonNull EditText editText) {
+        Objects.requireNonNull(editText).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.charCount.setText(String.valueOf(s.length()));
             }
 
             @Override
@@ -165,8 +207,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         });
     }
 
-    private void setupNameField(EditText editText) {
-        editText.addTextChangedListener(new TextWatcher() {
+    private void setupNameField(@NonNull EditText editText) {
+        Objects.requireNonNull(editText).addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -184,8 +226,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     }
 
     private void setupToolbar(Toolbar toolbar) {
-        toolbar.inflateMenu(R.menu.toolbar_add);
         toolbar.setOnMenuItemClickListener(this);
+        toolbar.setOverflowIcon(Objects.requireNonNull(getActivity()).getResources().getDrawable(R.drawable.ic_overflow_light, getActivity().getTheme()));
         toolbar.setNavigationOnClickListener(v -> {
             closeWithConfirmation();
         });
@@ -203,15 +245,15 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                     Objects.requireNonNull(getActivity()).finish();
                     return true;
                 } else {
-                    binding.nameEditText.setError(getResources().getString(R.string.name_field_error_message));
-                    binding.nameEditText.addTextChangedListener(new TextWatcher() {
+                    Objects.requireNonNull(binding.nameInputField).setError(getResources().getString(R.string.name_field_error_message));
+                    binding.nameInputField.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                         }
 
                         @Override
                         public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            binding.nameEditText.setError(null);
+                            binding.nameInputField.setError(null);
                         }
 
                         @Override
@@ -257,26 +299,17 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             compoundedItems.addAll(photoViewModel.getPaths());
         }
         if (compoundedItems.size() > 0) {
+            binding.placeholder.setVisibility(View.GONE);
             adapter.setPaths(compoundedItems);
             recyclerView.setAdapter(adapter);
             viewModel.getBox().setContents(compoundedItems);
             binding.setNumberOfItems(viewModel.getBox().getNumItems());
-//            togglePhotoDependentViewVisibilities(new TextView[]{binding.contentsHeading, binding.numItems});
-        }
-    }
-
-    private void togglePhotoDependentViewVisibilities(TextView[] textViews) {
-        for (TextView textView : textViews) {
-            if (textView.getVisibility() == View.GONE || textView.getVisibility() == View.INVISIBLE) {
-                textView.setVisibility(View.VISIBLE);
-            }
         }
     }
 
     @Override
     public void startCamera() {
         Intent intent = new Intent(getActivity(), CameraActivity.class);
-        intent.putExtra("useCase", 1);
         photoViewModel.clearPaths();
         startActivityForResult(intent, 1);
     }

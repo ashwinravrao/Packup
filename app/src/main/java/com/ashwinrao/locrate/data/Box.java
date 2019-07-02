@@ -62,7 +62,7 @@ public class Box {
     public void setContents(List<String> contents) {
         this.contents = contents;
         if(this.contents.size() == 0) {
-            setNumItems("Nothing");
+            setNumItems("Empty");
         } else if(this.contents.size() == 1) {
             setNumItems("1 item");
         } else {
