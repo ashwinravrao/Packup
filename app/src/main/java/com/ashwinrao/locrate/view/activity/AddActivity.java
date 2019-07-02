@@ -11,6 +11,9 @@ import androidx.fragment.app.Fragment;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.fragment.AddFragment;
+import com.ashwinrao.locrate.view.fragment.ListFragment;
+
+import java.util.Objects;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -26,7 +29,7 @@ public class AddActivity extends AppCompatActivity {
         if (fragment == null) {
             fragment = new AddFragment();
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment, "AddFragment").commit();
     }
 
     public void registerBackNavigationListener(@NonNull BackNavCallback listener) {
@@ -39,11 +42,9 @@ public class AddActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getFragments().get(0).getClass() == AddFragment.class) {
-            Log.d(TAG, "onBackPressed: Top fragment is AddFragment");
-            if (listener != null) {
-                listener.onBackPressed();
-            }
+        final Fragment addFragment = getSupportFragmentManager().findFragmentByTag("AddFragment");
+        if(addFragment != null && addFragment.isVisible()) {
+            if(listener != null) listener.onBackPressed();
         } else {
             super.onBackPressed();
         }

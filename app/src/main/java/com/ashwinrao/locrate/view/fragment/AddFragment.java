@@ -270,6 +270,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         }
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     private void showUnsavedChangesDialog() {
         ConfirmationDialog.make(getContext(), new String[]{
                 getString(R.string.dialog_discard_box_title),
