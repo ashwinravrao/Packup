@@ -98,11 +98,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         setupDescriptionField(binding.descriptionInputField);
         setupRecyclerView(binding.recyclerView);
         setupSaveButton(binding.saveButton);
-//        setupDiscardButton(binding.discardButton);
-//        setupPrioritySwitch(binding.prioritySwitch);
-//        setupFillBoxFab(binding.fillBoxFab);
         setupEmptyListPlaceholder(binding.placeholder);
-//        setupNestedScrollFabInteraction(binding.nestedScrollView, binding.fillBoxFab);
 
         return binding.getRoot();
     }
@@ -137,28 +133,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         });
     }
 
-//    private void setupNestedScrollFabInteraction(NestedScrollView nestedScrollView, ExtendedFloatingActionButton fillBoxFab) {
-//        nestedScrollView.setOnScrollChangeListener((NestedScrollView.OnScrollChangeListener) (v, scrollX, scrollY, oldScrollX, oldScrollY) -> {
-//            if (scrollY > oldScrollY && fillBoxFab.getVisibility() == View.VISIBLE) {
-//                fillBoxFab.hide();
-//            }
-//            if (scrollY < oldScrollY && fillBoxFab.getVisibility() != View.VISIBLE) {
-//                fillBoxFab.show();
-//            }
-//        });
-//    }
-
     private void setupEmptyListPlaceholder(RelativeLayout relativeLayout) {
         relativeLayout.setOnClickListener(view -> startCamera());
     }
-
-//    private void setupFillBoxFab(ExtendedFloatingActionButton fab) {
-//        fab.setOnClickListener(view -> startCamera());
-//    }
-//
-//    private void setupPrioritySwitch(SwitchCompat unpackSwitch) {
-//        unpackSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> viewModel.getBox().setPriority(isChecked));
-//    }
 
     private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
         return activity.getPreferences(Context.MODE_PRIVATE);
@@ -235,35 +212,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.toolbar_done) {
-            if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
-                showEmptyBoxDialog();
-                return true;
-            } else {
-                if (viewModel.saveBox()) {
-                    saveBoxNumber();
-                    Objects.requireNonNull(getActivity()).finish();
-                    return true;
-                } else {
-                    Objects.requireNonNull(binding.nameInputField).setError(getResources().getString(R.string.name_field_error_message));
-                    binding.nameInputField.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            binding.nameInputField.setError(null);
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-                    return true;
-                }
-            }
-        }
         return false;
     }
 
