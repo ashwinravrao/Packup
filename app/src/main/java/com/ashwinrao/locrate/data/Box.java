@@ -25,7 +25,7 @@ public class Box {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private String id;
+    private String id = "";
 
     @ColumnInfo(name = "move_id")
     private String moveId;
@@ -52,7 +52,6 @@ public class Box {
         this.createdDate = new Date();
     }
 
-    @NonNull
     public String getMoveId() {
         return moveId;
     }
@@ -61,7 +60,7 @@ public class Box {
         this.moveId = moveId;
     }
 
-    public void setId(String id) {
+    public void setId(@NonNull String id) {
         this.id = id;
     }
 
@@ -96,6 +95,7 @@ public class Box {
         this.priority = priority;
     }
 
+    @NonNull
     public String getId() {
         return id;
     }
