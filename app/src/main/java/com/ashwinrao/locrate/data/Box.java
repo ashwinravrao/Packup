@@ -4,18 +4,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Fts4;
+import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Fts4
-@Entity(tableName = "boxes")
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(tableName = "boxes", indices = @Index("id"),
+        foreignKeys = @ForeignKey(entity = Move.class,
+                parentColumns = "id",
+                childColumns = "move_id",
+                onDelete = CASCADE,
+                onUpdate = CASCADE))
+
 public class Box {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "rowid")
-    private int id;
+    @NonNull
+    @PrimaryKey
+    @ColumnInfo(name = "id")
+    private String id;
+
+    @ColumnInfo(name = "move_id")
+    private String moveId;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -39,7 +52,16 @@ public class Box {
         this.createdDate = new Date();
     }
 
-    public void setId(int id) {
+    @NonNull
+    public String getMoveId() {
+        return moveId;
+    }
+
+    public void setMoveId(@NonNull String moveId) {
+        this.moveId = moveId;
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -74,7 +96,7 @@ public class Box {
         this.priority = priority;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

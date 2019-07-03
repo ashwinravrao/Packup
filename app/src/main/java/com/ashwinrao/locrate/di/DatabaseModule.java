@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
 import com.ashwinrao.locrate.data.BoxDao;
-import com.ashwinrao.locrate.data.BoxDatabase;
+import com.ashwinrao.locrate.data.AppDatabase;
 import com.ashwinrao.locrate.data.BoxRepository;
+import com.ashwinrao.locrate.data.MoveDao;
+import com.ashwinrao.locrate.data.MoveRepository;
 import com.ashwinrao.locrate.viewmodel.ViewModelFactory;
 
 import javax.inject.Singleton;
@@ -18,32 +20,43 @@ import dagger.Provides;
 @Module
 public class DatabaseModule {
 
-    private final BoxDatabase database;
+    private final AppDatabase database;
 
     public DatabaseModule(Application application) {
         this.database =
                 Room.databaseBuilder(application.getApplicationContext(),
-                        BoxDatabase.class,
-                        "Boxes.db")
+                        AppDatabase.class,
+                        "Locrate.db")
                         .fallbackToDestructiveMigration()
                         .build();
     }
 
     @Provides
     @Singleton
-    BoxRepository provideRepository() {
+    BoxRepository provideBoxRepository() {
         return new BoxRepository(database);
     }
 
     @Provides
     @Singleton
-    BoxDatabase provideDatabase() {
+    MoveRepository provideMoveRepository() {
+        return new MoveRepository(database);
+    }
+
+    @Provides
+    @Singleton
+    AppDatabase provideDatabase() {
         return database;
     }
 
     @Provides
-    BoxDao provideDao() {
-        return database.dao();
+    BoxDao provideBoxDao() {
+        return database.boxDao();
+    }
+
+    @Provides
+    MoveDao provideMoveDao() {
+        return database.moveDao();
     }
 
     @Provides

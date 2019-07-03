@@ -4,10 +4,10 @@
     <data>
 
         <variable
-            name="username"
+            name="appUserName"
             type="String"/>
         <variable
-            name="userEmail"
+            name="appUserEmail"
             type="String" />
 
     </data>
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@{username}"
+            android:text="@{appUserName}"
             tools:text="John Smith"
             android:textColor="@color/iconAndTextColor"
             android:textSize="18sp"
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="@{userEmail}"
+            android:text="@{appUserEmail}"
             tools:text="johnsmith@gmail.com"
             android:textColor="@color/text_color_secondary_view_holder"
             app:layout_constraintStart_toStartOf="@+id/username"

@@ -25,7 +25,7 @@ public class BoxViewModel extends ViewModel {
         return this.box;
     }
 
-    public LiveData<Box> getBoxByID(int id) {
+    public LiveData<Box> getBoxByID(String id) {
         return repo.getBoxByID(id);
     }
 
@@ -35,7 +35,7 @@ public class BoxViewModel extends ViewModel {
 
     public boolean saveBox() {
         if(new BoxValidator(this.box).validate()) {
-            repo.saveBox(this.box);
+            repo.insert(this.box);
             return true;
         } else {
             return false;
@@ -57,7 +57,7 @@ public class BoxViewModel extends ViewModel {
     }
 
     public void save(Box box) {
-        repo.saveBox(box);
+        repo.insert(box);
     }
 
     public void delete(Box box) {

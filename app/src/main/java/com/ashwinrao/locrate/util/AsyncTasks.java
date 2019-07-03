@@ -4,29 +4,44 @@ import android.os.AsyncTask;
 
 import com.ashwinrao.locrate.data.Box;
 import com.ashwinrao.locrate.data.BoxDao;
+import com.ashwinrao.locrate.data.Move;
+import com.ashwinrao.locrate.data.MoveDao;
 
 import java.util.List;
 
 public class AsyncTasks {
 
-    public static class Insert extends AsyncTask<Box, Void, Void> {
+    public static class InsertBox extends AsyncTask<Box, Void, Void> {
 
         private BoxDao dao;
 
-        public Insert(BoxDao dao) { this.dao = dao; }
+        public InsertBox(BoxDao dao) { this.dao = dao; }
 
         @Override
         protected Void doInBackground(Box... boxes) {
-            dao.save(boxes[0]);
+            dao.insert(boxes[0]);
             return null;
         }
     }
 
-    public static class Delete extends AsyncTask<Box, Void, Void> {
+    public static class UpdateBox extends AsyncTask<Box, Void, Void> {
 
         private BoxDao dao;
 
-        public Delete(BoxDao dao) { this.dao = dao; }
+        public UpdateBox(BoxDao dao) { this.dao = dao; }
+
+        @Override
+        protected Void doInBackground(Box... boxes) {
+            dao.update(boxes[0]);
+            return null;
+        }
+    }
+
+    public static class DeleteBox extends AsyncTask<Box, Void, Void> {
+
+        private BoxDao dao;
+
+        public DeleteBox(BoxDao dao) { this.dao = dao; }
 
         @Override
         protected Void doInBackground(Box... boxes) {
@@ -35,15 +50,42 @@ public class AsyncTasks {
         }
     }
 
-    public static class ListBoxes extends AsyncTask<Void, Void, List<Box>> {
+    public static class InsertMove extends AsyncTask<Move, Void, Void> {
 
-        private BoxDao dao;
+        private MoveDao dao;
 
-        public ListBoxes(BoxDao dao) { this.dao = dao; }
+        public InsertMove(MoveDao dao) { this.dao = dao; }
 
         @Override
-        protected List<Box> doInBackground(Void... voids) {
-            return dao.listBoxes();
+        protected Void doInBackground(Move... moves) {
+            dao.insert(moves[0]);
+            return null;
+        }
+    }
+
+    public static class UpdateMove extends AsyncTask<Move, Void, Void> {
+
+        private MoveDao dao;
+
+        public UpdateMove(MoveDao dao) { this.dao = dao; }
+
+        @Override
+        protected Void doInBackground(Move... moves) {
+            dao.update(moves[0]);
+            return null;
+        }
+    }
+
+    public static class DeleteMove extends AsyncTask<Move, Void, Void> {
+
+        private MoveDao dao;
+
+        public DeleteMove(MoveDao dao) { this.dao = dao; }
+
+        @Override
+        protected Void doInBackground(Move... moves) {
+            dao.delete(moves[0]);
+            return null;
         }
     }
 

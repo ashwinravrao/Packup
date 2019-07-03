@@ -41,7 +41,6 @@ public class ThumbnailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void setPaths(List<String> paths) {
-
         if (this.paths.size() > 0) {
             this.paths.remove(this.paths.size() - 1);
         }

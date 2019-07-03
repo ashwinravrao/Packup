@@ -89,7 +89,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         binding = FragmentAddBinding.inflate(inflater);
 
         // data binding
-        binding.setBoxNumber(getBoxNumber());
+        binding.setBoxId(getBoxNumber());
         binding.setNumberOfItems(getString(R.string.num_items_default));
 
         // widgets
@@ -143,6 +143,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     private int getBoxNumber() {
         // Retrieve next available id
+        int lastUsed = getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
+        viewModel.getBox().setId(String.valueOf(lastUsed + 1));
         return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
     }
 

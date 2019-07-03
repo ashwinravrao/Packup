@@ -29,8 +29,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Na
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentBottomSheetBinding binding = FragmentBottomSheetBinding.inflate(inflater);
         binding.navigationView.setNavigationItemSelectedListener(this);
-        binding.setUsername(getUserDetails()[0]);
-        binding.setUserEmail(getUserDetails()[1]);
+        binding.setAppUserName(getUserDetails()[0]);
+        binding.setAppUserEmail(getUserDetails()[1]);
         return binding.getRoot();
     }
 

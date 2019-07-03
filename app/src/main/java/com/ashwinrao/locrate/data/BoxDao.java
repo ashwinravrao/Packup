@@ -3,65 +3,66 @@ package com.ashwinrao.locrate.data;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
+
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface BoxDao {
 
     /**
-     * @return A collection of all boxes from {@link BoxDatabase}.
+     * @return An observable collection of all boxes from {@link AppDatabase}.
      */
 
-    @Query("SELECT *, `rowid` FROM boxes ORDER BY created DESC")
-    List<Box> listBoxes();
-
-    @Query("SELECT contents FROM boxes ORDER BY created DESC")
-    LiveData<List<String>> getAllContents();
-
-    /**
-     * @return An observable collection of all boxes from {@link BoxDatabase}.
-     */
-
-    @Query("SELECT *, `rowid` FROM boxes ORDER BY created DESC")
+    @Query("SELECT * FROM boxes ORDER BY created DESC")
     LiveData<List<Box>> getBoxes();
 
 
     /**
-     * @return An observable box (with specified name field) from {@link BoxDatabase}.
+     * @param moveId The id representing the parent move column
+     * @return an observable collection of boxes that belong to the specified move
      */
 
-    @Query("SELECT *, `rowid` FROM boxes WHERE name = :name")
+    @Query("select * from boxes where move_id = :moveId order by created desc")
+    LiveData<List<Box>> getBoxesByMove(int moveId);
+
+
+    /**
+     * @return An observable box (with specified name field) from {@link AppDatabase}.
+     */
+
+    @Query("SELECT * FROM boxes WHERE name = :name")
     LiveData<Box> getBoxByName(String name);
 
 
     /**
-     * @return An observable box (with specified id field) from {@link BoxDatabase}.
+     * @return An observable box (with specified id field) from {@link AppDatabase}.
      */
 
-    @Query("SELECT *, `rowid` FROM boxes WHERE rowid = :id")
-    LiveData<Box> getBoxById(int id);
-
+    @Query("SELECT * FROM boxes WHERE id = :id")
+    LiveData<Box> getBoxById(String id);
 
     /**
-     * Insert/save a box to the {@link BoxDatabase}.
+     * InsertBox/save a box to the {@link AppDatabase}.
      *
      * Overwrites boxes that have the same primary key.
      */
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void save(Box box);
+    @Insert(onConflict = REPLACE)
+    void insert(Box...boxes);
 
+    @Update(onConflict = REPLACE)
+    void update(Box...boxes);
 
     /**
-     * Delete a box from {@link BoxDatabase}.
+     * DeleteBox a box from {@link AppDatabase}.
      */
 
     @Delete
-    void delete(Box box);
-
+    void delete(Box...boxes);
 }

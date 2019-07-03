@@ -2,7 +2,7 @@
     <string name="app_name">Locrate</string>
     <string name="title_search">Search</string>
     <string name="toolbar_title_list">Home</string>
-    <string name="placeholder_box_number"># %d</string>
+    <string name="placeholder_box_number"># %s</string>
     <string name="toolbar_done">Done</string>
     <string name="hint_name">Name</string>
     <string name="hint_description">Description</string>

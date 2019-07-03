@@ -97,7 +97,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         @Override
         public void onClick(View v) {
             Bundle bundle = new Bundle();
-            bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
+            bundle.putString("ID", boxes.get(getAdapterPosition()).getId());
             DetailFragment detail = new DetailFragment();
             detail.setArguments(bundle);
 
