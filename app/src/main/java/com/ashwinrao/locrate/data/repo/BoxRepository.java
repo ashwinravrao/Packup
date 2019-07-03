@@ -1,6 +1,9 @@
-package com.ashwinrao.locrate.data;
+package com.ashwinrao.locrate.data.repo;
 
-import com.ashwinrao.locrate.util.AsyncTasks;
+import com.ashwinrao.locrate.data.AppDatabase;
+import com.ashwinrao.locrate.data.repo.dao.BoxDao;
+import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.AsyncTasks;
 
 import java.util.List;
 

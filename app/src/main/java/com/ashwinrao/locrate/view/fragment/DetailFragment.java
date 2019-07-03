@@ -12,9 +12,9 @@ import android.widget.ImageView;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.data.Box;
+import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentDetailBinding;
-import com.ashwinrao.locrate.util.ConfirmationDialog;
+import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
@@ -76,9 +76,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private void setupToolbar(Toolbar toolbar) {
         toolbar.inflateMenu(R.menu.toolbar_detail);
         toolbar.setOnMenuItemClickListener(this);
-        toolbar.setNavigationOnClickListener(view -> {
-            Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-        });
+        toolbar.setNavigationOnClickListener(view -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
     }
 
     private void setupRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.ashwinrao.locrate.data.BoxRepository;
+import com.ashwinrao.locrate.data.repo.BoxRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

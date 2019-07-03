@@ -9,7 +9,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.data.Box;
+import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
 import com.ashwinrao.locrate.util.PropertiesFilter;
 import com.ashwinrao.locrate.view.fragment.DetailFragment;
@@ -49,7 +49,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         final Box box = boxes.get(position);
         holder.binding.setBox(box);
-        if(box.isPriority()) { holder.binding.timer.setVisibility(View.VISIBLE); }
     }
 
     @Override
@@ -88,7 +87,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
         private ViewholderBoxBinding binding;
 
-        public BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
+        private BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);

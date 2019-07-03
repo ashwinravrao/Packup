@@ -7,7 +7,7 @@
 
         <variable
             name="box"
-            type="com.ashwinrao.locrate.data.Box" />
+            type="com.ashwinrao.locrate.data.model.Box" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -94,12 +94,14 @@
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_note" />
+                            android:src="@drawable/ic_note"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:id="@+id/description"
@@ -120,13 +122,15 @@
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/description_card">
+                        app:layout_constraintTop_toBottomOf="@id/description_card"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:id="@+id/priority_icon"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_alarm" />
+                            android:src="@drawable/ic_alarm"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:id="@+id/priority_text"

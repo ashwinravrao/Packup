@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.data;
+package com.ashwinrao.locrate.data.model;
 
 import java.util.Date;
 import java.util.List;
@@ -45,9 +45,6 @@ public class Box {
     @ColumnInfo(name = "numItems")
     private String numItems;
 
-    @ColumnInfo(name = "priority")
-    private boolean priority;
-
     public Box() {
         this.createdDate = new Date();
     }
@@ -91,10 +88,6 @@ public class Box {
         }
     }
 
-    public void setPriority(boolean priority) {
-        this.priority = priority;
-    }
-
     @NonNull
     public String getId() {
         return id;
@@ -118,9 +111,5 @@ public class Box {
 
     public String getNumItems() {
         return this.numItems == null ? "Empty box" : this.numItems;
-    }
-
-    public boolean isPriority() {
-        return priority;
     }
 }

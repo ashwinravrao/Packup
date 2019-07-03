@@ -1,13 +1,11 @@
-package com.ashwinrao.locrate.util;
+package com.ashwinrao.locrate.data;
 
 import android.os.AsyncTask;
 
-import com.ashwinrao.locrate.data.Box;
-import com.ashwinrao.locrate.data.BoxDao;
-import com.ashwinrao.locrate.data.Move;
-import com.ashwinrao.locrate.data.MoveDao;
-
-import java.util.List;
+import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.repo.dao.BoxDao;
+import com.ashwinrao.locrate.data.model.Move;
+import com.ashwinrao.locrate.data.repo.dao.MoveDao;
 
 public class AsyncTasks {
 

@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.data;
+package com.ashwinrao.locrate.data.repo.dao;
 
 import java.util.List;
 
@@ -6,9 +6,11 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import com.ashwinrao.locrate.data.AppDatabase;
+import com.ashwinrao.locrate.data.model.Box;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 

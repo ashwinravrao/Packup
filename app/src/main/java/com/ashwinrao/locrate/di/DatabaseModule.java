@@ -5,11 +5,11 @@ import android.app.Application;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
-import com.ashwinrao.locrate.data.BoxDao;
+import com.ashwinrao.locrate.data.repo.dao.BoxDao;
 import com.ashwinrao.locrate.data.AppDatabase;
-import com.ashwinrao.locrate.data.BoxRepository;
-import com.ashwinrao.locrate.data.MoveDao;
-import com.ashwinrao.locrate.data.MoveRepository;
+import com.ashwinrao.locrate.data.repo.BoxRepository;
+import com.ashwinrao.locrate.data.repo.dao.MoveDao;
+import com.ashwinrao.locrate.data.repo.MoveRepository;
 import com.ashwinrao.locrate.viewmodel.ViewModelFactory;
 
 import javax.inject.Singleton;

@@ -1,9 +1,11 @@
-package com.ashwinrao.locrate.data;
+package com.ashwinrao.locrate.data.repo.dao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Update;
+
+import com.ashwinrao.locrate.data.model.Move;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 

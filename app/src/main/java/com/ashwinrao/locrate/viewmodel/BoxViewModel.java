@@ -1,7 +1,7 @@
 package com.ashwinrao.locrate.viewmodel;
 
-import com.ashwinrao.locrate.data.Box;
-import com.ashwinrao.locrate.data.BoxRepository;
+import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.repo.BoxRepository;
 import com.ashwinrao.locrate.util.BoxValidator;
 
 import java.util.ArrayList;

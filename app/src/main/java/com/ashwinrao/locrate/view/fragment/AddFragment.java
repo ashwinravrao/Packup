@@ -13,35 +13,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentAddBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.util.callback.CameraInitCallback;
-import com.ashwinrao.locrate.util.ConfirmationDialog;
+import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.CameraActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -207,9 +201,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     private void setupToolbar(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setOverflowIcon(Objects.requireNonNull(getActivity()).getResources().getDrawable(R.drawable.ic_overflow_light, getActivity().getTheme()));
-        toolbar.setNavigationOnClickListener(v -> {
-            closeWithConfirmation();
-        });
+        toolbar.setNavigationOnClickListener(v -> closeWithConfirmation());
     }
 
     @Override

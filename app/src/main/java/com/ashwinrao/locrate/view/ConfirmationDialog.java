@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.util;
+package com.ashwinrao.locrate.view;
 
 import android.content.Context;
 import android.content.DialogInterface;

@@ -1,6 +1,6 @@
 package com.ashwinrao.locrate;
 
-import com.ashwinrao.locrate.data.Box;
+import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.util.PropertiesFilter;
 
 import org.junit.After;
@@ -29,7 +29,7 @@ public class PropertiesFilterTest {
         expected = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Box box = new Box();
-            box.setId(i+1);
+            box.setId(String.valueOf(i+1));
             box.setName(names[i]);
             box.setDescription(descriptions[i]);
             boxes.add(box);

@@ -1,6 +1,9 @@
-package com.ashwinrao.locrate.data;
+package com.ashwinrao.locrate.data.repo;
 
-import com.ashwinrao.locrate.util.AsyncTasks;
+import com.ashwinrao.locrate.data.AppDatabase;
+import com.ashwinrao.locrate.data.repo.dao.MoveDao;
+import com.ashwinrao.locrate.data.model.Move;
+import com.ashwinrao.locrate.data.AsyncTasks;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

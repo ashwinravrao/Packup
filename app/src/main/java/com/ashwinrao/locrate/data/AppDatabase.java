@@ -4,7 +4,12 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Move.class, Box.class}, version = 4, exportSchema = false)
+import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.model.Move;
+import com.ashwinrao.locrate.data.repo.dao.BoxDao;
+import com.ashwinrao.locrate.data.repo.dao.MoveDao;
+
+@Database(entities = {Move.class, Box.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 

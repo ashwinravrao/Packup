@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.data;
+package com.ashwinrao.locrate.data.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

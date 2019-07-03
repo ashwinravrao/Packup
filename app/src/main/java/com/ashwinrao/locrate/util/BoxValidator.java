@@ -1,6 +1,6 @@
 package com.ashwinrao.locrate.util;
 
-import com.ashwinrao.locrate.data.Box;
+import com.ashwinrao.locrate.data.model.Box;
 
 public class BoxValidator {
 

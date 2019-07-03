@@ -1,6 +1,6 @@
 package com.ashwinrao.locrate.util;
 
-import com.ashwinrao.locrate.data.Box;
+import com.ashwinrao.locrate.data.model.Box;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +20,7 @@ public class PropertiesFilter {
         } else {
             final String constr = constraint.toString().toLowerCase();
             for (Box box : boxes) {
-                if ((onID && String.valueOf(box.getId()).toLowerCase().contains(constr))
+                if ((onID && box.getId().toLowerCase().contains(constr))
                         || (onName && box.getName().toLowerCase().contains(constr))
                         || (onDescription && box.getDescription().toLowerCase().contains(constr))) {
                     result.add(box);
