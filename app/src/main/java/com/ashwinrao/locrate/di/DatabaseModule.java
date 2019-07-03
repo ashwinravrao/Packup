@@ -5,9 +5,11 @@ import android.app.Application;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
+import com.ashwinrao.locrate.data.repo.ItemRepository;
 import com.ashwinrao.locrate.data.repo.dao.BoxDao;
 import com.ashwinrao.locrate.data.AppDatabase;
 import com.ashwinrao.locrate.data.repo.BoxRepository;
+import com.ashwinrao.locrate.data.repo.dao.ItemDao;
 import com.ashwinrao.locrate.data.repo.dao.MoveDao;
 import com.ashwinrao.locrate.data.repo.MoveRepository;
 import com.ashwinrao.locrate.viewmodel.ViewModelFactory;
@@ -45,6 +47,12 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
+    ItemRepository provideItemRepository() {
+        return new ItemRepository(database);
+    }
+
+    @Provides
+    @Singleton
     AppDatabase provideDatabase() {
         return database;
     }
@@ -57,6 +65,11 @@ public class DatabaseModule {
     @Provides
     MoveDao provideMoveDao() {
         return database.moveDao();
+    }
+
+    @Provides
+    ItemDao provideItemDao() {
+        return database.itemDao();
     }
 
     @Provides

@@ -56,10 +56,6 @@ public class BoxViewModel extends ViewModel {
         return box.getName() != null || !box.getDescription().equals("No description") || box.getContents() != null;
     }
 
-    public void save(Box box) {
-        repo.insert(box);
-    }
-
     public void delete(Box box) {
         repo.delete(box);
     }

@@ -3,8 +3,11 @@ package com.ashwinrao.locrate.data.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.UUID;
 
 
 @Entity(tableName = "moves", indices = @Index("id"))
@@ -13,7 +16,7 @@ public class Move {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private String id = "";
+    private String id = UUID.randomUUID().toString();
 
     @ColumnInfo(name = "origin")
     private String originLatLng;
@@ -30,6 +33,11 @@ public class Move {
 
     public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    @Ignore
+    public void setId(@NonNull UUID uuid) {
+        this.id = uuid.toString();
     }
 
     public String getOriginLatLng() {

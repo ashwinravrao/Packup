@@ -28,14 +28,14 @@ public class BoxRepository {
     public LiveData<Box> getBoxByID(String id) { return dao.getBoxById(id); }
 
     public void insert(Box... boxes) {
-        new AsyncTasks.InsertBox(dao).execute(boxes);
+        new AsyncTasks.BoxAsyncTask(dao, "insert").execute(boxes);
     }
 
     public void update(Box... boxes) {
-        new AsyncTasks.UpdateBox(dao).execute(boxes);
+        new AsyncTasks.BoxAsyncTask(dao, "update").execute(boxes);
     }
 
     public void delete(Box... boxes) {
-        new AsyncTasks.DeleteBox(dao).execute(boxes);
+        new AsyncTasks.BoxAsyncTask(dao, "delete").execute(boxes);
     }
 }

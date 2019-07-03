@@ -19,15 +19,15 @@ public class MoveRepository {
     }
 
     public void insert(Move... moves) {
-        new AsyncTasks.InsertMove(dao).execute(moves);
+        new AsyncTasks.MoveAsyncTask(dao, "insert").execute(moves);
     }
 
     public void update(Move... moves) {
-        new AsyncTasks.UpdateMove(dao).execute(moves);
+        new AsyncTasks.MoveAsyncTask(dao, "update").execute(moves);
     }
 
     public void delete(Move... moves) {
-        new AsyncTasks.DeleteMove(dao).execute(moves);
+        new AsyncTasks.MoveAsyncTask(dao, "delete").execute(moves);
     }
 
 }
