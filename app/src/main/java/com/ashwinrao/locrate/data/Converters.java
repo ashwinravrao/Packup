@@ -36,17 +36,4 @@ public class Converters {
         return new Gson().fromJson(list, listType);
     }
 
-    @TypeConverter
-    public static String latLngToString(LatLng latLng) {
-        return latLng.toString();
-    }
-
-    @TypeConverter
-    public static LatLng stringToLatLng(String latLng) {
-        Matcher m = Pattern.compile("\\((.*?)\\)").matcher(latLng);
-        String[] extr = new String[2];
-        if(m.find()) extr = m.group(1).split(",");
-        return new LatLng(Double.valueOf(extr[0]), Double.valueOf(extr[1]));
-    }
-
 }

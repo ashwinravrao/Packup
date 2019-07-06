@@ -15,13 +15,7 @@ import androidx.room.PrimaryKey;
 
 import static androidx.room.ForeignKey.CASCADE;
 
-@Entity(tableName = "boxes",
-        indices = @Index("id"),
-        foreignKeys = @ForeignKey(entity = Move.class,
-                parentColumns = "id",
-                childColumns = "move_id",
-                onDelete = CASCADE,
-                onUpdate = CASCADE))
+@Entity(tableName = "boxes", indices = @Index("id"))
 
 public class Box {
 
@@ -29,9 +23,6 @@ public class Box {
     @PrimaryKey
     @ColumnInfo(name = "id")
     private String id = UUID.randomUUID().toString();
-
-    @ColumnInfo(name = "move_id")
-    private String moveId;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -54,21 +45,7 @@ public class Box {
     @ColumnInfo(name = "is_full")
     private boolean isFull;
 
-    @ColumnInfo(name = "is_moved")
-    private boolean isMoved = false;
-
-    @ColumnInfo(name = "is_unpacked")
-    private boolean isUnpacked = false;
-
     public Box() { }
-
-    public String getMoveId() {
-        return moveId;
-    }
-
-    public void setMoveId(@NonNull String moveId) {
-        this.moveId = moveId;
-    }
 
     public void setId(@NonNull String id) {
         this.id = id;
@@ -110,14 +87,6 @@ public class Box {
         return isFull;
     }
 
-    public boolean isMoved() {
-        return isMoved;
-    }
-
-    public void setUnpacked(boolean unpacked) {
-        isUnpacked = unpacked;
-    }
-
     @NonNull
     public String getId() {
         return id;
@@ -145,14 +114,6 @@ public class Box {
 
     public void setFull(boolean full) {
         isFull = full;
-    }
-
-    public void setMoved(boolean moved) {
-        isMoved = moved;
-    }
-
-    public boolean isUnpacked() {
-        return isUnpacked;
     }
 
     public String getCategory() {

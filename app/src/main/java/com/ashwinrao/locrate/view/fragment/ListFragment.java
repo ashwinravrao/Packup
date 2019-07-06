@@ -21,7 +21,6 @@ import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;
 import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
 import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
-import com.ashwinrao.locrate.view.pages.ListMovesPageFragment;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -41,7 +40,7 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 
-public class ListFragment extends Fragment implements BackNavCallback, OnScrollCallback {
+public class ListFragment extends Fragment implements BackNavCallback {
 
     private ExtendedFloatingActionButton fab;
 
@@ -84,36 +83,15 @@ public class ListFragment extends Fragment implements BackNavCallback, OnScrollC
             startActivity(intent);
             v.setEnabled(false);
         });
-        fab.hide();
     }
 
     private void setupTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
-        final ListMovesPageFragment movesPage = new ListMovesPageFragment();
         final ListBoxesPageFragment boxesPage = new ListBoxesPageFragment();
         final ListItemsPageFragment itemsPage = new ListItemsPageFragment();
 
-        boxesPage.setScrollCallback(this);
-
-        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), movesPage, boxesPage, itemsPage);
+        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
         viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                if(position == 1) fab.show(true);
-                else fab.hide(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     private void setupToolbar(@NonNull AppCompatActivity parent, @NonNull Toolbar toolbar) {
@@ -167,14 +145,5 @@ public class ListFragment extends Fragment implements BackNavCallback, OnScrollC
     public void onDestroyView() {
         super.onDestroyView();
         ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
-    }
-
-    @Override
-    public void onScroll(boolean hide) {
-//        if(hide) {
-//            fab.hide(true);
-//        } else {
-//            fab.show(true);
-//        }
     }
 }

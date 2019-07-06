@@ -9,15 +9,14 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class ListPagerAdapter extends FragmentStatePagerAdapter {
 
-    private Fragment[] pages = new Fragment[3];
-    private String[] pageTitles = new String[]{"Moves", "Boxes", "Items"};
+    private Fragment[] pages = new Fragment[2];
+    private String[] pageTitles = new String[]{"Boxes", "Items"};
 
     @SuppressWarnings("deprecation")
-    public ListPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment movesPage, @NonNull Fragment boxesPage, @NonNull Fragment itemsPage) {
+    public ListPagerAdapter(@NonNull FragmentManager fm, @NonNull Fragment boxesPage, @NonNull Fragment itemsPage) {
         super(fm);
-        pages[0] = movesPage;
-        pages[1] = boxesPage;
-        pages[2] = itemsPage;
+        pages[0] = boxesPage;
+        pages[1] = itemsPage;
     }
 
     public void setPages(@NonNull Fragment[] pages) {

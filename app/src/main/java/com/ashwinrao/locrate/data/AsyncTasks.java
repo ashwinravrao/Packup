@@ -2,14 +2,10 @@ package com.ashwinrao.locrate.data;
 
 import android.os.AsyncTask;
 
-import androidx.room.Delete;
-
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.data.repo.dao.BoxDao;
-import com.ashwinrao.locrate.data.model.Move;
 import com.ashwinrao.locrate.data.repo.dao.ItemDao;
-import com.ashwinrao.locrate.data.repo.dao.MoveDao;
 
 public class AsyncTasks {
 
@@ -34,34 +30,6 @@ public class AsyncTasks {
                     return null;
                 case "delete":
                     dao.delete(boxes);
-                    return null;
-                default:
-                    return null;
-            }
-        }
-    }
-
-    public static class MoveAsyncTask extends AsyncTask<Move, Void, Void> {
-
-        private MoveDao dao;
-        private String operation;
-
-        public MoveAsyncTask(MoveDao dao, String operation) {
-            this.dao = dao;
-            this.operation = operation;
-        }
-
-        @Override
-        protected Void doInBackground(Move... moves) {
-            switch (operation.toLowerCase()) {
-                case "insert":
-                    dao.insert(moves);
-                    return null;
-                case "update":
-                    dao.update(moves);
-                    return null;
-                case "delete":
-                    dao.delete(moves);
                     return null;
                 default:
                     return null;

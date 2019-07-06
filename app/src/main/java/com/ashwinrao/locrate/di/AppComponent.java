@@ -6,7 +6,6 @@ import com.ashwinrao.locrate.view.fragment.ListFragment;
 import com.ashwinrao.locrate.view.fragment.PhotoReviewFragment;
 import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
 import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
-import com.ashwinrao.locrate.view.pages.ListMovesPageFragment;
 import com.ashwinrao.locrate.view.pages.ReviewPageFragment;
 
 import javax.inject.Singleton;
@@ -24,5 +23,4 @@ public interface AppComponent {
     void inject(PhotoReviewFragment fragment);
     void inject(ListItemsPageFragment fragment);
     void inject(ListBoxesPageFragment fragment);
-    void inject(ListMovesPageFragment fragment);
 }

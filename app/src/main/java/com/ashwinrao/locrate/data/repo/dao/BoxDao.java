@@ -26,15 +26,6 @@ public interface BoxDao {
 
 
     /**
-     * @param moveId The id representing the parent move column
-     * @return an observable collection of boxes that belong to the specified move
-     */
-
-    @Query("select * from boxes where move_id = :moveId order by created desc")
-    LiveData<List<Box>> getBoxesByMove(int moveId);
-
-
-    /**
      * @return An observable box (with specified name field) from {@link AppDatabase}.
      */
 

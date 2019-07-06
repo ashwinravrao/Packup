@@ -10,8 +10,6 @@ import com.ashwinrao.locrate.data.repo.dao.BoxDao;
 import com.ashwinrao.locrate.data.AppDatabase;
 import com.ashwinrao.locrate.data.repo.BoxRepository;
 import com.ashwinrao.locrate.data.repo.dao.ItemDao;
-import com.ashwinrao.locrate.data.repo.dao.MoveDao;
-import com.ashwinrao.locrate.data.repo.MoveRepository;
 import com.ashwinrao.locrate.viewmodel.ViewModelFactory;
 
 import javax.inject.Singleton;
@@ -41,12 +39,6 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    MoveRepository provideMoveRepository() {
-        return new MoveRepository(database);
-    }
-
-    @Provides
-    @Singleton
     ItemRepository provideItemRepository() {
         return new ItemRepository(database);
     }
@@ -63,19 +55,14 @@ public class DatabaseModule {
     }
 
     @Provides
-    MoveDao provideMoveDao() {
-        return database.moveDao();
-    }
-
-    @Provides
     ItemDao provideItemDao() {
         return database.itemDao();
     }
 
     @Provides
     @Singleton
-    ViewModelProvider.Factory provideViewModelFactory(MoveRepository mr, BoxRepository br, ItemRepository ir) {
-        return new ViewModelFactory(mr, br, ir);
+    ViewModelProvider.Factory provideViewModelFactory(BoxRepository br, ItemRepository ir) {
+        return new ViewModelFactory(br, ir);
     }
 
 }

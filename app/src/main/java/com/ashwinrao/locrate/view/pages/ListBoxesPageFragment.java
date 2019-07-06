@@ -35,7 +35,6 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
 public class ListBoxesPageFragment extends Fragment {
 
-    private OnScrollCallback callback;
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
 
@@ -46,10 +45,6 @@ public class ListBoxesPageFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         ((Locrate) context.getApplicationContext()).getAppComponent().inject(this);
-    }
-
-    public void setScrollCallback(@NonNull OnScrollCallback callback) {
-        this.callback = callback;
     }
 
     @Override
@@ -79,20 +74,6 @@ public class ListBoxesPageFragment extends Fragment {
                 listAdapter.setBoxes(new ArrayList<>());
             }
             recyclerView.setAdapter(listAdapter);
-        });
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-//                if(callback != null) {
-//                    if (dy > 0) {
-//                        callback.onScroll(true);
-//                    } else {
-//                        callback.onScroll(false);
-//                    }
-//                }
-            }
         });
     }
 }
