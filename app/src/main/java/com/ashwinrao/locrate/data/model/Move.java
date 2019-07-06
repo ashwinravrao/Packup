@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Date;
+
 @Entity(tableName = "moves", indices = @Index("id"))
 public class Move {
 
@@ -27,6 +29,9 @@ public class Move {
 
     @ColumnInfo(name = "destination")
     private String destination;
+
+    @ColumnInfo(name = "scheduled_date")
+    private Date scheduledDate;
 
     public Move(@NonNull String id) {
         this.id = id;
@@ -71,5 +76,13 @@ public class Move {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    public Date getScheduledDate() {
+        return scheduledDate;
+    }
+
+    public void setScheduledDate(Date scheduledDate) {
+        this.scheduledDate = scheduledDate;
     }
 }

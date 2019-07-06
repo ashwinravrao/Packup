@@ -74,8 +74,8 @@ public class DatabaseModule {
 
     @Provides
     @Singleton
-    ViewModelProvider.Factory provideViewModelFactory(BoxRepository repository) {
-        return new ViewModelFactory(repository);
+    ViewModelProvider.Factory provideViewModelFactory(MoveRepository mr, BoxRepository br, ItemRepository ir) {
+        return new ViewModelFactory(mr, br, ir);
     }
 
 }

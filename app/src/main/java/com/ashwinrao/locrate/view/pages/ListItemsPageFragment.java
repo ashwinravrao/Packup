@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class ListItemsPageFragment extends Fragment implements TabLayoutViewPage {
+public class ListItemsPageFragment extends Fragment {
 
     private LiveData<List<String>> allContents;
 
@@ -70,10 +70,5 @@ public class ListItemsPageFragment extends Fragment implements TabLayoutViewPage
             }
             recyclerView.setAdapter(adapter);
         });
-    }
-
-    @Override
-    public String getTitle() {
-        return "Items";
     }
 }

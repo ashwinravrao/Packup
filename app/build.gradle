@@ -20,7 +20,6 @@ android {
         enabled = true
     }
 
-    // for OkHttp
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -28,7 +27,7 @@ android {
 }
 
 dependencies {
-    def camera_x_version = "1.0.0-alpha03"
+    def camera_x_version = "1.0.0-alpha02"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Dagger 2

@@ -11,7 +11,7 @@ import com.ashwinrao.locrate.data.repo.dao.BoxDao;
 import com.ashwinrao.locrate.data.repo.dao.ItemDao;
 import com.ashwinrao.locrate.data.repo.dao.MoveDao;
 
-@Database(entities = {Move.class, Box.class, Item.class}, version = 2, exportSchema = false)
+@Database(entities = {Move.class, Box.class, Item.class}, version = 1, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 

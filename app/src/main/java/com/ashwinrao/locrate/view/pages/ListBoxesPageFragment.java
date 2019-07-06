@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.pages;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +20,10 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentListPageBinding;
 import com.ashwinrao.locrate.util.callback.OnScrollCallback;
+import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ListAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
-public class ListBoxesPageFragment extends Fragment implements TabLayoutViewPage {
+public class ListBoxesPageFragment extends Fragment {
 
     private OnScrollCallback callback;
     private ListAdapter listAdapter;
@@ -65,7 +68,6 @@ public class ListBoxesPageFragment extends Fragment implements TabLayoutViewPage
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        if(callback != null) callback.onScroll(recyclerView.getScrollX(), recyclerView.getScrollY());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
@@ -78,10 +80,19 @@ public class ListBoxesPageFragment extends Fragment implements TabLayoutViewPage
             }
             recyclerView.setAdapter(listAdapter);
         });
-    }
 
-    @Override
-    public String getTitle() {
-        return "Boxes";
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+//                if(callback != null) {
+//                    if (dy > 0) {
+//                        callback.onScroll(true);
+//                    } else {
+//                        callback.onScroll(false);
+//                    }
+//                }
+            }
+        });
     }
 }
