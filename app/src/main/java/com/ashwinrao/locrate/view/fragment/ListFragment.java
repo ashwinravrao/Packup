@@ -15,7 +15,6 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentListBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
-import com.ashwinrao.locrate.util.callback.OnScrollCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;

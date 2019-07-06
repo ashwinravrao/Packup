@@ -91,8 +91,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         setupNameField(binding.nameInputField);
         setupDescriptionField(binding.descriptionInputField);
         setupRecyclerView(binding.recyclerView);
-        setupSaveButton(binding.saveButton);
-        setupEmptyListPlaceholder(binding.placeholder);
+        setupFillButton(binding.fillButton);
 
         return binding.getRoot();
     }
@@ -127,8 +126,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         });
     }
 
-    private void setupEmptyListPlaceholder(RelativeLayout relativeLayout) {
-        relativeLayout.setOnClickListener(view -> startCamera());
+    private void setupFillButton(MaterialCardView cardView) {
+        cardView.setOnClickListener(view -> startCamera());
     }
 
     private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
@@ -200,12 +199,40 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     private void setupToolbar(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(this);
-        toolbar.setOverflowIcon(Objects.requireNonNull(getActivity()).getResources().getDrawable(R.drawable.ic_overflow_light, getActivity().getTheme()));
         toolbar.setNavigationOnClickListener(v -> closeWithConfirmation());
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        if(item.getItemId() == R.id.toolbar_done) {
+            if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
+                showEmptyBoxDialog();
+                return true;
+            } else {
+                if (viewModel.saveBox()) {
+                    saveBoxNumber();
+                    Objects.requireNonNull(getActivity()).finish();
+                    return true;
+                } else {
+                    Objects.requireNonNull(binding.nameInputField).setError(getResources().getString(R.string.name_field_error_message));
+                    binding.nameInputField.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            binding.nameInputField.setError(null);
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                        }
+                    });
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -241,7 +268,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             compoundedItems.addAll(photoViewModel.getPaths());
         }
         if (compoundedItems.size() > 0) {
-            binding.placeholder.setVisibility(View.GONE);
             adapter.setPaths(compoundedItems);
             recyclerView.setAdapter(adapter);
             viewModel.getBox().setContents(compoundedItems);

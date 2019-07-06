@@ -137,58 +137,16 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/add_to_move_heading"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/add_to_move_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/char_counter" />
-
-                <HorizontalScrollView
-                    android:id="@+id/add_to_move_chip_group_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="36dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/add_to_move_heading">
-
-                    <com.google.android.material.chip.ChipGroup
-                        android:id="@+id/add_to_move_chip_group"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/new_move_chip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:chipStartPadding="8dp"
-                            app:chipEndPadding="8dp"
-                            app:chipIcon="@drawable/ic_add_default"
-                            app:chipIconTint="@color/iconAndTextColor"
-                            app:chipIconSize="20dp"
-                            android:text="@string/new_chip" />
-
-                    </com.google.android.material.chip.ChipGroup>
-
-                </HorizontalScrollView>
-
-                <TextView
                     android:id="@+id/contents_section"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="40dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/contents_section_title"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/add_to_move_chip_group_container" />
+                    app:layout_constraintTop_toBottomOf="@id/char_counter" />
 
                 <TextView
                     android:id="@+id/contents_status"
@@ -202,48 +160,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/contents_section"
                     tools:text="Empty" />
-
-                <RelativeLayout
-                    android:id="@+id/placeholder"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/contents_section"
-                    android:layout_marginBottom="96dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    android:background="@drawable/background_add_items">
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:foregroundGravity="center"
-                        android:layout_centerInParent="true">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="0.5"
-                            android:gravity="center_vertical"
-                            android:paddingStart="32dp"
-                            android:text="@string/add_contents_instructions"/>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_smartphone_box"
-                            android:paddingTop="32dp"
-                            android:paddingBottom="32dp"/>
-
-                    </LinearLayout>
-
-                </RelativeLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -276,19 +192,34 @@
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/save_button"
+                    android:id="@+id/fill_button"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:cardBackgroundColor="@color/colorAccent"
                     app:cardCornerRadius="5dp">
 
-                    <TextView
+                    <LinearLayout
+                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/save_box"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-                        android:textColor="@android:color/white" />
+                        android:layout_gravity="center">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_camera_white"
+                            android:layout_marginEnd="16dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fill_box"
+                            android:layout_gravity="center"
+                            android:textSize="16sp"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                            android:textColor="@android:color/white"/>
+
+                    </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>
 
