@@ -21,6 +21,7 @@ import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;
 import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
 import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
+import com.ashwinrao.locrate.view.pages.ListMovesPageFragment;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -93,12 +94,13 @@ public class ListFragment extends Fragment implements BackNavCallback, OnScrollC
     private void setupTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
         this.tabLayout = tabLayout;
 
+        final ListMovesPageFragment movesPage = new ListMovesPageFragment();
         final ListBoxesPageFragment boxesPage = new ListBoxesPageFragment();
         final ListItemsPageFragment itemsPage = new ListItemsPageFragment();
 
         boxesPage.setScrollCallback(this);
 
-        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
+        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), movesPage, boxesPage, itemsPage);
         viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }

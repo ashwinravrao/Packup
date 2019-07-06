@@ -3,12 +3,10 @@ package com.ashwinrao.locrate.data.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.util.UUID;
-
+import com.google.android.gms.maps.model.LatLng;
 
 @Entity(tableName = "moves", indices = @Index("id"))
 public class Move {
@@ -16,15 +14,23 @@ public class Move {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private String id = UUID.randomUUID().toString();
+    private String id;
+
+    @ColumnInfo(name = "origin_lat_lng")
+    private LatLng originLatLng;
+
+    @ColumnInfo(name = "destination_lat_lng")
+    private LatLng destinationLatLng;
 
     @ColumnInfo(name = "origin")
-    private String originLatLng;
+    private String origin;
 
     @ColumnInfo(name = "destination")
-    private String destinationLatLng;
+    private String destination;
 
-    public Move() { }
+    public Move(@NonNull String id) {
+        this.id = id;
+    }
 
     @NonNull
     public String getId() {
@@ -35,24 +41,35 @@ public class Move {
         this.id = id;
     }
 
-    @Ignore
-    public void setId(@NonNull UUID uuid) {
-        this.id = uuid.toString();
-    }
-
-    public String getOriginLatLng() {
+    public LatLng getOriginLatLng() {
         return originLatLng;
     }
 
-    public void setOriginLatLng(String originLatLng) {
+    public void setOriginLatLng(LatLng originLatLng) {
         this.originLatLng = originLatLng;
     }
 
-    public String getDestinationLatLng() {
+    public LatLng getDestinationLatLng() {
         return destinationLatLng;
     }
 
-    public void setDestinationLatLng(String destinationLatLng) {
+    public void setDestinationLatLng(LatLng destinationLatLng) {
         this.destinationLatLng = destinationLatLng;
+    }
+
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin;
+    }
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 }

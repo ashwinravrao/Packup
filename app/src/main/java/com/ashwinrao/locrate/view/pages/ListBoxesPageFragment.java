@@ -30,7 +30,7 @@ import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
-public class ListBoxesPageFragment extends Fragment {
+public class ListBoxesPageFragment extends Fragment implements TabLayoutViewPage {
 
     private OnScrollCallback callback;
     private ListAdapter listAdapter;
@@ -78,5 +78,10 @@ public class ListBoxesPageFragment extends Fragment {
             }
             recyclerView.setAdapter(listAdapter);
         });
+    }
+
+    @Override
+    public String getTitle() {
+        return "Boxes";
     }
 }

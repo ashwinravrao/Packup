@@ -50,4 +50,6 @@
     <string name="contents_description">Each time you grab an item to pack, snap a photo first!</string>
     <string name="add_contents_instructions">Snap a photo of each item as you place it in your physical box</string>
     <string name="label_section_title">Label</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="completed">Completed</string>
 </resources>
