@@ -1,10 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <data>
+
+        <variable
+            name="filters"
+            type="String" />
+
+        <variable
+            name="filteredSize"
+            type="String" />
+
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:background="@color/colorPrimaryLight">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:isScrollContainer="true"
+            android:overScrollMode="ifContentScrolls">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimaryLight">
+
+                <TextView
+                    android:id="@+id/categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/all_boxes"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    tools:text="All" />
+
+                <TextView
+                    android:id="@+id/filtered_size_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@id/categories"
+                    app:layout_constraintTop_toBottomOf="@id/categories"
+                    android:text="14 total"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    tools:text="173 boxes" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/filter_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/nfc_button"
+                    app:elevation="0dp"
+                    app:fabCustomSize="45dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="32dp"
+                    app:borderWidth="0dp"
+                    app:tint="@android:color/white"
+                    app:rippleColor="@color/colorAccent"
+                    android:backgroundTint="@color/unselected_fab"
+                    android:src="@drawable/ic_filter" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/nfc_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/add_button"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="32dp"
+                    app:elevation="0dp"
+                    app:fabCustomSize="45dp"
+                    app:borderWidth="0dp"
+                    app:rippleColor="@android:color/white"
+                    app:tint="@android:color/white"
+                    android:backgroundTint="@color/colorAccent"
+                    android:src="@drawable/ic_nfc" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/add_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginTop="32dp"
+                    app:elevation="0dp"
+                    app:fabCustomSize="45dp"
+                    app:borderWidth="0dp"
+                    android:layout_gravity="end"
+                    app:rippleColor="@android:color/white"
+                    app:tint="@android:color/white"
+                    android:backgroundTint="@color/colorAccent"
+                    android:src="@drawable/ic_add_default" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/filtered_size_text"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:overScrollMode="never"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/divider" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
 </layout>

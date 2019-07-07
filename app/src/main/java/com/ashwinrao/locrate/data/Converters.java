@@ -1,17 +1,13 @@
 package com.ashwinrao.locrate.data;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import androidx.room.TypeConverter;
-import androidx.room.util.StringUtil;
 
 public class Converters {
 

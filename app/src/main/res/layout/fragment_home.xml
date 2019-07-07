@@ -53,19 +53,6 @@
             android:layout_height="wrap_content"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
 
-        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:backgroundTint="@color/colorAccent"
-            android:text="@string/list_fab"
-            android:textColor="@android:color/white"
-            app:layout_behavior=".view.ExtendedFabLayoutBehavior"
-            app:icon="@drawable/ic_add_default"
-            app:iconTint="@android:color/white" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

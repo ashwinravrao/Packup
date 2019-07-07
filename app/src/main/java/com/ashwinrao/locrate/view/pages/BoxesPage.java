@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.pages;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
+import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ListAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,17 +57,25 @@ public class BoxesPage extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentPageBoxesBinding binding = FragmentPageBoxesBinding.inflate(inflater);
-        setupRecyclerView(binding.recyclerView);
+        initializeRecyclerView(binding.recyclerView);
+        initializeAddButton(binding.addButton);
         return binding.getRoot();
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void initializeAddButton(FloatingActionButton button) {
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), AddActivity.class);
+            startActivity(intent);
+        });
+    }
+
+    private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
         recyclerView.setAdapter(listAdapter);
         boxesLD.observe(this, boxes -> {
-            if(boxes != null) {
+            if (boxes != null) {
                 listAdapter.setBoxes(boxes);
             } else {
                 listAdapter.setBoxes(new ArrayList<>());

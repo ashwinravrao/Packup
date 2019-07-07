@@ -1,24 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-    <!--Cardboard Brown Palette-->
-    <!--<color name="colorPrimary">#EBCFB2</color>-->
-    <!--<color name="colorPrimaryDark">#B89E82</color>-->
-    <!--<color name="colorAccent">#5F5C39</color>-->
-    <!--<color name="background_window">#F0DCC7</color>-->
-    <!--<color name="border_view_holder">#50A1887F</color>-->
-    <!--<color name="card_background">#EBCFB2</color>-->
-
-    <!-- Dark Envelope Gray Palette -->
-    <!--<color name="colorPrimary">#EEEEEE</color>-->
-    <!--<color name="colorPrimaryDark">#D7D7D7</color>-->
-    <!--<color name="colorAccent">#1788D3</color>-->
-
-     Envelope Gray Palette
     <color name="colorPrimary">#EEEEEE</color>
     <color name="colorPrimaryDark">#E3E3E3</color>
-    <!--<color name="colorPrimary">#FEFEFE</color>-->
-    <!--<color name="colorPrimaryDark">#EEEEEE</color>-->
     <color name="colorAccent">#1788D3</color>
     <color name="colorAccentGold">#FFCE54</color>
 
@@ -26,17 +10,13 @@
     <color name="filter_image_preview">#BFBFBF</color>
     <color name="background_window">#FFFFFF</color>
     <color name="secondary_background_window">#EEEEEE</color>
+    <color name="box_view_holder">@color/secondary_background_window</color>
     <color name="iconAndTextColor">#000000</color>
     <color name="border_view_holder">#264E4E4E</color>
     <color name="text_color_secondary_view_holder">#878787</color>
 
-    <!-- Other Palettes -->
     <color name="top_row_view_holder">#4E4E4E</color>
     <color name="divider">#D4D4D4</color>
-    <!--<color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/colorAccent</color>-->
-
-
-
-
+    <color name="unselected_fab">#BCBCBC</color>
 
 </resources>

@@ -41,8 +41,6 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class HomeFragment extends Fragment implements BackNavCallback {
 
-    private ExtendedFloatingActionButton fab;
-
     @Inject
     ViewModelProvider.Factory factory;
 
@@ -66,22 +64,12 @@ public class HomeFragment extends Fragment implements BackNavCallback {
         final AppCompatActivity parent = ((MainActivity) getActivity());
         initializeToolbar(Objects.requireNonNull(parent), binding.toolbar);
         initializeTabLayout(binding.listTabLayout, binding.listViewPager);
-        initializeExtendedFab(binding.fab);
         return binding.getRoot();
     }
 
     private void inflateBottomSheet() {
         final BottomSheetFragment bottomSheet = new BottomSheetFragment();
         bottomSheet.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), bottomSheet.getTag());
-    }
-
-    private void initializeExtendedFab(@NonNull ExtendedFloatingActionButton efab) {
-        fab = efab;
-        fab.setOnClickListener(v -> {
-            Intent intent = new Intent(getActivity(), AddActivity.class);
-            startActivity(intent);
-            v.setEnabled(false);
-        });
     }
 
     private void initializeTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
@@ -97,14 +85,6 @@ public class HomeFragment extends Fragment implements BackNavCallback {
         parent.setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> inflateBottomSheet());
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(!fab.isEnabled()) {
-            fab.setEnabled(true);
-        }
     }
 
     @Override
