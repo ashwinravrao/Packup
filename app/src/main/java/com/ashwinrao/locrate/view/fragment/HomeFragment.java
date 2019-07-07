@@ -13,13 +13,13 @@ import android.view.inputmethod.EditorInfo;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.databinding.FragmentListBinding;
+import com.ashwinrao.locrate.databinding.FragmentHomeBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.MainActivity;
-import com.ashwinrao.locrate.view.adapter.ListPagerAdapter;
-import com.ashwinrao.locrate.view.pages.ListBoxesPageFragment;
-import com.ashwinrao.locrate.view.pages.ListItemsPageFragment;
+import com.ashwinrao.locrate.view.adapter.HomePagerAdapter;
+import com.ashwinrao.locrate.view.pages.BoxesPage;
+import com.ashwinrao.locrate.view.pages.ItemsPage;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -39,7 +39,7 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 
-public class ListFragment extends Fragment implements BackNavCallback {
+public class HomeFragment extends Fragment implements BackNavCallback {
 
     private ExtendedFloatingActionButton fab;
 
@@ -62,11 +62,11 @@ public class ListFragment extends Fragment implements BackNavCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentListBinding binding = FragmentListBinding.inflate(inflater);
+        final FragmentHomeBinding binding = FragmentHomeBinding.inflate(inflater);
         final AppCompatActivity parent = ((MainActivity) getActivity());
-        setupToolbar(Objects.requireNonNull(parent), binding.toolbar);
-        setupTabLayout(binding.listTabLayout, binding.listViewPager);
-        setupEFAB(binding.fab);
+        initializeToolbar(Objects.requireNonNull(parent), binding.toolbar);
+        initializeTabLayout(binding.listTabLayout, binding.listViewPager);
+        initializeExtendedFab(binding.fab);
         return binding.getRoot();
     }
 
@@ -75,7 +75,7 @@ public class ListFragment extends Fragment implements BackNavCallback {
         bottomSheet.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), bottomSheet.getTag());
     }
 
-    private void setupEFAB(@NonNull ExtendedFloatingActionButton efab) {
+    private void initializeExtendedFab(@NonNull ExtendedFloatingActionButton efab) {
         fab = efab;
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddActivity.class);
@@ -84,16 +84,16 @@ public class ListFragment extends Fragment implements BackNavCallback {
         });
     }
 
-    private void setupTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
-        final ListBoxesPageFragment boxesPage = new ListBoxesPageFragment();
-        final ListItemsPageFragment itemsPage = new ListItemsPageFragment();
+    private void initializeTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
+        final BoxesPage boxesPage = new BoxesPage();
+        final ItemsPage itemsPage = new ItemsPage();
 
-        final ListPagerAdapter listPagerAdapter = new ListPagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
+        final HomePagerAdapter listPagerAdapter = new HomePagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
         viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void setupToolbar(@NonNull AppCompatActivity parent, @NonNull Toolbar toolbar) {
+    private void initializeToolbar(@NonNull AppCompatActivity parent, @NonNull Toolbar toolbar) {
         parent.setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> inflateBottomSheet());
         toolbar.setOverflowIcon(getResources().getDrawable(R.drawable.ic_overflow, Objects.requireNonNull(getActivity()).getTheme()));
@@ -131,7 +131,7 @@ public class ListFragment extends Fragment implements BackNavCallback {
             @Override
             public boolean onQueryTextChange(String newText) {
 //                listAdapter.getFilter().filter(newText);
-                // todo send newText to ListAdapter in ListBoxesPageFragment via callback
+                // todo send newText to ListAdapter in BoxesPage via callback
                 return false;
             }
         });

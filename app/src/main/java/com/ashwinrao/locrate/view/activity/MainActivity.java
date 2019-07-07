@@ -4,8 +4,7 @@ import android.os.Bundle;
 
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
-import com.ashwinrao.locrate.view.fragment.AddFragment;
-import com.ashwinrao.locrate.view.fragment.ListFragment;
+import com.ashwinrao.locrate.view.fragment.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +22,12 @@ public class MainActivity extends AppCompatActivity {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(fragment == null) {
-            fragment = new ListFragment();
+            fragment = new HomeFragment();
         }
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragment_container, fragment, "ListFragment")
+                .replace(R.id.fragment_container, fragment, "HomeFragment")
                 .commit();
     }
 
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         final Class topFragment = getSupportFragmentManager().getFragments().get(0).getClass();
-        if(topFragment == ListFragment.class) {
+        if(topFragment == HomeFragment.class) {
             if (listener != null) {
                 listener.onBackPressed();
             }

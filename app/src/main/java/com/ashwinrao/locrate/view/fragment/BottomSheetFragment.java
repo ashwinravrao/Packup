@@ -3,7 +3,6 @@ package com.ashwinrao.locrate.view.fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,9 +42,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Na
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.home:
-                final Fragment list = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("ListFragment");
+                final Fragment list = Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentByTag("HomeFragment");
                 if(list != null && !list.isVisible()) {
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListFragment()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                 }
                 this.dismiss();
                 return true;

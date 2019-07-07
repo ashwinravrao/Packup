@@ -12,13 +12,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
-import com.ashwinrao.locrate.data.model.Box;
-import com.ashwinrao.locrate.databinding.FragmentListPageBinding;
-import com.ashwinrao.locrate.view.adapter.ListAdapter;
+import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
+import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 
 import java.util.ArrayList;
@@ -28,11 +27,11 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
+import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class ListBoxesPageFragment extends Fragment {
+public class ItemsPage extends Fragment {
 
-    private ListAdapter listAdapter;
-    private LiveData<List<Box>> boxesLD;
+    private LiveData<List<String>> allContents;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -47,29 +46,29 @@ public class ListBoxesPageFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        boxesLD = viewModel.getBoxes();
+        allContents = viewModel.getAllContents();
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentListPageBinding binding = FragmentListPageBinding.inflate(inflater);
+        final FragmentPageItemsBinding binding = FragmentPageItemsBinding.inflate(inflater);
         setupRecyclerView(binding.recyclerView);
         return binding.getRoot();
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        addItemDecoration(getContext(), recyclerView, 1);
-        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
-        recyclerView.setAdapter(listAdapter);
-        boxesLD.observe(this, boxes -> {
-            if(boxes != null) {
-                listAdapter.setBoxes(boxes);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        addItemDecoration(getContext(), recyclerView, 2);
+        final ThumbnailAdapter adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
+        recyclerView.setAdapter(adapter);
+        allContents.observe(this, strings -> {
+            if(strings != null) {
+                adapter.setPaths(strings);
             } else {
-                listAdapter.setBoxes(new ArrayList<>());
+                adapter.setPaths(new ArrayList<>());
             }
-            recyclerView.setAdapter(listAdapter);
+            recyclerView.setAdapter(adapter);
         });
     }
 }

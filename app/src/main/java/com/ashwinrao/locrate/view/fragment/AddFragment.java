@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
@@ -257,7 +256,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                         .beginTransaction()
                         .addToBackStack(null)
                         .setCustomAnimations(0, 0, 0, R.anim.slide_down_out)
-                        .replace(R.id.fragment_container, new PhotoReviewFragment())
+                        .replace(R.id.fragment_container, new PhotoFragment())
                         .commit();
             }
         }

@@ -12,9 +12,9 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class ExtendedFABScrollBehavior extends CoordinatorLayout.Behavior<ExtendedFloatingActionButton> {
+public class ExtendedFabLayoutBehavior extends CoordinatorLayout.Behavior<ExtendedFloatingActionButton> {
 
-    public ExtendedFABScrollBehavior(Context context, AttributeSet attrs) {
+    public ExtendedFabLayoutBehavior(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

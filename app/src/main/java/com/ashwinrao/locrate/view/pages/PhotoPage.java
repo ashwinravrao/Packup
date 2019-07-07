@@ -21,7 +21,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.databinding.FragmentReviewPageBinding;
+import com.ashwinrao.locrate.databinding.FragmentPagePhotoBinding;
 import com.ashwinrao.locrate.util.FilenameCreator;
 import com.ashwinrao.locrate.util.callback.PaginationCallback;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
@@ -34,7 +34,7 @@ import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.KeyboardUtil.hideSoftKeyboard;
 
-public class ReviewPageFragment extends Fragment {
+public class PhotoPage extends Fragment {
 
     private int position = 0;
     private String path;
@@ -42,7 +42,7 @@ public class ReviewPageFragment extends Fragment {
     private PhotoViewModel viewModel;
     private CircularProgressDrawable progress;
 
-    private static final String TAG = "ReviewPageFragment";
+    private static final String TAG = "PhotoPage";
 
     private PaginationCallback listener;
 
@@ -78,7 +78,7 @@ public class ReviewPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentReviewPageBinding binding = FragmentReviewPageBinding.inflate(inflater);
+        final FragmentPagePhotoBinding binding = FragmentPagePhotoBinding.inflate(inflater);
         setupImageView(binding.imageView);
         setupNameField(binding.nameField);
         return binding.getRoot();

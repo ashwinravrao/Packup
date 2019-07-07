@@ -19,9 +19,9 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.databinding.FragmentPhotoReviewBinding;
+import com.ashwinrao.locrate.databinding.FragmentPhotoBinding;
 import com.ashwinrao.locrate.util.callback.PaginationCallback;
-import com.ashwinrao.locrate.view.adapter.PhotoReviewPagerAdapter;
+import com.ashwinrao.locrate.view.adapter.PhotoPagerAdapter;
 import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
 
 import java.util.ArrayList;
@@ -30,10 +30,10 @@ import java.util.Objects;
 
 import javax.inject.Inject;
 
-public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback {
+public class PhotoFragment extends Fragment implements Toolbar.OnMenuItemClickListener, PaginationCallback {
 
     private ViewPager viewPager;
-    private PhotoReviewPagerAdapter adapter;
+    private PhotoPagerAdapter adapter;
     private List<String> paths = new ArrayList<>();
 
     @Inject
@@ -56,7 +56,7 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentPhotoReviewBinding binding = FragmentPhotoReviewBinding.inflate(inflater);
+        final FragmentPhotoBinding binding = FragmentPhotoBinding.inflate(inflater);
         setupToolbar(binding.toolbar);
         setupViewPager(binding.viewPager);
         return binding.getRoot();
@@ -72,9 +72,7 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
         toolbar.setTitle("");
         toolbar.inflateMenu(R.menu.photo_review);
         toolbar.setOnMenuItemClickListener(this);
-        toolbar.setNavigationOnClickListener(v -> {
-            createUnsavedChangesDialog(getContext()).show();
-        });
+        toolbar.setNavigationOnClickListener(v -> createUnsavedChangesDialog(getContext()).show());
     }
 
     private AlertDialog createUnsavedChangesDialog(Context context) {
@@ -82,16 +80,15 @@ public class PhotoReviewFragment extends Fragment implements Toolbar.OnMenuItemC
                 .setTitle(getString(R.string.dialog_exit_photo_review_title))
                 .setMessage(getString(R.string.dialog_exit_photo_review_message))
                 .setCancelable(false)
-                .setPositiveButton(getResources().getString(R.string.yes), (dialog1, which) -> {
-                    Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
-                })
+                .setPositiveButton(getResources().getString(R.string.yes), (dialog1, which) ->
+                        Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack())
                 .setNegativeButton(getResources().getString(R.string.no), (dialog12, which) -> dialog12.cancel())
                 .create();
     }
 
     private void setupViewPager(ViewPager viewPager) {
         this.viewPager = viewPager;
-        adapter = new PhotoReviewPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), paths.size(), this, paths);
+        adapter = new PhotoPagerAdapter(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), paths.size(), this, paths);
         viewPager.setAdapter(adapter);
     }
 
