@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
@@ -20,6 +21,7 @@ import com.ashwinrao.locrate.view.pages.BoxesPage;
 import com.ashwinrao.locrate.view.pages.ItemsPage;
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -38,7 +40,9 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class HomeFragment extends Fragment implements BackNavCallback {
 
+    private ViewPager viewPager;
     private BoxesPage boxesPage;
+    private ItemsPage itemsPage;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -73,9 +77,10 @@ public class HomeFragment extends Fragment implements BackNavCallback {
 
     private void initializeTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
         this.boxesPage = new BoxesPage();
-        final ItemsPage itemsPage = new ItemsPage();
+        this.itemsPage = new ItemsPage();
 
         final HomePagerAdapter listPagerAdapter = new HomePagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
+        this.viewPager = viewPager;
         viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -109,14 +114,33 @@ public class HomeFragment extends Fragment implements BackNavCallback {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                boxesPage.onQueryTextChange(newText);
+
+                if(viewPager.getCurrentItem() == 0) {
+                    boxesPage.onQueryTextChange(newText);
+                } else {
+                    itemsPage.onQueryTextChange(newText);
+                }
+
+//                if (getCurrentlyVisibleFragment() == BoxesPage.class) {
+//                    boxesPage.onQueryTextChange(newText);
+//                }
+//
+//                if (getCurrentlyVisibleFragment() == ItemsPage.class) {
+//                    itemsPage.onQueryTextChange(newText);
+//                }
+//
+//                if (getCurrentlyVisibleFragment() == null) {
+//                    Toast.makeText(getContext(), "NULL!!!", Toast.LENGTH_SHORT).show();
+//                }
+
                 return false;
             }
         });
     }
 
     @Override
-    public void onBackPressed() { }
+    public void onBackPressed() {
+    }
 
     @Override
     public void onDestroyView() {

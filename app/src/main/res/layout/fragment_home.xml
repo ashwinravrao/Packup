@@ -37,11 +37,12 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/list_tab_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
                 android:background="@color/colorPrimary"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/colorAccent"
                 app:tabMode="fixed"
+                app:tabTextAppearance="@android:style/TextAppearance.Material.Widget.TabWidget"
                 app:tabSelectedTextColor="@color/colorAccent"
                 app:tabTextColor="@color/text_color_secondary_view_holder" />
 

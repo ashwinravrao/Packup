@@ -7,7 +7,7 @@
 
         <variable
             name="boxId"
-            type="String" />
+            type="Integer" />
 
         <variable
             name="numberOfItems"
@@ -202,13 +202,15 @@
                         android:orientation="horizontal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        tools:ignore="UseCompoundDrawables">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_camera_white"
-                            android:layout_marginEnd="16dp"/>
+                            android:layout_marginEnd="16dp"
+                            tools:ignore="ContentDescription" />
 
                         <TextView
                             android:layout_width="wrap_content"

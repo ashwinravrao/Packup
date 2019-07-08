@@ -11,7 +11,7 @@ import android.widget.Filterable;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
-import com.ashwinrao.locrate.util.PropertiesFilter;
+import com.ashwinrao.locrate.util.BoxPropertiesFilter;
 import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
 import com.ashwinrao.locrate.view.fragment.DetailFragment;
 import com.ashwinrao.locrate.view.activity.MainActivity;
@@ -25,17 +25,17 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder> implements Filterable {
+public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolder> implements Filterable {
 
     private Context context;
     private List<Box> boxes;
     private List<Box> boxesCopy;
 
-    public ListAdapter(@NonNull Context context) {
+    public BoxesAdapter(@NonNull Context context) {
         this.context = context;
     }
 
-    public void setBoxes(List<Box> boxes) {
+    public void setBoxes(@NonNull List<Box> boxes) {
         this.boxes = boxes;
         this.boxesCopy = new ArrayList<>(boxes);
     }
@@ -60,39 +60,38 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
 
     @Override
     public Filter getFilter() {
-        return filter;
+
+        return new Filter() {
+
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<Box> filtered;
+                BoxPropertiesFilter pf = new BoxPropertiesFilter(boxesCopy);
+                filtered = pf.filter(constraint, true, true, true);
+
+                FilterResults results = new FilterResults();
+                results.values = filtered;
+                return results;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                final DiffUtilCallback diffUtil = new DiffUtilCallback(new ArrayList<>(boxes), (List) results.values);
+                DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtil, true);
+
+                boxes.clear();
+                boxes.addAll((List) results.values);
+                result.dispatchUpdatesTo(BoxesAdapter.this);
+            }
+        };
     }
 
-    private Filter filter = new Filter() {
+    class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Box> filtered;
-            PropertiesFilter pf = new PropertiesFilter(boxesCopy);
-            filtered = pf.filter(constraint, true, true, true);
+        ViewholderBoxBinding binding;
 
-            FilterResults results = new FilterResults();
-            results.values = filtered;
-            return results;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            final DiffUtilCallback diffUtil = new DiffUtilCallback(boxes, (List) results.values);
-            DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtil, true);
-
-            boxes.clear();
-            boxes.addAll((List) results.values);
-            result.dispatchUpdatesTo(ListAdapter.this);
-        }
-    };
-
-    public class BoxViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-
-        private ViewholderBoxBinding binding;
-
-        private BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
+        BoxViewHolder(@NonNull ViewholderBoxBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);
@@ -101,7 +100,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         @Override
         public void onClick(View v) {
             Bundle bundle = new Bundle();
-            bundle.putString("ID", boxes.get(getAdapterPosition()).getId());
+            bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
             DetailFragment detail = new DetailFragment();
             detail.setArguments(bundle);
 
@@ -115,3 +114,4 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         }
     }
 }
+

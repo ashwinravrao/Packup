@@ -21,7 +21,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.view.activity.AddActivity;
-import com.ashwinrao.locrate.view.adapter.ListAdapter;
+import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -35,7 +35,7 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
 public class BoxesPage extends Fragment {
 
-    private ListAdapter listAdapter;
+    private BoxesAdapter boxesAdapter;
     private LiveData<List<Box>> boxesLD;
     private FragmentPageBoxesBinding binding;
 
@@ -58,6 +58,9 @@ public class BoxesPage extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        // crashing due to NPE on ref to BoxesAdapter (when returning from other fragment)
+        // TODO re-initialize BoxesAdapter ref after returning here
         binding.setFilterActivated(false);
     }
 
@@ -67,7 +70,7 @@ public class BoxesPage extends Fragment {
         binding = FragmentPageBoxesBinding.inflate(inflater);
 
         // binding vars
-        binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all_boxes));
+        binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all));
         binding.setFilterActivated(false);
 
         // layout widgets
@@ -96,21 +99,21 @@ public class BoxesPage extends Fragment {
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageBoxesBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
-        listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
+        boxesAdapter = new BoxesAdapter(Objects.requireNonNull(getActivity()));
         recyclerView.setItemAnimator(null);
-        recyclerView.setAdapter(listAdapter);
+        recyclerView.setAdapter(boxesAdapter);
         boxesLD.observe(this, boxes -> {
             if (boxes != null) {
-                listAdapter.setBoxes(boxes);
+                boxesAdapter.setBoxes(boxes);
                 binding.setFilteredSize(String.format(getString(R.string.filtered_size), boxes.size()));
             } else {
-                listAdapter.setBoxes(new ArrayList<>());
+                boxesAdapter.setBoxes(new ArrayList<>());
             }
-            recyclerView.setAdapter(listAdapter);
+            recyclerView.setAdapter(boxesAdapter);
         });
     }
 
     public void onQueryTextChange(String newText) {
-        listAdapter.getFilter().filter(newText);
+        boxesAdapter.getFilter().filter(newText);
     }
 }

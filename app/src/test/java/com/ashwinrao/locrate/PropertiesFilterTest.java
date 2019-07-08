@@ -1,7 +1,7 @@
 package com.ashwinrao.locrate;
 
 import com.ashwinrao.locrate.data.model.Box;
-import com.ashwinrao.locrate.util.PropertiesFilter;
+import com.ashwinrao.locrate.util.BoxPropertiesFilter;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,7 +19,7 @@ public class PropertiesFilterTest {
     private String[] names = {"Socks", "Shoes", "Kitchen Stuff", "Cleaning Products", "Phone Accessories"};
     private String[] descriptions = {"Throw away", "Move to storage", "Sell", "Goodwill", "Donate to church"};
     private List<Box> boxes = new ArrayList<>();
-    private PropertiesFilter propfilter;
+    private BoxPropertiesFilter propfilter;
     private List<Box> actual;
     private List<Box> expected;
 
@@ -29,12 +29,12 @@ public class PropertiesFilterTest {
         expected = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             Box box = new Box();
-            box.setId(String.valueOf(i+1));
+            box.setId(i+1);
             box.setName(names[i]);
             box.setDescription(descriptions[i]);
             boxes.add(box);
         }
-        propfilter = new PropertiesFilter(boxes);
+        propfilter = new BoxPropertiesFilter(boxes);
     }
 
     @Test

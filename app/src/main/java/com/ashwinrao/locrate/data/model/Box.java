@@ -8,21 +8,16 @@ import java.util.UUID;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import static androidx.room.ForeignKey.CASCADE;
-
 @Entity(tableName = "boxes", indices = @Index("id"))
-
 public class Box {
 
-    @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private String id = UUID.randomUUID().toString();
+    private int id;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -47,13 +42,8 @@ public class Box {
 
     public Box() { }
 
-    public void setId(@NonNull String id) {
+    public void setId(int id) {
         this.id = id;
-    }
-
-    @Ignore
-    public void setIdFromUUID(@NonNull UUID uuid) {
-        this.id = uuid.toString();
     }
 
     public void setName(String name) {
@@ -87,8 +77,7 @@ public class Box {
         return isFull;
     }
 
-    @NonNull
-    public String getId() {
+    public int getId() {
         return id;
     }
 

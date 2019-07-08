@@ -17,7 +17,6 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentAddBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
-import com.ashwinrao.locrate.util.callback.CameraInitCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.CameraActivity;
@@ -47,7 +46,7 @@ import static android.app.Activity.RESULT_OK;
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, CameraInitCallback, BackNavCallback {
+public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavCallback {
 
     private BoxViewModel viewModel;
     private PhotoViewModel photoViewModel;
@@ -95,36 +94,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         return binding.getRoot();
     }
 
-    private void setupSaveButton(MaterialCardView saveButton) {
-        saveButton.setOnClickListener(view -> {
-            if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
-                showEmptyBoxDialog();
-            } else {
-                if (viewModel.saveBox()) {
-                    saveBoxNumber();
-                    Objects.requireNonNull(getActivity()).finish();
-                } else {
-                    Objects.requireNonNull(binding.nameInputField).setError(getResources().getString(R.string.name_field_error_message));
-                    binding.nameInputField.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                        }
-
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            binding.nameInputField.setError(null);
-                        }
-
-                        @Override
-                        public void afterTextChanged(Editable s) {
-                        }
-                    });
-                }
-            }
-
-        });
-    }
-
     private void setupFillButton(MaterialCardView cardView) {
         cardView.setOnClickListener(view -> startCamera());
     }
@@ -133,11 +102,11 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         return activity.getPreferences(Context.MODE_PRIVATE);
     }
 
-    private String getBoxNumber() {
+    private int getBoxNumber() {
         // Retrieve next available id
         int lastUsed = getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
-        viewModel.getBox().setId(String.valueOf(lastUsed + 1));
-        return String.valueOf(getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1));
+        viewModel.getBox().setId(lastUsed + 1);
+        return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
     }
 
     private void saveBoxNumber() {
@@ -155,7 +124,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         addItemDecoration(getContext(), recyclerView, 2);
         adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
-        adapter.registerStartCameraListener(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -274,7 +242,6 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         }
     }
 
-    @Override
     public void startCamera() {
         Intent intent = new Intent(getActivity(), CameraActivity.class);
         photoViewModel.clearPaths();

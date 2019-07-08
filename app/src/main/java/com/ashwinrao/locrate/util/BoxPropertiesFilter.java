@@ -5,11 +5,11 @@ import com.ashwinrao.locrate.data.model.Box;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PropertiesFilter {
+public class BoxPropertiesFilter {
 
     private List<Box> boxes;
 
-    public PropertiesFilter(List<Box> boxes) {
+    public BoxPropertiesFilter(List<Box> boxes) {
         this.boxes = boxes;
     }
 
@@ -20,7 +20,7 @@ public class PropertiesFilter {
         } else {
             final String constr = constraint.toString().toLowerCase();
             for (Box box : boxes) {
-                if ((onID && box.getId().toLowerCase().contains(constr))
+                if ((onID && String.valueOf(box.getId()).contains(constr))
                         || (onName && box.getName().toLowerCase().contains(constr))
                         || (onDescription && box.getDescription().toLowerCase().contains(constr))) {
                     result.add(box);

@@ -2,7 +2,6 @@ package com.ashwinrao.locrate.viewmodel;
 
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.repo.BoxRepository;
-import com.ashwinrao.locrate.util.BoxValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class BoxViewModel extends ViewModel {
         return this.box;
     }
 
-    public LiveData<Box> getBoxByID(String id) {
+    public LiveData<Box> getBoxByID(int id) {
         return repo.getBoxByID(id);
     }
 
@@ -34,7 +33,7 @@ public class BoxViewModel extends ViewModel {
     }
 
     public boolean saveBox() {
-        if(new BoxValidator(this.box).validate()) {
+        if(box.getName() != null) {
             repo.insert(this.box);
             return true;
         } else {

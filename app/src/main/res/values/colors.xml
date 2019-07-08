@@ -20,5 +20,6 @@
     <color name="divider">#D4D4D4</color>
     <color name="unselected_fab">#BCBCBC</color>
     <color name="delete_red">#99BE0000</color>
+    <color name="item_image_background">#DDDDDD</color>
 
 </resources>

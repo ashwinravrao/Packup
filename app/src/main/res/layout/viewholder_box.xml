@@ -22,7 +22,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:fontFamily="sans-serif-black"
-                android:text="@{Box.id}"
+                android:text="@{String.valueOf(Box.id)}"
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display3"
                 android:textSize="60sp"

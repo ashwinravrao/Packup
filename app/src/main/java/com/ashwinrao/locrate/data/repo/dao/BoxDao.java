@@ -38,7 +38,7 @@ public interface BoxDao {
      */
 
     @Query("SELECT * FROM boxes WHERE id = :id")
-    LiveData<Box> getBoxById(String id);
+    LiveData<Box> getBoxById(int id);
 
     /**
      * InsertBox/save a box to the {@link AppDatabase}.

@@ -12,13 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
+import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
-import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
+import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,12 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
-import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class ItemsPage extends Fragment {
 
+    private ItemsAdapter itemsAdapter;
     private LiveData<List<String>> allContents;
+    private FragmentPageItemsBinding binding;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -49,26 +52,61 @@ public class ItemsPage extends Fragment {
         allContents = viewModel.getAllContents();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // possible crashes mirroring BoxesPage issue
+        binding.setFilterActivated(false);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentPageItemsBinding binding = FragmentPageItemsBinding.inflate(inflater);
-        setupRecyclerView(binding.recyclerView);
+        binding = FragmentPageItemsBinding.inflate(inflater);
+
+        // binding vars
+        binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all));
+        binding.setFilterActivated(false);
+
+
+        // layout widgets
+        initializeButtons(binding.filterButton, binding.packButton);
+//        initializeRecyclerView(binding.recyclerView, binding);
         return binding.getRoot();
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        addItemDecoration(getContext(), recyclerView, 2);
-        final ThumbnailAdapter adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
-        recyclerView.setAdapter(adapter);
+    private void initializeButtons(@NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
+        filterButton.setOnClickListener(view -> {
+            binding.setFilterActivated(!binding.getFilterActivated());
+            if(binding.getFilterActivated()) {
+                // TODO add method body
+            }
+        });
+
+        packButton.setOnClickListener(v -> {
+            // TODO add method body
+        });
+    }
+
+    private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageItemsBinding binding) {
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        addItemDecoration(getContext(), recyclerView, 1);
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()));
+        recyclerView.setItemAnimator(null);
+        recyclerView.setAdapter(itemsAdapter);
         allContents.observe(this, strings -> {
             if(strings != null) {
-                adapter.setPaths(strings);
+//                itemsAdapter.setItems(strings);
+                binding.setFilteredSize(String.format(getString(R.string.filtered_size), strings.size()));
             } else {
-                adapter.setPaths(new ArrayList<>());
+                itemsAdapter.setItems(new ArrayList<>());
             }
-            recyclerView.setAdapter(adapter);
+            recyclerView.setAdapter(itemsAdapter);
         });
+    }
+
+    public void onQueryTextChange(String newText) {
+        itemsAdapter.getFilter().filter(newText);
     }
 }

@@ -41,7 +41,7 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private Box box;
-    private String boxId;
+    private int boxId;
     private BoxViewModel viewModel;
     private ThumbnailAdapter adapter;
     private RecyclerView recyclerView;
@@ -60,7 +60,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         super.onCreate(savedInstanceState);
         viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         if (getArguments() != null) {
-            boxId = getArguments().getString("ID", "0");
+            boxId = getArguments().getInt("ID", 0);
         }
     }
 

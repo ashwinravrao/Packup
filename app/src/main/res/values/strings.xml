@@ -2,7 +2,7 @@
     <string name="app_name">Locrate</string>
     <string name="title_search">Search</string>
     <string name="toolbar_title_list">Home</string>
-    <string name="placeholder_box_number"># %s</string>
+    <string name="placeholder_box_number"># %d</string>
     <string name="toolbar_done">Done</string>
     <string name="hint_name">Name</string>
     <string name="hint_description">Description</string>
@@ -40,7 +40,7 @@
     <string name="save">Save</string>
     <string name="save_box">Save Box</string>
     <string name="about_section_title">About</string>
-    <string name="box_number_placeholder">Box %s</string>
+    <string name="box_number_placeholder">Box %d</string>
     <string name="helper_text_required">Required</string>
     <string name="add_to_move_title">Add to a move</string>
     <string name="new_chip">New Move</string>
@@ -54,7 +54,8 @@
     <string name="completed">Completed</string>
     <string name="fill_box">Fill Box</string>
     <string name="start_packing">Start Packing</string>
-    <string name="all_boxes">All</string>
+    <string name="all">All</string>
     <string name="filtered_size">%d total</string>
     <string name="toolbar_title_home">Home</string>
+    <string name="content_description_item_image">Item photo</string>
 </resources>

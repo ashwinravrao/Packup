@@ -25,7 +25,7 @@ public class BoxRepository {
         return dao.getBoxes();
     }
 
-    public LiveData<Box> getBoxByID(String id) { return dao.getBoxById(id); }
+    public LiveData<Box> getBoxByID(int id) { return dao.getBoxById(id); }
 
     public void insert(Box... boxes) {
         new AsyncTasks.BoxAsyncTask(dao, "insert").execute(boxes);
