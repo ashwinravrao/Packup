@@ -4,7 +4,7 @@
     <color name="colorPrimary">#EEEEEE</color>
     <color name="colorPrimaryDark">#E3E3E3</color>
     <color name="colorAccent">#1788D3</color>
-    <color name="colorAccentGold">#FFCE54</color>
+    <color name="colorAccentGold">#CCAD83</color>
 
     <color name="colorPrimaryLight">#F5F5F5</color>
     <color name="filter_image_preview">#BFBFBF</color>
@@ -13,10 +13,12 @@
     <color name="box_view_holder">@color/secondary_background_window</color>
     <color name="iconAndTextColor">#000000</color>
     <color name="border_view_holder">#264E4E4E</color>
+    <color name="box_number">#806C6C6C</color>
     <color name="text_color_secondary_view_holder">#878787</color>
 
     <color name="top_row_view_holder">#4E4E4E</color>
     <color name="divider">#D4D4D4</color>
     <color name="unselected_fab">#BCBCBC</color>
+    <color name="delete_red">#99BE0000</color>
 
 </resources>

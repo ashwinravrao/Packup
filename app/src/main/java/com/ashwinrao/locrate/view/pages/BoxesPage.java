@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
+import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.view.activity.AddActivity;
@@ -36,6 +37,7 @@ public class BoxesPage extends Fragment {
 
     private ListAdapter listAdapter;
     private LiveData<List<Box>> boxesLD;
+    private FragmentPageBoxesBinding binding;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -53,34 +55,62 @@ public class BoxesPage extends Fragment {
         boxesLD = viewModel.getBoxes();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        binding.setFilterActivated(false);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentPageBoxesBinding binding = FragmentPageBoxesBinding.inflate(inflater);
-        initializeRecyclerView(binding.recyclerView);
-        initializeAddButton(binding.addButton);
+        binding = FragmentPageBoxesBinding.inflate(inflater);
+
+        // binding vars
+        binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all_boxes));
+        binding.setFilterActivated(false);
+
+        // layout widgets
+        initializeRecyclerView(binding.recyclerView, binding);
+        initializeButtons(binding.filterButton, binding.nfcButton, binding.addButton);
         return binding.getRoot();
     }
 
-    private void initializeAddButton(FloatingActionButton button) {
-        button.setOnClickListener(v -> {
+    private void initializeButtons(@NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton nfcButton, @NonNull FloatingActionButton addButton) {
+        filterButton.setOnClickListener(view -> {
+            binding.setFilterActivated(!binding.getFilterActivated());
+            if(binding.getFilterActivated()) {
+            }
+        });
+
+        nfcButton.setOnClickListener(view -> {
+
+        });
+
+        addButton.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddActivity.class);
             startActivity(intent);
         });
     }
 
-    private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageBoxesBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         listAdapter = new ListAdapter(Objects.requireNonNull(getActivity()));
+        recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(listAdapter);
         boxesLD.observe(this, boxes -> {
             if (boxes != null) {
                 listAdapter.setBoxes(boxes);
+                binding.setFilteredSize(String.format(getString(R.string.filtered_size), boxes.size()));
             } else {
                 listAdapter.setBoxes(new ArrayList<>());
             }
             recyclerView.setAdapter(listAdapter);
         });
+    }
+
+    public void onQueryTextChange(String newText) {
+        listAdapter.getFilter().filter(newText);
     }
 }

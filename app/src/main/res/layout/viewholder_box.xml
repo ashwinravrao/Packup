@@ -18,15 +18,20 @@
             <TextView
                 android:id="@+id/box_number"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="20dp"
-                android:text="@{@string/placeholder_box_number(Box.id)}"
-                android:textColor="@color/iconAndTextColor"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@{Box.id}"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+                android:textSize="60sp"
+                android:textColor="@color/box_number"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="# 7" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="8" />
 
             <TextView
                 android:id="@+id/box_name"
@@ -37,43 +42,27 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/top_row_view_holder"
                 tools:text="Coffee Kit" />
 
-            <LinearLayout
-                android:id="@+id/bottom_text_container"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:text="@{Box.description}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/box_number"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="16dp"
-                android:layout_marginEnd="16dp">
-
-                <TextView
-                    android:id="@+id/description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.7"
-                    android:text="@{Box.description}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_color_secondary_view_holder"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    tools:text="Bodum Chambord and accessories and stuff" />
-
-                <TextView
-                    android:id="@+id/num_items"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.3"
-                    android:layout_height="wrap_content"
-                    android:text="@{Box.numItems}"
-                    android:textAlignment="viewEnd"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/text_color_secondary_view_holder"
-                    tools:text="25 items" />
-
-            </LinearLayout>
+                android:layout_marginEnd="48dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_color_secondary_view_holder"
+                android:ellipsize="end"
+                android:maxEms="25"
+                android:maxLines="1"
+                tools:text="Bodum Chambord and accessories and stuff" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

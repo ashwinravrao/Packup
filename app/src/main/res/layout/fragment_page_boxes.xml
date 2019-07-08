@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="filterActivated"
+            type="Boolean" />
+
+        <variable
             name="filters"
             type="String" />
 
@@ -37,22 +41,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="32dp"
+                    app:layout_constraintTop_toTopOf="@id/filter_button"
                     android:layout_marginStart="24dp"
-                    android:text="@string/all_boxes"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                    tools:text="All" />
+                    android:text="@{filters}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
                 <TextView
                     android:id="@+id/filtered_size_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="@id/categories"
-                    app:layout_constraintTop_toBottomOf="@id/categories"
-                    android:text="14 total"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    tools:text="173 boxes" />
+                    app:layout_constraintBottom_toBottomOf="@id/filter_button"
+                    android:text="@{filteredSize}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/filter_button"
@@ -66,8 +68,8 @@
                     android:layout_marginTop="32dp"
                     app:borderWidth="0dp"
                     app:tint="@android:color/white"
-                    app:rippleColor="@color/colorAccent"
-                    android:backgroundTint="@color/unselected_fab"
+                    app:rippleColor="@android:color/white"
+                    android:backgroundTint="@{filterActivated ? @color/colorAccentGold : @color/unselected_fab}"
                     android:src="@drawable/ic_filter" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -111,15 +113,13 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/filtered_size_text"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"/>
+                    android:layout_marginTop="32dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:overScrollMode="never"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintEnd_toEndOf="parent"

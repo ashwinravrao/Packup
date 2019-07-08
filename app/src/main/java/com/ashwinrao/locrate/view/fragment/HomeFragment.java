@@ -1,7 +1,6 @@
 package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,12 +14,10 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentHomeBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
-import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.HomePagerAdapter;
 import com.ashwinrao.locrate.view.pages.BoxesPage;
 import com.ashwinrao.locrate.view.pages.ItemsPage;
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.Objects;
@@ -40,6 +37,8 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 
 public class HomeFragment extends Fragment implements BackNavCallback {
+
+    private BoxesPage boxesPage;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -73,7 +72,7 @@ public class HomeFragment extends Fragment implements BackNavCallback {
     }
 
     private void initializeTabLayout(@NonNull TabLayout tabLayout, @NonNull ViewPager viewPager) {
-        final BoxesPage boxesPage = new BoxesPage();
+        this.boxesPage = new BoxesPage();
         final ItemsPage itemsPage = new ItemsPage();
 
         final HomePagerAdapter listPagerAdapter = new HomePagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
@@ -110,8 +109,7 @@ public class HomeFragment extends Fragment implements BackNavCallback {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//                listAdapter.getFilter().filter(newText);
-                // todo send newText to ListAdapter in BoxesPage via callback
+                boxesPage.onQueryTextChange(newText);
                 return false;
             }
         });

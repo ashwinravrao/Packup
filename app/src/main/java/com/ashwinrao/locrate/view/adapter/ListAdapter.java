@@ -12,6 +12,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
 import com.ashwinrao.locrate.util.PropertiesFilter;
+import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
 import com.ashwinrao.locrate.view.fragment.DetailFragment;
 import com.ashwinrao.locrate.view.activity.MainActivity;
 
@@ -20,6 +21,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -77,9 +79,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.BoxViewHolder>
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
+            final DiffUtilCallback diffUtil = new DiffUtilCallback(boxes, (List) results.values);
+            DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtil, true);
+
             boxes.clear();
             boxes.addAll((List) results.values);
-            notifyDataSetChanged();
+            result.dispatchUpdatesTo(ListAdapter.this);
         }
     };
 

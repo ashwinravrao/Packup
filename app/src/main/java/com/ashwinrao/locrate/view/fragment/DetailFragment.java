@@ -18,6 +18,7 @@ import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.Objects;
 
@@ -67,19 +68,27 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentDetailBinding binding = FragmentDetailBinding.inflate(inflater);
-        setupToolbar(binding.toolbar);
-        setupRecyclerView(binding, binding.recyclerView);
-        setupBottomNavigation(binding.deleteButton, binding.editButton);
+        initializeToolbar(binding.toolbar);
+        initializeRecyclerView(binding, binding.recyclerView);
+        initializeButtons(binding.editButton, binding.deleteButton);
         return binding.getRoot();
     }
 
-    private void setupToolbar(Toolbar toolbar) {
-        toolbar.inflateMenu(R.menu.toolbar_detail);
+    private void initializeButtons(@NonNull FloatingActionButton editButton, @NonNull FloatingActionButton deleteButton) {
+        editButton.setOnClickListener(view -> {
+
+        });
+
+        deleteButton.setOnClickListener(view -> showDeleteConfirmationDialog());
+    }
+
+    private void initializeToolbar(Toolbar toolbar) {
+        toolbar.inflateMenu(R.menu.menu_toolbar_list);
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(view -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
     }
 
-    private void setupRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {
+    private void initializeRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {
         this.recyclerView = rv;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         addItemDecoration(getContext(), recyclerView, 2);
@@ -127,7 +136,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.archive) {
+        if (item.getItemId() == R.id.toolbar_search) {
             return true;
         }
         return true;

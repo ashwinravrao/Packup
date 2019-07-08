@@ -133,11 +133,11 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         return activity.getPreferences(Context.MODE_PRIVATE);
     }
 
-    private int getBoxNumber() {
+    private String getBoxNumber() {
         // Retrieve next available id
         int lastUsed = getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
         viewModel.getBox().setId(String.valueOf(lastUsed + 1));
-        return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
+        return String.valueOf(getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1));
     }
 
     private void saveBoxNumber() {

@@ -6,7 +6,7 @@
         android:color="@color/border_view_holder">
     </stroke>
     <solid
-        android:color="@color/box_view_holder"/>
+        android:color="@color/colorPrimary"/>
     <corners
         android:radius="5dp">
     </corners>
