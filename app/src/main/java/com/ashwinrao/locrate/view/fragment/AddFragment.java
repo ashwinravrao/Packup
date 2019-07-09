@@ -22,7 +22,6 @@ import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.CameraActivity;
-import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
@@ -50,7 +49,6 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
 public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavCallback {
 
-    private int currentBoxId;
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
     private FragmentAddBinding binding;
@@ -86,7 +84,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         // data binding
         binding.setBoxId(getBoxNumber());
 
-        // widgets
+        // layout widgets
         initializeToolbar(binding.toolbar);
         initializeFields(binding.nameInputField, binding.descriptionInputField);
         initializeRecyclerView(binding.recyclerView);
@@ -143,10 +141,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     private int getBoxNumber() {
         // Retrieve next available id
-        int lastUsed = getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
-        currentBoxId = lastUsed + 1;
+        int lastUsed = getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 0);
         boxViewModel.getBox().setId(lastUsed + 1);
-        return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
+        return lastUsed + 1;
     }
 
     private void saveBoxNumber() {
@@ -222,7 +219,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
                 if (paths != null) {
                     for (String path: paths) {
-                        items.add(new Item(currentBoxId, path));
+                        items.add(new Item(getBoxNumber(), path));
                     }
                     itemViewModel.setItems(items);
                 }
