@@ -58,4 +58,5 @@
     <string name="filtered_size">%d total</string>
     <string name="toolbar_title_home">Home</string>
     <string name="content_description_item_image">Item photo</string>
+    <string name="number_of_items_format_string">%d items</string>
 </resources>

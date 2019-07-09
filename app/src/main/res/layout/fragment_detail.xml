@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="box"
             type="com.ashwinrao.locrate.data.model.Box" />
+
+        <variable
+            name="numItems"
+            type="Integer" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -59,7 +62,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="@id/box_name"
                     app:layout_constraintBottom_toBottomOf="@id/delete_button"
-                    android:text="@{box.numItems}"
+                    android:text="@{String.format(@string/number_of_items_format_string, numItems)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/top_row_view_holder"/>
 

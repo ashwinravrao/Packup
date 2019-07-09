@@ -13,13 +13,18 @@ import android.widget.ImageView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentDetailBinding;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
+import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -27,9 +32,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import javax.inject.Inject;
@@ -42,9 +49,12 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private Box box;
     private int boxId;
-    private BoxViewModel viewModel;
+    private ItemsAdapter itemsAdapter;
+    private BoxViewModel boxViewModel;
+    private ItemViewModel itemViewModel;
     private ThumbnailAdapter adapter;
     private RecyclerView recyclerView;
+    private LiveData<List<Item>> itemsLD;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -58,9 +68,11 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        itemViewModel = ViewModelProviders.of(getActivity(), factory).get(ItemViewModel.class);
         if (getArguments() != null) {
             boxId = getArguments().getInt("ID", 0);
+            itemsLD = itemViewModel.getItemsFromBox(boxId);
         }
     }
 
@@ -68,6 +80,8 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentDetailBinding binding = FragmentDetailBinding.inflate(inflater);
+
+        // layout widgets
         initializeToolbar(binding.toolbar);
         initializeRecyclerView(binding, binding.recyclerView);
         initializeButtons(binding.editButton, binding.deleteButton);
@@ -88,28 +102,21 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         toolbar.setNavigationOnClickListener(view -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
     }
 
-    private void initializeRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView rv) {
-        this.recyclerView = rv;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        addItemDecoration(getContext(), recyclerView, 2);
-        adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
-        recyclerView.setAdapter(adapter);
-        viewModel.getBoxByID(boxId).observe(this, box -> {
+    private void initializeRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addItemDecoration(getContext(), recyclerView, 1);
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()));
+        recyclerView.setItemAnimator(null);
+        recyclerView.setAdapter(itemsAdapter);
+        boxViewModel.getBoxByID(boxId).observe(this, box -> {
             this.box = box;
             binding.setBox(box);
-            new Handler().post(() -> {
-                adapter.setPaths(box.getContents());
-                recyclerView.setAdapter(adapter);
-            });
         });
-    }
-
-    private void setupBottomNavigation(@NonNull ImageView delete, @NonNull ImageView edit) {
-        delete.setOnClickListener(view -> showDeleteConfirmationDialog());
-        edit.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), AddActivity.class);
-            intent.putExtra("ID", boxId);
-            startActivity(intent);
+        itemsLD.observe(this, items -> {
+            itemsAdapter.setItems(items);
+            binding.setNumItems(items.size());
+            recyclerView.setAdapter(itemsAdapter);
         });
     }
 
@@ -125,7 +132,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
                         ContextCompat.getColor(getContext(), R.color.colorAccent),
                         ContextCompat.getColor(getContext(), android.R.color.holo_red_dark)},
                 dialogInterface -> {
-                    viewModel.delete(box);
+                    boxViewModel.delete(box);
                     Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack();
                     return null;
                 }, dialogInterface -> {

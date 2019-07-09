@@ -15,14 +15,17 @@ import android.widget.EditText;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
+import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentAddBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.CameraActivity;
-import com.ashwinrao.locrate.view.adapter.ThumbnailAdapter;
+import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
+import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
-import com.ashwinrao.locrate.viewmodel.PhotoViewModel;
+import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.card.MaterialCardView;
 
 import java.io.File;
@@ -37,23 +40,23 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
-import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickListener, BackNavCallback {
 
-    private BoxViewModel viewModel;
-    private PhotoViewModel photoViewModel;
+    private int currentBoxId;
+    private BoxViewModel boxViewModel;
+    private ItemViewModel itemViewModel;
     private FragmentAddBinding binding;
     private RecyclerView recyclerView;
-    private ThumbnailAdapter adapter;
-    private List<String> compoundedItems = new ArrayList<>();
+    private ItemsAdapter itemsAdapter;
+    private List<Item> items = new ArrayList<>();
 
     private final String PREF_ID_KEY = "next_available_id";
     private static final String TAG = "AddFragment";
@@ -71,8 +74,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AddActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
-        viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        photoViewModel = ViewModelProviders.of(getActivity(), factory).get(PhotoViewModel.class);
+        boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        itemViewModel = ViewModelProviders.of(getActivity(), factory).get(ItemViewModel.class);
     }
 
     @Nullable
@@ -82,19 +85,55 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
         // data binding
         binding.setBoxId(getBoxNumber());
-        binding.setNumberOfItems(getString(R.string.num_items_default));
 
         // widgets
-        setupToolbar(binding.toolbar);
-        setupNameField(binding.nameInputField);
-        setupDescriptionField(binding.descriptionInputField);
-        setupRecyclerView(binding.recyclerView);
-        setupFillButton(binding.fillButton);
+        initializeToolbar(binding.toolbar);
+        initializeFields(binding.nameInputField, binding.descriptionInputField);
+        initializeRecyclerView(binding.recyclerView);
+        initializeFillButton(binding.fillButton);
 
         return binding.getRoot();
     }
 
-    private void setupFillButton(MaterialCardView cardView) {
+    private void initializeFields(EditText nameInputField, EditText descriptionInputField) {
+
+        // Name Input Field
+        Objects.requireNonNull(nameInputField).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                final String name = s.toString().length() > 0 ? s.toString() : null;
+                boxViewModel.getBox().setName(name);
+            }
+        });
+
+        // Description Input Field
+        Objects.requireNonNull(descriptionInputField).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                binding.charCount.setText(String.valueOf(s.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                final String description = s.toString().length() > 0 ? s.toString() : null;
+                boxViewModel.getBox().setDescription(description);
+            }
+        });
+    }
+
+    private void initializeFillButton(MaterialCardView cardView) {
         cardView.setOnClickListener(view -> startCamera());
     }
 
@@ -105,7 +144,8 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     private int getBoxNumber() {
         // Retrieve next available id
         int lastUsed = getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
-        viewModel.getBox().setId(lastUsed + 1);
+        currentBoxId = lastUsed + 1;
+        boxViewModel.getBox().setId(lastUsed + 1);
         return getSharedPreferences(Objects.requireNonNull(getActivity())).getInt(PREF_ID_KEY, 1);
     }
 
@@ -119,52 +159,16 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         editor.apply();  // .apply() >= .commit()
     }
 
-    private void setupRecyclerView(RecyclerView recyclerView) {
+    private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        addItemDecoration(getContext(), recyclerView, 2);
-        adapter = new ThumbnailAdapter(getContext(), dpToPx(Objects.requireNonNull(getContext()), 150f), dpToPx(getContext(), 150f));
-        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        addItemDecoration(getContext(), recyclerView, 1);
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()));
+        recyclerView.setItemAnimator(null);
+        recyclerView.setAdapter(itemsAdapter);
     }
 
-    private void setupDescriptionField(@NonNull EditText editText) {
-        Objects.requireNonNull(editText).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.charCount.setText(String.valueOf(s.length()));
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                final String description = s.toString().length() > 0 ? s.toString() : null;
-                viewModel.getBox().setDescription(description);
-            }
-        });
-    }
-
-    private void setupNameField(@NonNull EditText editText) {
-        Objects.requireNonNull(editText).addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                final String name = s.toString().length() > 0 ? s.toString() : null;
-                viewModel.getBox().setName(name);
-            }
-        });
-    }
-
-    private void setupToolbar(Toolbar toolbar) {
+    private void initializeToolbar(Toolbar toolbar) {
         toolbar.setOnMenuItemClickListener(this);
         toolbar.setNavigationOnClickListener(v -> closeWithConfirmation());
     }
@@ -172,12 +176,13 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if(item.getItemId() == R.id.toolbar_done) {
-            if (viewModel.getBox().getContents() == null || viewModel.getBox().getContents().size() < 1) {
+            if (itemViewModel.getItemsFromThis().size() == 0) {
                 showEmptyBoxDialog();
                 return true;
             } else {
-                if (viewModel.saveBox()) {
+                if (boxViewModel.saveBox()) {
                     saveBoxNumber();
+                    itemViewModel.insertItems(itemViewModel.getItemsFromThis());
                     Objects.requireNonNull(getActivity()).finish();
                     return true;
                 } else {
@@ -216,40 +221,31 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             if (resultCode == RESULT_OK) {
                 final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
                 if (paths != null) {
-                    photoViewModel.setPaths(paths);
+                    for (String path: paths) {
+                        items.add(new Item(currentBoxId, path));
+                    }
+                    itemViewModel.setItems(items);
                 }
-
-                Objects.requireNonNull(getActivity())
-                        .getSupportFragmentManager()
-                        .beginTransaction()
-                        .addToBackStack(null)
-                        .setCustomAnimations(0, 0, 0, R.anim.slide_down_out)
-                        .replace(R.id.fragment_container, new PhotoFragment())
-                        .commit();
             }
         }
     }
 
     private void updateItems() {
-        if (photoViewModel.getPaths() != null && !photoViewModel.getPaths().equals(compoundedItems)) {
-            compoundedItems.addAll(photoViewModel.getPaths());
-        }
-        if (compoundedItems.size() > 0) {
-            adapter.setPaths(compoundedItems);
-            recyclerView.setAdapter(adapter);
-            viewModel.getBox().setContents(compoundedItems);
-            binding.setNumberOfItems(viewModel.getBox().getNumItems());
+        if (items.size() > 0) {
+            itemsAdapter.setItems(items);
+            recyclerView.setAdapter(itemsAdapter);
+            binding.setNumItems(itemViewModel.getItemsFromThis().size());
         }
     }
 
-    public void startCamera() {
+    private void startCamera() {
         Intent intent = new Intent(getActivity(), CameraActivity.class);
-        photoViewModel.clearPaths();
         startActivityForResult(intent, 1);
     }
 
     private void closeWithConfirmation() {
-        if (viewModel.areChangesUnsaved()) {
+        final Box box = boxViewModel.getBox();
+        if (box.getName() != null || !box.getDescription().equals("No description") || items.size() > 0) {
             showUnsavedChangesDialog();
         } else {
             Objects.requireNonNull(getActivity()).finish();
@@ -264,10 +260,11 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 getString(R.string.discard),
                 getString(R.string.no)}, false, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
                 ContextCompat.getColor(Objects.requireNonNull(getContext()), android.R.color.holo_red_dark)}, dialogInterface -> {
-            if (photoViewModel.getPaths() != null) {
-                for (String path : photoViewModel.getPaths()) {
-                    new File(path).delete();
+            if (itemViewModel.getItemsFromThis() != null) {
+                for(Item item : itemViewModel.getItemsFromThis()) {
+                    new File(item.getFilePath()).delete();
                 }
+                itemViewModel.deleteItems(itemViewModel.getItemsFromThis());
             }
             Objects.requireNonNull(getActivity()).finish();
             return null;

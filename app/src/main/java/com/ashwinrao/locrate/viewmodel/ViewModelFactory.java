@@ -29,6 +29,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(BoxViewModel.class)) {
             return (T) new BoxViewModel(boxRepo);
+        } else if (modelClass.isAssignableFrom(ItemViewModel.class)) {
+            return (T) new ItemViewModel(itemRepo);
         } else if (modelClass.isAssignableFrom(PhotoViewModel.class)) {
             return (T) new PhotoViewModel();
         } else

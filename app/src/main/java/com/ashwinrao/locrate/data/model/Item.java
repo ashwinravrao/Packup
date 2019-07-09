@@ -29,7 +29,7 @@ public class Item {
     private String id = UUID.randomUUID().toString();
 
     @ColumnInfo(name = "box_id")
-    private String boxId;
+    private int boxId;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -46,7 +46,10 @@ public class Item {
     @ColumnInfo(name = "category")
     private String category;
 
-    public Item() { }
+    public Item(@NonNull Integer boxId, @NonNull String filePath) {
+        this.boxId = boxId;
+        this.filePath = filePath;
+    }
 
     @NonNull
     public String getId() {
@@ -62,11 +65,11 @@ public class Item {
         this.id = uuid.toString();
     }
 
-    public String getBoxId() {
+    public int getBoxId() {
         return boxId;
     }
 
-    public void setBoxId(String boxId) {
+    public void setBoxId(int boxId) {
         this.boxId = boxId;
     }
 

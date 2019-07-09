@@ -23,19 +23,13 @@ public class Box {
     private String name;
 
     @ColumnInfo(name = "description")
-    private String description;
+    private String description = "No description";
 
     @ColumnInfo(name = "created")
     private Date createdDate = new Date();
 
     @ColumnInfo(name = "category")
     private String category;
-
-    @ColumnInfo(name = "contents")
-    private List<String> contents;
-
-    @ColumnInfo(name = "num_items")
-    private String numItems;
 
     @ColumnInfo(name = "is_full")
     private boolean isFull;
@@ -58,21 +52,6 @@ public class Box {
         this.createdDate = createdDate;
     }
 
-    public void setNumItems(String numItems) {
-        this.numItems = numItems;
-    }
-
-    public void setContents(List<String> contents) {
-        this.contents = contents;
-        if (this.contents.size() == 0) {
-            setNumItems("Empty");
-        } else if (this.contents.size() == 1) {
-            setNumItems("1 item");
-        } else {
-            setNumItems(String.format(Locale.US, "%d items", this.contents.size()));
-        }
-    }
-
     public boolean isFull() {
         return isFull;
     }
@@ -86,19 +65,11 @@ public class Box {
     }
 
     public String getDescription() {
-        return description == null ? "No description" : description;
+        return description;
     }
 
     public Date getCreatedDate() {
         return createdDate;
-    }
-
-    public List<String> getContents() {
-        return contents;
-    }
-
-    public String getNumItems() {
-        return this.numItems == null ? "Empty box" : this.numItems;
     }
 
     public void setFull(boolean full) {

@@ -17,9 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
+import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
-import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 public class ItemsPage extends Fragment {
 
     private ItemsAdapter itemsAdapter;
-    private LiveData<List<String>> allContents;
+    private LiveData<List<Item>> itemsLD;
     private FragmentPageItemsBinding binding;
 
     @Inject
@@ -48,8 +49,7 @@ public class ItemsPage extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        allContents = viewModel.getAllContents();
+        itemsLD = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class).getAllItemsFromDatabase();
     }
 
     @Override
@@ -69,10 +69,9 @@ public class ItemsPage extends Fragment {
         binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all));
         binding.setFilterActivated(false);
 
-
         // layout widgets
         initializeButtons(binding.filterButton, binding.packButton);
-//        initializeRecyclerView(binding.recyclerView, binding);
+        initializeRecyclerView(binding.recyclerView, binding);
         return binding.getRoot();
     }
 
@@ -95,10 +94,10 @@ public class ItemsPage extends Fragment {
         itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()));
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
-        allContents.observe(this, strings -> {
-            if(strings != null) {
-//                itemsAdapter.setItems(strings);
-                binding.setFilteredSize(String.format(getString(R.string.filtered_size), strings.size()));
+        itemsLD.observe(this, items -> {
+            if(items != null) {
+                itemsAdapter.setItems(items);
+                binding.setFilteredSize(String.format(getString(R.string.filtered_size), items.size()));
             } else {
                 itemsAdapter.setItems(new ArrayList<>());
             }

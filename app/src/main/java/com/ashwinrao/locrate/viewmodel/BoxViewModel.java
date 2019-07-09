@@ -41,19 +41,15 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
-    public LiveData<List<String>> getAllContents() {
-        return Transformations.switchMap(getBoxes(), value -> {
-            MutableLiveData<List<String>> mld = new MutableLiveData<>();
-            List<String> contents = new ArrayList<>();
-            for(Box box : value) contents.addAll(box.getContents());
-            mld.setValue(contents);
-            return mld;
-        });
-    }
-
-    public boolean areChangesUnsaved() {
-        return box.getName() != null || !box.getDescription().equals("No description") || box.getContents() != null;
-    }
+//    public LiveData<List<String>> getAllContents() {
+//        return Transformations.switchMap(getBoxes(), value -> {
+//            MutableLiveData<List<String>> mld = new MutableLiveData<>();
+//            List<String> contents = new ArrayList<>();
+//            for(Box box : value) contents.addAll(box.getContents());
+//            mld.setValue(contents);
+//            return mld;
+//        });
+//    }
 
     public void delete(Box box) {
         repo.delete(box);

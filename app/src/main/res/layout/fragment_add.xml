@@ -10,8 +10,8 @@
             type="Integer" />
 
         <variable
-            name="numberOfItems"
-            type="String" />
+            name="numItems"
+            type="Integer" />
 
     </data>
 
@@ -78,8 +78,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
-                    android:layout_marginEnd="28dp"
                     android:layout_marginTop="32dp"
+                    android:layout_marginEnd="28dp"
                     android:hint="@string/hint_name"
                     android:inputType="textCapWords"
                     android:textColor="@color/iconAndTextColor"
@@ -99,11 +99,11 @@
                     android:layout_marginEnd="28dp"
                     android:hint="@string/hint_description"
                     android:inputType="textCapSentences|textMultiLine"
+                    android:maxEms="250"
+                    android:maxLength="250"
                     android:textColor="@color/iconAndTextColor"
                     android:textColorHint="@color/top_row_view_holder"
                     android:textSize="16sp"
-                    android:maxEms="250"
-                    android:maxLength="250"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/name_input_field"
@@ -112,27 +112,27 @@
 
                 <LinearLayout
                     android:id="@+id/char_counter"
-                    android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    android:orientation="horizontal"
                     app:layout_constraintEnd_toEndOf="@id/description_input_field"
                     app:layout_constraintTop_toBottomOf="@id/description_input_field">
 
                     <TextView
                         android:id="@+id/char_count"
-                        android:text="@string/char_count_default"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:text="@string/char_count_default"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
                     <TextView
                         android:id="@+id/char_limit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:text="@string/char_limit"/>
+                        android:text="@string/char_limit"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption" />
 
                 </LinearLayout>
 
@@ -153,9 +153,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
-                    android:text="@{numberOfItems}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:alpha="0.7"
+                    android:text="@{safeUnbox(numItems) == 0 ? @string/num_items_default : String.format(@string/number_of_items_format_string, numItems)}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintBottom_toBottomOf="@id/contents_section"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/contents_section"
@@ -166,16 +166,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
+                    android:layout_marginBottom="96dp"
                     android:overScrollMode="never"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/contents_section"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintVertical_bias="0"
-                    android:layout_marginBottom="96dp"/>
+                    app:layout_constraintVertical_bias="0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -191,39 +191,39 @@
             android:padding="16dp"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/fill_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:cardBackgroundColor="@color/colorAccent"
-                    app:cardCornerRadius="5dp">
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fill_button"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:cardBackgroundColor="@color/colorAccent"
+                app:cardCornerRadius="5dp">
 
-                    <LinearLayout
-                        android:orientation="horizontal"
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    tools:ignore="UseCompoundDrawables">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_camera_white"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        tools:ignore="UseCompoundDrawables">
+                        android:text="@string/fill_box"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp" />
 
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_camera_white"
-                            android:layout_marginEnd="16dp"
-                            tools:ignore="ContentDescription" />
+                </LinearLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fill_box"
-                            android:layout_gravity="center"
-                            android:textSize="16sp"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-                            android:textColor="@android:color/white"/>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 

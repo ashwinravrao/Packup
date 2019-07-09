@@ -34,6 +34,10 @@ public class ItemRepository {
         return dao.getItemsValued(estimatedValue);
     }
 
+    public LiveData<List<Item>> getItemsFromBox(int boxId) {
+        return dao.getItemsFromBox(boxId);
+    }
+
     public void insert(Item... items) {
         new AsyncTasks.ItemAsyncTask(dao, "insert").execute(items);
     }
