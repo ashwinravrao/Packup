@@ -121,18 +121,6 @@ public class HomeFragment extends Fragment implements BackNavCallback {
                     itemsPage.onQueryTextChange(newText);
                 }
 
-//                if (getCurrentlyVisibleFragment() == BoxesPage.class) {
-//                    boxesPage.onQueryTextChange(newText);
-//                }
-//
-//                if (getCurrentlyVisibleFragment() == ItemsPage.class) {
-//                    itemsPage.onQueryTextChange(newText);
-//                }
-//
-//                if (getCurrentlyVisibleFragment() == null) {
-//                    Toast.makeText(getContext(), "NULL!!!", Toast.LENGTH_SHORT).show();
-//                }
-
                 return false;
             }
         });

@@ -7,7 +7,7 @@
     <color name="colorAccentGold">#CCAD83</color>
 
     <color name="colorPrimaryLight">#F5F5F5</color>
-    <color name="filter_image_preview">#BFBFBF</color>
+    <color name="light_gray_multi_use">#BFBFBF</color>
     <color name="background_window">#FFFFFF</color>
     <color name="secondary_background_window">#EEEEEE</color>
     <color name="box_view_holder">@color/secondary_background_window</color>

@@ -9,7 +9,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/background_window</item>
         <item name="drawerArrowStyle">@style/AppTheme.DrawerArrowStyle</item>
-        <item name="android:colorEdgeEffect">@color/filter_image_preview</item>
+        <item name="android:colorEdgeEffect">@color/light_gray_multi_use</item>
 
     </style>
 

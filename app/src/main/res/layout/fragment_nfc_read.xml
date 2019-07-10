@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryLight"
+        android:elevation="50dp"
+        android:fitsSystemWindows="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryLight">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:elevation="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_close_dark"
+                app:popupTheme="@style/AppTheme.PopUpOverlay"
+                app:title="@string/tap_to_reveal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:text="@string/nfc_read_instructions_p1"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                app:layout_constraintBottom_toTopOf="@id/nfc_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+            <ImageView
+                android:id="@+id/nfc_image"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:alpha="0.7"
+                android:contentDescription="@string/tap_nfc_content_description"
+                android:src="@drawable/ic_tap_nfc"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:text="@string/nfc_read_instructions_p2"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/nfc_image" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

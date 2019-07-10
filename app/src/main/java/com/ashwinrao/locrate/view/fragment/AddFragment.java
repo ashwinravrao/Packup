@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
@@ -88,7 +89,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         initializeToolbar(binding.toolbar);
         initializeFields(binding.nameInputField, binding.descriptionInputField);
         initializeRecyclerView(binding.recyclerView);
-        initializeFillButton(binding.fillButton);
+        initializeButtons(binding.nfcButton, binding.fillButton);
 
         return binding.getRoot();
     }
@@ -131,8 +132,9 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         });
     }
 
-    private void initializeFillButton(MaterialCardView cardView) {
-        cardView.setOnClickListener(view -> startCamera());
+    private void initializeButtons(@NonNull MaterialCardView nfcButton, @NonNull MaterialCardView fillButton) {
+        nfcButton.setOnClickListener(view -> Toast.makeText(getContext(), "Provisioning NFC tag...", Toast.LENGTH_SHORT).show());
+        fillButton.setOnClickListener(view -> startCamera());
     }
 
     private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
@@ -255,7 +257,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 getString(R.string.dialog_discard_box_title),
                 getString(R.string.dialog_discard_box_message),
                 getString(R.string.discard),
-                getString(R.string.no)}, false, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
+                getString(R.string.cancel)}, true, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
                 ContextCompat.getColor(Objects.requireNonNull(getContext()), android.R.color.holo_red_dark)}, dialogInterface -> {
             if (itemViewModel.getItemsFromThis() != null) {
                 for(Item item : itemViewModel.getItemsFromThis()) {
@@ -277,7 +279,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                         getString(R.string.dialog_empty_box_message),
                         getString(R.string.ok),
                         getString(R.string.discard)},
-                false,
+                true,
                 new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
                         ContextCompat.getColor(getContext(), R.color.colorAccent)},
                 dialogInterface -> {

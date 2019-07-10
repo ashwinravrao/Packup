@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import androidx.appcompat.app.AlertDialog;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.util.function.Function;
 
 public class ConfirmationDialog {
@@ -25,7 +28,7 @@ public class ConfirmationDialog {
                             int[] buttonColors,
                             Function<DialogInterface, Void> positiveButtonAction,
                             Function<DialogInterface, Void> negativeButtonAction) {
-        AlertDialog dialog = new AlertDialog.Builder(context)
+        AlertDialog dialog = new MaterialAlertDialogBuilder(context)
                 .setTitle(content[0])
                 .setMessage(content[1])
                 .setCancelable(cancelable)

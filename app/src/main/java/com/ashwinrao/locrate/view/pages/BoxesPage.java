@@ -22,6 +22,7 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
+import com.ashwinrao.locrate.view.fragment.NFCReadFragment;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -38,6 +39,7 @@ public class BoxesPage extends Fragment {
     private BoxesAdapter boxesAdapter;
     private LiveData<List<Box>> boxesLD;
     private FragmentPageBoxesBinding binding;
+    private FloatingActionButton[] fabs;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -51,16 +53,14 @@ public class BoxesPage extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final BoxViewModel viewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        boxesLD = viewModel.getBoxes();
+        final BoxViewModel boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        boxesLD = boxViewModel.getBoxes();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        // crashing due to NPE on ref to BoxesAdapter (when returning from other fragment)
-        // TODO re-initialize BoxesAdapter ref after returning here
+        for (FloatingActionButton fab : fabs) fab.setEnabled(true);
         binding.setFilterActivated(false);
     }
 
@@ -80,19 +80,32 @@ public class BoxesPage extends Fragment {
     }
 
     private void initializeButtons(@NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton nfcButton, @NonNull FloatingActionButton addButton) {
+        fabs = new FloatingActionButton[]{nfcButton, addButton};
+
         filterButton.setOnClickListener(view -> {
             binding.setFilterActivated(!binding.getFilterActivated());
-            if(binding.getFilterActivated()) {
+            if (binding.getFilterActivated()) {
             }
         });
 
         nfcButton.setOnClickListener(view -> {
-
+            Objects.requireNonNull(getActivity())
+                    .getSupportFragmentManager()
+                    .beginTransaction()
+                    .addToBackStack(null)
+                    .setCustomAnimations(R.anim.slide_up_in,
+                            R.anim.stay_still,
+                            R.anim.stay_still,
+                            R.anim.slide_down_out)
+                    .replace(R.id.fragment_container, new NFCReadFragment(), "NFCReadFragment")
+                    .commit();
+            view.setEnabled(false);
         });
 
-        addButton.setOnClickListener(v -> {
+        addButton.setOnClickListener(view -> {
             Intent intent = new Intent(getActivity(), AddActivity.class);
             startActivity(intent);
+            view.setEnabled(false);
         });
     }
 

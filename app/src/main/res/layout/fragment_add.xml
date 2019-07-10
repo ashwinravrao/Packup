@@ -191,39 +191,84 @@
             android:padding="16dp"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior">
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/fill_button"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:cardBackgroundColor="@color/colorAccent"
-                app:cardCornerRadius="5dp">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    tools:ignore="UseCompoundDrawables">
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/nfc_button"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_weight="0.5"
+                    app:cardBackgroundColor="@color/colorAccentGold"
+                    android:layout_marginEnd="8dp"
+                    app:cardCornerRadius="5dp">
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:src="@drawable/ic_camera_white"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="@string/fill_box"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
-                        android:textColor="@android:color/white"
-                        android:textSize="16sp" />
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/ic_nfc"
+                            tools:ignore="ContentDescription" />
 
-            </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/nfc_tag"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/fill_button"
+                    android:layout_width="0dp"
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_weight="0.5"
+                    android:layout_marginStart="8dp"
+                    app:cardBackgroundColor="@color/colorAccent"
+                    app:cardCornerRadius="5dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:src="@drawable/ic_camera_white"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="@string/fill_box"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
 
         </com.google.android.material.bottomnavigation.BottomNavigationView>
 

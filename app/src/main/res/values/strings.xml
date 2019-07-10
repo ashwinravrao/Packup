@@ -59,4 +59,12 @@
     <string name="toolbar_title_home">Home</string>
     <string name="content_description_item_image">Item photo</string>
     <string name="number_of_items_format_string">%d items</string>
+    <string name="tap_to_reveal">Tap to Reveal</string>
+    <string name="tap_nfc_content_description">Tap NFC sticker to reveal box contents</string>
+    <string name="nfc_read_instructions_p1">Tap your phone on an NFC sticker</string>
+    <string name="nfc_read_instructions_p2">to reveal that box\'s contents</string>
+    <string name="cancel">Cancel</string>
+    <string name="encode_nfc_content_description">Encode an NFC tag</string>
+    <string name="encode_nfc_tag">NFC Tag</string>
+    <string name="nfc_tag">NFC Tag</string>
 </resources>
