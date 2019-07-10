@@ -9,9 +9,9 @@
         android:duration="@android:integer/config_mediumAnimTime"
         android:interpolator="@android:anim/accelerate_interpolator"
         android:fromYDelta="0%p"
-        android:toYDelta="70%p"/>
+        android:toYDelta="50%p"/>
     <alpha
-        android:duration="300"
+        android:duration="200"
         android:interpolator="@android:anim/accelerate_interpolator"
         android:fromAlpha="1.0"
         android:toAlpha="0.0"/>

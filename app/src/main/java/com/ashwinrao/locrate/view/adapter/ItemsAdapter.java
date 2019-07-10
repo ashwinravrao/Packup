@@ -18,18 +18,23 @@ import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ViewholderItemBinding;
 import com.ashwinrao.locrate.util.ItemPropertiesFilter;
 import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
+import com.bumptech.glide.Glide;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> implements Filterable {
 
     private Context context;
     private List<Item> items;
     private List<Item> itemsCopy;
+    private Boolean isShownWithBoxContext;
 
-    public ItemsAdapter(@NonNull Context context) {
+    public ItemsAdapter(@NonNull Context context, @NonNull Boolean isShownWithBoxContext) {
         this.context = context;
+        this.isShownWithBoxContext = isShownWithBoxContext;
     }
 
     public void setItems(@NonNull List<Item> items) {
@@ -47,8 +52,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
-//        Item item = items.get(position);
-//        holder.binding.setItem(item);
+        final Item item = items.get(position);
+        item.setIsShownWithBoxContext(isShownWithBoxContext);
+        holder.binding.setItem(item);
+
+        final String path = item.getFilePath();
+        Glide.with(context)
+                .load(new File(path))
+                .thumbnail(0.01f)  // down-sample to 1% of original image resolution for thumbnail
+                .centerCrop()
+                .into(holder.binding.itemImage);
     }
 
     @Override

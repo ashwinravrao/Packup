@@ -5,6 +5,7 @@
     <color name="colorPrimaryDark">#E3E3E3</color>
     <color name="colorAccent">#1788D3</color>
     <color name="colorAccentGold">#CCAD83</color>
+    <color name="item_value_green">#0B9300</color>
 
     <color name="colorPrimaryLight">#F5F5F5</color>
     <color name="light_gray_multi_use">#BFBFBF</color>

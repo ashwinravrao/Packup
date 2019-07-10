@@ -2,9 +2,9 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <translate
-        android:duration="@android:integer/config_mediumAnimTime"
+        android:duration="250"
         android:interpolator="@android:anim/accelerate_decelerate_interpolator"
-        android:fromYDelta="70%p"
+        android:fromYDelta="50%p"
         android:toYDelta="0%p" />
     <alpha
         android:duration="300"

@@ -91,7 +91,7 @@ public class ItemsPage extends Fragment {
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageItemsBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         addItemDecoration(getContext(), recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()));
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), false);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
         itemsLD.observe(this, items -> {

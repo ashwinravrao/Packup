@@ -8,7 +8,10 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import static androidx.room.ForeignKey.CASCADE;
@@ -45,6 +48,9 @@ public class Item {
 
     @ColumnInfo(name = "category")
     private String category;
+
+    @Ignore
+    private Boolean isShownWithBoxContext;
 
     public Item(@NonNull Integer boxId, @NonNull String filePath) {
         this.boxId = boxId;
@@ -95,6 +101,20 @@ public class Item {
 
     public Date getPackedDate() {
         return packedDate;
+    }
+
+    @Ignore
+    public void setIsShownWithBoxContext(boolean isShownWithBoxContext) {
+        this.isShownWithBoxContext = isShownWithBoxContext;
+    }
+
+    @Ignore
+    public String getPackedDateAsString() {
+        final DateFormat df = new SimpleDateFormat("M/d/yy", Locale.US);
+        String dateAsString = df.format(getPackedDate());
+        return isShownWithBoxContext
+                ? String.format(Locale.US,"Packed on %s", dateAsString)
+                : String.format(Locale.US,"Packed on %s in Box %d", dateAsString, getBoxId());
     }
 
     public void setEstimatedValue(double estimatedValue) {

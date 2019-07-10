@@ -67,4 +67,8 @@
     <string name="encode_nfc_content_description">Encode an NFC tag</string>
     <string name="encode_nfc_tag">NFC Tag</string>
     <string name="nfc_tag">NFC Tag</string>
+    <string name="nfc_read_dialog_title">Tap to Scan</string>
+    <string name="nfc_read_dialog_message">Scan an NFC tag to see what\'s inside the corresponding box.\n\nJust tap the back of your phone on a tag, and you box should appear! </string>
+    <string name="item_name">Item name</string>
+    <string name="item_packed_date">Packed on %s</string>
 </resources>

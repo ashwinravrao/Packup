@@ -162,7 +162,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()));
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), true);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
     }
