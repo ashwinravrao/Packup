@@ -62,6 +62,8 @@ public class BoxesPage extends Fragment {
         super.onResume();
         for (FloatingActionButton fab : fabs) fab.setEnabled(true);
         binding.setFilterActivated(false);
+        binding.setBulkEditActivated(false);
+
     }
 
     @Nullable
@@ -72,19 +74,28 @@ public class BoxesPage extends Fragment {
         // binding vars
         binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all));
         binding.setFilterActivated(false);
+        binding.setBulkEditActivated(false);
 
         // layout widgets
         initializeRecyclerView(binding.recyclerView, binding);
-        initializeButtons(binding.filterButton, binding.nfcButton, binding.addButton);
+        initializeButtons(binding.bulkEditButton, binding.filterButton, binding.nfcButton, binding.addButton);
         return binding.getRoot();
     }
 
-    private void initializeButtons(@NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton nfcButton, @NonNull FloatingActionButton addButton) {
+    private void initializeButtons(@NonNull FloatingActionButton bulkEditButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton nfcButton, @NonNull FloatingActionButton addButton) {
         fabs = new FloatingActionButton[]{nfcButton, addButton};
+
+        bulkEditButton.setOnClickListener(view -> {
+            binding.setBulkEditActivated(!binding.getBulkEditActivated());
+            if(binding.getBulkEditActivated()) {
+                // TODO add method body
+            }
+        });
 
         filterButton.setOnClickListener(view -> {
             binding.setFilterActivated(!binding.getFilterActivated());
             if (binding.getFilterActivated()) {
+                // TODO add method body
             }
         });
 

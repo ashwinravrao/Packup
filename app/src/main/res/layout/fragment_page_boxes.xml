@@ -17,6 +17,10 @@
             name="filteredSize"
             type="String" />
 
+        <variable
+            name="bulkEditActivated"
+            type="Boolean" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -36,117 +40,160 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryLight">
 
-                <TextView
-                    android:id="@+id/categories"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/filter_button"
-                    android:layout_marginStart="24dp"
-                    android:text="@{filters}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
-
-                <TextView
-                    android:id="@+id/filtered_size_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/categories"
-                    app:layout_constraintBottom_toBottomOf="@id/filter_button"
-                    android:text="@{filteredSize}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/top_row_view_holder"/>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/filter_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/nfc_button"
-                    app:elevation="0dp"
-                    app:fabCustomSize="45dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
-                    app:borderWidth="0dp"
-                    app:tint="@android:color/white"
-                    app:rippleColor="@android:color/white"
-                    android:backgroundTint="@{safeUnbox(filterActivated) ? @color/colorAccentGold : @color/unselected_fab}"
-                    android:src="@drawable/ic_filter" />
-
-                <TextView
-                    android:id="@+id/filter_button_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/filter_button"
-                    app:layout_constraintStart_toStartOf="@id/filter_button"
-                    app:layout_constraintEnd_toEndOf="@id/filter_button"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/nfc_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/add_button"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
-                    app:elevation="0dp"
-                    app:fabCustomSize="45dp"
-                    app:borderWidth="0dp"
-                    app:rippleColor="@android:color/white"
-                    app:tint="@android:color/white"
-                    android:backgroundTint="@color/colorAccent"
-                    android:src="@drawable/ic_nfc" />
-
-                <TextView
-                    android:id="@+id/nfc_button_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/nfc"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/nfc_button"
-                    app:layout_constraintStart_toStartOf="@id/nfc_button"
-                    app:layout_constraintEnd_toEndOf="@id/nfc_button"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/add_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
-                    app:elevation="0dp"
-                    app:fabCustomSize="45dp"
-                    app:borderWidth="0dp"
-                    android:layout_gravity="end"
-                    app:rippleColor="@android:color/white"
-                    app:tint="@android:color/white"
-                    android:backgroundTint="@color/colorAccent"
-                    android:src="@drawable/ic_add_default" />
-
-                <TextView
-                    android:id="@+id/add_button_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add"
-                    android:layout_marginTop="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/add_button"
-                    app:layout_constraintStart_toStartOf="@id/add_button"
-                    app:layout_constraintEnd_toEndOf="@id/add_button"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
-
-                <View
-                    android:id="@+id/divider"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/top_buttons"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
+                    android:layout_height="150dp"
+                    app:cardElevation="3dp"
+                    app:cardCornerRadius="0dp"
+                    app:cardBackgroundColor="@color/colorPrimaryLight"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/filter_button_caption"
-                    android:layout_marginTop="16dp"/>
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/nfc_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
+                            android:layout_marginStart="32dp"
+                            app:elevation="0dp"
+                            app:borderWidth="0dp"
+                            app:rippleColor="@android:color/white"
+                            app:tint="@android:color/white"
+                            android:backgroundTint="@color/colorAccent"
+                            android:src="@drawable/ic_nfc" />
+
+                        <TextView
+                            android:id="@+id/nfc_button_caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nfc"
+                            android:layout_marginTop="16dp"
+                            android:textAlignment="center"
+                            app:layout_constraintTop_toBottomOf="@id/nfc_button"
+                            app:layout_constraintStart_toStartOf="@id/nfc_button"
+                            app:layout_constraintEnd_toEndOf="@id/nfc_button"
+                            android:fontFamily="sans-serif-medium"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/filter_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/nfc_button"
+                            app:layout_constraintEnd_toStartOf="@id/bulk_edit_button"
+                            app:elevation="0dp"
+                            android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
+                            app:borderWidth="0dp"
+                            app:tint="@android:color/white"
+                            app:rippleColor="@android:color/white"
+                            android:backgroundTint="@{safeUnbox(filterActivated) ? @color/colorAccentGold : @color/unselected_fab}"
+                            android:src="@drawable/ic_filter" />
+
+                        <TextView
+                            android:id="@+id/filter_button_caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{safeUnbox(filterActivated) ? @string/filtering : @string/filter}"
+                            android:layout_marginTop="16dp"
+                            android:textAlignment="center"
+                            android:fontFamily="sans-serif-medium"
+                            app:layout_constraintTop_toBottomOf="@id/filter_button"
+                            app:layout_constraintStart_toStartOf="@id/filter_button"
+                            app:layout_constraintEnd_toEndOf="@id/filter_button"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/bulk_edit_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/filter_button"
+                            app:layout_constraintEnd_toStartOf="@id/add_button"
+                            app:elevation="0dp"
+                            android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
+                            app:borderWidth="0dp"
+                            app:tint="@android:color/white"
+                            app:rippleColor="@android:color/white"
+                            android:backgroundTint="@{safeUnbox(bulkEditActivated) ? @color/colorAccentGold : @color/unselected_fab}"
+                            android:src="@drawable/ic_bulk_edit" />
+
+                        <TextView
+                            android:id="@+id/bulk_edit_button_caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{safeUnbox(bulkEditActivated) ? @string/bulk_editing : @string/bulk_edit}"
+                            android:layout_marginTop="16dp"
+                            android:textAlignment="center"
+                            android:fontFamily="sans-serif-medium"
+                            app:layout_constraintTop_toBottomOf="@id/bulk_edit_button"
+                            app:layout_constraintStart_toStartOf="@id/bulk_edit_button"
+                            app:layout_constraintEnd_toEndOf="@id/bulk_edit_button"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/add_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
+                            app:elevation="0dp"
+                            app:borderWidth="0dp"
+                            android:layout_gravity="end"
+                            app:rippleColor="@android:color/white"
+                            app:tint="@android:color/white"
+                            android:backgroundTint="@color/colorAccent"
+                            android:src="@drawable/ic_add_default" />
+
+                        <TextView
+                            android:id="@+id/add_button_caption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add"
+                            android:layout_marginTop="16dp"
+                            android:textAlignment="center"
+                            android:fontFamily="sans-serif-medium"
+                            app:layout_constraintTop_toBottomOf="@id/add_button"
+                            app:layout_constraintStart_toStartOf="@id/add_button"
+                            app:layout_constraintEnd_toEndOf="@id/add_button"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--<TextView-->
+                    <!--android:id="@+id/categories"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@id/top_buttons"-->
+                    <!--android:layout_marginStart="24dp"-->
+                    <!--android:layout_marginTop="24dp"-->
+                    <!--android:text="@{filters}"-->
+                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Title" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/filtered_size_text"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--android:layout_marginEnd="24dp"-->
+                    <!--app:layout_constraintBottom_toBottomOf="@id/categories"-->
+                    <!--app:layout_constraintTop_toTopOf="@id/categories"-->
+                    <!--android:text="@{filteredSize}"-->
+                    <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"-->
+                    <!--android:textColor="@color/top_row_view_holder"/>-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -157,7 +204,7 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/divider" />
+                    app:layout_constraintTop_toBottomOf="@id/top_buttons" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

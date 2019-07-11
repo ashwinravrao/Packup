@@ -54,7 +54,7 @@
     <string name="completed">Completed</string>
     <string name="fill_box">Fill Box</string>
     <string name="start_packing">Start Packing</string>
-    <string name="all">All</string>
+    <string name="all">All Boxes</string>
     <string name="filtered_size">%d total</string>
     <string name="toolbar_title_home">Home</string>
     <string name="content_description_item_image">Item photo</string>
@@ -72,7 +72,10 @@
     <string name="item_name">Item name</string>
     <string name="item_packed_date">Packed on %s</string>
     <string name="categories">Categories</string>
-    <string name="filter">Filter</string>
-    <string name="nfc">NFC</string>
-    <string name="add">Add</string>
+    <string name="filter">Filter By</string>
+    <string name="filtering">Filtering…</string>
+    <string name="nfc">Scan NFC</string>
+    <string name="add">New Box</string>
+    <string name="bulk_edit">Bulk Edit</string>
+    <string name="bulk_editing">Editing…</string>
 </resources>
