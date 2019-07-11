@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ashwinrao.locrate.databinding.FragmentNfcReadBinding;
 
+
 public class NFCReadFragment extends Fragment {
 
     @Nullable

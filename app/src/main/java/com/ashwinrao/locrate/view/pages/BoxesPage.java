@@ -21,6 +21,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.view.activity.AddActivity;
+import com.ashwinrao.locrate.view.activity.NFCActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import com.ashwinrao.locrate.view.fragment.NFCReadFragment;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
@@ -100,21 +101,24 @@ public class BoxesPage extends Fragment {
         });
 
         nfcButton.setOnClickListener(view -> {
-            Objects.requireNonNull(getActivity())
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_up_in,
-                            R.anim.stay_still,
-                            R.anim.stay_still,
-                            R.anim.slide_down_out)
-                    .replace(R.id.fragment_container, new NFCReadFragment(), "NFCReadFragment")
-                    .commit();
+//            Objects.requireNonNull(getActivity())
+//                    .getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .addToBackStack(null)
+//                    .setCustomAnimations(R.anim.slide_up_in,
+//                            R.anim.stay_still,
+//                            R.anim.stay_still,
+//                            R.anim.slide_down_out)
+//                    .replace(R.id.fragment_container, new NFCReadFragment(), "NFCReadFragment")
+//                    .commit();
+            final Intent intent = new Intent(getActivity(), NFCActivity.class);
+            intent.putExtra("fragment", "read");
+            startActivity(intent);
             view.setEnabled(false);
         });
 
         addButton.setOnClickListener(view -> {
-            Intent intent = new Intent(getActivity(), AddActivity.class);
+            final Intent intent = new Intent(getActivity(), AddActivity.class);
             startActivity(intent);
             view.setEnabled(false);
         });
