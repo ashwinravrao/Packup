@@ -32,6 +32,7 @@ import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> implements Filterable {
 
+    private Filter filter;
     private Context context;
     private List<Item> items;
     private List<Item> itemsCopy;
@@ -44,6 +45,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         this.context = context;
         this.isShownWithBoxContext = isShownWithBoxContext;
         this.isInPackingMode = isInPackingMode;
+        initializeFilter();
     }
 
     public LiveData<Item> getRenamedItem() {
@@ -53,6 +55,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     public void setItems(@NonNull List<Item> items) {
         this.items = items;
         this.itemsCopy = new ArrayList<>(items);
+    }
+
+    public void initializeFilter() {
+        this.filter = createFilter();
     }
 
     @NonNull
@@ -107,23 +113,26 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     @Override
     public Filter getFilter() {
+        return this.filter;
+    }
 
+    private Filter createFilter() {
         return new Filter() {
 
             @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
+            protected Filter.FilterResults performFiltering(CharSequence constraint) {
                 List<Item> filtered;
                 ItemPropertiesFilter pf = new ItemPropertiesFilter(itemsCopy);
                 filtered = pf.filter(constraint, true);
 
-                FilterResults results = new FilterResults();
+                Filter.FilterResults results = new Filter.FilterResults();
                 results.values = filtered;
                 return results;
             }
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
+            protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
                 final DiffUtilCallback diffUtil = new DiffUtilCallback(new ArrayList<>(items), (List) results.values);
                 DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtil, true);
 

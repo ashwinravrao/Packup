@@ -20,7 +20,7 @@ public class ItemPropertiesFilter {
         } else {
             final String constr = constraint.toString().toLowerCase();
             for (Item item : items) {
-                if (onName && item.getName().contains(constr)) {
+                if (onName && item.getName().toLowerCase().contains(constr)) {
                     result.add(item);
                 }
             }

@@ -62,6 +62,9 @@ public class BoxesPage extends Fragment {
         for (FloatingActionButton fab : fabs) fab.setEnabled(true);
         binding.setFilterActivated(false);
         binding.setBulkEditActivated(false);
+        if(boxesAdapter != null) {
+            boxesAdapter.initializeFilter();
+        }
 
     }
 
@@ -98,16 +101,6 @@ public class BoxesPage extends Fragment {
         });
 
         nfcButton.setOnClickListener(view -> {
-//            Objects.requireNonNull(getActivity())
-//                    .getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .addToBackStack(null)
-//                    .setCustomAnimations(R.anim.slide_up_in,
-//                            R.anim.stay_still,
-//                            R.anim.stay_still,
-//                            R.anim.slide_down_out)
-//                    .replace(R.id.fragment_container, new NFCReadFragment(), "NFCReadFragment")
-//                    .commit();
             final Intent intent = new Intent(getActivity(), NFCActivity.class);
             intent.putExtra("fragment", "read");
             startActivity(intent);

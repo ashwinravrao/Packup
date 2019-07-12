@@ -54,9 +54,10 @@ public class ItemsPage extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        // possible crashes mirroring BoxesPage issue
         binding.setFilterActivated(false);
+        if(itemsAdapter != null) {
+            itemsAdapter.initializeFilter();
+        }
     }
 
     @Nullable

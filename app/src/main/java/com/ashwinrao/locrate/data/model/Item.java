@@ -35,7 +35,7 @@ public class Item {
     private int boxId;
 
     @ColumnInfo(name = "name")
-    private String name;
+    private String name = "";
 
     @ColumnInfo(name = "packed_date")
     private Date packedDate = new Date();

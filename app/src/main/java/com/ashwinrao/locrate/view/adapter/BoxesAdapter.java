@@ -2,7 +2,6 @@ package com.ashwinrao.locrate.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,7 @@ import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
 import com.ashwinrao.locrate.util.BoxPropertiesFilter;
 import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
 import com.ashwinrao.locrate.view.activity.DetailActivity;
-import com.ashwinrao.locrate.view.fragment.DetailFragment;
 import com.ashwinrao.locrate.view.activity.MainActivity;
-import com.ashwinrao.locrate.view.fragment.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +30,20 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
     private Context context;
     private List<Box> boxes;
     private List<Box> boxesCopy;
+    private Filter filter;
 
     public BoxesAdapter(@NonNull Context context) {
         this.context = context;
+        initializeFilter();
     }
 
     public void setBoxes(@NonNull List<Box> boxes) {
         this.boxes = boxes;
         this.boxesCopy = new ArrayList<>(boxes);
+    }
+
+    public void initializeFilter() {
+        this.filter = createFilter();
     }
 
     @NonNull
@@ -63,23 +66,26 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
 
     @Override
     public Filter getFilter() {
+        return this.filter;
+    }
 
+    private Filter createFilter() {
         return new Filter() {
 
             @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
+            protected Filter.FilterResults performFiltering(CharSequence constraint) {
                 List<Box> filtered;
                 BoxPropertiesFilter pf = new BoxPropertiesFilter(boxesCopy);
                 filtered = pf.filter(constraint, true, true, true);
 
-                FilterResults results = new FilterResults();
+                Filter.FilterResults results = new Filter.FilterResults();
                 results.values = filtered;
                 return results;
             }
 
             @SuppressWarnings("unchecked")
             @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
+            protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
                 final DiffUtilCallback diffUtil = new DiffUtilCallback(new ArrayList<>(boxes), (List) results.values);
                 DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtil, true);
 
