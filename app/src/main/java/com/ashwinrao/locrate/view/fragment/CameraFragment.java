@@ -28,6 +28,7 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
+import androidx.camera.core.UseCase;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -115,6 +116,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels);
 
         final PreviewConfig previewConfig = new PreviewConfig.Builder()
+                .setLensFacing(CameraX.LensFacing.BACK)
                 .setTargetAspectRatio(screenAspectRatio)
                 .setTargetResolution(screenSize)
                 .build();

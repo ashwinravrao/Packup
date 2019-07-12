@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    def camera_x_version = "1.0.0-alpha02"
+    def camera_x_version = "1.0.0-alpha03"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     // Dagger 2
