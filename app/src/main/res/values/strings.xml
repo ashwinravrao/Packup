@@ -78,4 +78,8 @@
     <string name="add">New Box</string>
     <string name="bulk_edit">Bulk Edit</string>
     <string name="bulk_editing">Editing…</string>
+    <string name="unpack">Unpack</string>
+    <string name="pack">Pack</string>
+    <string name="pack_item">Pack Item</string>
+    <string name="bulk_unpack">Bulk Unpack</string>
 </resources>

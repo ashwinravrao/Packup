@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +14,10 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
 import com.ashwinrao.locrate.util.BoxPropertiesFilter;
 import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
+import com.ashwinrao.locrate.view.activity.DetailActivity;
 import com.ashwinrao.locrate.view.fragment.DetailFragment;
 import com.ashwinrao.locrate.view.activity.MainActivity;
+import com.ashwinrao.locrate.view.fragment.HomeFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,18 +102,10 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
 
         @Override
         public void onClick(View v) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("ID", boxes.get(getAdapterPosition()).getId());
-            DetailFragment detail = new DetailFragment();
-            detail.setArguments(bundle);
-
-            ((MainActivity) context)
-                    .getSupportFragmentManager()
-                    .beginTransaction()
-                    .addToBackStack(null)
-                    .setCustomAnimations(R.anim.slide_in_from_right, R.anim.stay_still, R.anim.stay_still, R.anim.slide_out_to_right)
-                    .replace(R.id.fragment_container, detail)
-                    .commit();
+            final Intent intent = new Intent(context, DetailActivity.class);
+            intent.putExtra("ID", boxes.get(getAdapterPosition()).getId());
+            context.startActivity(intent);
+            ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
         }
     }
 }

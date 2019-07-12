@@ -13,6 +13,7 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentDetailBinding;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
+import com.ashwinrao.locrate.view.activity.DetailActivity;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
@@ -59,9 +60,14 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         super.onCreate(savedInstanceState);
         boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         final ItemViewModel itemViewModel = ViewModelProviders.of(getActivity(), factory).get(ItemViewModel.class);
-        if (getArguments() != null) {
-            boxId = getArguments().getInt("ID", 0);
+
+        final Bundle extras = getActivity().getIntent().getExtras();
+        if(extras != null) {
+            final int boxId = extras.getInt("ID", 0);
             itemsLD = itemViewModel.getItemsFromBox(boxId);
+        } else {
+            getActivity().finish();
+            getActivity().overridePendingTransition(R.anim.slide_out_to_right, R.anim.stay_still);
         }
     }
 
@@ -94,7 +100,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private void initializeRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), true);
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), true, false);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
         boxViewModel.getBoxByID(boxId).observe(this, box -> {

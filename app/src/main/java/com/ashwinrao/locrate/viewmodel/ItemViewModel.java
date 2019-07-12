@@ -38,6 +38,10 @@ public class ItemViewModel extends ViewModel {
         repo.insert(items.toArray(new Item[0]));
     }
 
+    public void updateItem(Item item) {
+        repo.update(item);
+    }
+
     public void deleteItems(List<Item> items) {
         repo.delete(items.toArray(new Item[0]));
     }

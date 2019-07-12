@@ -17,13 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
-import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.NFCActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
-import com.ashwinrao.locrate.view.fragment.NFCReadFragment;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -73,7 +71,6 @@ public class BoxesPage extends Fragment {
         binding = FragmentPageBoxesBinding.inflate(inflater);
 
         // binding vars
-        binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all));
         binding.setFilterActivated(false);
         binding.setBulkEditActivated(false);
 
@@ -133,7 +130,6 @@ public class BoxesPage extends Fragment {
         boxesLD.observe(this, boxes -> {
             if (boxes != null) {
                 boxesAdapter.setBoxes(boxes);
-                binding.setFilteredSize(String.format(getString(R.string.filtered_size), boxes.size()));
             } else {
                 boxesAdapter.setBoxes(new ArrayList<>());
             }

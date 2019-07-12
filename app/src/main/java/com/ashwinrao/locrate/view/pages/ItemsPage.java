@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
-import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
@@ -66,16 +65,19 @@ public class ItemsPage extends Fragment {
         binding = FragmentPageItemsBinding.inflate(inflater);
 
         // binding vars
-        binding.setFilters(Objects.requireNonNull(getActivity()).getResources().getString(R.string.all));
         binding.setFilterActivated(false);
 
         // layout widgets
-        initializeButtons(binding.filterButton, binding.packButton);
+        initializeButtons(binding.unpackButton, binding.filterButton, binding.packButton);
         initializeRecyclerView(binding.recyclerView, binding);
         return binding.getRoot();
     }
 
-    private void initializeButtons(@NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
+    private void initializeButtons(@NonNull FloatingActionButton unpackButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
+        unpackButton.setOnClickListener(view -> {
+            // TODO add method body
+        });
+
         filterButton.setOnClickListener(view -> {
             binding.setFilterActivated(!binding.getFilterActivated());
             if(binding.getFilterActivated()) {
@@ -91,13 +93,12 @@ public class ItemsPage extends Fragment {
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageItemsBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         addItemDecoration(getContext(), recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), false);
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), false, false);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
         itemsLD.observe(this, items -> {
             if(items != null) {
                 itemsAdapter.setItems(items);
-                binding.setFilteredSize(String.format(getString(R.string.filtered_size), items.size()));
             } else {
                 itemsAdapter.setItems(new ArrayList<>());
             }

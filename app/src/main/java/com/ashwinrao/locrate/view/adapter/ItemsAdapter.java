@@ -1,15 +1,20 @@
 package com.ashwinrao.locrate.view.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,16 +36,23 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     private List<Item> items;
     private List<Item> itemsCopy;
     private Boolean isShownWithBoxContext;
+    private Boolean isInPackingMode;
+    private MutableLiveData<Item> renamedItem = new MutableLiveData<>();
 
-    public ItemsAdapter(@NonNull Context context, @NonNull Boolean isShownWithBoxContext) {
+
+    public ItemsAdapter(@NonNull Context context, @NonNull Boolean isShownWithBoxContext, @NonNull Boolean isInPackingMode) {
         this.context = context;
         this.isShownWithBoxContext = isShownWithBoxContext;
+        this.isInPackingMode = isInPackingMode;
+    }
+
+    public LiveData<Item> getRenamedItem() {
+        return renamedItem;
     }
 
     public void setItems(@NonNull List<Item> items) {
         this.items = items;
         this.itemsCopy = new ArrayList<>(items);
-
     }
 
     @NonNull
@@ -55,6 +67,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         final Item item = items.get(position);
         item.setIsShownWithBoxContext(isShownWithBoxContext);
         holder.binding.setItem(item);
+        holder.binding.itemNameEditText.setVisibility(isInPackingMode ? View.VISIBLE : View.GONE);
+        holder.binding.itemNameTextView.setVisibility(!isInPackingMode ? View.VISIBLE : View.GONE);
+
+        watchText(holder.binding.itemNameEditText, item);
 
         final String path = item.getFilePath();
         Glide.with(context)
@@ -62,6 +78,26 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
                 .thumbnail(0.01f)  // down-sample to 1% of original image resolution for thumbnail
                 .centerCrop()
                 .into(holder.binding.itemImage);
+    }
+
+    private void watchText(@NonNull EditText editText, @NonNull Item item) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                item.setName(s.toString().length() > 0 ? s.toString() : null);
+                renamedItem.setValue(item);
+            }
+        });
     }
 
     @Override

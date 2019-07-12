@@ -61,7 +61,25 @@
                     android:hint="@string/item_name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:singleLine="true"
-                    android:maxLines="1"/>
+                    android:inputType="textCapWords"
+                    android:maxLines="1"
+                    tools:ignore="Autofill" />
+
+                <TextView
+                    android:id="@+id/item_name_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/top_row_view_holder"
+                    android:textColor="@color/top_row_view_holder"
+                    android:text="@{item.name}"
+                    tools:text="@string/item_name"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
                 <TextView
                     android:id="@+id/packed_on_text_view"

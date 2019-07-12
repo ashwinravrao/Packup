@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="filterActivated"
             type="Boolean" />
-
-        <variable
-            name="filters"
-            type="String" />
-
-        <variable
-            name="filteredSize"
-            type="String" />
 
         <variable
             name="bulkEditActivated"
@@ -172,29 +163,6 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!--<TextView-->
-                    <!--android:id="@+id/categories"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@id/top_buttons"-->
-                    <!--android:layout_marginStart="24dp"-->
-                    <!--android:layout_marginTop="24dp"-->
-                    <!--android:text="@{filters}"-->
-                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Title" />-->
-
-                <!--<TextView-->
-                    <!--android:id="@+id/filtered_size_text"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--android:layout_marginEnd="24dp"-->
-                    <!--app:layout_constraintBottom_toBottomOf="@id/categories"-->
-                    <!--app:layout_constraintTop_toTopOf="@id/categories"-->
-                    <!--android:text="@{filteredSize}"-->
-                    <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"-->
-                    <!--android:textColor="@color/top_row_view_holder"/>-->
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
@@ -211,6 +179,5 @@
         </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
 </layout>

@@ -38,6 +38,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -162,7 +163,10 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), true);
+        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), true, true);
+        itemsAdapter.getRenamedItem().observe(this, item -> {
+            if (item != null) itemViewModel.updateItem(item);
+        });
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
     }
@@ -174,7 +178,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.toolbar_done) {
+        if (item.getItemId() == R.id.toolbar_done) {
             if (itemViewModel.getItemsFromThis().size() == 0) {
                 showEmptyBoxDialog();
                 return true;
@@ -220,7 +224,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
             if (resultCode == RESULT_OK) {
                 final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
                 if (paths != null) {
-                    for (String path: paths) {
+                    for (String path : paths) {
                         items.add(new Item(getBoxNumber(), path));
                     }
                     itemViewModel.setItems(items);
@@ -260,7 +264,7 @@ public class AddFragment extends Fragment implements Toolbar.OnMenuItemClickList
                 getString(R.string.cancel)}, true, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
                 ContextCompat.getColor(Objects.requireNonNull(getContext()), android.R.color.holo_red_dark)}, dialogInterface -> {
             if (itemViewModel.getItemsFromThis() != null) {
-                for(Item item : itemViewModel.getItemsFromThis()) {
+                for (Item item : itemViewModel.getItemsFromThis()) {
                     new File(item.getFilePath()).delete();
                 }
                 itemViewModel.deleteItems(itemViewModel.getItemsFromThis());
