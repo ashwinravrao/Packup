@@ -13,7 +13,6 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentDetailBinding;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
-import com.ashwinrao.locrate.view.activity.DetailActivity;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
@@ -41,9 +40,9 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickListener {
 
     private Box box;
-    private int boxId;
     private ItemsAdapter itemsAdapter;
     private BoxViewModel boxViewModel;
+    private LiveData<Box> boxLD;
     private LiveData<List<Item>> itemsLD;
 
     @Inject
@@ -64,11 +63,16 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         final Bundle extras = getActivity().getIntent().getExtras();
         if(extras != null) {
             final int boxId = extras.getInt("ID", 0);
+            boxLD = boxViewModel.getBoxByID(boxId);
             itemsLD = itemViewModel.getItemsFromBox(boxId);
         } else {
-            getActivity().finish();
-            getActivity().overridePendingTransition(R.anim.slide_out_to_right, R.anim.stay_still);
+            finishActivity();
         }
+    }
+
+    private void finishActivity() {
+        Objects.requireNonNull(getActivity()).finish();
+        getActivity().overridePendingTransition(R.anim.slide_out_to_right, R.anim.stay_still);
     }
 
     @Nullable
@@ -94,7 +98,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
     private void initializeToolbar(Toolbar toolbar) {
         toolbar.inflateMenu(R.menu.menu_toolbar_list);
         toolbar.setOnMenuItemClickListener(this);
-        toolbar.setNavigationOnClickListener(view -> Objects.requireNonNull(getActivity()).getSupportFragmentManager().popBackStack());
+        toolbar.setNavigationOnClickListener(view -> finishActivity());
     }
 
     private void initializeRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView recyclerView) {
@@ -103,7 +107,7 @@ public class DetailFragment extends Fragment implements Toolbar.OnMenuItemClickL
         itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), true, false);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
-        boxViewModel.getBoxByID(boxId).observe(this, box -> {
+        boxLD.observe(this, box -> {
             this.box = box;
             binding.setBox(box);
         });
