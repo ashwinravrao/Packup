@@ -22,7 +22,7 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
-import com.ashwinrao.locrate.databinding.FragmentDetailBinding;
+import com.ashwinrao.locrate.databinding.ActivityDetailBinding;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
@@ -51,7 +51,7 @@ public class DetailActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((Locrate) getApplicationContext()).getAppComponent().inject(this);
-        final FragmentDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.fragment_detail);
+        final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         boxViewModel = ViewModelProviders.of(this, factory).get(BoxViewModel.class);
         final ItemViewModel itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
@@ -112,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeRecyclerView(@NonNull FragmentDetailBinding binding, @NonNull RecyclerView recyclerView) {
+    private void initializeRecyclerView(@NonNull ActivityDetailBinding binding, @NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addItemDecoration(this, recyclerView, 1);
         itemsAdapter = new ItemsAdapter(this, true, false);

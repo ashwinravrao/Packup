@@ -1,4 +1,4 @@
-package com.ashwinrao.locrate.view.pages;
+package com.ashwinrao.locrate.view.fragment.pages;
 
 import android.content.Context;
 import android.content.Intent;

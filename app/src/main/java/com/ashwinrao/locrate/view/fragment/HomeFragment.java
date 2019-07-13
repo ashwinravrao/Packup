@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
@@ -17,11 +16,10 @@ import com.ashwinrao.locrate.databinding.FragmentHomeBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.ashwinrao.locrate.view.adapter.HomePagerAdapter;
-import com.ashwinrao.locrate.view.pages.BoxesPage;
-import com.ashwinrao.locrate.view.pages.ItemsPage;
+import com.ashwinrao.locrate.view.fragment.pages.BoxesPage;
+import com.ashwinrao.locrate.view.fragment.pages.ItemsPage;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.List;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -40,6 +38,7 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class HomeFragment extends Fragment implements BackNavCallback {
 
+    private MenuItem search;
     private ViewPager viewPager;
     private BoxesPage boxesPage;
     private ItemsPage itemsPage;
@@ -58,6 +57,12 @@ public class HomeFragment extends Fragment implements BackNavCallback {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(search != null) search.collapseActionView();
     }
 
     @Nullable
@@ -95,8 +100,7 @@ public class HomeFragment extends Fragment implements BackNavCallback {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_toolbar_list, menu);
-
-        MenuItem search = menu.findItem(R.id.toolbar_search);
+        search = menu.findItem(R.id.toolbar_search);
         SearchView searchView = (SearchView) search.getActionView();
         configureSearchView(searchView);
     }
