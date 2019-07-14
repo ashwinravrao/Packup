@@ -136,13 +136,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
             }
         });
 
-        searchView.setOnSearchClickListener(v -> {
-            viewPager.setPagingEnabled(false);
-        });
-        searchView.setOnCloseListener(() -> {
-            viewPager.setPagingEnabled(true);
-            return false;
-        });
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> viewPager.setPagingEnabled(!hasFocus));
     }
 
     private void inflateBottomSheet() {
