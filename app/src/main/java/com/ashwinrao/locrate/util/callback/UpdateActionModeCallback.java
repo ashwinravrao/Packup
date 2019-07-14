@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface UpdateActionModeCallback {
 
-    void update(List<Object> objects, String objectType);
+    boolean update(List<Object> objects, String objectType);
 
 }

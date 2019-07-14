@@ -48,12 +48,12 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 public class HomeFragment extends Fragment implements BackNavCallback, UpdateActionModeCallback {
 
     private MenuItem search;
+    private SearchView searchView;
     private CustomViewPager viewPager;
     private BoxesPage boxesPage;
     private ItemsPage itemsPage;
     private ActionMode actionMode;
     private BoxViewModel boxViewModel;
-    private List<Object> selected = new ArrayList<>();
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -75,7 +75,10 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     @Override
     public void onResume() {
         super.onResume();
-        if (search != null) search.collapseActionView();
+        if (search != null) {
+            search.collapseActionView();
+            viewPager.setPagingEnabled(true);
+        }
     }
 
     @Override
@@ -109,6 +112,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     }
 
     private void configureSearchView(SearchView searchView) {
+        this.searchView = searchView;
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setQueryHint("Search boxes");
@@ -130,6 +134,14 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
 
                 return false;
             }
+        });
+
+        searchView.setOnSearchClickListener(v -> {
+            viewPager.setPagingEnabled(false);
+        });
+        searchView.setOnCloseListener(() -> {
+            viewPager.setPagingEnabled(true);
+            return false;
         });
     }
 
@@ -156,12 +168,15 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     }
 
     @Override
-    public void update(List<Object> objects, String objectType) {
-        if (actionMode == null) {
+    public boolean update(List<Object> objects, String objectType) {
+        if (actionMode == null && !searchView.hasFocus()) {
             ((MainActivity) Objects.requireNonNull(getActivity())).startActionMode(new ActionModeCallback());
+            actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));
             viewPager.setPagingEnabled(false);
+            return true;
+        } else {
+            return false;
         }
-        actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));
     }
 
     private void showBulkDeleteConfirmationDialog(@NonNull List<Box> toDelete, @NonNull ActionMode mode) {

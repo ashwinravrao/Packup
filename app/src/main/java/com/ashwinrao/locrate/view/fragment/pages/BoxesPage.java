@@ -66,7 +66,6 @@ public class BoxesPage extends Fragment {
         if(boxesAdapter != null) {
             boxesAdapter.initializeFilter();
         }
-
     }
 
     @Nullable

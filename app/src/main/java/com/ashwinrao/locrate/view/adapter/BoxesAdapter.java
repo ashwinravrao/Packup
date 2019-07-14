@@ -153,8 +153,11 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
                 selected = new ArrayList<>();
                 if (updateActionModeCallback != null) {
                     selected.add(boxes.get(getAdapterPosition()));
-                    binding.setSelected(!binding.getSelected());
-                    updateActionModeCallback.update(selected, "boxes");
+                    if(updateActionModeCallback.update(selected, "boxes")) {
+                        binding.setSelected(!binding.getSelected());
+                    } else {
+                        selected = null;
+                    }
                 }
                 return true;
             } else {
