@@ -71,6 +71,14 @@ public class DetailActivity extends AppCompatActivity {
         initializeButtons(binding.editButton, binding.deleteButton);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(itemsAdapter != null) {
+            itemsAdapter.initializeFilter();
+        }
+    }
+
     private void initializeButtons(@NonNull FloatingActionButton editButton, @NonNull FloatingActionButton deleteButton) {
         editButton.setOnClickListener(view -> {
 

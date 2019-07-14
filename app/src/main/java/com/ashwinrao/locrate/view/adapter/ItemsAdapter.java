@@ -73,7 +73,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         final Item item = items.get(position);
         item.setIsShownWithBoxContext(isShownWithBoxContext);
         holder.binding.setItem(item);
-        if(item.getName().length() > 0) holder.binding.itemNameEditText.setText(item.getName());
+        if(isInPackingMode && item.getName().length() > 0) holder.binding.itemNameEditText.setText(item.getName());
         holder.binding.itemNameEditText.setVisibility(isInPackingMode ? View.VISIBLE : View.GONE);
         holder.binding.itemNameTextView.setVisibility(!isInPackingMode ? View.VISIBLE : View.GONE);
 
