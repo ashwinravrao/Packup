@@ -1,6 +1,9 @@
 package com.ashwinrao.locrate.view.activity;
 
+import android.drm.DrmStore;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
@@ -8,7 +11,9 @@ import com.ashwinrao.locrate.view.fragment.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,5 +53,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         super.onBackPressed();
+    }
+
+    public void startActionMode(ActionMode.Callback callback) {
+        this.startSupportActionMode(callback);
     }
 }

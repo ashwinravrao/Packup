@@ -64,4 +64,8 @@ public class BoxViewModel extends ViewModel {
     public void delete(Box box) {
         repo.delete(box);
     }
+
+    public void deleteMultiple(List<Box> boxes) {
+        repo.delete(boxes.toArray(new Box[0]));
+    }
 }

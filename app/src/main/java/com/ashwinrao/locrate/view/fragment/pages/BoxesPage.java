@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
+import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.NFCActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
@@ -39,6 +40,7 @@ public class BoxesPage extends Fragment {
     private LiveData<List<Box>> boxesLD;
     private FragmentPageBoxesBinding binding;
     private FloatingActionButton[] fabs;
+    private UpdateActionModeCallback callback;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -61,7 +63,6 @@ public class BoxesPage extends Fragment {
         super.onResume();
         for (FloatingActionButton fab : fabs) fab.setEnabled(true);
         binding.setFilterActivated(false);
-        binding.setBulkEditActivated(false);
         if(boxesAdapter != null) {
             boxesAdapter.initializeFilter();
         }
@@ -75,23 +76,23 @@ public class BoxesPage extends Fragment {
 
         // binding vars
         binding.setFilterActivated(false);
-        binding.setBulkEditActivated(false);
 
         // layout widgets
         initializeRecyclerView(binding.recyclerView, binding);
-        initializeButtons(binding.bulkEditButton, binding.filterButton, binding.nfcButton, binding.addButton);
+        initializeButtons(binding.filterButton, binding.nfcButton, binding.addButton);
         return binding.getRoot();
     }
 
-    private void initializeButtons(@NonNull FloatingActionButton bulkEditButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton nfcButton, @NonNull FloatingActionButton addButton) {
-        fabs = new FloatingActionButton[]{nfcButton, addButton};
+    public void setCallback(@NonNull UpdateActionModeCallback callback) {
+        this.callback = callback;
+    }
 
-        bulkEditButton.setOnClickListener(view -> {
-            binding.setBulkEditActivated(!binding.getBulkEditActivated());
-            if(binding.getBulkEditActivated()) {
-                // TODO add method body
-            }
-        });
+    public BoxesAdapter getAdapter() {
+        return boxesAdapter;
+    }
+
+    private void initializeButtons(@NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton nfcButton, @NonNull FloatingActionButton addButton) {
+        fabs = new FloatingActionButton[]{nfcButton, addButton};
 
         filterButton.setOnClickListener(view -> {
             binding.setFilterActivated(!binding.getFilterActivated());
@@ -118,6 +119,7 @@ public class BoxesPage extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         boxesAdapter = new BoxesAdapter(Objects.requireNonNull(getActivity()));
+        boxesAdapter.setCallback(callback);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(boxesAdapter);
         boxesLD.observe(this, boxes -> {

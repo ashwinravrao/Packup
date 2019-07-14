@@ -23,4 +23,7 @@
     <color name="delete_red">#99BE0000</color>
     <color name="item_image_background">#DDDDDD</color>
 
+    <color name="colorAccentSolidSelected">#331788D3</color>
+    <color name="colorAccentBorderSelected">#801788D3</color>
+
 </resources>

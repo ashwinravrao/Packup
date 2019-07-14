@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="@drawable/background_box_viewholder">
+        android:background="@drawable/background_box_viewholder_unselected">
 
         <LinearLayout
             android:orientation="horizontal"

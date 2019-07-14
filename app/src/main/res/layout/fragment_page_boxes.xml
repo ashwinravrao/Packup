@@ -8,10 +8,6 @@
             name="filterActivated"
             type="Boolean" />
 
-        <variable
-            name="bulkEditActivated"
-            type="Boolean" />
-
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -80,7 +76,7 @@
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintStart_toEndOf="@id/nfc_button"
-                            app:layout_constraintEnd_toStartOf="@id/bulk_edit_button"
+                            app:layout_constraintEnd_toStartOf="@id/add_button"
                             app:elevation="0dp"
                             android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
                             app:borderWidth="0dp"
@@ -102,33 +98,33 @@
                             app:layout_constraintEnd_toEndOf="@id/filter_button"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
 
-                        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                            android:id="@+id/bulk_edit_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintStart_toEndOf="@id/filter_button"
-                            app:layout_constraintEnd_toStartOf="@id/add_button"
-                            app:elevation="0dp"
-                            android:layout_marginTop="@dimen/boxes_page_fab_top_margin"
-                            app:borderWidth="0dp"
-                            app:tint="@android:color/white"
-                            app:rippleColor="@android:color/white"
-                            android:backgroundTint="@{safeUnbox(bulkEditActivated) ? @color/colorAccentGold : @color/unselected_fab}"
-                            android:src="@drawable/ic_bulk_edit" />
+                        <!--<com.google.android.material.floatingactionbutton.FloatingActionButton-->
+                            <!--android:id="@+id/bulk_edit_button"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--app:layout_constraintTop_toTopOf="parent"-->
+                            <!--app:layout_constraintStart_toEndOf="@id/filter_button"-->
+                            <!--app:layout_constraintEnd_toStartOf="@id/add_button"-->
+                            <!--app:elevation="0dp"-->
+                            <!--android:layout_marginTop="@dimen/boxes_page_fab_top_margin"-->
+                            <!--app:borderWidth="0dp"-->
+                            <!--app:tint="@android:color/white"-->
+                            <!--app:rippleColor="@android:color/white"-->
+                            <!--android:backgroundTint="@{safeUnbox(bulkEditActivated) ? @color/colorAccentGold : @color/unselected_fab}"-->
+                            <!--android:src="@drawable/ic_bulk_edit" />-->
 
-                        <TextView
-                            android:id="@+id/bulk_edit_button_caption"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{safeUnbox(bulkEditActivated) ? @string/bulk_editing : @string/bulk_edit}"
-                            android:layout_marginTop="16dp"
-                            android:textAlignment="center"
-                            android:fontFamily="sans-serif-medium"
-                            app:layout_constraintTop_toBottomOf="@id/bulk_edit_button"
-                            app:layout_constraintStart_toStartOf="@id/bulk_edit_button"
-                            app:layout_constraintEnd_toEndOf="@id/bulk_edit_button"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
+                        <!--<TextView-->
+                            <!--android:id="@+id/bulk_edit_button_caption"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@{safeUnbox(bulkEditActivated) ? @string/bulk_editing : @string/bulk_edit}"-->
+                            <!--android:layout_marginTop="16dp"-->
+                            <!--android:textAlignment="center"-->
+                            <!--android:fontFamily="sans-serif-medium"-->
+                            <!--app:layout_constraintTop_toBottomOf="@id/bulk_edit_button"-->
+                            <!--app:layout_constraintStart_toStartOf="@id/bulk_edit_button"-->
+                            <!--app:layout_constraintEnd_toEndOf="@id/bulk_edit_button"-->
+                            <!--android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>-->
 
                         <com.google.android.material.floatingactionbutton.FloatingActionButton
                             android:id="@+id/add_button"
