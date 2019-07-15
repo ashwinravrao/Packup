@@ -9,12 +9,16 @@
             name="item"
             type="com.ashwinrao.locrate.data.model.Item" />
 
+        <variable
+            name="selected"
+            type="Boolean" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="@drawable/background_box_viewholder_unselected">
+        android:background="@{safeUnbox(selected) ? @drawable/background_box_viewholder_selected : @drawable/background_box_viewholder_unselected}">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -40,7 +44,8 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:elevation="1dp"
-                android:background="@drawable/background_item_content"
+                android:background="@color/colorPrimary"
+                android:foreground="@{safeUnbox(selected) ? @color/colorAccentSolidSelected : android.R.color.transparent}"
                 android:layout_marginStart="-5dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.6">

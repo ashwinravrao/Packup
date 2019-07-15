@@ -23,6 +23,7 @@ import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ViewholderItemBinding;
 import com.ashwinrao.locrate.util.ItemPropertiesFilter;
 import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
+import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -40,6 +41,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     private Boolean isInPackingMode;
     private MutableLiveData<Item> renamedItem = new MutableLiveData<>();
 
+    // Action Mode
+    private UpdateActionModeCallback updateActionModeCallback;
+    private List<Object> selected;
+
 
     public ItemsAdapter(@NonNull Context context, @NonNull Boolean isShownWithBoxContext, @NonNull Boolean isInPackingMode) {
         this.context = context;
@@ -52,13 +57,26 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         return renamedItem;
     }
 
+    public void initializeFilter() {
+        this.filter = createFilter();
+    }
+
     public void setItems(@NonNull List<Item> items) {
         this.items = items;
         this.itemsCopy = new ArrayList<>(items);
     }
 
-    public void initializeFilter() {
-        this.filter = createFilter();
+    public void setCallback(@NonNull UpdateActionModeCallback callback) {
+        this.updateActionModeCallback = callback;
+    }
+
+    public List<Object> getSelected() {
+        return this.selected;
+    }
+
+    public void clearSelected() {
+        this.selected = null;
+        this.notifyDataSetChanged();
     }
 
     @NonNull
@@ -71,8 +89,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         final Item item = items.get(position);
-        item.setIsShownWithBoxContext(isShownWithBoxContext);
         holder.binding.setItem(item);
+        holder.binding.setSelected(false);
+        item.setIsShownWithBoxContext(isShownWithBoxContext);
         if(isInPackingMode && item.getName().length() > 0) holder.binding.itemNameEditText.setText(item.getName());
         holder.binding.itemNameEditText.setVisibility(isInPackingMode ? View.VISIBLE : View.GONE);
         holder.binding.itemNameTextView.setVisibility(!isInPackingMode ? View.VISIBLE : View.GONE);
@@ -144,19 +163,51 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         };
     }
 
-    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ViewholderItemBinding binding;
 
         ItemViewHolder(@NonNull ViewholderItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.binding.getRoot().setOnClickListener(this);
+            this.binding.getRoot().setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            // TODO replace with actual action
-            Toast.makeText(context, "You clicked this item", Toast.LENGTH_SHORT).show();
+            if(updateActionModeCallback != null) {
+                final Item item = items.get(getAdapterPosition());
+                if(selected.contains(item)) {
+                    selected.remove(item);
+                } else {
+                    selected.add(item);
+                }
+                binding.setSelected(!binding.getSelected());
+                updateActionModeCallback.update(selected, getObjectTypeString());
+            }
+        }
+
+        private String getObjectTypeString() {
+            return (selected.size() < 1 || selected.size() > 1) ? "items" : "item";
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if(selected == null) {
+                selected = new ArrayList<>();
+                if (updateActionModeCallback != null) {
+                    selected.add(items.get(getAdapterPosition()));
+                    if(updateActionModeCallback.update(selected, getObjectTypeString())) {
+                        binding.setSelected(!binding.getSelected());
+                    } else {
+                        selected = null;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

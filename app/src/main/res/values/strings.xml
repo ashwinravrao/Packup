@@ -88,4 +88,7 @@
     <string name="dialog_bulk_delete_message">Are you sure you want to permanently delete these boxes? You cannot undo this action.</string>
     <string name="boxes_query_hint">Search boxes</string>
     <string name="items_query_hint">Search items</string>
+    <string name="unpack_selected">Unpack\nSelected</string>
+    <string name="dialog_unpack_multiple_title">Unpack items?</string>
+    <string name="dialog_unpack_multiple_message">Unpacking these items will remove them from this list. You can still view them in the on the unpacked items screen.</string>
 </resources>

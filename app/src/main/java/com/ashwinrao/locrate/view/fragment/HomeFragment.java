@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
+import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentHomeBinding;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
@@ -25,6 +26,7 @@ import com.ashwinrao.locrate.view.adapter.HomePagerAdapter;
 import com.ashwinrao.locrate.view.fragment.pages.BoxesPage;
 import com.ashwinrao.locrate.view.fragment.pages.ItemsPage;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -58,8 +60,10 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     private ItemsPage itemsPage;
     private ActionMode actionMode;
     private BoxViewModel boxViewModel;
+    private ItemViewModel itemViewModel;
     private Bundle savedInstanceState;
     private boolean wasBackPressed;
+    private int currentPage = 0;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -76,6 +80,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         setHasOptionsMenu(true);
         this.savedInstanceState = savedInstanceState;
         boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        itemViewModel = ViewModelProviders.of(getActivity(), factory).get(ItemViewModel.class);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
     }
 
@@ -168,6 +173,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
             @Override
             public void onPageSelected(int position) {
                 searchView.setQueryHint(position <= 0 ? getResources().getString(R.string.boxes_query_hint) : getResources().getString(R.string.items_query_hint));
+                currentPage = position;
             }
 
             @Override
@@ -188,8 +194,10 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
 
     private void initializeTabLayout(@NonNull TabLayout tabLayout, @NonNull CustomViewPager viewPager) {
         this.boxesPage = new BoxesPage();
-        boxesPage.setCallback(this);
         this.itemsPage = new ItemsPage();
+
+        boxesPage.setCallback(this);
+        itemsPage.setCallback(this);
 
         final HomePagerAdapter listPagerAdapter = new HomePagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
         this.tabLayout = tabLayout;
@@ -238,6 +246,23 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         });
     }
 
+    private void showUnpackConfirmationDialog(@NonNull List<Item> toUnpack, @NonNull ActionMode mode) {
+        ConfirmationDialog.make(getContext(), new String[]{
+                getString(R.string.dialog_unpack_multiple_title),
+                getString(R.string.dialog_unpack_multiple_message),
+                getString(R.string.unpack),
+                getString(R.string.cancel)}, true, new int[]{ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent),
+                ContextCompat.getColor(getContext(), R.color.colorAccent)}, dialogInterface -> {
+//            itemViewModel.deleteItems(toUnpack);
+            // TODO implement "unpacking" aka moving these items to "archived" status in a different list
+            mode.finish();
+            return null;
+        }, dialogInterface -> {
+            dialogInterface.cancel();
+            return null;
+        });
+    }
+
     private class ActionModeCallback implements ActionMode.Callback {
 
         @Override
@@ -255,10 +280,19 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.delete) {
-                @SuppressWarnings("unchecked") final List<Box> selected = (List<Box>) (List<?>) boxesPage.getAdapter().getSelected();
-                showBulkDeleteConfirmationDialog(selected, mode);
+                final List<Object> selected = currentPage == 0 ? boxesPage.getAdapter().getSelected() : itemsPage.getAdapter().getSelected();
+                if(currentPage == 0) {
+                    @SuppressWarnings("unchecked")
+                    final List<Box> selectedBoxes = (List<Box>) (List<?>) selected;
+                    showBulkDeleteConfirmationDialog(selectedBoxes, mode);
+                } else {
+                    @SuppressWarnings("unchecked")
+                    final List<Item> selectedItems = (List<Item>) (List<?>) selected;
+                    showUnpackConfirmationDialog(selectedItems, mode);
+                }
                 return true;
             } else if (item.getItemId() == R.id.archive) {
+                // TODO implement archiving
                 mode.finish();
                 return true;
             }
@@ -267,7 +301,11 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            boxesPage.getAdapter().clearSelected();
+            if(currentPage == 0 ) {
+                boxesPage.getAdapter().clearSelected();
+            } else {
+                itemsPage.getAdapter().clearSelected();
+            }
             viewPager.setPagingEnabled(true);
             actionMode = null;
         }
