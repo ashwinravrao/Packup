@@ -58,9 +58,13 @@ public class DetailActivity extends AppCompatActivity {
 
         final Bundle extras = getIntent().getExtras();
         if(extras != null) {
-            final int boxId = extras.getInt("ID", 0);
-            boxLD = boxViewModel.getBoxByID(boxId);
-            itemsLD = itemViewModel.getItemsFromBox(boxId);
+            final String boxUUID = extras.getString("ID");
+            if(boxUUID != null) {
+                boxLD = boxViewModel.getBoxByUUID(boxUUID);
+                itemsLD = itemViewModel.getItemsFromBox(boxUUID);
+            } else {
+                finishWithTransition();
+            }
         } else {
             finishWithTransition();
         }

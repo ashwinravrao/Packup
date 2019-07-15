@@ -34,8 +34,8 @@ public class ItemRepository {
         return dao.getItemsValued(estimatedValue);
     }
 
-    public LiveData<List<Item>> getItemsFromBox(int boxId) {
-        return dao.getItemsFromBox(boxId);
+    public LiveData<List<Item>> getItemsFromBox(String boxUUID) {
+        return dao.getItemsFromBox(boxUUID);
     }
 
     public void insert(Item... items) {

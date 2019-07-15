@@ -37,8 +37,12 @@ public interface BoxDao {
      * @return An observable box (with specified id field) from {@link AppDatabase}.
      */
 
-    @Query("SELECT * FROM boxes WHERE id = :id")
-    LiveData<Box> getBoxById(int id);
+    @Query("SELECT * FROM boxes WHERE number = :number")
+    LiveData<Box> getBoxByNumber(int number);
+
+
+    @Query("SELECT * FROM boxes WHERE id = :uuid")
+    LiveData<Box> getBoxByUUID(String uuid);
 
     /**
      * InsertBox/save a box to the {@link AppDatabase}.

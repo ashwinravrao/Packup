@@ -22,8 +22,8 @@ public interface ItemDao {
     @Query("select * from items where name = :name")
     LiveData<Item> getItem(String name);
 
-    @Query("select * from items where box_id = :boxId")
-    LiveData<List<Item>> getItemsFromBox(int boxId);
+    @Query("select * from items where box_uuid = :boxUUID")
+    LiveData<List<Item>> getItemsFromBox(String boxUUID);
 
     @Query("select * from items where estimated_value >= :estimatedValue")
     LiveData<List<Item>> getItemsValued(double estimatedValue);

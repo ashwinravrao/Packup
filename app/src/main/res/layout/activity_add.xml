@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="boxId"
+            name="boxNum"
             type="Integer" />
 
         <variable
@@ -67,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="@{String.format(@string/box_number_placeholder, boxId)}"
+                    android:text="@{String.format(@string/box_number_placeholder, boxNum)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     app:layout_constraintBottom_toBottomOf="@id/label_section"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -22,8 +22,8 @@ public class ItemViewModel extends ViewModel {
         return repo.getItems();
     }
 
-    public LiveData<List<Item>> getItemsFromBox(int boxId) {
-        return repo.getItemsFromBox(boxId);
+    public LiveData<List<Item>> getItemsFromBox(String boxUUID) {
+        return repo.getItemsFromBox(boxUUID);
     }
 
     public void setItems(List<Item> items) {

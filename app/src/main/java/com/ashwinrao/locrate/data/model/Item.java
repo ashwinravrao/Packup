@@ -20,7 +20,7 @@ import static androidx.room.ForeignKey.CASCADE;
         indices = @Index("id"),
         foreignKeys = @ForeignKey(entity = Box.class,
                 parentColumns = "id",
-                childColumns = "box_id",
+                childColumns = "box_uuid",
                 onUpdate = CASCADE,
                 onDelete = CASCADE))
 
@@ -31,8 +31,11 @@ public class Item {
     @ColumnInfo(name = "id")
     private String id = UUID.randomUUID().toString();
 
-    @ColumnInfo(name = "box_id")
-    private int boxId;
+    @ColumnInfo(name = "box_uuid")
+    private String boxUUID;
+
+    @ColumnInfo(name = "box_number")
+    private int boxNumber;
 
     @ColumnInfo(name = "name")
     private String name = "";
@@ -52,8 +55,9 @@ public class Item {
     @Ignore
     private Boolean isShownWithBoxContext;
 
-    public Item(@NonNull Integer boxId, @NonNull String filePath) {
-        this.boxId = boxId;
+    public Item(@NonNull String boxUUID, @NonNull Integer boxNumber, @NonNull String filePath) {
+        this.boxUUID = boxUUID;
+        this.boxNumber = boxNumber;
         this.filePath = filePath;
     }
 
@@ -71,12 +75,12 @@ public class Item {
         this.id = uuid.toString();
     }
 
-    public int getBoxId() {
-        return boxId;
+    public String getBoxUUID() {
+        return boxUUID;
     }
 
-    public void setBoxId(int boxId) {
-        this.boxId = boxId;
+    public void setBoxUUID(String boxUUID) {
+        this.boxUUID = boxUUID;
     }
 
     public String getName() {
@@ -108,13 +112,21 @@ public class Item {
         this.isShownWithBoxContext = isShownWithBoxContext;
     }
 
+    public int getBoxNumber() {
+        return boxNumber;
+    }
+
+    public void setBoxNumber(int boxNumber) {
+        this.boxNumber = boxNumber;
+    }
+
     @Ignore
     public String getPackedDateAsString() {
         final DateFormat df = new SimpleDateFormat("M/d/yy", Locale.US);
         String dateAsString = df.format(getPackedDate());
         return isShownWithBoxContext
                 ? String.format(Locale.US,"Packed on %s", dateAsString)
-                : String.format(Locale.US,"Packed on %s in Box %d", dateAsString, getBoxId());
+                : String.format(Locale.US,"Packed on %s in Box %d", dateAsString, getBoxNumber());
     }
 
     public void setEstimatedValue(double estimatedValue) {

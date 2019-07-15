@@ -43,7 +43,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:navigationIcon="@drawable/ic_arrow_back"
-                    app:title="@{String.format(@string/box_number_placeholder, box.id)}"
+                    app:title="@{String.format(@string/box_number_placeholder, box.number)}"
                     app:popupTheme="@style/AppTheme.PopUpOverlay"/>
 
                 <TextView

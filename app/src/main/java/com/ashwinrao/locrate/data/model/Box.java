@@ -15,9 +15,13 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "boxes", indices = @Index("id"))
 public class Box {
 
+    @NonNull
     @PrimaryKey
     @ColumnInfo(name = "id")
-    private int id;
+    private String id = UUID.randomUUID().toString();
+
+    @ColumnInfo(name = "number")
+    private int number;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -36,8 +40,12 @@ public class Box {
 
     public Box() { }
 
-    public void setId(int id) {
+    public void setId(@NonNull String id) {
         this.id = id;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public void setName(String name) {
@@ -56,8 +64,13 @@ public class Box {
         return isFull;
     }
 
-    public int getId() {
+    @NonNull
+    public String getId() {
         return id;
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public String getName() {

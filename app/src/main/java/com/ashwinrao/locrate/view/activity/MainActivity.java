@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
                     super.onBackPressed();
                 }
             }
+        } else {
+            super.onBackPressed();
         }
     }
 

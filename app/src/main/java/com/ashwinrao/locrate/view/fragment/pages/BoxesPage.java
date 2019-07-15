@@ -21,7 +21,7 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
-import com.ashwinrao.locrate.view.activity.NFCActivity;
+import com.ashwinrao.locrate.view.activity.NfcActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -101,8 +101,8 @@ public class BoxesPage extends Fragment {
         });
 
         nfcButton.setOnClickListener(view -> {
-            final Intent intent = new Intent(getActivity(), NFCActivity.class);
-            intent.putExtra("fragment", "read");
+            final Intent intent = new Intent(getActivity(), NfcActivity.class);
+            intent.putExtra("isWrite", false);
             startActivity(intent);
             view.setEnabled(false);
         });

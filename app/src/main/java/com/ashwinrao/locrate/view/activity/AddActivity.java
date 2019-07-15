@@ -68,7 +68,7 @@ public class AddActivity extends AppCompatActivity {
         itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
 
         // data binding
-        binding.setBoxId(getBoxNumber());
+        binding.setBoxNum(getBoxNumber());
 
         // layout widgets
         initializeToolbar(binding.toolbar);
@@ -133,7 +133,7 @@ public class AddActivity extends AppCompatActivity {
     private int getBoxNumber() {
         // Retrieve next available id
         int lastUsed = getSharedPreferences(this).getInt(PREF_ID_KEY, 0);
-        boxViewModel.getBox().setId(lastUsed + 1);
+        boxViewModel.getBox().setNumber(lastUsed + 1);
         return lastUsed + 1;
     }
 
@@ -172,7 +172,7 @@ public class AddActivity extends AppCompatActivity {
                 final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
                 if (paths != null) {
                     for (String path : paths) {
-                        items.add(new Item(getBoxNumber(), path));
+                        items.add(new Item(boxViewModel.getBox().getId(), this.getBoxNumber(), path));
                     }
                     itemViewModel.setItems(items);
                 }

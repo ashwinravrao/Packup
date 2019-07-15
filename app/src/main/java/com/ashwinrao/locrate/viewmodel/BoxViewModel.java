@@ -4,13 +4,10 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.repo.BoxRepository;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
@@ -27,8 +24,12 @@ public class BoxViewModel extends ViewModel {
         return this.box;
     }
 
-    public LiveData<Box> getBoxByID(int id) {
-        return repo.getBoxByID(id);
+    public LiveData<Box> getBoxByNumber(int id) {
+        return repo.getBoxByNumber(id);
+    }
+
+    public LiveData<Box> getBoxByUUID(String uuid) {
+        return repo.getBoxByUUID(uuid);
     }
 
     public LiveData<List<Box>> getBoxes() {
@@ -51,15 +52,6 @@ public class BoxViewModel extends ViewModel {
     public BoxesAdapter getBoxesAdapter() {
         return this.boxesAdapter;
     }
-//    public LiveData<List<String>> getAllContents() {
-//        return Transformations.switchMap(getBoxes(), value -> {
-//            MutableLiveData<List<String>> mld = new MutableLiveData<>();
-//            List<String> contents = new ArrayList<>();
-//            for(Box box : value) contents.addAll(box.getContents());
-//            mld.setValue(contents);
-//            return mld;
-//        });
-//    }
 
     public void delete(Box box) {
         repo.delete(box);
