@@ -91,4 +91,5 @@
     <string name="unpack_selected">Unpack\nSelected</string>
     <string name="dialog_unpack_multiple_title">Unpack items?</string>
     <string name="dialog_unpack_multiple_message">Unpacking these items will remove them from this list. You can still view them in the on the unpacked items screen.</string>
+    <string name="press_back_again_to_exit">Press back again to exit</string>
 </resources>

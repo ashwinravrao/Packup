@@ -1,7 +1,6 @@
 package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,7 +28,6 @@ import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,6 +63,9 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     private boolean wasBackPressed;
     private int currentPage = 0;
 
+    private final String TAG = this.getClass().getSimpleName();
+    private final String EXISTING_QUERY_KEY = "existing_query";
+
     @Inject
     ViewModelProvider.Factory factory;
 
@@ -87,11 +88,24 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     @Override
     public void onResume() {
         super.onResume();
+
+        if(actionMode != null) {
+            actionMode.finish();
+            viewPager.setPagingEnabled(true);
+            if(currentPage == 0) {
+                boxesPage.getAdapter().clearSelected();
+            } else {
+                itemsPage.getAdapter().clearSelected();
+            }
+        }
+
         wasBackPressed = false;
+
         if (search != null) {
             search.collapseActionView();
             viewPager.setPagingEnabled(true);
         }
+
         if(this.savedInstanceState != null) {
             initializeTabLayout(tabLayout, viewPager);
         }
@@ -103,17 +117,10 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
     }
 
-    /***
-     * Custom callback function that overrides the system level callback of the same name
-     *
-     * @return boolean value indicating whether the back press was consumed completely by the custom callback.
-     * If the back press was consumed completely, no super calls are necessary.
-     */
-
     @Override
     public boolean onBackPressed() {
         if(!wasBackPressed) {
-            Toast.makeText(getActivity(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show();
             wasBackPressed = !wasBackPressed;
             return true;
         }
@@ -135,6 +142,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_toolbar_list, menu);
         search = menu.findItem(R.id.toolbar_search);
+        if(search.isActionViewExpanded()) search.collapseActionView();
         SearchView searchView = (SearchView) search.getActionView();
         configureSearchView(searchView);
     }
@@ -153,22 +161,18 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
 
             @Override
             public boolean onQueryTextChange(String newText) {
-
                 if (viewPager.getCurrentItem() == 0) {
                     boxesPage.onQueryTextChange(newText);
                 } else {
                     itemsPage.onQueryTextChange(newText);
                 }
-
                 return false;
             }
         });
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
 
             @Override
             public void onPageSelected(int position) {
@@ -177,14 +181,11 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
+            public void onPageScrollStateChanged(int state) { }
         });
 
-        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
-            viewPager.setPagingEnabled(((SearchView) v).getQuery().toString().length() <= 0 && !hasFocus);
-        });
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) ->
+                viewPager.setPagingEnabled(((SearchView) v).getQuery().toString().length() <= 0 && !hasFocus));
     }
 
     private void inflateBottomSheet() {
@@ -214,19 +215,16 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
 
     @Override
     public boolean update(List<Object> objects, String objectType) {
-
         if (actionMode == null && !searchView.hasFocus()) {
             ((MainActivity) Objects.requireNonNull(getActivity())).startActionMode(new ActionModeCallback());
             actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));
             viewPager.setPagingEnabled(false);
             return true;
         }
-
         if(actionMode != null) {
             actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));
             return true;
         }
-
         return false;
     }
 
