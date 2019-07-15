@@ -86,4 +86,6 @@
     <string name="permanent_delete">Permanently delete</string>
     <string name="dialog_bulk_delete_title">Permanently delete boxes</string>
     <string name="dialog_bulk_delete_message">Are you sure you want to permanently delete these boxes? You cannot undo this action.</string>
+    <string name="boxes_query_hint">Search boxes</string>
+    <string name="items_query_hint">Search items</string>
 </resources>

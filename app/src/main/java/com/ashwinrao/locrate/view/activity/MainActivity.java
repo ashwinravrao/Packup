@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -49,10 +48,11 @@ public class MainActivity extends AppCompatActivity {
         final Class topFragment = getSupportFragmentManager().getFragments().get(0).getClass();
         if(topFragment == HomeFragment.class) {
             if (listener != null) {
-                listener.onBackPressed();
+                if(!listener.onBackPressed()) {
+                    super.onBackPressed();
+                }
             }
         }
-        super.onBackPressed();
     }
 
     public void startActionMode(ActionMode.Callback callback) {

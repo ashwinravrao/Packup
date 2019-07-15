@@ -197,8 +197,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onBackPressed() {
         finishUpActivity();
-
+        return true;
     }
 }

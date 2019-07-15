@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
@@ -39,6 +41,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import javax.inject.Inject;
 
@@ -50,10 +53,13 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     private MenuItem search;
     private SearchView searchView;
     private CustomViewPager viewPager;
+    private TabLayout tabLayout;
     private BoxesPage boxesPage;
     private ItemsPage itemsPage;
     private ActionMode actionMode;
     private BoxViewModel boxViewModel;
+    private Bundle savedInstanceState;
+    private boolean wasBackPressed;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -68,6 +74,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        this.savedInstanceState = savedInstanceState;
         boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
     }
@@ -75,9 +82,13 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     @Override
     public void onResume() {
         super.onResume();
+        wasBackPressed = false;
         if (search != null) {
             search.collapseActionView();
             viewPager.setPagingEnabled(true);
+        }
+        if(this.savedInstanceState != null) {
+            initializeTabLayout(tabLayout, viewPager);
         }
     }
 
@@ -87,9 +98,21 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         ((MainActivity) Objects.requireNonNull(getActivity())).unregisterBackNavigationListener();
     }
 
-    // custom callback
+    /***
+     * Custom callback function that overrides the system level callback of the same name
+     *
+     * @return boolean value indicating whether the back press was consumed completely by the custom callback.
+     * If the back press was consumed completely, no super calls are necessary.
+     */
+
     @Override
-    public void onBackPressed() {
+    public boolean onBackPressed() {
+        if(!wasBackPressed) {
+            Toast.makeText(getActivity(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+            wasBackPressed = !wasBackPressed;
+            return true;
+        }
+        return false;
     }
 
     @Nullable
@@ -115,7 +138,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         this.searchView = searchView;
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setMaxWidth(Integer.MAX_VALUE);
-        searchView.setQueryHint("Search boxes");
+        searchView.setQueryHint(getResources().getString(R.string.boxes_query_hint));
         searchView.setPadding(dpToPx(Objects.requireNonNull(getActivity()), -16f), 0, 0, dpToPx(getActivity(), -1f));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -136,7 +159,26 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
             }
         });
 
-        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> viewPager.setPagingEnabled(!hasFocus));
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                searchView.setQueryHint(position <= 0 ? getResources().getString(R.string.boxes_query_hint) : getResources().getString(R.string.items_query_hint));
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+            viewPager.setPagingEnabled(((SearchView) v).getQuery().toString().length() <= 0 && !hasFocus);
+        });
     }
 
     private void inflateBottomSheet() {
@@ -150,6 +192,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         this.itemsPage = new ItemsPage();
 
         final HomePagerAdapter listPagerAdapter = new HomePagerAdapter(getChildFragmentManager(), boxesPage, itemsPage);
+        this.tabLayout = tabLayout;
         this.viewPager = viewPager;
         viewPager.setAdapter(listPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -163,14 +206,20 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
 
     @Override
     public boolean update(List<Object> objects, String objectType) {
+
         if (actionMode == null && !searchView.hasFocus()) {
             ((MainActivity) Objects.requireNonNull(getActivity())).startActionMode(new ActionModeCallback());
             actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));
             viewPager.setPagingEnabled(false);
             return true;
-        } else {
-            return false;
         }
+
+        if(actionMode != null) {
+            actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));
+            return true;
+        }
+
+        return false;
     }
 
     private void showBulkDeleteConfirmationDialog(@NonNull List<Box> toDelete, @NonNull ActionMode mode) {
