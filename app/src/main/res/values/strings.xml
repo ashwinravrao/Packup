@@ -92,4 +92,11 @@
     <string name="dialog_unpack_multiple_title">Unpack items?</string>
     <string name="dialog_unpack_multiple_message">Unpacking these items will remove them from this list. You can still view them in the on the unpacked items screen.</string>
     <string name="press_back_again_to_exit">Press back again to exit</string>
+    <string name="overwrite">overwrite</string>
+    <string name="nevermind">Nevermind</string>
+    <string name="dialog_nfc_tag_already_registered_title">Already registered</string>
+    <string name="dialog_nfc_tag_already_registered_message">There is already a tag registered to this box. Are you sure you want to register another tag?</string>
+    <string name="tap_to_write">Tap to Write</string>
+    <string name="register_a_tag">Register a Tag</string>
+    <string name="nfc_write_instructions">to register it with this box</string>
 </resources>

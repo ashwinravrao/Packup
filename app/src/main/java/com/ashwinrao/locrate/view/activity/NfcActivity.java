@@ -40,7 +40,8 @@ public class NfcActivity extends AppCompatActivity {
         super.onResume();
         final IntentFilter[] intentFilters = new IntentFilter[]{
                 new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED),
-                new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)
+                new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED),
+                new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED)
         };
 
         final PendingIntent pendingIntent = PendingIntent

@@ -50,6 +50,7 @@ public class AddActivity extends AppCompatActivity {
     private ActivityAddBinding binding;
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter;
+    private boolean nfcTagRegistered = false;
     private List<Item> items = new ArrayList<>();
 
     private final String PREF_ID_KEY = "next_available_id";
@@ -88,12 +89,10 @@ public class AddActivity extends AppCompatActivity {
         // Name Input Field
         Objects.requireNonNull(nameInputField).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -122,8 +121,21 @@ public class AddActivity extends AppCompatActivity {
     }
 
     private void initializeButtons(@NonNull MaterialCardView nfcButton, @NonNull MaterialCardView fillButton) {
-        nfcButton.setOnClickListener(view -> Toast.makeText(this, "Provisioning NFC tag...", Toast.LENGTH_SHORT).show());
+        nfcButton.setOnClickListener(view -> {
+            if(nfcTagRegistered) {
+                showNfcTagAlreadyRegisteredDialog();
+            } else {
+                createNfcTagRegistrationIntent();
+            }
+        });
         fillButton.setOnClickListener(view -> startCamera());
+    }
+
+    private void createNfcTagRegistrationIntent() {
+        final Intent intent = new Intent(this, NfcActivity.class);
+        intent.putExtra("isWrite", true);
+        intent.putExtra("uuidToRegister", boxViewModel.getBox().getId());
+        startActivityForResult(intent, 2);
     }
 
     private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
@@ -176,6 +188,13 @@ public class AddActivity extends AppCompatActivity {
                     }
                     itemViewModel.setItems(items);
                 }
+            }
+        }
+
+        if(requestCode == 2) {
+            if(resultCode == RESULT_OK) {
+                this.nfcTagRegistered = true;
+                Toast.makeText(this, "Nfc tag registered!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -270,6 +289,24 @@ public class AddActivity extends AppCompatActivity {
                     return null;
                 }, dialogInterface -> {
                     this.finish();
+                    return null;
+                });
+    }
+
+    private void showNfcTagAlreadyRegisteredDialog() {
+        ConfirmationDialog.make(this, new String[]{
+                        getString(R.string.dialog_nfc_tag_already_registered_title),
+                        getString(R.string.dialog_nfc_tag_already_registered_message),
+                        getString(R.string.yes),
+                        getString(R.string.no)},
+                true,
+                new int[]{ContextCompat.getColor(this, R.color.colorAccent),
+                        ContextCompat.getColor(this, R.color.colorAccent)},
+                dialogInterface -> {
+                    dialogInterface.cancel();
+                    return null;
+                }, dialogInterface -> {
+                    createNfcTagRegistrationIntent();
                     return null;
                 });
     }
