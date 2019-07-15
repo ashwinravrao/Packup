@@ -142,9 +142,13 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
                         selected.add(box);
                     }
                     binding.setSelected(!binding.getSelected());
-                    updateActionModeCallback.update(selected, "boxes");
+                    updateActionModeCallback.update(selected, getObjectTypeString());
                 }
             }
+        }
+
+        private String getObjectTypeString() {
+            return (selected.size() < 1 || selected.size() > 1) ? "boxes" : "box";
         }
 
         @Override
@@ -153,7 +157,7 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
                 selected = new ArrayList<>();
                 if (updateActionModeCallback != null) {
                     selected.add(boxes.get(getAdapterPosition()));
-                    if(updateActionModeCallback.update(selected, "boxes")) {
+                    if(updateActionModeCallback.update(selected, getObjectTypeString())) {
                         binding.setSelected(!binding.getSelected());
                     } else {
                         selected = null;
