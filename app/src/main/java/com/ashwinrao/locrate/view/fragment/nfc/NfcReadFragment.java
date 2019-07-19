@@ -57,10 +57,9 @@ public class NfcReadFragment extends Fragment implements NfcFragment, BackNavCal
             if(boxUUID.length() > 0) {
                 final Intent intent = new Intent(getActivity(), DetailActivity.class);
                 intent.putExtra("ID", boxUUID);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
-
+                getActivity().finishAfterTransition();
             } else {
                 Toast.makeText(getActivity(), "This tag isn't registered", Toast.LENGTH_SHORT).show();
             }
