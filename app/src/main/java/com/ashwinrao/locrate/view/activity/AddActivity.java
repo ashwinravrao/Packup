@@ -33,6 +33,7 @@ import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class AddActivity extends AppCompatActivity {
     private ActivityAddBinding binding;
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter;
-    private boolean nfcTagRegistered = false;
+    private boolean wasTagAssigned = false;
     private List<Item> items = new ArrayList<>();
 
     private final String PREF_ID_KEY = "next_available_id";
@@ -89,10 +90,12 @@ public class AddActivity extends AppCompatActivity {
         // Name Input Field
         Objects.requireNonNull(nameInputField).addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -122,7 +125,7 @@ public class AddActivity extends AppCompatActivity {
 
     private void initializeButtons(@NonNull MaterialCardView nfcButton, @NonNull MaterialCardView fillButton) {
         nfcButton.setOnClickListener(view -> {
-            if(nfcTagRegistered) {
+            if (wasTagAssigned) {
                 showNfcTagAlreadyRegisteredDialog();
             } else {
                 createNfcTagRegistrationIntent();
@@ -191,10 +194,9 @@ public class AddActivity extends AppCompatActivity {
             }
         }
 
-        if(requestCode == 2) {
-            if(resultCode == RESULT_OK) {
-                this.nfcTagRegistered = true;
-                Toast.makeText(this, "Nfc tag registered!", Toast.LENGTH_SHORT).show();
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                wasTagAssigned = true;
             }
         }
     }

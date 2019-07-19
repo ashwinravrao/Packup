@@ -176,7 +176,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
         @Override
         public void onClick(View v) {
-            if(updateActionModeCallback != null) {
+            if(selected != null && updateActionModeCallback != null) {
                 final Item item = items.get(getAdapterPosition());
                 if(selected.contains(item)) {
                     selected.remove(item);

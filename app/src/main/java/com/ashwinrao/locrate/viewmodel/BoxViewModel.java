@@ -8,12 +8,15 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class BoxViewModel extends ViewModel {
 
     private Box box = new Box();
     private final BoxRepository repo;
+    private MutableLiveData<Boolean> nfcOverwriteMLD = new MutableLiveData<>(false);
     private BoxesAdapter boxesAdapter;
 
     BoxViewModel(BoxRepository repo) {
@@ -37,12 +40,20 @@ public class BoxViewModel extends ViewModel {
     }
 
     public boolean saveBox() {
-        if(box.getName() != null) {
+        if (box.getName() != null) {
             repo.insert(this.box);
             return true;
         } else {
             return false;
         }
+    }
+
+    public LiveData<Boolean> getNfcOverwritePermission() {
+        return nfcOverwriteMLD;
+    }
+
+    public void setNfcOverwritePermission(boolean isOverwritePermitted) {
+        nfcOverwriteMLD.setValue(isOverwritePermitted);
     }
 
     public void setBoxesAdapter(@NonNull BoxesAdapter boxesAdapter) {

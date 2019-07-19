@@ -31,7 +31,7 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:navigationIcon="@drawable/ic_drawer_handle"
                 app:popupTheme="@style/AppTheme.PopUpOverlay"
-                app:title="@string/toolbar_title_home"
+                app:title="@string/app_name"
                 app:titleTextColor="@color/iconAndTextColor" />
 
             <com.google.android.material.tabs.TabLayout
