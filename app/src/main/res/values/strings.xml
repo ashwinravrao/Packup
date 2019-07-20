@@ -105,4 +105,5 @@
     <string name="assignment_status_heading">Is there a tag assigned to this box?</string>
     <string name="tag_success_message">Tag successfully written!</string>
     <string name="empty_list_text">No saved boxes</string>
+    <string name="empty_items_text">No packed items</string>
 </resources>

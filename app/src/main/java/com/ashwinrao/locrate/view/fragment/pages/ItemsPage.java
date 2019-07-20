@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
+import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
@@ -111,6 +112,17 @@ public class ItemsPage extends Fragment {
         });
     }
 
+    private void togglePlaceholderVisibility(@Nullable List<Item> items) {
+        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
+        for(View v : placeholders) {
+            if(items != null) {
+                v.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
+            } else {
+                v.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageItemsBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         addItemDecoration(getContext(), recyclerView, 1);
@@ -124,6 +136,7 @@ public class ItemsPage extends Fragment {
             } else {
                 itemsAdapter.setItems(new ArrayList<>());
             }
+            togglePlaceholderVisibility(items);
             recyclerView.setAdapter(itemsAdapter);
         });
     }
