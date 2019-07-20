@@ -12,7 +12,12 @@
         <item name="android:colorEdgeEffect">@color/light_gray_multi_use</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/colorPrimary</item>
+    </style>
 
+    <!-- Splash Screen -->
+    <style name="AppTheme.Launcher">
+        <item name="android:windowBackground">@drawable/launcher_splash</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="AppTheme.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
