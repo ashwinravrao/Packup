@@ -103,4 +103,6 @@
     <string name="register_tag">Register Tag</string>
     <string name="assign_tag">Assign Tag</string>
     <string name="assignment_status_heading">Is there a tag assigned to this box?</string>
-    </resources>
+    <string name="tag_success_message">Tag successfully written!</string>
+    <string name="empty_list_text">No saved boxes</string>
+</resources>

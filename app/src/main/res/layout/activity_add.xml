@@ -30,10 +30,16 @@
             android:isScrollContainer="true"
             android:overScrollMode="ifContentScrolls">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/coordinator"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="88dp"
                 android:background="@color/background_window">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -178,7 +184,9 @@
                     app:layout_constraintTop_toBottomOf="@id/contents_section"
                     app:layout_constraintVertical_bias="0" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         </androidx.core.widget.NestedScrollView>
 

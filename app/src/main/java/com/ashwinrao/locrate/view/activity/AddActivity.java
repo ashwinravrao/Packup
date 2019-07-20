@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -33,7 +34,6 @@ import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -43,6 +43,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
+import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -197,6 +198,9 @@ public class AddActivity extends AppCompatActivity {
         if (requestCode == 2) {
             if (resultCode == RESULT_OK) {
                 wasTagAssigned = true;
+                Toast toast = Toast.makeText(this, R.string.tag_success_message, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM, 0, dpToPx(this, 94f));
+                toast.show();
             }
         }
     }
@@ -305,10 +309,10 @@ public class AddActivity extends AppCompatActivity {
                 new int[]{ContextCompat.getColor(this, R.color.colorAccent),
                         ContextCompat.getColor(this, R.color.colorAccent)},
                 dialogInterface -> {
-                    dialogInterface.cancel();
+                    createNfcTagRegistrationIntent();
                     return null;
                 }, dialogInterface -> {
-                    createNfcTagRegistrationIntent();
+                    dialogInterface.cancel();
                     return null;
                 });
     }

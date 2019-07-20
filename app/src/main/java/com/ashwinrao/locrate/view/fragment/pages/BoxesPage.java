@@ -114,6 +114,17 @@ public class BoxesPage extends Fragment {
         });
     }
 
+    private void togglePlaceholderVisibility(@Nullable List<Box> boxes) {
+        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
+        for(View v : placeholders) {
+            if(boxes != null) {
+                v.setVisibility(boxes.size() > 0 ? View.GONE : View.VISIBLE);
+            } else {
+                v.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageBoxesBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
@@ -127,6 +138,7 @@ public class BoxesPage extends Fragment {
             } else {
                 boxesAdapter.setBoxes(new ArrayList<>());
             }
+            togglePlaceholderVisibility(boxes);
             recyclerView.setAdapter(boxesAdapter);
         });
     }
