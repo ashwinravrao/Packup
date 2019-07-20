@@ -50,6 +50,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity android:name=".view.activity.SettingsActivity"
+            android:theme="@style/AppTheme.SettingsActivity"
+            android:windowSoftInputMode="adjustPan" />
+
     </application>
 
 </manifest>

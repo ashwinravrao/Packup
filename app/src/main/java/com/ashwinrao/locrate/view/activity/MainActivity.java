@@ -1,9 +1,6 @@
 package com.ashwinrao.locrate.view.activity;
 
-import android.drm.DrmStore;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;

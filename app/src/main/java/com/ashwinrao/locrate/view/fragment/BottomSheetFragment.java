@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentBottomSheetBinding;
+import com.ashwinrao.locrate.view.activity.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
@@ -46,6 +48,11 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Na
                 if(list != null && !list.isVisible()) {
                     getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                 }
+                this.dismiss();
+                return true;
+            case R.id.settings:
+                final Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
                 this.dismiss();
                 return true;
         }
