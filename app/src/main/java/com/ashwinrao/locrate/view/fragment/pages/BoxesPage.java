@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
+import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
@@ -26,6 +28,8 @@ import com.ashwinrao.locrate.view.activity.NfcActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,7 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
 public class BoxesPage extends Fragment {
 
+    private int numBoxes;
     private BoxesAdapter boxesAdapter;
     private LiveData<List<Box>> boxesLD;
     private FragmentPageBoxesBinding binding;
@@ -96,17 +101,25 @@ public class BoxesPage extends Fragment {
         fabs = new FloatingActionButton[]{nfcButton, addButton};
 
         filterButton.setOnClickListener(view -> {
-            binding.setFilterActivated(!binding.getFilterActivated());
-            if (binding.getFilterActivated()) {
-                // TODO add method body
+            if(numBoxes == 0) {
+                emptyListSnackbarWithAction("There are no boxes to filter");
+            } else {
+                binding.setFilterActivated(!binding.getFilterActivated());
+                if (binding.getFilterActivated()) {
+                    // TODO add method body
+                }
             }
         });
 
         nfcButton.setOnClickListener(view -> {
-            final Intent intent = new Intent(getActivity(), NfcActivity.class);
-            intent.putExtra("isWrite", false);
-            startActivity(intent);
-            view.setEnabled(false);
+            if(numBoxes == 0) {
+                emptyListSnackbarWithAction("There are no boxes to scan");
+            } else {
+                final Intent intent = new Intent(getActivity(), NfcActivity.class);
+                intent.putExtra("isWrite", false);
+                startActivity(intent);
+                view.setEnabled(false);
+            }
         });
 
         addButton.setOnClickListener(view -> {
@@ -115,6 +128,25 @@ public class BoxesPage extends Fragment {
             view.setEnabled(false);
         });
     }
+
+    private void emptyListSnackbarWithAction(@NonNull String text) {
+        Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), text, 4000)
+                .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+                .setAction(R.string.create, v1 -> {
+                    final Intent intent = new Intent(getActivity(), AddActivity.class);
+                    startActivity(intent);
+                })
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                .show();
+    }
+
+    /**
+     * Toggles list placeholder visibility based on the value of a SharedPreferences file key.
+     *
+     * @param boxes Nullable list of Box objects.
+     *              Pass null if toggling placeholder visibility without needing to update
+     *              SharedPreferences file. Otherwise, pass list observed from the ViewModel.
+     */
 
     private void togglePlaceholderVisibility(@Nullable List<Box> boxes) {
 
@@ -139,8 +171,10 @@ public class BoxesPage extends Fragment {
         recyclerView.setAdapter(boxesAdapter);
         boxesLD.observe(this, boxes -> {
             if (boxes != null) {
+                numBoxes = boxes.size();
                 boxesAdapter.setBoxes(boxes);
             } else {
+                numBoxes = 0;
                 boxesAdapter.setBoxes(new ArrayList<>());
             }
             togglePlaceholderVisibility(boxes != null ? boxes : new ArrayList<>());

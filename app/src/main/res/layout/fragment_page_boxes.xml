@@ -146,9 +146,8 @@
                 <ImageView
                     android:id="@+id/placeholder_image"
                     android:layout_width="match_parent"
-                    android:layout_height="125dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/ic_trolley"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_warehouse"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/top_buttons"
@@ -166,8 +165,8 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/placeholder_image"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/text_color_secondary_view_holder"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"
                     android:text="@string/empty_list_text"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

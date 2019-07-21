@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -210,6 +211,18 @@ public class AddActivity extends AppCompatActivity {
             itemsAdapter.setItems(items);
             recyclerView.setAdapter(itemsAdapter);
             binding.setNumItems(itemViewModel.getItemsFromThis().size());
+        }
+        togglePlaceholderVisibility();
+    }
+
+    private void togglePlaceholderVisibility() {
+        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
+        for(View v : placeholders) {
+            if(items != null) {
+                v.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
+            } else {
+                v.setVisibility(View.VISIBLE);
+            }
         }
     }
 

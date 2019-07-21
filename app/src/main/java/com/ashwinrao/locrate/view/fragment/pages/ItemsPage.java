@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.fragment.pages;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,7 +25,9 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
+import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
+import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -39,6 +43,7 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
 public class ItemsPage extends Fragment {
 
+    private int numBoxes;
     private ItemsAdapter itemsAdapter;
     private LiveData<List<Item>> itemsLD;
     private FragmentPageItemsBinding binding;
@@ -57,6 +62,7 @@ public class ItemsPage extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         itemsLD = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class).getAllItemsFromDatabase();
+        ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class).getBoxes().observe(getActivity(), boxes -> numBoxes = boxes != null ? boxes.size() : 0);
     }
 
     @Override
@@ -92,23 +98,50 @@ public class ItemsPage extends Fragment {
 
     private void initializeButtons(@NonNull FloatingActionButton unpackButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
         unpackButton.setOnClickListener(view -> {
-            if(itemsAdapter.getSelected() == null) {
-                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "Select one or more items to unpack", 4000)
+            if(numBoxes == 0) {
+                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no boxes to unpack", 4000)
                         .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+                        .setAction(R.string.create, v1 -> {
+                            final Intent intent = new Intent(getActivity(), AddActivity.class);
+                            startActivity(intent);
+                        })
                         .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
                         .show();
+            } else {
+                if (itemsAdapter.getSelected() == null) {
+                    Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "Select one or more items to unpack", 4000)
+                            .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                            .show();
+                }
             }
         });
 
         filterButton.setOnClickListener(view -> {
-            binding.setFilterActivated(!binding.getFilterActivated());
-            if(binding.getFilterActivated()) {
-                // TODO add method body
+            if(numBoxes == 0) {
+                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no items to filter", 4000)
+                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                        .show();
+            } else {
+                binding.setFilterActivated(!binding.getFilterActivated());
+                if (binding.getFilterActivated()) {
+                    // TODO
+                }
             }
         });
 
         packButton.setOnClickListener(v -> {
-            // TODO add method body
+            if(numBoxes == 0) {
+                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no boxes to pack", 4000)
+                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+                        .setAction(R.string.create, v1 -> {
+                            final Intent intent = new Intent(getActivity(), AddActivity.class);
+                            startActivity(intent);
+                        })
+                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                        .show();
+            }
         });
     }
 

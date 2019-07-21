@@ -104,8 +104,11 @@
     <string name="assign_tag">Assign Tag</string>
     <string name="assignment_status_heading">Is there a tag assigned to this box?</string>
     <string name="tag_success_message">Tag successfully written!</string>
-    <string name="empty_list_text">No saved boxes</string>
-    <string name="empty_items_text">No packed items</string>
+    <string name="empty_list_text">Boxes you create will show up here</string>
+    <string name="empty_items_text">Items you pack will show up here</string>
     <string name="menu_item_settings">Settings</string>
     <string name="settings">Settings</string>
+    <string name="create">Create</string>
+    <string name="write_nfc">Write NFC</string>
+    <string name="empty_photos_text">Items you pack will show up here</string>
 </resources>
