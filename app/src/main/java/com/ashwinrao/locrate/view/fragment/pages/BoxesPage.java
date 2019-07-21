@@ -2,6 +2,7 @@ package com.ashwinrao.locrate.view.fragment.pages;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,7 +64,7 @@ public class BoxesPage extends Fragment {
         super.onResume();
         for (FloatingActionButton fab : fabs) fab.setEnabled(true);
         binding.setFilterActivated(false);
-        if(boxesAdapter != null) {
+        if (boxesAdapter != null) {
             boxesAdapter.initializeFilter();
         }
     }
@@ -77,6 +78,7 @@ public class BoxesPage extends Fragment {
         binding.setFilterActivated(false);
 
         // layout widgets
+        togglePlaceholderVisibility(null);
         initializeRecyclerView(binding.recyclerView, binding);
         initializeButtons(binding.filterButton, binding.nfcButton, binding.addButton);
         return binding.getRoot();
@@ -115,17 +117,20 @@ public class BoxesPage extends Fragment {
     }
 
     private void togglePlaceholderVisibility(@Nullable List<Box> boxes) {
-        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
-        for(View v : placeholders) {
-            if(boxes != null) {
-                v.setVisibility(boxes.size() > 0 ? View.GONE : View.VISIBLE);
-            } else {
-                v.setVisibility(View.VISIBLE);
-            }
+
+        final SharedPreferences preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("administration", Context.MODE_PRIVATE);
+        if (boxes != null) {
+            final SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("areBoxes", boxes.size() > 0);
+            editor.apply();
         }
+
+        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
+        for (View v : placeholders) v.setVisibility(preferences.getBoolean("areBoxes", true) ? View.GONE : View.VISIBLE);
     }
 
-    private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageBoxesBinding binding) {
+    private void initializeRecyclerView(@NonNull RecyclerView
+                                                recyclerView, @NonNull FragmentPageBoxesBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         boxesAdapter = new BoxesAdapter(Objects.requireNonNull(getActivity()));
@@ -138,7 +143,7 @@ public class BoxesPage extends Fragment {
             } else {
                 boxesAdapter.setBoxes(new ArrayList<>());
             }
-            togglePlaceholderVisibility(boxes);
+            togglePlaceholderVisibility(boxes != null ? boxes : new ArrayList<>());
             recyclerView.setAdapter(boxesAdapter);
         });
     }

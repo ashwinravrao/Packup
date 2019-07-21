@@ -2,6 +2,7 @@ package com.ashwinrao.locrate.view.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -58,7 +59,6 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     private ItemsPage itemsPage;
     private ActionMode actionMode;
     private BoxViewModel boxViewModel;
-    private ItemViewModel itemViewModel;
     private Bundle savedInstanceState;
     private boolean wasBackPressed;
     private int currentPage = 0;
@@ -81,7 +81,6 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         setHasOptionsMenu(true);
         this.savedInstanceState = savedInstanceState;
         boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        itemViewModel = ViewModelProviders.of(getActivity(), factory).get(ItemViewModel.class);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
     }
 
@@ -122,6 +121,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         if(!wasBackPressed) {
             Toast.makeText(getActivity(), getString(R.string.press_back_again_to_exit), Toast.LENGTH_SHORT).show();
             wasBackPressed = !wasBackPressed;
+            new Handler().postDelayed(() -> wasBackPressed = false, 5000);  // reset after 5 seconds
             return true;
         }
         return false;
