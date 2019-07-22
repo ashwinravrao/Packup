@@ -111,4 +111,14 @@
     <string name="create">Create</string>
     <string name="write_nfc">Write NFC</string>
     <string name="empty_photos_text">Items you pack will show up here</string>
+    <string name="optional">Optional</string>
+    <string name="required">Required</string>
+    <string name="toolbar_save">Save</string>
+    <string name="clear_items">Clear items</string>
+    <string name="undo">Undo</string>
+    <string name="empty">Empty</string>
+    <string name="items_section_title">Items</string>
+    <string name="packing_instructions">Photograph items as you pack</string>
+    <string name="pack_box">Pack Box</string>
+    <string name="hint_category">Choose categories...</string>
 </resources>

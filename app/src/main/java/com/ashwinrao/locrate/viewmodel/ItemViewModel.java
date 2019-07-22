@@ -26,6 +26,10 @@ public class ItemViewModel extends ViewModel {
         return repo.getItemsFromBox(boxUUID);
     }
 
+    public void clearItems() {
+        this.items.clear();
+    }
+
     public void setItems(List<Item> items) {
         this.items.addAll(items);
     }

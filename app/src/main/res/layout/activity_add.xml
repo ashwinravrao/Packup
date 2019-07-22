@@ -11,7 +11,7 @@
 
         <variable
             name="numItems"
-            type="Integer" />
+            type="String" />
 
     </data>
 
@@ -47,39 +47,40 @@
                     app:menu="@menu/toolbar_add"
                     app:navigationIcon="@drawable/ic_close"
                     app:popupTheme="@style/AppTheme.PopUpOverlay"
-                    app:title="@{null}" />
+                    app:titleTextColor="@android:color/white"
+                    app:title="@{String.format(@string/box_number_placeholder, boxNum)}" />
 
-                <TextView
-                    android:id="@+id/label_section"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="40dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/label_section_title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
+                <!--<TextView-->
+                    <!--android:id="@+id/label_section"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginStart="32dp"-->
+                    <!--android:layout_marginTop="40dp"-->
+                    <!--android:fontFamily="sans-serif-medium"-->
+                    <!--android:text="@string/label_section_title"-->
+                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Headline"-->
+                    <!--app:layout_constraintStart_toStartOf="parent"-->
+                    <!--app:layout_constraintTop_toBottomOf="@id/toolbar" />-->
 
-                <TextView
-                    android:id="@+id/box_number"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="32dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@{String.format(@string/box_number_placeholder, boxNum)}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    app:layout_constraintBottom_toBottomOf="@id/label_section"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/label_section"
-                    tools:text="Box 16" />
+                <!--<TextView-->
+                    <!--android:id="@+id/box_number"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="32dp"-->
+                    <!--android:fontFamily="sans-serif-medium"-->
+                    <!--android:text="@{String.format(@string/box_number_placeholder, boxNum)}"-->
+                    <!--android:textAppearance="@style/TextAppearance.AppCompat.Subhead"-->
+                    <!--app:layout_constraintBottom_toBottomOf="@id/label_section"-->
+                    <!--app:layout_constraintEnd_toEndOf="parent"-->
+                    <!--app:layout_constraintTop_toTopOf="@id/label_section"-->
+                    <!--tools:text="Box 16" />-->
 
                 <EditText
                     android:id="@+id/name_input_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="28dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="28dp"
                     android:hint="@string/hint_name"
                     android:inputType="textCapWords"
@@ -88,8 +89,7 @@
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/label_section"
-                    tools:ignore="Autofill" />
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"/>
 
                 <EditText
                     android:id="@+id/description_input_field"
@@ -110,6 +110,17 @@
                     app:layout_constraintTop_toBottomOf="@id/name_input_field"
                     tools:ignore="Autofill" />
 
+                <TextView
+                    android:id="@+id/required_field_notice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    app:layout_constraintTop_toTopOf="@id/name_input_field"
+                    app:layout_constraintBottom_toBottomOf="@id/name_input_field"
+                    app:layout_constraintEnd_toEndOf="@id/name_input_field"
+                    android:textColor="@color/delete_red"
+                    android:text="@string/required"/>
 
                 <LinearLayout
                     android:id="@+id/char_counter"
@@ -137,17 +148,40 @@
 
                 </LinearLayout>
 
+                <HorizontalScrollView
+                    android:id="@+id/chip_scrollview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/char_counter"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/category_chip_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:singleLine="true"/>
+
+                </HorizontalScrollView>
+
+
                 <TextView
-                    android:id="@+id/contents_section"
+                    android:id="@+id/items_section"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="32dp"
                     android:fontFamily="sans-serif-medium"
-                    android:text="@string/contents_section_title"
+                    android:text="@string/items_section_title"
+                    android:textColor="@color/top_row_view_holder"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/char_counter" />
+                    app:layout_constraintTop_toBottomOf="@id/chip_scrollview" />
 
                 <TextView
                     android:id="@+id/contents_status"
@@ -155,12 +189,11 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
                     android:alpha="0.7"
-                    android:text="@{safeUnbox(numItems) == 0 ? @string/num_items_default : String.format(@string/number_of_items_format_string, numItems)}"
+                    android:text="@{numItems}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    app:layout_constraintBottom_toBottomOf="@id/contents_section"
+                    app:layout_constraintBottom_toBottomOf="@id/items_section"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/contents_section"
-                    tools:text="Empty" />
+                    app:layout_constraintTop_toTopOf="@id/items_section" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -174,7 +207,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/contents_section"
+                    app:layout_constraintTop_toBottomOf="@id/items_section"
                     app:layout_constraintVertical_bias="0" />
 
                 <ImageView
@@ -184,7 +217,7 @@
                     android:src="@drawable/ic_open_box"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/contents_section"
+                    app:layout_constraintTop_toBottomOf="@id/items_section"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="128dp"
                     tools:ignore="ContentDescription" />
@@ -209,6 +242,15 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/snackbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="88dp">
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/detail_bnv"
@@ -287,7 +329,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="@string/fill_box"
+                            android:text="@string/pack_box"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
                             android:textColor="@android:color/white"
                             android:textSize="16sp" />

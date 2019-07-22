@@ -1,5 +1,6 @@
 package com.ashwinrao.locrate.data.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +34,7 @@ public class Box {
     private Date createdDate = new Date();
 
     @ColumnInfo(name = "category")
-    private String category;
+    private List<String> categories = new ArrayList<>();
 
     @ColumnInfo(name = "is_full")
     private boolean isFull;
@@ -89,11 +90,11 @@ public class Box {
         isFull = full;
     }
 
-    public String getCategory() {
-        return category;
+    public List<String> getCategories() {
+        return categories;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }

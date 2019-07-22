@@ -7,6 +7,7 @@ import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -39,8 +40,9 @@ public class BoxViewModel extends ViewModel {
         return repo.getBoxes();
     }
 
-    public boolean saveBox() {
+    public boolean saveBox(@NonNull List<String> categories) {
         if (box.getName() != null) {
+            box.setCategories(categories);
             repo.insert(this.box);
             return true;
         } else {
