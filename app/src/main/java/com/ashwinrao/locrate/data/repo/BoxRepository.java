@@ -29,6 +29,8 @@ public class BoxRepository {
 
     public LiveData<Box> getBoxByUUID(String uuid) { return dao.getBoxByUUID(uuid); }
 
+    public LiveData<List<String>> getAllBoxCategories() { return dao.getAllBoxCategories(); }
+
     public void insert(Box... boxes) {
         new AsyncTasks.BoxAsyncTask(dao, "insert").execute(boxes);
     }

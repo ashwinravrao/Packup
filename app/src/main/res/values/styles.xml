@@ -39,18 +39,4 @@
         <item name="android:actionMenuTextColor">@android:color/white</item>
     </style>
 
-    <style name="HintText" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/top_row_view_holder</item>
-    </style>
-
-    <style name="TextInputLayoutAppearance" parent="Base.Widget.MaterialComponents.TextInputLayout">
-        <item name="android:textColor">@color/top_row_view_holder</item>
-        <item name="android:textColorHint">@color/top_row_view_holder</item>
-        <item name="hintTextAppearance">@style/HintText</item>
-        <item name="boxStrokeColor">@color/colorAccent</item>
-        <item name="android:colorControlActivated">@color/top_row_view_holder</item>
-        <item name="android:colorControlNormal">@color/top_row_view_holder</item>
-        <item name="android:colorControlHighlight">@color/colorAccent</item>
-    </style>
-
 </resources>

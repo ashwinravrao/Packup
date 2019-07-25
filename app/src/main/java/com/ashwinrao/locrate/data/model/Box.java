@@ -3,15 +3,14 @@ package com.ashwinrao.locrate.data.model;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
 
 @Entity(tableName = "boxes", indices = @Index("id"))
 public class Box {

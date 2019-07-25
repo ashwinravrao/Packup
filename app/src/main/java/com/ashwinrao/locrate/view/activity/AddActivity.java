@@ -4,16 +4,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -32,6 +35,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityAddBinding;
+import com.ashwinrao.locrate.util.HashtagDetection;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
@@ -40,8 +44,6 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -131,20 +133,19 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.charCount.setText(String.valueOf(s.length()));
-                detectHashtag(s, matchFound, matchStrings);
+                HashtagDetection.detect(s, categories,matchFound,matchStrings);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                cleanupHashtag(s, matchFound, matchStrings, binding.categoryChipGroup);
+                tagToChip(s, matchFound, matchStrings, binding.categoryChipGroup);
                 description = s.toString().length() > 0 ? s.toString() : null;
                 boxViewModel.getBox().setDescription(description);
             }
         });
     }
 
-    private void cleanupHashtag(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {
-        // use hashtag substring to inflate Entry Chip and delete substring from EditText
+    private void tagToChip(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {
         if(matchFound[0]) {
             s.delete(s.length() - matchStrings[0].length(), s.length());
             addNewCategoryChip(group);
@@ -304,44 +305,57 @@ public class AddActivity extends AppCompatActivity {
                         itemViewModel.insertItems(itemViewModel.getItemsFromThis());
                         this.finish();
                     } else {
-                        Objects.requireNonNull(binding.nameInputField).setError(getResources().getString(R.string.name_field_error_message));
-                        binding.nameInputField.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                binding.nameInputField.setError(null);
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                            }
-                        });
+                        setError(binding.nameInputField);
                     }
                 }
                 return true;
             case R.id.toolbar_clear_items:
-                items.clear();
-                updateItems();
-                Snackbar.make(binding.snackbarContainer, "Items cleared", Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-                        .setAction(getString(R.string.undo), v -> {
-                            items.addAll(itemViewModel.getItemsFromThis());
-                            updateItems();
-                        })
-                        .addCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar transientBottomBar, int event) {
-                        if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                            itemViewModel.clearItems();
-                        }
-                    }
-                }).show();
+                if(items.size() > 0) {
+                    items.clear();
+                    updateItems();
+                    Snackbar.make(binding.snackbarContainer, "Items cleared", Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                            .setAction(getString(R.string.undo), v -> {
+                                items.addAll(itemViewModel.getItemsFromThis());
+                                updateItems();
+                            })
+                            .addCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                                        itemViewModel.clearItems();
+                                    }
+                                }
+                            }).show();
+                } else {
+                    final Toast toast = Toast.makeText(this, "Nothing to clear", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM,0,dpToPx(this, 112f));
+                    toast.show();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setError(@NonNull EditText text) {
+        text.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.delete_red)));
+        text.setHintTextColor(ContextCompat.getColor(this, R.color.delete_red));
+        text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                text.setHintTextColor(ContextCompat.getColor(AddActivity.this, R.color.top_row_view_holder));
+                text.setBackgroundTintList(getColorStateList(R.color.state_list_input_field));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")

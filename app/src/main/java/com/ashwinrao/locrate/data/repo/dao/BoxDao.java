@@ -24,6 +24,9 @@ public interface BoxDao {
     @Query("SELECT * FROM boxes ORDER BY created DESC")
     LiveData<List<Box>> getBoxes();
 
+    @Query("SELECT category FROM boxes")
+    LiveData<List<String>> getAllBoxCategories();
+
 
     /**
      * @return An observable box (with specified name field) from {@link AppDatabase}.

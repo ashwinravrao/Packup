@@ -90,7 +90,7 @@
                             android:id="@+id/filter_button_caption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@{safeUnbox(filterActivated) ? @string/filtering : @string/filter}"
+                            android:text="@string/categories"
                             android:layout_marginTop="16dp"
                             android:textAlignment="center"
                             android:fontFamily="sans-serif-medium"
@@ -132,6 +132,32 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <TextView
+                    android:id="@+id/filtered_results_disclaimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:visibility="gone"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/top_row_view_holder"
+                    android:text="@string/filtered_results_disclaimer"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/top_buttons"/>
+
+                <Button
+                    android:id="@+id/clear_filtered_results_button"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent"
+                    android:text="@string/clear"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toTopOf="@id/filtered_results_disclaimer"
+                    app:layout_constraintBottom_toBottomOf="@id/filtered_results_disclaimer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="24dp"/>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
                     android:layout_width="match_parent"
@@ -141,7 +167,7 @@
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/top_buttons" />
+                    app:layout_constraintTop_toBottomOf="@id/filtered_results_disclaimer" />
 
                 <ImageView
                     android:id="@+id/placeholder_image"

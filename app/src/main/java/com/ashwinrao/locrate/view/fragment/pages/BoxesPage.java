@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,10 +23,12 @@ import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.FragmentPageBoxesBinding;
+import com.ashwinrao.locrate.util.callback.DismissCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
 import com.ashwinrao.locrate.view.activity.NfcActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
+import com.ashwinrao.locrate.view.fragment.CategoryFilterDialog;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -39,14 +42,16 @@ import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 
-public class BoxesPage extends Fragment {
+public class BoxesPage extends Fragment implements DismissCallback {
 
     private int numBoxes;
+    private RecyclerView recyclerView;
     private BoxesAdapter boxesAdapter;
     private LiveData<List<Box>> boxesLD;
     private FragmentPageBoxesBinding binding;
     private FloatingActionButton[] fabs;
     private UpdateActionModeCallback callback;
+    private List<Box> boxes = new ArrayList<>();
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -68,9 +73,13 @@ public class BoxesPage extends Fragment {
     public void onResume() {
         super.onResume();
         for (FloatingActionButton fab : fabs) fab.setEnabled(true);
-        binding.setFilterActivated(false);
+        if(binding != null) setFilterActivated(false);
         if (boxesAdapter != null) {
             boxesAdapter.initializeFilter();
+            if(boxes != null && recyclerView != null) {
+                boxesAdapter.setBoxes(boxes);
+                recyclerView.setAdapter(boxesAdapter);
+            }
         }
     }
 
@@ -80,13 +89,20 @@ public class BoxesPage extends Fragment {
         binding = FragmentPageBoxesBinding.inflate(inflater);
 
         // binding vars
-        binding.setFilterActivated(false);
+        setFilterActivated(false);
 
         // layout widgets
         togglePlaceholderVisibility(null);
         initializeRecyclerView(binding.recyclerView, binding);
         initializeButtons(binding.filterButton, binding.nfcButton, binding.addButton);
+        initializeClearFilterButton(binding.clearFilteredResultsButton);
         return binding.getRoot();
+    }
+
+    private void setFilterActivated(final boolean state) {
+        binding.setFilterActivated(state);
+        binding.filteredResultsDisclaimer.setVisibility(state ? View.VISIBLE : View.GONE);
+        binding.clearFilteredResultsButton.setVisibility(state ? View.VISIBLE : View.GONE);
     }
 
     public void setCallback(@NonNull UpdateActionModeCallback callback) {
@@ -104,9 +120,10 @@ public class BoxesPage extends Fragment {
             if(numBoxes == 0) {
                 emptyListSnackbarWithAction("There are no boxes to filter");
             } else {
-                binding.setFilterActivated(!binding.getFilterActivated());
-                if (binding.getFilterActivated()) {
-                    // TODO add method body
+                if (!binding.getFilterActivated()) {
+                    showCategoryPickerDialog();
+                } else {
+                    resetCategoryFiltering();
                 }
             }
         });
@@ -127,6 +144,20 @@ public class BoxesPage extends Fragment {
             startActivity(intent);
             view.setEnabled(false);
         });
+    }
+
+    private void initializeClearFilterButton(@NonNull Button button) {
+        button.setOnClickListener(v -> {
+            if(binding.getFilterActivated()) {
+                resetCategoryFiltering();
+            }
+        });
+    }
+
+    private void showCategoryPickerDialog() {
+        final CategoryFilterDialog fragment = new CategoryFilterDialog();
+        fragment.setDismissCallback(this);
+        fragment.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(),fragment.getClass().getSimpleName());
     }
 
     private void emptyListSnackbarWithAction(@NonNull String text) {
@@ -163,6 +194,7 @@ public class BoxesPage extends Fragment {
 
     private void initializeRecyclerView(@NonNull RecyclerView
                                                 recyclerView, @NonNull FragmentPageBoxesBinding binding) {
+        this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addItemDecoration(getContext(), recyclerView, 1);
         boxesAdapter = new BoxesAdapter(Objects.requireNonNull(getActivity()));
@@ -171,9 +203,11 @@ public class BoxesPage extends Fragment {
         recyclerView.setAdapter(boxesAdapter);
         boxesLD.observe(this, boxes -> {
             if (boxes != null) {
+                this.boxes = boxes;
                 numBoxes = boxes.size();
                 boxesAdapter.setBoxes(boxes);
             } else {
+                this.boxes = new ArrayList<>();
                 numBoxes = 0;
                 boxesAdapter.setBoxes(new ArrayList<>());
             }
@@ -185,4 +219,36 @@ public class BoxesPage extends Fragment {
     public void onQueryTextChange(String newText) {
         boxesAdapter.getFilter().filter(newText);
     }
+
+    private void resetCategoryFiltering() {
+        boxesAdapter.setBoxes(boxes);
+        recyclerView.setAdapter(boxesAdapter);
+        setFilterActivated(false);
+        Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), getString(R.string.filters_cleared), 4000)
+                .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+                .show();
+    }
+
+    @Override
+    public void onDismiss(@NonNull final List<String> selectedCategories) {
+        if(selectedCategories.size() > 0) {
+            if (boxes != null) {
+                final List<Box> filtered = new ArrayList<>();
+                for (String s : selectedCategories) {
+                    for (Box box : boxes) {
+                        if (box.getCategories().contains(s) && !filtered.contains(box)) {
+                            filtered.add(box);
+                        }
+                    }
+                }
+                if (filtered.size() > 0) {
+                    boxesAdapter.setBoxes(filtered);
+                    recyclerView.setAdapter(boxesAdapter);
+                }
+                setFilterActivated(true);
+            }
+        }
+    }
+
 }
