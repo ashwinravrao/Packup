@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentCategoryFilterDialogBinding;
-import com.ashwinrao.locrate.util.callback.DismissCallback;
+import com.ashwinrao.locrate.util.callback.DialogDismissedCallback;
 import com.ashwinrao.locrate.view.adapter.CategoriesAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 
@@ -34,9 +34,12 @@ import javax.inject.Inject;
 
 public class CategoryFilterDialog extends DialogFragment {
 
-    private DismissCallback callback;
-    private boolean filterButtonClicked;
+    private DialogDismissedCallback callback;
+    private CategoriesAdapter adapter;
+    private boolean applyButtonClicked;
     private LiveData<List<String>> categoriesLD;
+    private List<String> categories = new ArrayList<>();
+    private FragmentCategoryFilterDialogBinding binding;
     private List<String> checkedCategories = new ArrayList<>();
 
     private final String TAG = this.getClass().getSimpleName();
@@ -44,7 +47,7 @@ public class CategoryFilterDialog extends DialogFragment {
     @Inject
     ViewModelProvider.Factory factory;
 
-    public void setDismissCallback(DismissCallback callback) {
+    public void setDialogDismissedCallback(@NonNull DialogDismissedCallback callback) {
         this.callback = callback;
     }
 
@@ -75,8 +78,13 @@ public class CategoryFilterDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final FragmentCategoryFilterDialogBinding binding = DataBindingUtil.inflate(inflater,R.layout.fragment_category_filter_dialog, container, false);
-        initializeFilterButton(binding.filterButton);
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_category_filter_dialog, container, false);
+
+        // binding vars
+        binding.setMinCategoriesSelected(false);
+
+        // layout widgets
+        initializeFilterButton(binding.applyButton);
         initializeRecyclerView(binding.categoryRecyclerView);
         return binding.getRoot();
     }
@@ -88,24 +96,28 @@ public class CategoryFilterDialog extends DialogFragment {
     }
 
     private void initializeRecyclerView(@NonNull final RecyclerView recyclerView) {
-        final CategoriesAdapter adapter = new CategoriesAdapter(getActivity());
+        adapter = new CategoriesAdapter(getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(adapter);
-        categoriesLD.observe(this, list -> {
-            if(list != null) {
-                adapter.setCategories(list);
+        categoriesLD.observe(this, categories -> {
+            if(categories != null) {
+                this.categories = categories;
+                adapter.setCategories(categories);
             }
             recyclerView.setAdapter(adapter);
         });
 
         adapter.getChecked().observe(this, strings -> {
-            if(strings != null) checkedCategories = strings;
+            if(strings != null) {
+                checkedCategories = strings;
+                binding.setMinCategoriesSelected(strings.size() > 0);
+            }
         });
     }
 
     private void initializeFilterButton(@NonNull Button button) {
         button.setOnClickListener(v -> {
-            filterButtonClicked = true;
+            applyButtonClicked = true;
             dismiss();
         });
     }
@@ -113,6 +125,8 @@ public class CategoryFilterDialog extends DialogFragment {
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(filterButtonClicked) callback.onDismiss(checkedCategories);
+        if(applyButtonClicked) {
+            callback.onDialogDismissed(checkedCategories);
+        }
     }
 }

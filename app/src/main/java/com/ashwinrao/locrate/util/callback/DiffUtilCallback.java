@@ -34,4 +34,13 @@ public class DiffUtilCallback extends DiffUtil.Callback {
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
     }
+
+    public int getIndexOfDeletion() {
+        for (int i = 0; i < getOldListSize(); i++) {
+            if (!oldList.get(i).equals(newList.get(i))) {
+                return i;
+            }
+        }
+        return getNewListSize() + 1;
+    }
 }

@@ -26,7 +26,6 @@ import com.ashwinrao.locrate.view.adapter.HomePagerAdapter;
 import com.ashwinrao.locrate.view.fragment.pages.BoxesPage;
 import com.ashwinrao.locrate.view.fragment.pages.ItemsPage;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
-import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
@@ -92,7 +91,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
             actionMode.finish();
             viewPager.setPagingEnabled(true);
             if(currentPage == 0) {
-                boxesPage.getAdapter().clearSelected();
+                boxesPage.getBoxesAdapter().clearSelected();
             } else {
                 itemsPage.getAdapter().clearSelected();
             }
@@ -278,7 +277,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.delete) {
-                final List<Object> selected = currentPage == 0 ? boxesPage.getAdapter().getSelected() : itemsPage.getAdapter().getSelected();
+                final List<Object> selected = currentPage == 0 ? boxesPage.getBoxesAdapter().getSelected() : itemsPage.getAdapter().getSelected();
                 if(currentPage == 0) {
                     @SuppressWarnings("unchecked")
                     final List<Box> selectedBoxes = (List<Box>) (List<?>) selected;
@@ -300,7 +299,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             if(currentPage == 0 ) {
-                boxesPage.getAdapter().clearSelected();
+                boxesPage.getBoxesAdapter().clearSelected();
             } else {
                 itemsPage.getAdapter().clearSelected();
             }

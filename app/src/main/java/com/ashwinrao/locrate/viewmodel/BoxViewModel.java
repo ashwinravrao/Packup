@@ -53,31 +53,16 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
-    /**
-     * Temporary fix until a more elegant solution is found
-     * <p>
-     * Box category tags are stored in a List<String>.
-     * Querying the database for all boxes' categories returns
-     * List<String>, not the expected List<List<String>>.
-     * This method implements a SwitchMap to do the conversion
-     * and returns a flattened list.
-     *
-     * @return LiveData<List< String>> allCategories.
-     */
-
     public LiveData<List<String>> getAllBoxCategories() {
-        return Transformations.switchMap(repo.getAllBoxCategories(), value -> {
-            final MutableLiveData<List<String>> mld = new MutableLiveData<>();
-            final List<List<String>> contents = new ArrayList<>();
-            for (String s : value) {
-                final String sub = s.substring(2, s.length() - 2);
-                final List<String> split = Arrays.asList(sub.split("\",\""));
-                contents.add(split);
-            }
-            mld.setValue(contents.stream()
-                    .flatMap(List::stream)
-                    .collect(Collectors.toList()));
-            return mld;
+        return Transformations.switchMap(repo.getBoxes(), boxes -> {
+           final MutableLiveData<List<String>> mld = new MutableLiveData<>();
+           List<String> categories = null;
+           if (boxes != null) {
+               categories = new ArrayList<>();
+               for (final Box box : boxes) categories.addAll(box.getCategories());
+           }
+           mld.setValue(categories);
+           return mld;
         });
     }
 

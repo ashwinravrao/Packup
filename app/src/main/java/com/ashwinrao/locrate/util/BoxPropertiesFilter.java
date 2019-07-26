@@ -20,7 +20,7 @@ public class BoxPropertiesFilter {
         } else {
             final String constr = constraint.toString().toLowerCase();
             for (Box box : boxes) {
-                if ((onID && String.valueOf(box.getId()).contains(constr))
+                if ((onID && String.valueOf(box.getNumber()).contains(constr))
                         || (onName && box.getName().toLowerCase().contains(constr))
                         || (onDescription && box.getDescription().toLowerCase().contains(constr))) {
                     result.add(box);

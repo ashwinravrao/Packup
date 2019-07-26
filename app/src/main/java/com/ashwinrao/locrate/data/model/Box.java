@@ -27,7 +27,7 @@ public class Box {
     private String name;
 
     @ColumnInfo(name = "description")
-    private String description = "No description";
+    private String description = "";
 
     @ColumnInfo(name = "created")
     private Date createdDate = new Date();

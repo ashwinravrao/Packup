@@ -133,13 +133,13 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.charCount.setText(String.valueOf(s.length()));
-                HashtagDetection.detect(s, categories,matchFound,matchStrings);
+                HashtagDetection.detect(s, categories, matchFound, matchStrings);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 tagToChip(s, matchFound, matchStrings, binding.categoryChipGroup);
-                description = s.toString().length() > 0 ? s.toString() : null;
+                description = s.toString().length() > 0 ? s.toString() : "";
                 boxViewModel.getBox().setDescription(description);
             }
         });

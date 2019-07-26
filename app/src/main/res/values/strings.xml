@@ -62,10 +62,15 @@
     <string name="items_section_title">Items</string>
     <string name="pack_box">Pack Box</string>
     <string name="description_instructions">Create custom tags with the # symbol</string>
-    <string name="filter_dialog_title">Filter by category</string>
+    <string name="filter_dialog_title">Filter…</string>
     <string name="filter_dialog_positive_button">Filter</string>
     <string name="categories">Categories</string>
     <string name="filtered_results_disclaimer">Showing filtered results…</string>
     <string name="clear">clear</string>
     <string name="filters_cleared">Filters cleared</string>
+    <string name="filter_dialog_message">Choose at least one category to filter on</string>
+    <string name="filters_cleared_all_categories">Filters cleared because all categories selected</string>
+    <string name="apply">Apply</string>
+    <string name="showing_all">Showing all</string>
+    <string name="no_description">No description</string>
 </resources>

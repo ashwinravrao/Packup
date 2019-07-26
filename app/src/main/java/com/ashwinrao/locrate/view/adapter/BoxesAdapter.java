@@ -12,7 +12,6 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.databinding.ViewholderBoxBinding;
 import com.ashwinrao.locrate.util.BoxPropertiesFilter;
-import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.activity.DetailActivity;
 import com.ashwinrao.locrate.view.activity.MainActivity;
@@ -23,32 +22,46 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolder> implements Filterable {
+public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> implements Filterable {
 
     private Filter filter;
     private Context context;
-    private List<Box> boxes;
-    private List<Box> boxesCopy;
+    private List<Box> boxesForFiltering;
 
     // Action Mode
     private UpdateActionModeCallback updateActionModeCallback;
     private List<Object> selected;
 
-    public BoxesAdapter(@NonNull Context context) {
-        this.context = context;
-        initializeFilter();
-    }
+    private static final DiffUtil.ItemCallback<Box> DIFF_CALLBACK = new DiffUtil.ItemCallback<Box>() {
 
-    public void initializeFilter() {
+        @Override
+        public boolean areItemsTheSame(@NonNull Box oldItem, @NonNull Box newItem) {
+            return oldItem.getId().equals(newItem.getId());
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull Box oldItem, @NonNull Box newItem) {
+            return oldItem.getId().equals(newItem.getId()) &&
+                    oldItem.getNumber() == newItem.getNumber() &&
+                    oldItem.getDescription().equals(newItem.getDescription()) &&
+                    oldItem.getCategories().equals(newItem.getCategories()) &&
+                    oldItem.getName().equals(newItem.getName()) &&
+                    oldItem.getCreatedDate().equals(newItem.getCreatedDate());
+        }
+    };
+
+    public BoxesAdapter(@NonNull Context context) {
+        super(DIFF_CALLBACK);
+        this.context = context;
         this.filter = createFilter();
     }
 
-    public void setBoxes(@NonNull List<Box> boxes) {
-        this.boxes = boxes;
-        this.boxesCopy = new ArrayList<>(boxes);
+    public void setBoxesForFiltering(@NonNull List<Box> boxes) {
+        this.boxesForFiltering = boxes;
     }
 
     public void setCallback(@NonNull UpdateActionModeCallback callback) {
@@ -64,6 +77,12 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
         this.notifyDataSetChanged();
     }
 
+    @Override
+    public long getItemId(int position) {
+        final Box box = getItem(position);
+        return box.hashCode();
+    }
+
     @NonNull
     @Override
     public BoxViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,14 +92,12 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
-        final Box box = boxes.get(position);
+        final Box box = getItem(position);
+        if (box.getDescription().equals("")) {
+            holder.binding.description.setText(R.string.no_description);
+        }
         holder.binding.setBox(box);
         holder.binding.setSelected(false);
-    }
-
-    @Override
-    public int getItemCount() {
-        return boxes == null ? 0 : boxes.size();
     }
 
     @Override
@@ -94,7 +111,7 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
             @Override
             protected Filter.FilterResults performFiltering(CharSequence constraint) {
                 List<Box> filtered;
-                BoxPropertiesFilter pf = new BoxPropertiesFilter(boxesCopy);
+                BoxPropertiesFilter pf = new BoxPropertiesFilter(boxesForFiltering);
                 filtered = pf.filter(constraint, true, true, true);
 
                 Filter.FilterResults results = new Filter.FilterResults();
@@ -105,12 +122,7 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
-                final DiffUtilCallback diffUtil = new DiffUtilCallback(new ArrayList<>(boxes), (List) results.values);
-                DiffUtil.DiffResult result = DiffUtil.calculateDiff(diffUtil, true);
-
-                boxes.clear();
-                boxes.addAll((List) results.values);
-                result.dispatchUpdatesTo(BoxesAdapter.this);
+                BoxesAdapter.this.submitList((List) results.values);
             }
         };
     }
@@ -128,15 +140,15 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
 
         @Override
         public void onClick(View v) {
-            if(selected == null) {
+            if (selected == null) {
                 final Intent intent = new Intent(context, DetailActivity.class);
-                intent.putExtra("ID", boxes.get(getAdapterPosition()).getId());
+                intent.putExtra("ID", getItem(getAdapterPosition()).getId());
                 context.startActivity(intent);
                 ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
             } else {
-                if(updateActionModeCallback != null) {
-                    final Box box = boxes.get(getAdapterPosition());
-                    if(selected.contains(box)) {
+                if (updateActionModeCallback != null) {
+                    final Box box = getItem(getAdapterPosition());
+                    if (selected.contains(box)) {
                         selected.remove(box);
                     } else {
                         selected.add(box);
@@ -153,11 +165,11 @@ public class BoxesAdapter extends RecyclerView.Adapter<BoxesAdapter.BoxViewHolde
 
         @Override
         public boolean onLongClick(View v) {
-            if(selected == null) {
+            if (selected == null) {
                 selected = new ArrayList<>();
                 if (updateActionModeCallback != null) {
-                    selected.add(boxes.get(getAdapterPosition()));
-                    if(updateActionModeCallback.update(selected, getObjectTypeString())) {
+                    selected.add(getItem(getAdapterPosition()));
+                    if (updateActionModeCallback.update(selected, getObjectTypeString())) {
                         binding.setSelected(!binding.getSelected());
                     } else {
                         selected = null;

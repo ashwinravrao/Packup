@@ -21,11 +21,8 @@ public interface BoxDao {
      * @return An observable collection of all boxes from {@link AppDatabase}.
      */
 
-    @Query("SELECT * FROM boxes ORDER BY created DESC")
+    @Query("SELECT * FROM boxes ORDER BY number DESC")
     LiveData<List<Box>> getBoxes();
-
-    @Query("SELECT category FROM boxes")
-    LiveData<List<String>> getAllBoxCategories();
 
 
     /**
