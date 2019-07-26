@@ -15,7 +15,6 @@ public class Locrate extends Application {
         super.onCreate();
 
         appComponent = DaggerAppComponent.builder().databaseModule(new DatabaseModule(this)).build();
-
     }
 
     public AppComponent getAppComponent() {

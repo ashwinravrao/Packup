@@ -5,6 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 
+import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.data.repo.ItemRepository;
 import com.ashwinrao.locrate.data.repo.dao.BoxDao;
 import com.ashwinrao.locrate.data.AppDatabase;

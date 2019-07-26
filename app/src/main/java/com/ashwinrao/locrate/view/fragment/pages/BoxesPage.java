@@ -142,7 +142,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
         filterButton.setOnClickListener(view -> {
             if (localBoxes.size() == 0) {
-                showEmptyListSnackbarWithAction("There are no localBoxes to filter");
+                showEmptyListSnackbarWithAction("There are no boxes to filter");
             } else {
                 if (!binding.getFilterActivated()) {
                     showCategoryPickerDialog();
@@ -154,7 +154,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
         nfcButton.setOnClickListener(view -> {
             if (localBoxes.size() == 0) {
-                showEmptyListSnackbarWithAction("There are no localBoxes to scan");
+                showEmptyListSnackbarWithAction("There are no boxes to scan");
             } else {
                 final Intent intent = new Intent(getActivity(), NfcActivity.class);
                 intent.putExtra("isWrite", false);
@@ -216,19 +216,26 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setHasFixedSize(true);
         addItemDecoration(getContext(), recyclerView, 1);
-        final BoxesAdapter boxesAdapter = new BoxesAdapter(Objects.requireNonNull(getActivity()));
+        final BoxesAdapter boxesAdapter =
+                new BoxesAdapter(Objects.requireNonNull(getActivity()));
         boxesAdapter.setHasStableIds(true);
         boxesAdapter.setCallback(callback);
         recyclerView.setAdapter(boxesAdapter);
 
         boxViewModel.getBoxes().observe(this, boxes -> {
-            localBoxes = boxes != null ? boxes : new ArrayList<>();
-            boxesAdapter.setBoxesForFiltering(boxes != null ? boxes : new ArrayList<>());
             boxesAdapter.submitList(boxes);
+            boxesAdapter.setBoxesForFiltering(boxes);
+            updateLocalBoxes(boxes);
             togglePlaceholderVisibility(boxes != null ? boxes : new ArrayList<>());
         });
+    }
+
+    private void updateLocalBoxes(@Nullable List<Box> boxes) {
+        if(boxes != null) this.localBoxes = boxes;
+        else this.localBoxes.clear();
     }
 
     public void onQueryTextChange(String newText) {

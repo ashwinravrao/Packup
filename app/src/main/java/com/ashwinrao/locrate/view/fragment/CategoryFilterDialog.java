@@ -98,6 +98,7 @@ public class CategoryFilterDialog extends DialogFragment {
     private void initializeRecyclerView(@NonNull final RecyclerView recyclerView) {
         adapter = new CategoriesAdapter(getActivity());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
         categoriesLD.observe(this, categories -> {
             if(categories != null) {

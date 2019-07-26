@@ -158,6 +158,7 @@ public class ItemsPage extends Fragment {
 
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageItemsBinding binding) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
+        recyclerView.setHasFixedSize(true);
         addItemDecoration(getContext(), recyclerView, 1);
         itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), false, false);
         itemsAdapter.setCallback(callback);

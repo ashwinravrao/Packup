@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -30,7 +31,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
 
     private Filter filter;
     private Context context;
-    private List<Box> boxesForFiltering;
+    private List<Box> boxesForFiltering = new ArrayList<>();
 
     // Action Mode
     private UpdateActionModeCallback updateActionModeCallback;
@@ -60,8 +61,12 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
         this.filter = createFilter();
     }
 
-    public void setBoxesForFiltering(@NonNull List<Box> boxes) {
-        this.boxesForFiltering = boxes;
+    public void setBoxesForFiltering(@Nullable List<Box> boxes) {
+        if(boxes != null) {
+            this.boxesForFiltering = boxes;
+        } else {
+            this.boxesForFiltering.clear();
+        }
     }
 
     public void setCallback(@NonNull UpdateActionModeCallback callback) {

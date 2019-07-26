@@ -1,6 +1,7 @@
 package com.ashwinrao.locrate.view.activity;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,8 +72,7 @@ public class AddActivity extends AppCompatActivity {
     private boolean wasTagAssigned = false;
     private List<Item> items = new ArrayList<>();
 
-    private final String PREF_ID_KEY = "next_available_id";
-    private final String TAG = this.getClass().getSimpleName();
+//    private final String QUEUED_BOX_NUMBER_KEY = "queued_box_number";
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -86,7 +87,6 @@ public class AddActivity extends AppCompatActivity {
         itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
 
         // data binding
-        binding.setBoxNum(getBoxNumber());
         binding.setNumItems(null);
 
         // layout widgets
@@ -94,6 +94,15 @@ public class AddActivity extends AppCompatActivity {
         initializeFields(binding.nameInputField, binding.descriptionInputField);
         initializeRecyclerView(binding.recyclerView);
         initializeButtons(binding.nfcButton, binding.fillButton);
+
+        final Boolean[] notSet = {true};
+        boxViewModel.getLastUsedBoxNumber().observe(this, integer -> {
+            if(notSet[0]) {
+                binding.setBoxNum(integer + 1);
+                boxViewModel.getBox().setNumber(integer + 1);
+                notSet[0] = false;
+            }
+        });
     }
 
     @Override
@@ -166,21 +175,6 @@ public class AddActivity extends AppCompatActivity {
         group.addView(chip);
     }
 
-    private void detectHashtag(@NonNull CharSequence s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings) {
-        // Reset match found flags
-        matchFound[0] = false;
-        matchStrings[0] = null;
-        matchStrings[1] = null;
-
-        final Matcher matcher = Pattern.compile("#([A-Za-z0-9_-]+ )").matcher(s);
-        while (matcher.find()) {
-            matchFound[0] = true;
-            matchStrings[0] = s.subSequence(matcher.start(), matcher.end()).toString();
-            matchStrings[1] = s.subSequence(matcher.start()+1, matcher.end()-1).toString();
-            categories.add(s.subSequence(matcher.start()+1, matcher.end()-1).toString());
-        }
-    }
-
     private void initializeButtons(@NonNull MaterialCardView nfcButton, @NonNull MaterialCardView fillButton) {
         nfcButton.setOnClickListener(view -> {
             if (wasTagAssigned) {
@@ -197,27 +191,6 @@ public class AddActivity extends AppCompatActivity {
         intent.putExtra("isWrite", true);
         intent.putExtra("uuidToRegister", boxViewModel.getBox().getId());
         startActivityForResult(intent, 2);
-    }
-
-    private SharedPreferences getSharedPreferences(@NonNull Activity activity) {
-        return activity.getPreferences(Context.MODE_PRIVATE);
-    }
-
-    private int getBoxNumber() {
-        // Retrieve next available id
-        int lastUsed = getSharedPreferences(this).getInt(PREF_ID_KEY, 0);
-        boxViewModel.getBox().setNumber(lastUsed + 1);
-        return lastUsed + 1;
-    }
-
-    private void saveBoxNumber() {
-        SharedPreferences sharedPref = getSharedPreferences(this);
-        int nextAvailableId = sharedPref.getInt(PREF_ID_KEY, 1);
-
-        // Store next available id
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(PREF_ID_KEY, nextAvailableId + 1);
-        editor.apply();  // .apply() >= .commit()
     }
 
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
@@ -246,7 +219,7 @@ public class AddActivity extends AppCompatActivity {
                 final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
                 if (paths != null) {
                     for (String path : paths) {
-                        items.add(new Item(boxViewModel.getBox().getId(), this.getBoxNumber(), path));
+                        items.add(new Item(boxViewModel.getBox().getId(), boxViewModel.getBox().getNumber(), path));
                     }
                     itemViewModel.setItems(items);
                 }
@@ -301,7 +274,6 @@ public class AddActivity extends AppCompatActivity {
                     showEmptyBoxDialog();
                 } else {
                     if (boxViewModel.saveBox(this.categories)) {
-                        saveBoxNumber();
                         itemViewModel.insertItems(itemViewModel.getItemsFromThis());
                         this.finish();
                     } else {
