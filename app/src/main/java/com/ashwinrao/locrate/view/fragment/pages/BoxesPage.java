@@ -49,7 +49,6 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
     private BoxViewModel boxViewModel;
     private FragmentPageBoxesBinding binding;
     private UpdateActionModeCallback callback;
-    private List<Box> localBoxes = new ArrayList<>();
 
     private final String RECYCLER_VIEW_STATE_KEY = "recycler_view_state";
     private final Integer SNACKBAR_DURATION = 4000;
@@ -87,15 +86,11 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
     public void onResume() {
         super.onResume();
 
-        // re-enable FABs that were disabled to prevent multiple presses
-        for (FloatingActionButton fab : new FloatingActionButton[]{binding.nfcButton, binding.addButton}) {
-            fab.setEnabled(true);
-        }
+        // enable fabs that were disabled to prevent accidental presses
+        binding.nfcButton.setEnabled(true);
+        binding.addButton.setEnabled(true);
 
-        // reset category filtering to avoid displaying outdated data
         setFilterActivated(false);
-
-        // Restore RecyclerView state
         if (recyclerViewState != null) {
             if (recyclerView.getLayoutManager() != null) {
                 recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
@@ -141,7 +136,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
                               @NonNull Button clearFiltersButton) {
 
         filterButton.setOnClickListener(view -> {
-            if (localBoxes.size() == 0) {
+            if (boxViewModel.getCachedBoxes().size() == 0) {
                 showEmptyListSnackbarWithAction("There are no boxes to filter");
             } else {
                 if (!binding.getFilterActivated()) {
@@ -153,7 +148,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         });
 
         nfcButton.setOnClickListener(view -> {
-            if (localBoxes.size() == 0) {
+            if (boxViewModel.getCachedBoxes().size() == 0) {
                 showEmptyListSnackbarWithAction("There are no boxes to scan");
             } else {
                 final Intent intent = new Intent(getActivity(), NfcActivity.class);
@@ -228,14 +223,9 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         boxViewModel.getBoxes().observe(this, boxes -> {
             boxesAdapter.submitList(boxes);
             boxesAdapter.setBoxesForFiltering(boxes);
-            updateLocalBoxes(boxes);
-            togglePlaceholderVisibility(boxes != null ? boxes : new ArrayList<>());
+            boxViewModel.setCachedBoxes(boxes);
+            togglePlaceholderVisibility(boxes);
         });
-    }
-
-    private void updateLocalBoxes(@Nullable List<Box> boxes) {
-        if(boxes != null) this.localBoxes = boxes;
-        else this.localBoxes.clear();
     }
 
     public void onQueryTextChange(String newText) {
@@ -243,7 +233,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
     }
 
     private void resetCategoryFiltering() {
-        getBoxesAdapter().submitList(localBoxes);
+        getBoxesAdapter().submitList(boxViewModel.getCachedBoxes());
         setFilterActivated(false);
         Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), getString(R.string.filters_cleared), SNACKBAR_DURATION)
                 .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
@@ -252,24 +242,25 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
     }
 
     @Override
-    public void onDialogDismissed(@NonNull final List<String> checkedCategories) {
-        if (checkedCategories.size() > 0) {
-            if (localBoxes != null) {
+    public void onDialogDismissed(@NonNull final List<String> selectedCategories) {
+
+        if (selectedCategories.size() > 0) {
+            if (boxViewModel.getCachedBoxes().size() > 0) {
                 final List<Box> filtered = new ArrayList<>();
-                for (String s : checkedCategories) {
-                    for (Box box : localBoxes) {
+                for (String s : selectedCategories) {
+                    for (Box box : boxViewModel.getCachedBoxes()) {
                         if (box.getCategories().contains(s) && !filtered.contains(box)) {
                             filtered.add(box);
                         }
                     }
                 }
 
-                if (filtered.size() > 0 && !filtered.equals(localBoxes)) {
+                if (filtered.size() > 0 && !filtered.equals(boxViewModel.getCachedBoxes())) {
                     getBoxesAdapter().submitList(filtered);
                     setFilterActivated(true);
                 }
 
-                if (filtered.equals(localBoxes)) {
+                if (filtered.equals(boxViewModel.getCachedBoxes())) {
                     Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), getString(R.string.showing_all), SNACKBAR_DURATION)
                             .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
                             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)

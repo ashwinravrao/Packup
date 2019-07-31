@@ -13,10 +13,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+
 public class BoxViewModel extends ViewModel {
 
     private Box box = new Box();
     private final BoxRepository repo;
+    private List<Box> cachedBoxes = new ArrayList<>();
 
     BoxViewModel(BoxRepository repo) {
         this.repo = repo;
@@ -38,6 +40,18 @@ public class BoxViewModel extends ViewModel {
         return repo.getBoxes();
     }
 
+    public void setCachedBoxes(@NonNull final List<Box> cachedBoxes) {
+        if (cachedBoxes.size() > 0) {
+            this.cachedBoxes = cachedBoxes;
+        } else {
+            this.cachedBoxes.clear();
+        }
+    }
+
+    public List<Box> getCachedBoxes() {
+        return this.cachedBoxes;
+    }
+
     public boolean saveBox(@NonNull List<String> categories) {
         if (box.getName() != null) {
             box.setCategories(categories);
@@ -48,7 +62,16 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
-    public LiveData<List<String>> getAllBoxCategories() {
+    public List<String> getCachedBoxCategories() {
+        List<String> categories = null;
+        if (this.cachedBoxes != null) {
+            categories = new ArrayList<>();
+            for (final Box box : cachedBoxes) categories.addAll(box.getCategories());
+        }
+        return categories;
+    }
+
+    public LiveData<List<String>> getFreshBoxCategories() {
         return Transformations.switchMap(repo.getBoxes(), boxes -> {
             final MutableLiveData<List<String>> mld = new MutableLiveData<>();
             List<String> categories = null;
@@ -65,8 +88,8 @@ public class BoxViewModel extends ViewModel {
         return Transformations.switchMap(repo.getBoxes(), boxes -> {
             final MutableLiveData<Integer> mld = new MutableLiveData<>();
             int lastUsedNumber = 0;
-            if(boxes != null) {
-                if(boxes.size() > 0) {
+            if (boxes != null) {
+                if (boxes.size() > 0) {
                     lastUsedNumber = boxes.get(0).getNumber();
                 }
             }
