@@ -30,6 +30,7 @@ import com.ashwinrao.locrate.view.activity.NfcActivity;
 import com.ashwinrao.locrate.view.adapter.BoxesAdapter;
 import com.ashwinrao.locrate.view.fragment.CategoryFilterDialog;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -46,7 +47,10 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
     private RecyclerView recyclerView;
     private Parcelable recyclerViewState;
+
     private BoxViewModel boxViewModel;
+    private CategoryViewModel categoryViewModel;
+
     private FragmentPageBoxesBinding binding;
     private UpdateActionModeCallback callback;
 
@@ -68,6 +72,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         super.onCreate(savedInstanceState);
 
         boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        categoryViewModel = ViewModelProviders.of(getActivity(), factory).get(CategoryViewModel.class);
         if (savedInstanceState != null) {
             recyclerViewState = savedInstanceState.getBundle(RECYCLER_VIEW_STATE_KEY);
         }
@@ -86,11 +91,14 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
     public void onResume() {
         super.onResume();
 
-        // enable fabs that were disabled to prevent accidental presses
+        // re-enable fabs due to accidental presses
         binding.nfcButton.setEnabled(true);
         binding.addButton.setEnabled(true);
 
+        // clear filters with stale data
         setFilterActivated(false);
+
+        // restore list on config change
         if (recyclerViewState != null) {
             if (recyclerView.getLayoutManager() != null) {
                 recyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
@@ -104,7 +112,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
         binding = FragmentPageBoxesBinding.inflate(inflater);
 
-        // binding variable
+        // init filter state
         setFilterActivated(false);
 
         // layout widgets
@@ -126,9 +134,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         this.callback = callback;
     }
 
-    public BoxesAdapter getBoxesAdapter() {
-        return (BoxesAdapter) recyclerView.getAdapter();
-    }
+    public BoxesAdapter getBoxesAdapter() { return (BoxesAdapter) recyclerView.getAdapter(); }
 
     private void setupButtons(@NonNull FloatingActionButton filterButton,
                               @NonNull FloatingActionButton nfcButton,
@@ -224,6 +230,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
             boxesAdapter.submitList(boxes);
             boxesAdapter.setBoxesForFiltering(boxes);
             boxViewModel.setCachedBoxes(boxes);
+            categoryViewModel.setCachedBoxCategories(boxes);
             togglePlaceholderVisibility(boxes);
         });
     }

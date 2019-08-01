@@ -1,15 +1,9 @@
 package com.ashwinrao.locrate.view.activity;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -22,9 +16,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,6 +35,7 @@ import com.ashwinrao.locrate.util.HashtagDetection;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
@@ -52,8 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -64,15 +57,16 @@ public class AddActivity extends AppCompatActivity {
 
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
+    private CategoryViewModel categoryViewModel;
+
     private ActivityAddBinding binding;
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter;
     private String description;
-    private List<String> categories = new ArrayList<>();
+    private List<String> boxCategories = new ArrayList<>();
     private boolean wasTagAssigned = false;
     private List<Item> items = new ArrayList<>();
 
-//    private final String QUEUED_BOX_NUMBER_KEY = "queued_box_number";
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -85,6 +79,12 @@ public class AddActivity extends AppCompatActivity {
 
         boxViewModel = ViewModelProviders.of(this, factory).get(BoxViewModel.class);
         itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
+        categoryViewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
+
+        // Setup CategoryViewModel to be able to retrieve item categories later
+        new Handler().post(() ->
+                itemViewModel.getAllItemsFromDatabase().observe(this, items ->
+                        categoryViewModel.setCachedItemCategories(items)));
 
         // data binding
         binding.setNumItems(null);
@@ -142,7 +142,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.charCount.setText(String.valueOf(s.length()));
-                HashtagDetection.detect(s, categories, matchFound, matchStrings);
+                HashtagDetection.detect(s, boxCategories, matchFound, matchStrings);
             }
 
             @Override
@@ -165,12 +165,12 @@ public class AddActivity extends AppCompatActivity {
         final Chip chip = new Chip(group.getContext());
         chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         chip.setChipBackgroundColorResource(R.color.colorAccent);
-        chip.setText(categories.get(categories.size()-1));
+        chip.setText(boxCategories.get(boxCategories.size()-1));
         chip.setCloseIconVisible(true);
         chip.setCloseIconTintResource(android.R.color.white);
         chip.setOnCloseIconClickListener(v -> {
             group.removeView(v);
-            categories.remove(categories.size()-1);
+            boxCategories.remove(boxCategories.size()-1);
         });
         group.addView(chip);
     }
@@ -198,7 +198,8 @@ public class AddActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addItemDecoration(this, recyclerView, 1);
         itemsAdapter = new ItemsAdapter(this, true, true);
-        itemsAdapter.getRenamedItem().observe(this, item -> {
+        itemsAdapter.setCategories(categoryViewModel.getCachedItemCategories());
+        itemsAdapter.getEditedItem().observe(this, item -> {
             if (item != null) itemViewModel.updateItem(item);
         });
         recyclerView.setItemAnimator(null);
@@ -273,7 +274,7 @@ public class AddActivity extends AppCompatActivity {
                 if (itemViewModel.getItemsFromThis().size() == 0) {
                     showEmptyBoxDialog();
                 } else {
-                    if (boxViewModel.saveBox(this.categories)) {
+                    if (boxViewModel.saveBox(this.boxCategories)) {
                         itemViewModel.insertItems(itemViewModel.getItemsFromThis());
                         this.finish();
                     } else {

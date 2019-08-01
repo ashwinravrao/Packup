@@ -73,4 +73,15 @@
     <string name="apply">Apply</string>
     <string name="showing_all">Showing all</string>
     <string name="no_description">No description</string>
+    <string name="hint_item_name">Item name</string>
+    <string name="hint_item_value">Estimated value</string>
+    <string name="category_hint">#categories</string>
+
+    <string-array name="currency_abbreviations">
+        <item>USD</item>
+        <item>EUR</item>
+        <item>GBP</item>
+        <item>INR</item>
+        <item>CNY</item>
+    </string-array>
 </resources>

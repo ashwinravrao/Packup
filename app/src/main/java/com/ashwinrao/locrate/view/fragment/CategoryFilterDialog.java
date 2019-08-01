@@ -23,7 +23,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.databinding.FragmentCategoryFilterDialogBinding;
 import com.ashwinrao.locrate.util.callback.DialogDismissedCallback;
 import com.ashwinrao.locrate.view.adapter.CategoriesAdapter;
-import com.ashwinrao.locrate.viewmodel.BoxViewModel;
+import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +35,9 @@ public class CategoryFilterDialog extends DialogFragment {
 
     private DialogDismissedCallback callback;
     private boolean applyButtonClicked;
-    private List<String> categories = new ArrayList<>();
+    private CategoryViewModel categoryViewModel;
     private List<String> selectedCategories = new ArrayList<>();
 
-    private final String TAG = this.getClass().getSimpleName();
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -65,10 +64,7 @@ public class CategoryFilterDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final BoxViewModel boxViewModel = ViewModelProviders
-                .of(Objects.requireNonNull(getActivity()), factory)
-                .get(BoxViewModel.class);
-        categories = boxViewModel.getCachedBoxCategories();
+        categoryViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(CategoryViewModel.class);
     }
 
     @Nullable
@@ -87,7 +83,7 @@ public class CategoryFilterDialog extends DialogFragment {
 
     private void initializeRecyclerView(@NonNull final RecyclerView recyclerView, @NonNull final FragmentCategoryFilterDialogBinding binding) {
         final CategoriesAdapter adapter = new CategoriesAdapter(getActivity());
-        adapter.setCategories(categories);
+        adapter.setCategories(categoryViewModel.getCachedBoxCategories());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);

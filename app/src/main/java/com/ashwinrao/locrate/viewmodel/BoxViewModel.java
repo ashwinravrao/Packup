@@ -62,28 +62,6 @@ public class BoxViewModel extends ViewModel {
         }
     }
 
-    public List<String> getCachedBoxCategories() {
-        List<String> categories = null;
-        if (this.cachedBoxes != null) {
-            categories = new ArrayList<>();
-            for (final Box box : cachedBoxes) categories.addAll(box.getCategories());
-        }
-        return categories;
-    }
-
-    public LiveData<List<String>> getFreshBoxCategories() {
-        return Transformations.switchMap(repo.getBoxes(), boxes -> {
-            final MutableLiveData<List<String>> mld = new MutableLiveData<>();
-            List<String> categories = null;
-            if (boxes != null) {
-                categories = new ArrayList<>();
-                for (final Box box : boxes) categories.addAll(box.getCategories());
-            }
-            mld.setValue(categories);
-            return mld;
-        });
-    }
-
     public LiveData<Integer> getLastUsedBoxNumber() {
         return Transformations.switchMap(repo.getBoxes(), boxes -> {
             final MutableLiveData<Integer> mld = new MutableLiveData<>();
