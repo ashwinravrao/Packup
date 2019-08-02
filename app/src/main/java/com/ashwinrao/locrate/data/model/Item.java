@@ -49,6 +49,9 @@ public class Item {
     @ColumnInfo(name = "estimated_value")
     private double estimatedValue;
 
+    @ColumnInfo(name = "currency_code")
+    private String currencyCode;
+
     @ColumnInfo(name = "category")
     private String category;
 
@@ -143,5 +146,13 @@ public class Item {
 
     public void setPackedDate(Date packedDate) {
         this.packedDate = packedDate;
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
     }
 }

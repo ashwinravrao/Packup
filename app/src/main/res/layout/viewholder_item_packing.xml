@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
@@ -48,15 +49,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="@color/item_value_green"
+                android:hint="@string/hint_item_value"
                 android:inputType="textCapWords"
                 android:textColor="@color/item_value_green"
                 android:textColorHint="@color/item_value_green"
                 android:textSize="16sp"
-                android:hint="@string/hint_item_value"
-                android:backgroundTint="@color/item_value_green"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/item_name_edit_text"
-                app:layout_constraintEnd_toEndOf="@id/item_name_edit_text"/>
+                app:layout_constraintEnd_toStartOf="@id/currency_spinner"
+                app:layout_constraintTop_toBottomOf="@id/item_name_edit_text" />
 
             <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/currency_spinner"
@@ -64,8 +66,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/estimated_value_edit_text"
-                app:layout_constraintBottom_toBottomOf="@id/estimated_value_edit_text"
-                android:layout_marginEnd="24dp"/>
+                app:layout_constraintBottom_toBottomOf="@id/estimated_value_edit_text"/>
 
             <ImageView
                 android:id="@+id/item_image"

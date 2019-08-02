@@ -6,6 +6,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -226,6 +228,21 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     editedItem.setValue(items.get(getAdapterPosition()));
                 }
             });
+
+            // Currency Spinner
+            final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency_abbreviations, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            this.binding.currencySpinner.setAdapter(adapter);
+            this.binding.currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    items.get(getAdapterPosition()).setCurrencyCode(parent.getItemAtPosition(position).toString());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { }
+            });
+            this.binding.currencySpinner.setSelection(0);
         }
 
         @Override

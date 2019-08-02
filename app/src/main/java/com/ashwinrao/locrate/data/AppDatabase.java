@@ -9,7 +9,7 @@ import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.data.repo.dao.BoxDao;
 import com.ashwinrao.locrate.data.repo.dao.ItemDao;
 
-@Database(entities = {Box.class, Item.class}, version = 4, exportSchema = false)
+@Database(entities = {Box.class, Item.class}, version = 5, exportSchema = false)
 @TypeConverters(Converters.class)
 public abstract class AppDatabase extends RoomDatabase {
 
