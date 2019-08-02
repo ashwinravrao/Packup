@@ -50,4 +50,6 @@ public class ItemViewModel extends ViewModel {
         repo.delete(items.toArray(new Item[0]));
     }
 
+    public void deleteItem(Item item) { repo.delete(item); }
+
 }

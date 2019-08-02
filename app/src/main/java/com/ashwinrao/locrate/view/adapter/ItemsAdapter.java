@@ -26,6 +26,7 @@ import com.ashwinrao.locrate.databinding.ViewholderItemPackingBinding;
 import com.ashwinrao.locrate.util.HashtagDetection;
 import com.ashwinrao.locrate.util.ItemPropertiesFilter;
 import com.ashwinrao.locrate.util.callback.DiffUtilCallback;
+import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.bumptech.glide.Glide;
 import com.google.android.material.chip.Chip;
@@ -54,6 +55,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private UpdateActionModeCallback updateActionModeCallback;
     private List<Object> selected;
 
+    // Single Item Delete Callback
+    private SingleItemDeleteCallback singleItemDeleteCallback;
 
     public ItemsAdapter(@NonNull Context context, @NonNull Boolean isShownWithBoxContext, @NonNull Boolean isInPackingMode) {
         this.context = context;
@@ -85,8 +88,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.itemsCopy = new ArrayList<>(items);
     }
 
-    public void setCallback(@NonNull UpdateActionModeCallback callback) {
+    public void setActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
+    }
+
+    public void setSingleItemDeleteCallback(@NonNull SingleItemDeleteCallback callback) {
+        this.singleItemDeleteCallback = callback;
     }
 
     public List<Object> getSelected() {
@@ -223,7 +230,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         public void onClick(View v) {
-            // delete this viewholder and delete the image
+            singleItemDeleteCallback.deleteItem(items.get(getAdapterPosition()), getAdapterPosition());
         }
 
         private void tagToChip(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {

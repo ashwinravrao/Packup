@@ -6,14 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ashwinrao.locrate.Locrate;
 import com.ashwinrao.locrate.R;
-import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
@@ -45,6 +42,7 @@ public class ItemsPage extends Fragment {
 
     private int numBoxes;
     private ItemsAdapter itemsAdapter;
+    private ItemViewModel itemViewModel;
     private LiveData<List<Item>> itemsLD;
     private FragmentPageItemsBinding binding;
     private UpdateActionModeCallback callback;
@@ -61,7 +59,8 @@ public class ItemsPage extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        itemsLD = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class).getAllItemsFromDatabase();
+        itemViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class);
+        itemsLD = itemViewModel.getAllItemsFromDatabase();
         ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class).getBoxes().observe(getActivity(), boxes -> numBoxes = boxes != null ? boxes.size() : 0);
     }
 
@@ -161,7 +160,7 @@ public class ItemsPage extends Fragment {
         recyclerView.setHasFixedSize(true);
         addItemDecoration(getContext(), recyclerView, 1);
         itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), false, false);
-        itemsAdapter.setCallback(callback);
+        itemsAdapter.setActionModeCallback(callback);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(itemsAdapter);
         itemsLD.observe(this, items -> {

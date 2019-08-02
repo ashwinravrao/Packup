@@ -32,6 +32,7 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityAddBinding;
 import com.ashwinrao.locrate.util.HashtagDetection;
+import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
@@ -53,7 +54,7 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements SingleItemDeleteCallback {
 
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
@@ -199,6 +200,7 @@ public class AddActivity extends AppCompatActivity {
         addItemDecoration(this, recyclerView, 1);
         itemsAdapter = new ItemsAdapter(this, true, true);
         itemsAdapter.setCategories(categoryViewModel.getCachedItemCategories());
+        itemsAdapter.setSingleItemDeleteCallback(this);
         itemsAdapter.getEditedItem().observe(this, item -> {
             if (item != null) itemViewModel.updateItem(item);
         });
@@ -401,5 +403,21 @@ public class AddActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         closeWithConfirmation();
+    }
+
+    @Override
+    public void deleteItem(@NonNull Item item, @NonNull Integer position) {
+        final Item itemCopy = item;
+        if(items.size() > 0) {
+            items.remove(item);
+            updateItems();
+        }
+
+        Snackbar.make(binding.snackbarContainer, "Item removed", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .setAction(getString(R.string.undo), v -> {
+                    items.add(position, itemCopy);
+                    updateItems();
+                }).show();
     }
 }
