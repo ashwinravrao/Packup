@@ -76,6 +76,8 @@
     <string name="hint_item_name">Item name</string>
     <string name="hint_item_value">Estimated value</string>
     <string name="category_hint">#categories</string>
+    <string name="estimate_value_hint">Estimated value</string>
+    <string name="remove">Remove</string>
 
     <string-array name="currency_abbreviations">
         <item>USD</item>

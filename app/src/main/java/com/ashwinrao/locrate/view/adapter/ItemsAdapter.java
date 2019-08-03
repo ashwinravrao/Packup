@@ -50,9 +50,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Boolean isInPackingMode;
     private MutableLiveData<Item> editedItem = new MutableLiveData<>();
 
-    private final Boolean[] matchFound = {false};
-    private final String[] matchStrings = {null, null};
-
     // Action Mode
     private UpdateActionModeCallback updateActionModeCallback;
     private List<Object> selected;
@@ -213,21 +210,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     editedItem.setValue(items.get(getAdapterPosition()));
                 }
             });
-            this.binding.categoryField.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    HashtagDetection.detect(s, categories, matchFound, matchStrings);
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    tagToChip(s, matchFound, matchStrings, binding.categoryChipGroup);
-                    editedItem.setValue(items.get(getAdapterPosition()));
-                }
-            });
 
             // Currency Spinner
             final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency_abbreviations, android.R.layout.simple_spinner_item);
@@ -248,27 +230,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         @Override
         public void onClick(View v) {
             singleItemDeleteCallback.deleteItem(items.get(getAdapterPosition()), getAdapterPosition());
-        }
-
-        private void tagToChip(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {
-            if(matchFound[0]) {
-                s.delete(s.length() - matchStrings[0].length(), s.length());
-                addNewCategoryChip(group);
-            }
-        }
-
-        private void addNewCategoryChip(@NonNull ChipGroup group) {
-            final Chip chip = new Chip(group.getContext());
-            chip.setTextColor(ContextCompat.getColor(context, android.R.color.white));
-            chip.setChipBackgroundColorResource(R.color.colorAccent);
-            chip.setText(categories.get(categories.size()-1));
-            chip.setCloseIconVisible(true);
-            chip.setCloseIconTintResource(android.R.color.white);
-            chip.setOnCloseIconClickListener(v -> {
-                group.removeView(v);
-                categories.remove(categories.size()-1);
-            });
-            group.addView(chip);
         }
     }
 
