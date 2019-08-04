@@ -126,6 +126,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             item.setIsShownWithBoxContext(isShownWithBoxContext);
             loadImage(context, item, viewHolder.binding.itemImage);
         } else {
+            final ItemViewHolderPacking viewHolder = (ItemViewHolderPacking) holder;
+            if(item.getName().length() > 0) viewHolder.binding.itemNameEditText.setText(item.getName());
+            if(item.getEstimatedValue() > 0.0) viewHolder.binding.estimatedValueEditText.setText(String.valueOf(item.getEstimatedValue()));
             loadImage(context, item, ((ItemViewHolderPacking) holder).binding.itemImage);
         }
     }

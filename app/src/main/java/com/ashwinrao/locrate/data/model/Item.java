@@ -47,7 +47,7 @@ public class Item {
     private String filePath;
 
     @ColumnInfo(name = "estimated_value")
-    private double estimatedValue;
+    private double estimatedValue = 0.0;
 
     @ColumnInfo(name = "currency_code")
     private String currencyCode;

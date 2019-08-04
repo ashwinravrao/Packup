@@ -16,11 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,7 +37,6 @@ import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
@@ -176,7 +174,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
         group.addView(chip);
     }
 
-    private void initializeButtons(@NonNull MaterialCardView nfcButton, @NonNull MaterialCardView fillButton) {
+    private void initializeButtons(@NonNull CardView nfcButton, @NonNull CardView fillButton) {
         nfcButton.setOnClickListener(view -> {
             if (wasTagAssigned) {
                 showNfcTagAlreadyRegisteredDialog();
@@ -224,7 +222,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
                     for (String path : paths) {
                         items.add(new Item(boxViewModel.getBox().getId(), boxViewModel.getBox().getNumber(), path));
                     }
-                    itemViewModel.setItems(items);
+                    itemViewModel.addItemsToThis(items);
                 }
             }
         }
@@ -298,7 +296,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
                                 @Override
                                 public void onDismissed(Snackbar transientBottomBar, int event) {
                                     if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                                        itemViewModel.clearItems();
+                                        itemViewModel.clearItemsFromThis();
                                     }
                                 }
                             }).show();
@@ -407,7 +405,6 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
 
     @Override
     public void deleteItem(@NonNull Item item, @NonNull Integer position) {
-        final Item itemCopy = item;
         if(items.size() > 0) {
             items.remove(item);
             updateItems();
@@ -416,8 +413,17 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
         Snackbar.make(binding.snackbarContainer, "Item removed", Snackbar.LENGTH_LONG)
                 .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
                 .setAction(getString(R.string.undo), v -> {
-                    items.add(position, itemCopy);
+                    items.add(position, item);
                     updateItems();
-                }).show();
+                })
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            itemViewModel.removeItemFromThis(item);
+                        }
+                    }
+                })
+                .show();
     }
 }
