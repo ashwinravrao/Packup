@@ -2,11 +2,11 @@
     <string name="app_name">Locrate</string>
     <string name="title_search">Search</string>
     <string name="hint_name">Name</string>
-    <string name="hint_description">Description</string>
+    <string name="hint_description">Description / #category</string>
     <string name="dialog_discard_box_title">Discard current box</string>
     <string name="dialog_discard_box_message">Are you sure you want to leave? Your current box will be discarded. You cannot undo this action.</string>
     <string name="dialog_empty_box_title">Empty box</string>
-    <string name="dialog_empty_box_message">This box is empty. Consider adding at least one item before saving.</string>
+    <string name="dialog_empty_box_message">You cannot save an empty box. Add at least one item and try again.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
@@ -61,7 +61,7 @@
     <string name="undo">Undo</string>
     <string name="items_section_title">Items</string>
     <string name="pack_box">Pack Box</string>
-    <string name="description_instructions">Create custom tags with the # symbol</string>
+    <string name="description_instructions">Category tags will show up below</string>
     <string name="filter_dialog_title">Filter…</string>
     <string name="filter_dialog_positive_button">Filter</string>
     <string name="categories">Categories</string>

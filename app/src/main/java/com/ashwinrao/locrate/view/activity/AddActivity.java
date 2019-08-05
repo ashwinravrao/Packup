@@ -1,5 +1,6 @@
 package com.ashwinrao.locrate.view.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -40,6 +42,7 @@ import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
@@ -354,21 +357,13 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
     }
 
     private void showEmptyBoxDialog() {
-        ConfirmationDialog.make(this, new String[]{
-                        getString(R.string.dialog_empty_box_title),
-                        getString(R.string.dialog_empty_box_message),
-                        getString(R.string.ok),
-                        getString(R.string.discard)},
-                true,
-                new int[]{ContextCompat.getColor(this, R.color.colorAccent),
-                        ContextCompat.getColor(this, R.color.colorAccent)},
-                dialogInterface -> {
-                    dialogInterface.cancel();
-                    return null;
-                }, dialogInterface -> {
-                    this.finish();
-                    return null;
-                });
+        final AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dialog_empty_box_title)
+                .setMessage(R.string.dialog_empty_box_message)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok, (dialog1, which) -> dialog1.dismiss()).create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
     }
 
     private void showNfcTagAlreadyRegisteredDialog() {

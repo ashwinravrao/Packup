@@ -143,19 +143,23 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
         filterButton.setOnClickListener(view -> {
             if (boxViewModel.getCachedBoxes().size() == 0) {
-                showEmptyListSnackbarWithAction("There are no boxes to filter");
+                showEmptyListSnackbar("There are no boxes to filter", true);
             } else {
-                if (!binding.getFilterActivated()) {
-                    showCategoryPickerDialog();
+                if(categoryViewModel.getCachedBoxCategories().size() > 0) {
+                    if (!binding.getFilterActivated()) {
+                        showCategoryPickerDialog();
+                    } else {
+                        resetCategoryFiltering();
+                    }
                 } else {
-                    resetCategoryFiltering();
+                    showEmptyListSnackbar("There are no categories to filter on", false);
                 }
             }
         });
 
         nfcButton.setOnClickListener(view -> {
             if (boxViewModel.getCachedBoxes().size() == 0) {
-                showEmptyListSnackbarWithAction("There are no boxes to scan");
+                showEmptyListSnackbar("There are no boxes to scan", true);
             } else {
                 final Intent intent = new Intent(getActivity(), NfcActivity.class);
                 intent.putExtra("isWrite", false);
@@ -183,15 +187,17 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         fragment.show(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), fragment.getClass().getSimpleName());
     }
 
-    private void showEmptyListSnackbarWithAction(@NonNull String text) {
-        Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), text, SNACKBAR_DURATION)
+    private void showEmptyListSnackbar(@NonNull String text, @NonNull Boolean showDefaultAction) {
+        final Snackbar snackbar = Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), text, SNACKBAR_DURATION)
                 .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
-                .setAction(R.string.create, v1 -> {
-                    final Intent intent = new Intent(getActivity(), AddActivity.class);
-                    startActivity(intent);
-                })
-                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                .show();
+                .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
+        if(showDefaultAction) {
+            snackbar.setAction(R.string.create, v1 -> {
+                final Intent intent = new Intent(getActivity(), AddActivity.class);
+                startActivity(intent);
+            });
+        }
+        snackbar.show();
     }
 
     /**
