@@ -62,11 +62,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
     }
 
     public void setBoxesForFiltering(@Nullable List<Box> boxes) {
-        if(boxes != null) {
-            this.boxesForFiltering = boxes;
-        } else {
-            this.boxesForFiltering.clear();
-        }
+        this.boxesForFiltering = boxes;
     }
 
     public void setCallback(@NonNull UpdateActionModeCallback callback) {

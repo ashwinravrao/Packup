@@ -23,14 +23,13 @@ import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.activity.AddActivity;
-import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
+import com.ashwinrao.locrate.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,8 +40,7 @@ import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 public class ItemsPage extends Fragment {
 
     private int numBoxes;
-    private ItemsAdapter itemsAdapter;
-    private ItemViewModel itemViewModel;
+    private ItemDisplayAdapter adapter;
     private LiveData<List<Item>> itemsLD;
     private FragmentPageItemsBinding binding;
     private UpdateActionModeCallback callback;
@@ -59,7 +57,7 @@ public class ItemsPage extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        itemViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class);
+        final ItemViewModel itemViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class);
         itemsLD = itemViewModel.getAllItemsFromDatabase();
         ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class).getBoxes().observe(getActivity(), boxes -> numBoxes = boxes != null ? boxes.size() : 0);
     }
@@ -68,8 +66,8 @@ public class ItemsPage extends Fragment {
     public void onResume() {
         super.onResume();
         binding.setFilterActivated(false);
-        if(itemsAdapter != null) {
-            itemsAdapter.initializeFilter();
+        if(adapter != null) {
+            adapter.initializeFilter();
         }
     }
 
@@ -83,7 +81,7 @@ public class ItemsPage extends Fragment {
 
         // layout widgets
         initializeButtons(binding.unpackButton, binding.filterButton, binding.packButton);
-        initializeRecyclerView(binding.recyclerView, binding);
+        initializeRecyclerView(binding.recyclerView);
         return binding.getRoot();
     }
 
@@ -91,8 +89,8 @@ public class ItemsPage extends Fragment {
         this.callback = callback;
     }
 
-    public ItemsAdapter getAdapter() {
-        return itemsAdapter;
+    public ItemDisplayAdapter getAdapter() {
+        return adapter;
     }
 
     private void initializeButtons(@NonNull FloatingActionButton unpackButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
@@ -107,7 +105,7 @@ public class ItemsPage extends Fragment {
                         .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
                         .show();
             } else {
-                if (itemsAdapter.getSelected() == null) {
+                if (adapter.getSelected() == null) {
                     Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "Select one or more items to unpack", 4000)
                             .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
                             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
@@ -155,26 +153,22 @@ public class ItemsPage extends Fragment {
         }
     }
 
-    private void initializeRecyclerView(@NonNull RecyclerView recyclerView, @NonNull FragmentPageItemsBinding binding) {
+    private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setHasFixedSize(true);
         addItemDecoration(getContext(), recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(Objects.requireNonNull(getActivity()), false, false);
-        itemsAdapter.setActionModeCallback(callback);
-        recyclerView.setItemAnimator(null);
-        recyclerView.setAdapter(itemsAdapter);
+        adapter = new ItemDisplayAdapter(Objects.requireNonNull(getActivity()), false);
+        adapter.setActionModeCallback(callback);
+        adapter.setHasStableIds(true);
+        recyclerView.setAdapter(adapter);
         itemsLD.observe(this, items -> {
-            if(items != null) {
-                itemsAdapter.setItems(items);
-            } else {
-                itemsAdapter.setItems(new ArrayList<>());
-            }
+            adapter.submitList(items);
+            adapter.setItemsForFiltering(items);
             togglePlaceholderVisibility(items);
-            recyclerView.setAdapter(itemsAdapter);
         });
     }
 
     public void onQueryTextChange(String newText) {
-        itemsAdapter.getFilter().filter(newText);
+        adapter.getFilter().filter(newText);
     }
 }

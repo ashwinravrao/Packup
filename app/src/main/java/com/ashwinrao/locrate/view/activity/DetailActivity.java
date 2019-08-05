@@ -24,7 +24,7 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityDetailBinding;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
-import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
+import com.ashwinrao.locrate.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -39,7 +39,7 @@ import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 public class DetailActivity extends AppCompatActivity {
 
     private Box box;
-    private ItemsAdapter itemsAdapter;
+    private ItemDisplayAdapter adapter;
     private BoxViewModel boxViewModel;
     private LiveData<Box> boxLD;
     private LiveData<List<Item>> itemsLD;
@@ -78,8 +78,8 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(itemsAdapter != null) {
-            itemsAdapter.initializeFilter();
+        if(adapter != null) {
+            adapter.initializeFilter();
         }
     }
 
@@ -118,26 +118,27 @@ public class DetailActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                itemsAdapter.getFilter().filter(newText);
+                adapter.getFilter().filter(newText);
                 return false;
             }
         });
     }
 
     private void initializeRecyclerView(@NonNull ActivityDetailBinding binding, @NonNull RecyclerView recyclerView) {
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addItemDecoration(this, recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(this, true, false);
-        recyclerView.setItemAnimator(null);
-        recyclerView.setAdapter(itemsAdapter);
+        adapter = new ItemDisplayAdapter(this, true);
+        adapter.setHasStableIds(true);
+        recyclerView.setAdapter(adapter);
         boxLD.observe(this, box -> {
             this.box = box;
             binding.setBox(box);
         });
         itemsLD.observe(this, items -> {
-            itemsAdapter.setItems(items);
+            adapter.submitList(items);
+            adapter.setItemsForFiltering(items);
             binding.setNumItems(items.size());
-            recyclerView.setAdapter(itemsAdapter);
         });
     }
 

@@ -17,6 +17,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.FragmentHomeBinding;
+import com.ashwinrao.locrate.util.RecyclerViewDimensionHelper;
 import com.ashwinrao.locrate.util.callback.BackNavCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;

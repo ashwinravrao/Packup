@@ -33,7 +33,8 @@ import com.ashwinrao.locrate.databinding.ActivityAddBinding;
 import com.ashwinrao.locrate.util.HashtagDetection;
 import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
-import com.ashwinrao.locrate.view.adapter.ItemsAdapter;
+import com.ashwinrao.locrate.view.adapter.ItemDisplayAdapter;
+import com.ashwinrao.locrate.view.adapter.ItemPackAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
@@ -60,7 +61,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
 
     private ActivityAddBinding binding;
     private RecyclerView recyclerView;
-    private ItemsAdapter itemsAdapter;
+    private ItemPackAdapter adapter;
     private String description;
     private List<String> boxCategories = new ArrayList<>();
     private boolean wasTagAssigned = false;
@@ -196,14 +197,13 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addItemDecoration(this, recyclerView, 1);
-        itemsAdapter = new ItemsAdapter(this, true, true);
-        itemsAdapter.setCategories(categoryViewModel.getCachedItemCategories());
-        itemsAdapter.setSingleItemDeleteCallback(this);
-        itemsAdapter.getEditedItem().observe(this, item -> {
+        adapter = new ItemPackAdapter(this);
+        adapter.setSingleItemDeleteCallback(this);
+        adapter.getEditedItem().observe(this, item -> {
             if (item != null) itemViewModel.updateItem(item);
         });
         recyclerView.setItemAnimator(null);
-        recyclerView.setAdapter(itemsAdapter);
+        recyclerView.setAdapter(adapter);
     }
 
     private void initializeToolbar(Toolbar toolbar) {
@@ -238,8 +238,8 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
     }
 
     private void updateItems() {
-        itemsAdapter.setItems(items);
-        recyclerView.setAdapter(itemsAdapter);
+        adapter.setItems(items);
+        recyclerView.setAdapter(adapter);
         if (items.size() == 0) binding.setNumItems(null);
         else binding.setNumItems(items.size() > 1 ? String.format(Locale.US, "%d items", items.size()) : String.format(Locale.US, "%d item", items.size()));
         togglePlaceholderVisibility();
