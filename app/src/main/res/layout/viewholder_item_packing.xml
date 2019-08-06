@@ -33,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/background_item_pack_vh_bottom">
+            android:background="@drawable/background_item_pack_vh_bottom_unselected">
 
             <EditText
                 android:id="@+id/item_name_edit_text"
@@ -75,10 +75,10 @@
                 android:layout_marginEnd="16dp"/>
 
             <Button
-                android:id="@+id/remove_button"
+                android:id="@+id/unpack_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/remove"
+                android:text="@string/unpack"
                 android:textColor="@color/delete_red"
                 android:fontFamily="sans-serif-medium"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -125,8 +125,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void initializeRecyclerView(@NonNull ActivityDetailBinding binding, @NonNull RecyclerView recyclerView) {
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
         addItemDecoration(this, recyclerView, 1);
         adapter = new ItemDisplayAdapter(this, true);
         adapter.setHasStableIds(true);

@@ -90,7 +90,7 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
         ItemViewHolder(@NonNull ViewholderItemPackingBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
-            this.binding.removeButton.setOnClickListener(this);
+            this.binding.unpackButton.setOnClickListener(this);
             this.binding.itemNameEditText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

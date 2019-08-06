@@ -82,6 +82,9 @@
     <string name="register_nfc">Register NFC Tag</string>
     <string name="write_to_nfc">Write to NFC</string>
     <string name="pair_nfc_tag">Pair NFC</string>
+    <string name="edit">Edit</string>
+    <string name="go_to_box">Go to box</string>
+    <string name="view_box">View box</string>
 
     <string-array name="currency_abbreviations">
         <item>USD</item>

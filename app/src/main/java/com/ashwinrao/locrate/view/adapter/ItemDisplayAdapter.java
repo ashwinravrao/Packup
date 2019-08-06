@@ -1,7 +1,9 @@
 package com.ashwinrao.locrate.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -9,6 +11,8 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -18,7 +22,10 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ViewholderItemDisplayBinding;
 import com.ashwinrao.locrate.util.ItemPropertiesFilter;
+import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
+import com.ashwinrao.locrate.view.activity.DetailActivity;
+import com.ashwinrao.locrate.view.activity.MainActivity;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -30,12 +37,13 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     private Filter filter;
     private Context context;
+    private List<Object> selected;
     private Boolean isShownWithBoxContext;
     private List<Item> itemsForFiltering = new ArrayList<>();
 
-    // Action Mode
+    // Callbacks
     private UpdateActionModeCallback updateActionModeCallback;
-    private List<Object> selected;
+    private SingleItemDeleteCallback singleItemDeleteCallback;
 
     private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new DiffUtil.ItemCallback<Item>() {
 
@@ -72,6 +80,10 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     public void setActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
+    }
+
+    public void setSingleItemDeleteCallback(@NonNull SingleItemDeleteCallback callback) {
+        this.singleItemDeleteCallback = callback;
     }
 
     public List<Object> getSelected() {
@@ -140,7 +152,7 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
         };
     }
 
-    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener, Toolbar.OnMenuItemClickListener {
 
         ViewholderItemDisplayBinding binding;
 
@@ -149,6 +161,11 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);
             this.binding.getRoot().setOnLongClickListener(this);
+            this.binding.toolbar.inflateMenu(isShownWithBoxContext ?
+                    R.menu.toolbar_item_with_context :
+                    R.menu.toolbar_item_without_context);
+            this.binding.toolbar.setOnMenuItemClickListener(this);
+            this.binding.toolbar.setOverflowIcon(ContextCompat.getDrawable(context, R.drawable.ic_overflow));
         }
 
         @Override
@@ -183,6 +200,42 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
                 return true;
             } else {
                 return false;
+            }
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            if(isShownWithBoxContext) {
+                switch (item.getItemId()) {
+                    case R.id.toolbar_edit:
+                        // TODO implement editing function
+                        return true;
+                    case R.id.toolbar_unpack:
+                        if(singleItemDeleteCallback != null) {
+                            singleItemDeleteCallback.deleteItem(getItem(getAdapterPosition()),
+                                    getAdapterPosition());
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
+            } else {
+                switch (item.getItemId()) {
+                    case R.id.toolbar_view_box:
+                        final Intent intent = new Intent(context, DetailActivity.class);
+                        intent.putExtra("ID", getItem(getAdapterPosition()).getBoxUUID());
+                        context.startActivity(intent);
+                        ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
+                        return true;
+                    case R.id.toolbar_unpack:
+                        if(singleItemDeleteCallback != null) {
+                            singleItemDeleteCallback.deleteItem(getItem(getAdapterPosition()),
+                                    getAdapterPosition());
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
             }
         }
     }

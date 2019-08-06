@@ -65,7 +65,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
         this.boxesForFiltering = boxes;
     }
 
-    public void setCallback(@NonNull UpdateActionModeCallback callback) {
+    public void setUpdateActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
     }
 
