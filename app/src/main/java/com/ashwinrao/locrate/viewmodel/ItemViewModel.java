@@ -34,8 +34,16 @@ public class ItemViewModel extends ViewModel {
         this.items.remove(item);
     }
 
+    public void addItemToThis(Item item, int position) {
+        this.items.add(position, item);
+    }
+
     public void addItemsToThis(List<Item> items) {
         this.items.addAll(items);
+    }
+
+    public void setItemsToThis(List<Item> items) {
+        this.items = items;
     }
 
     public List<Item> getItemsFromThis() {
@@ -46,8 +54,16 @@ public class ItemViewModel extends ViewModel {
         repo.insert(items.toArray(new Item[0]));
     }
 
+    public void insertItem(Item item) {
+        repo.insert(item);
+    }
+
     public void updateItem(Item item) {
         repo.update(item);
+    }
+
+    public void updateItems(List<Item> items) {
+        repo.update(items.toArray(new Item[0]));
     }
 
     public void deleteItems(List<Item> items) {

@@ -22,7 +22,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ViewholderItemDisplayBinding;
 import com.ashwinrao.locrate.util.ItemPropertiesFilter;
-import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
+import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.locrate.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.locrate.view.activity.DetailActivity;
 import com.ashwinrao.locrate.view.activity.MainActivity;
@@ -43,7 +43,7 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     // Callbacks
     private UpdateActionModeCallback updateActionModeCallback;
-    private SingleItemDeleteCallback singleItemDeleteCallback;
+    private SingleItemUnpackCallback singleItemUnpackCallback;
 
     private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new DiffUtil.ItemCallback<Item>() {
 
@@ -82,8 +82,8 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
         this.updateActionModeCallback = callback;
     }
 
-    public void setSingleItemDeleteCallback(@NonNull SingleItemDeleteCallback callback) {
-        this.singleItemDeleteCallback = callback;
+    public void setSingleItemUnpackCallback(@NonNull SingleItemUnpackCallback callback) {
+        this.singleItemUnpackCallback = callback;
     }
 
     public List<Object> getSelected() {
@@ -120,7 +120,7 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
         final String filePath = item.getFilePath();
         Glide.with(context)
                 .load(new File(filePath))
-                .thumbnail(0.01f)  // down-sample to 1% of original image resolution for thumbnail
+                .thumbnail(0.01f)  // down-sample to 1% of original resolution
                 .centerCrop()
                 .into(imageView);
     }
@@ -205,20 +205,15 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            if(isShownWithBoxContext) {
-                switch (item.getItemId()) {
-                    case R.id.toolbar_edit:
-                        // TODO implement editing function
-                        return true;
-                    case R.id.toolbar_unpack:
-                        if(singleItemDeleteCallback != null) {
-                            singleItemDeleteCallback.deleteItem(getItem(getAdapterPosition()),
-                                    getAdapterPosition());
-                        }
-                        return true;
-                    default:
-                        return false;
+            if (isShownWithBoxContext) {
+                if (item.getItemId() == R.id.toolbar_unpack) {
+                    if (singleItemUnpackCallback != null) {
+                        singleItemUnpackCallback.unpackItem(getItem(getAdapterPosition()),
+                                getAdapterPosition());
+                    }
+                    return true;
                 }
+                return false;
             } else {
                 switch (item.getItemId()) {
                     case R.id.toolbar_view_box:
@@ -228,8 +223,8 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
                         ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
                         return true;
                     case R.id.toolbar_unpack:
-                        if(singleItemDeleteCallback != null) {
-                            singleItemDeleteCallback.deleteItem(getItem(getAdapterPosition()),
+                        if (singleItemUnpackCallback != null) {
+                            singleItemUnpackCallback.unpackItem(getItem(getAdapterPosition()),
                                     getAdapterPosition());
                         }
                         return true;

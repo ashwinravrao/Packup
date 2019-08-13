@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,9 +34,9 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityAddBinding;
 import com.ashwinrao.locrate.util.HashtagDetection;
-import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
+import com.ashwinrao.locrate.util.callback.ItemEditedCallback;
+import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
-import com.ashwinrao.locrate.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.locrate.view.adapter.ItemPackAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
@@ -56,7 +57,7 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class AddActivity extends AppCompatActivity implements SingleItemDeleteCallback {
+public class AddActivity extends AppCompatActivity implements SingleItemUnpackCallback, ItemEditedCallback {
 
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
@@ -201,10 +202,14 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         addItemDecoration(this, recyclerView, 1);
         adapter = new ItemPackAdapter(this);
-        adapter.setSingleItemDeleteCallback(this);
+        adapter.setFirstBind(false);
+        adapter.setSingleItemUnpackCallback(this);
         adapter.getEditedItem().observe(this, item -> {
-            if (item != null) itemViewModel.updateItem(item);
+            if(item != null) {
+                itemViewModel.updateItem(item);
+            }
         });
+//        adapter.setItemEditedCallback(this);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(adapter);
     }
@@ -399,7 +404,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
     }
 
     @Override
-    public void deleteItem(@NonNull Item item, @NonNull Integer position) {
+    public void unpackItem(@NonNull Item item, @NonNull Integer position) {
         if(items.size() > 0) {
             items.remove(item);
             updateItems();
@@ -420,5 +425,10 @@ public class AddActivity extends AppCompatActivity implements SingleItemDeleteCa
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void itemEdited(@NonNull Item item, @NonNull Integer position) {
+        itemViewModel.updateItem(item);
     }
 }

@@ -52,6 +52,10 @@ public class BoxViewModel extends ViewModel {
         return this.cachedBoxes;
     }
 
+    public void updateBox(@NonNull Box box) {
+        repo.update(box);
+    }
+
     public boolean saveBox(@NonNull List<String> categories) {
         if (box.getName() != null) {
             box.setCategories(categories);

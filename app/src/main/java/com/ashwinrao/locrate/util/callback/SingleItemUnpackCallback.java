@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.ashwinrao.locrate.data.model.Item;
 
-public interface SingleItemDeleteCallback {
+public interface SingleItemUnpackCallback {
 
-    void deleteItem(@NonNull final Item item, @NonNull final Integer position);
+    void unpackItem(@NonNull final Item item, @NonNull final Integer position);
 }

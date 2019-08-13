@@ -1,5 +1,6 @@
 package com.ashwinrao.locrate.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,11 +24,13 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityDetailBinding;
+import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -36,12 +39,15 @@ import javax.inject.Inject;
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
 import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements SingleItemUnpackCallback {
 
     private Box box;
+    private RecyclerView recyclerView;
     private ItemDisplayAdapter adapter;
     private BoxViewModel boxViewModel;
+    private ItemViewModel itemViewModel;
     private LiveData<Box> boxLD;
+    private ActivityDetailBinding binding;
     private LiveData<List<Item>> itemsLD;
 
     @Inject
@@ -51,10 +57,10 @@ public class DetailActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((Locrate) getApplicationContext()).getAppComponent().inject(this);
-        final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         boxViewModel = ViewModelProviders.of(this, factory).get(BoxViewModel.class);
-        final ItemViewModel itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
+        itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
 
         final Bundle extras = getIntent().getExtras();
         if(extras != null) {
@@ -69,10 +75,9 @@ public class DetailActivity extends AppCompatActivity {
             finishWithTransition();
         }
 
-        // layout widgets
-        initializeToolbar(binding.toolbar);
-        initializeRecyclerView(binding, binding.recyclerView);
-        initializeButtons(binding.editButton, binding.deleteButton);
+        setupToolbar(binding.toolbar);
+        setupRecyclerView(binding, binding.recyclerView);
+        setupButtons(binding.editButton, binding.deleteButton);
     }
 
     @Override
@@ -83,15 +88,17 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
-    private void initializeButtons(@NonNull FloatingActionButton editButton, @NonNull FloatingActionButton deleteButton) {
+    private void setupButtons(@NonNull FloatingActionButton editButton, @NonNull FloatingActionButton deleteButton) {
         editButton.setOnClickListener(view -> {
-
+            final Intent intent = new Intent(this, EditActivity.class);
+            intent.putExtra("ID", box.getId());
+            startActivity(intent);
         });
 
         deleteButton.setOnClickListener(view -> showDeleteConfirmationDialog());
     }
 
-    private void initializeToolbar(Toolbar toolbar) {
+    private void setupToolbar(Toolbar toolbar) {
         this.setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(view -> finishWithTransition());
     }
@@ -124,11 +131,13 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
-    private void initializeRecyclerView(@NonNull ActivityDetailBinding binding, @NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(@NonNull ActivityDetailBinding binding, @NonNull RecyclerView recyclerView) {
+        this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemAnimator(null);
         addItemDecoration(this, recyclerView, 1);
         adapter = new ItemDisplayAdapter(this, true);
+        adapter.setSingleItemUnpackCallback(this);
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
         boxLD.observe(this, box -> {
@@ -172,5 +181,30 @@ public class DetailActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
+    }
+
+    @Override
+    public void unpackItem(@NonNull Item item, @NonNull Integer position) {
+        itemViewModel.removeItemFromThis(item);
+        adapter.submitList(itemViewModel.getItemsFromThis());
+        binding.numberOfItems.setText(String.format(getString(R.string.number_of_items_format_string), itemViewModel.getItemsFromThis().size()));
+        Snackbar.make(binding.snackbarContainer, "Item deleted", Snackbar.LENGTH_SHORT)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .setAction(R.string.undo, v -> {
+                    itemViewModel.addItemToThis(item, position);
+                    adapter.submitList(itemViewModel.getItemsFromThis());
+                    binding.numberOfItems.setText(String.format(getString(R.string.number_of_items_format_string), itemViewModel.getItemsFromThis().size()));
+                    recyclerView.setAdapter(adapter);
+                })
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+                        if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            itemViewModel.deleteItem(item);
+                        }
+                    }
+                })
+                .show();
     }
 }

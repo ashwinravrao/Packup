@@ -85,6 +85,7 @@
     <string name="edit">Edit</string>
     <string name="go_to_box">Go to box</string>
     <string name="view_box">View box</string>
+    <string name="item_deleted_snackbar">Item deleted</string>
 
     <string-array name="currency_abbreviations">
         <item>USD</item>

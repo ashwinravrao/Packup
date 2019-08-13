@@ -18,7 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ViewholderItemPackingBinding;
-import com.ashwinrao.locrate.util.callback.SingleItemDeleteCallback;
+import com.ashwinrao.locrate.util.callback.ItemEditedCallback;
+import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
@@ -29,8 +30,10 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
 
     private Context context;
     private List<Item> items;
+    private final boolean[] firstBind = {true};
     private MutableLiveData<Item> editedItem = new MutableLiveData<>();
-    private SingleItemDeleteCallback singleItemDeleteCallback;
+    private SingleItemUnpackCallback singleItemUnpackCallback;
+    private ItemEditedCallback itemEditedCallback;
 
     public ItemPackAdapter(@NonNull Context context) {
         this.context = context;
@@ -46,13 +49,20 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
         return editedItem;
     }
 
+    public void setFirstBind(boolean bindComplete) {
+        this.firstBind[0] = bindComplete;
+    }
 
     public void setItems(@NonNull List<Item> items) {
         this.items = items;
     }
 
-    public void setSingleItemDeleteCallback(@NonNull SingleItemDeleteCallback callback) {
-        this.singleItemDeleteCallback = callback;
+    public void setSingleItemUnpackCallback(@NonNull SingleItemUnpackCallback callback) {
+        this.singleItemUnpackCallback = callback;
+    }
+
+    public void setItemEditedCallback(@NonNull ItemEditedCallback callback) {
+        this.itemEditedCallback = callback;
     }
 
     @NonNull
@@ -102,8 +112,11 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    items.get(getAdapterPosition()).setName(s.toString().length() > 0 ? s.toString() : null);
-                    editedItem.setValue(items.get(getAdapterPosition()));
+                    if(!firstBind[0]) {
+                        items.get(getAdapterPosition()).setName(s.toString().length() > 0 ? s.toString() : null);
+                        if(itemEditedCallback != null) itemEditedCallback.itemEdited(items.get(getAdapterPosition()), getAdapterPosition());
+                        editedItem.setValue(items.get(getAdapterPosition()));
+                    }
                 }
             });
             this.binding.estimatedValueEditText.addTextChangedListener(new TextWatcher() {
@@ -117,8 +130,11 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    items.get(getAdapterPosition()).setEstimatedValue(Double.valueOf(s.toString().length() > 0 ? s.toString() : ""));
-                    editedItem.setValue(items.get(getAdapterPosition()));
+                    if(!firstBind[0]) {
+                        items.get(getAdapterPosition()).setEstimatedValue(Double.valueOf(s.toString().length() > 0 ? s.toString() : ""));
+                        editedItem.setValue(items.get(getAdapterPosition()));
+                        if(itemEditedCallback != null) itemEditedCallback.itemEdited(items.get(getAdapterPosition()), getAdapterPosition());
+                    }
                 }
             });
 
@@ -141,7 +157,7 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
 
         @Override
         public void onClick(View v) {
-            singleItemDeleteCallback.deleteItem(items.get(getAdapterPosition()), getAdapterPosition());
+            singleItemUnpackCallback.unpackItem(items.get(getAdapterPosition()), getAdapterPosition());
         }
     }
 

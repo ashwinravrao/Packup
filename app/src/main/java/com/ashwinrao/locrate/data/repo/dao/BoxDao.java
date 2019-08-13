@@ -44,6 +44,7 @@ public interface BoxDao {
     @Query("SELECT * FROM boxes WHERE id = :uuid")
     LiveData<Box> getBoxByUUID(String uuid);
 
+
     /**
      * InsertBox/save a box to the {@link AppDatabase}.
      *
