@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="boxNum"
-            type="Integer" />
-
-        <variable
             name="numItems"
             type="String" />
 
@@ -51,7 +47,7 @@
                     app:menu="@menu/toolbar_add"
                     app:navigationIcon="@drawable/ic_close"
                     app:popupTheme="@style/AppTheme.PopUpOverlay"
-                    app:title="@{String.format(@string/box_number_placeholder, boxNum)}"
+                    app:title="@{String.format(@string/box_number_placeholder, box.number)}"
                     app:titleTextColor="@android:color/white" />
 
                 <EditText
@@ -263,6 +259,34 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider" />
+
+                <ImageView
+                    android:id="@+id/placeholder_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/ic_open_box"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/buttons"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/placeholder_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/empty_photos_text"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/placeholder_image" />
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:id="@+id/snackbar_container"

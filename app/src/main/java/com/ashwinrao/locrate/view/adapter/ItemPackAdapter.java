@@ -131,7 +131,7 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
                 @Override
                 public void afterTextChanged(Editable s) {
                     if(!firstBind[0]) {
-                        items.get(getAdapterPosition()).setEstimatedValue(Double.valueOf(s.toString().length() > 0 ? s.toString() : ""));
+                        items.get(getAdapterPosition()).setEstimatedValue(Double.valueOf(s.toString().length() > 0 ? s.toString() : "0.0"));
                         editedItem.setValue(items.get(getAdapterPosition()));
                         if(itemEditedCallback != null) itemEditedCallback.itemEdited(items.get(getAdapterPosition()), getAdapterPosition());
                     }
@@ -157,7 +157,7 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
 
         @Override
         public void onClick(View v) {
-            singleItemUnpackCallback.unpackItem(items.get(getAdapterPosition()), getAdapterPosition());
+            if(singleItemUnpackCallback != null) singleItemUnpackCallback.unpackItem(items.get(getAdapterPosition()), getAdapterPosition());
         }
     }
 

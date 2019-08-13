@@ -4,13 +4,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -23,20 +28,24 @@ import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityEditBinding;
 import com.ashwinrao.locrate.util.callback.ItemEditedCallback;
+import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.locrate.view.adapter.ItemPackAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import javax.inject.Inject;
 
 import static com.ashwinrao.locrate.util.Decorations.addItemDecoration;
+import static com.ashwinrao.locrate.util.UnitConversion.dpToPx;
 
-public class EditActivity extends AppCompatActivity implements ItemEditedCallback {
+public class EditActivity extends AppCompatActivity implements ItemEditedCallback, SingleItemUnpackCallback {
 
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
@@ -65,9 +74,8 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
         boxViewModel = ViewModelProviders.of(this, factory).get(BoxViewModel.class);
         itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
-//        categoryViewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
+        categoryViewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
 
-        // layout widgets
         setupToolbar(binding.toolbar);
         setupInputFields(binding.nameInputField, binding.descriptionInputField);
         setupRecyclerView(binding.recyclerView);
@@ -87,24 +95,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                 populateItems(items);
             }
         });
-
-//        itemViewModel.getItemsFromBox(uuid).observe(this, items ->
-//                itemViewModel.addItemsToThis(items));
-
-//        // Setup CategoryViewModel to be able to retrieve item categories later
-//        new Handler().post(() ->
-//                itemViewModel.getAllItemsFromDatabase().observe(this, items ->
-//                        categoryViewModel.setCachedItemCategories(items)));
-//
-//        // data binding
-//        binding.setNumItems(String.format(getString(R.string.number_of_items_format_string), itemViewModel.getItemsFromThis().size()));
-//        binding.setBoxNum(thisBox.getNumber());
-//
-//        // layout widgets
-//        setupToolbar(binding.toolbar);
-//        setupInputFields(binding.nameInputField, binding.descriptionInputField);
-//        setupRecyclerView(binding.recyclerView);
-//        setupButtons(binding.nfcButton, binding.fillButton);
     }
 
     private void populate(@NonNull final Box box) {
@@ -115,17 +105,16 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     private void populateItems(@NonNull final List<Item> items) {
         this.items = items;
-        adapter.setItems(items);
-        recyclerView.setAdapter(adapter);
         adapter.setFirstBind(false);
+        updateItems();
     }
 
-    //    @Override
-//    public void onResume() {
-//        super.onResume();
-//        updateItems();
-//    }
-//
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateItems();
+    }
+
     private void setupInputFields(EditText nameInputField, EditText descriptionInputField) {
 
 //        nameInputField.setText(thisBox.getName());
@@ -243,11 +232,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         addItemDecoration(this, recyclerView, 1);
         adapter = new ItemPackAdapter(this);
         adapter.setItemEditedCallback(this);
-//        adapter.getEditedItem().observe(this, item -> {
-//            if (item != null) {
-//                itemViewModel.updateItem(item);
-//            }
-//        });
+        adapter.setSingleItemUnpackCallback(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -261,7 +246,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     public void itemEdited(@NonNull Item item, @NonNull Integer position) {
         this.items.remove((int) position);
         this.items.add(position, item);
-//        itemViewModel.updateItem(item);
     }
 
     @Override
@@ -296,79 +280,100 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 //        }
 //    }
 //
-//    private void updateItems() {
-//        adapter.setItems(items);
-//        recyclerView.setAdapter(adapter);
-//        if (items.size() == 0) binding.setNumItems(null);
-//        else
-//            binding.setNumItems(items.size() > 1 ? String.format(Locale.US, "%d items", items.size()) : String.format(Locale.US, "%d item", items.size()));
-//        togglePlaceholderVisibility();
-//    }
-//
-//    private void togglePlaceholderVisibility() {
-//        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
-//        for (View v : placeholders) {
-//            if (items != null) {
-//                v.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
-//            } else {
-//                v.setVisibility(View.VISIBLE);
-//            }
-//        }
-//    }
+    private void updateItems() {
+        adapter.setItems(items);
+        recyclerView.setAdapter(adapter);
+        if (items.size() == 0) {
+            binding.setNumItems(null);
+        } else {
+            binding.setNumItems(items.size() > 1 ? String.format(Locale.US, "%d items", items.size()) : String.format(Locale.US, "%d item", items.size()));
+        }
+        togglePlaceholderVisibility(items);
+    }
+
+    private void clearItems() {
+        this.items.clear();
+        updateItems();
+    }
+
+    private void removeItem(@NonNull Item item) {
+        this.items.remove(item);
+        updateItems();
+    }
+
+    private void restoreItems(@NonNull List<Item> items) {
+        if(items.size() > 0) {
+            this.items.addAll(items);
+            updateItems();
+        }
+    }
+
+    private void restoreSingleItem(@NonNull Item item) {
+        this.items.add(item);
+        updateItems();
+    }
+
+    private void togglePlaceholderVisibility(@Nullable List<Item> items) {
+        final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};
+        for (View v : placeholders) {
+            if (items != null) {
+                v.setVisibility(items.size() > 0 ? View.GONE : View.VISIBLE);
+            } else {
+                v.setVisibility(View.VISIBLE);
+            }
+        }
+    }
 //
 //    private void startCamera() {
 //        Intent intent = new Intent(this, CameraActivity.class);
 //        startActivityForResult(intent, 1);
 //    }
 //
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.toolbar_add, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.toolbar_save:
-//                if (itemViewModel.getItemsFromThis().size() == 0) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_add, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toolbar_save:
+                if (itemViewModel.getItemsFromThis().size() == 0) {
 //                    showEmptyBoxDialog();
-//                } else {
-//                    if (boxViewModel.saveBox(this.thisBox.getCategories())) {
-//                        itemViewModel.insertItems(itemViewModel.getItemsFromThis());
-//                        this.finish();
-//                    } else {
+                } else {
+                    if (boxViewModel.saveBox(this.thisBox.getCategories())) {
+                        itemViewModel.insertItems(itemViewModel.getItemsFromThis());
+                        this.finish();
+                    } else {
 //                        setError(binding.nameInputField);
-//                    }
-//                }
-//                return true;
-//            case R.id.toolbar_clear_items:
-//                if (items.size() > 0) {
-//                    items.clear();
-//                    updateItems();
-//                    Snackbar.make(binding.snackbarContainer, "Items cleared", Snackbar.LENGTH_LONG)
-//                            .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-//                            .setAction(getString(R.string.undo), v -> {
-//                                items.addAll(itemViewModel.getItemsFromThis());
-//                                updateItems();
-//                            })
-//                            .addCallback(new Snackbar.Callback() {
-//                                @Override
-//                                public void onDismissed(Snackbar transientBottomBar, int event) {
-//                                    if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-//                                        itemViewModel.clearItemsFromThis();
-//                                    }
-//                                }
-//                            }).show();
-//                } else {
-//                    final Toast toast = Toast.makeText(this, "Nothing to clear", Toast.LENGTH_SHORT);
-//                    toast.setGravity(Gravity.BOTTOM, 0, dpToPx(this, 112f));
-//                    toast.show();
-//                }
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+                    }
+                }
+                return true;
+            case R.id.toolbar_clear_items:
+                if (items.size() > 0) {
+                    final List<Item> itemsCopy = new ArrayList<>(items);
+                    clearItems();
+                    Snackbar.make(binding.snackbarContainer, "Items cleared", Snackbar.LENGTH_LONG)
+                            .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                            .setAction(getString(R.string.undo), v -> restoreItems(itemsCopy))
+                            .addCallback(new Snackbar.Callback() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                                        itemViewModel.deleteItems(itemsCopy);
+                                    }
+                                }
+                            }).show();
+                } else {
+                    final Toast toast = Toast.makeText(this, "Nothing to clear", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM, 0, dpToPx(this, 112f));
+                    toast.show();
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 //
 //    private void setError(@NonNull EditText text) {
 //        text.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.delete_red)));
@@ -456,27 +461,21 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 //        closeWithConfirmation();
 //    }
 //
-//    @Override
-//    public void unpackItem(@NonNull Item item, @NonNull Integer position) {
-//        if (items.size() > 0) {
-//            items.remove(item);
-//            updateItems();
-//        }
-//
-//        Snackbar.make(binding.snackbarContainer, "Item removed", Snackbar.LENGTH_LONG)
-//                .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-//                .setAction(getString(R.string.undo), v -> {
-//                    items.add(position, item);
-//                    updateItems();
-//                })
-//                .addCallback(new Snackbar.Callback() {
-//                    @Override
-//                    public void onDismissed(Snackbar transientBottomBar, int event) {
-//                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-//                            itemViewModel.removeItemFromThis(item);
-//                        }
-//                    }
-//                })
-//                .show();
-//    }
+    @Override
+    public void unpackItem(@NonNull Item item, @NonNull Integer position) {
+        removeItem(item);
+
+        Snackbar.make(binding.snackbarContainer, "Item removed", Snackbar.LENGTH_LONG)
+                .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                .setAction(getString(R.string.undo), v -> restoreSingleItem(item))
+                .addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                            itemViewModel.deleteItem(item);
+                        }
+                    }
+                })
+                .show();
+    }
 }
