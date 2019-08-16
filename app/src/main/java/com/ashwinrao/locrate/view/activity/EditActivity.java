@@ -1,5 +1,8 @@
 package com.ashwinrao.locrate.view.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -13,8 +16,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
@@ -29,12 +34,15 @@ import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityEditBinding;
 import com.ashwinrao.locrate.util.callback.ItemEditedCallback;
 import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
+import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemPackAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,14 +59,17 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     private ItemViewModel itemViewModel;
     private CategoryViewModel categoryViewModel;
 
-    private Box thisBox;
+    private Box original;
+    private Box edited;
+    private int originalItemsSize;
+    private boolean itemWasEdited;
     private final boolean[] initialBoxBound = {false};
     private ActivityEditBinding binding;
     private RecyclerView recyclerView;
     private ItemPackAdapter adapter;
     private String description;
-    private boolean wasTagAssigned = false;
     private List<Item> items = new ArrayList<>();
+    private List<String> addItemPaths = new ArrayList<>();
 
     private static final String TAG = "EditActivity";
 
@@ -76,10 +87,16 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
         categoryViewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
 
+        // Setup CategoryViewModel to be able to retrieve item categories later
+        // Used for suggesting previously made categories (app-wide) in AutoCompleteTextView later on
+        new Handler().post(() ->
+                itemViewModel.getAllItemsFromDatabase().observe(this, items ->
+                        categoryViewModel.setCachedItemCategories(items)));
+
         setupToolbar(binding.toolbar);
         setupInputFields(binding.nameInputField, binding.descriptionInputField);
         setupRecyclerView(binding.recyclerView);
-//        setupButtons(binding.nfcButton, binding.fillButton);
+        setupButtons(binding.nfcButton, binding.fillButton);
 
         final String uuid = Objects.requireNonNull(getIntent().getExtras()).getString("ID");
 
@@ -91,35 +108,39 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         });
 
         itemViewModel.getItemsFromBox(uuid).observe(this, items -> {
-            if(items != null) {
+            if (items != null) {
                 populateItems(items);
+                itemViewModel.getItemsFromBox(uuid).removeObservers(this);
             }
         });
     }
 
     private void populate(@NonNull final Box box) {
-        thisBox = box;
-        binding.setBox(thisBox);
+        edited = box;
+        original = box;
+        binding.setBox(edited);
         initialBoxBound[0] = true;
     }
 
     private void populateItems(@NonNull final List<Item> items) {
         this.items = items;
+        originalItemsSize = items.size();
         adapter.setFirstBind(false);
-        updateItems();
+        updateListedItems();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateItems();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+////        if (edited != null) populate(edited);
+////        if (items.size() > 0) populateItems(items);
+//    }
 
     private void setupInputFields(EditText nameInputField, EditText descriptionInputField) {
 
-//        nameInputField.setText(thisBox.getName());
-//        descriptionInputField.setText(thisBox.getDescription());
-//        for(String category : thisBox.getCategories()) {
+//        nameInputField.setText(edited.getName());
+//        descriptionInputField.setText(edited.getDescription());
+//        for(String category : edited.getCategories()) {
 //            addPreExistingCategoryChips(binding.categoryChipGroup, category);
 //        }
 
@@ -141,8 +162,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                 final String name = s.toString().length() > 0 ? s.toString() : null;
                 binding.requiredFieldNotice.setVisibility(s.toString().length() > 0 ? View.GONE : View.VISIBLE);
                 if (initialBoxBound[0]) {
-                    thisBox.setName(name);
-                    boxViewModel.updateBox(thisBox);
+                    edited.setName(name);
                 }
             }
         });
@@ -156,7 +176,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.charCount.setText(String.valueOf(s.length()));
-//                HashtagDetection.detect(s, thisBox.getCategories(), matchFound, matchStrings);
+//                HashtagDetection.detect(s, edited.getCategories(), matchFound, matchStrings);
             }
 
             @Override
@@ -164,8 +184,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 //                tagToChip(s, matchFound, matchStrings, binding.categoryChipGroup);
                 description = s.toString().length() > 0 ? s.toString() : "";
                 if (initialBoxBound[0]) {
-                    thisBox.setDescription(description);
-                    boxViewModel.updateBox(thisBox);
+                    edited.setDescription(description);
                 }
             }
         });
@@ -188,7 +207,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 //        chip.setCloseIconTintResource(android.R.color.white);
 //        chip.setOnCloseIconClickListener(v -> {
 //            group.removeView(v);
-//            thisBox.getCategories().remove(text);
+//            edited.getCategories().remove(text);
 //        });
 //        group.addView(chip);
 //    }
@@ -197,34 +216,34 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 //        final Chip chip = new Chip(group.getContext());
 //        chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
 //        chip.setChipBackgroundColorResource(R.color.colorAccent);
-//        chip.setText(thisBox.getCategories().get(thisBox.getCategories().size() - 1));
+//        chip.setText(edited.getCategories().get(edited.getCategories().size() - 1));
 //        chip.setCloseIconVisible(true);
 //        chip.setCloseIconTintResource(android.R.color.white);
 //        chip.setOnCloseIconClickListener(v -> {
 //            group.removeView(v);
-//            thisBox.getCategories().remove(thisBox.getCategories().size() - 1);
+//            edited.getCategories().remove(edited.getCategories().size() - 1);
 //        });
 //        group.addView(chip);
 //    }
-//
-//    private void setupButtons(@NonNull CardView nfcButton, @NonNull CardView fillButton) {
-//        nfcButton.setOnClickListener(view -> {
-//            if (wasTagAssigned) {
-//                showNfcTagAlreadyRegisteredDialog();
-//            } else {
-//                createNfcTagRegistrationIntent();
-//            }
-//        });
-//        fillButton.setOnClickListener(view -> startCamera());
-//    }
-//
-//    private void createNfcTagRegistrationIntent() {
-//        final Intent intent = new Intent(this, NfcActivity.class);
-//        intent.putExtra("isWrite", true);
-//        intent.putExtra("uuidToRegister", boxViewModel.getBox().getId());
-//        startActivityForResult(intent, 2);
-//    }
-//
+
+    private void setupButtons(@NonNull CardView nfcButton, @NonNull CardView fillButton) {
+        nfcButton.setOnClickListener(view -> {
+            if (edited.isTagRegistered()) {
+                showNfcTagAlreadyRegisteredDialog();
+            } else {
+                createNfcTagRegistrationIntent();
+            }
+        });
+        fillButton.setOnClickListener(view -> startCamera());
+    }
+
+    private void createNfcTagRegistrationIntent() {
+        final Intent intent = new Intent(this, NfcActivity.class);
+        intent.putExtra("isWrite", true);
+        intent.putExtra("uuidToRegister", boxViewModel.getBox().getId());
+        startActivityForResult(intent, 2);
+    }
+
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -239,48 +258,57 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     private void setupToolbar(Toolbar toolbar) {
         this.setSupportActionBar(toolbar);
         toolbar.setOverflowIcon(getDrawable(R.drawable.ic_overflow_light));
-//        toolbar.setNavigationOnClickListener(v -> closeWithConfirmation());
+        toolbar.setNavigationOnClickListener(v -> closeWithConfirmation());
     }
 
     @Override
     public void itemEdited(@NonNull Item item, @NonNull Integer position) {
+        itemWasEdited = true;
         this.items.remove((int) position);
         this.items.add(position, item);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        itemViewModel.updateItems(items);
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+////        itemViewModel.updateItems(items);
+////        boxViewModel.updateBox(edited);
+//    }
+
+    private void saveAndClose() {
+        boxViewModel.updateBox(edited);
+        itemViewModel.insertItems(this.items);
+        this.finish();
     }
 
-    //
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == 1) {
-//            if (resultCode == RESULT_OK) {
-//                final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
-//                if (paths != null) {
-//                    for (String path : paths) {
-//                        items.add(new Item(boxViewModel.getBox().getId(), boxViewModel.getBox().getNumber(), path));
-//                    }
-//                    itemViewModel.addItemsToThis(items);
-//                }
-//            }
-//        }
-//
-//        if (requestCode == 2) {
-//            if (resultCode == RESULT_OK) {
-//                wasTagAssigned = true;
-//                Snackbar.make(binding.snackbarContainer, R.string.tag_success_message, Snackbar.LENGTH_SHORT)
-//                        .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
-//                        .show();
-//            }
-//        }
-//    }
-//
-    private void updateItems() {
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                final ArrayList<String> paths = Objects.requireNonNull(data).getStringArrayListExtra("paths");
+                if (paths != null) {
+                    addItemPaths.addAll(paths);
+                    for (String path : paths) {
+                        this.items.add(new Item(edited.getId(), edited.getNumber(), path));
+                    }
+                    updateListedItems();
+                }
+            }
+        }
+
+        if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                edited.setTagRegistered(true);
+                Snackbar.make(binding.snackbarContainer, R.string.tag_success_message, Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
+                        .show();
+            }
+        }
+    }
+
+    private void updateListedItems() {
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
         if (items.size() == 0) {
@@ -293,24 +321,24 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     private void clearItems() {
         this.items.clear();
-        updateItems();
+        updateListedItems();
     }
 
     private void removeItem(@NonNull Item item) {
         this.items.remove(item);
-        updateItems();
+        updateListedItems();
     }
 
     private void restoreItems(@NonNull List<Item> items) {
-        if(items.size() > 0) {
+        if (items.size() > 0) {
             this.items.addAll(items);
-            updateItems();
+            updateListedItems();
         }
     }
 
     private void restoreSingleItem(@NonNull Item item) {
         this.items.add(item);
-        updateItems();
+        updateListedItems();
     }
 
     private void togglePlaceholderVisibility(@Nullable List<Item> items) {
@@ -323,12 +351,12 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
             }
         }
     }
-//
-//    private void startCamera() {
-//        Intent intent = new Intent(this, CameraActivity.class);
-//        startActivityForResult(intent, 1);
-//    }
-//
+
+    private void startCamera() {
+        final Intent intent = new Intent(this, CameraActivity.class);
+        startActivityForResult(intent, 1);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_add, menu);
@@ -339,14 +367,13 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.toolbar_save:
-                if (itemViewModel.getItemsFromThis().size() == 0) {
-//                    showEmptyBoxDialog();
+                if (items.size() == 0) {
+                    showEmptyBoxDialog();
                 } else {
-                    if (boxViewModel.saveBox(this.thisBox.getCategories())) {
-                        itemViewModel.insertItems(itemViewModel.getItemsFromThis());
-                        this.finish();
+                    if (edited.getName() != null) {
+                        saveAndClose();
                     } else {
-//                        setError(binding.nameInputField);
+                        setError(binding.nameInputField);
                     }
                 }
                 return true;
@@ -357,14 +384,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                     Snackbar.make(binding.snackbarContainer, "Items cleared", Snackbar.LENGTH_LONG)
                             .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
                             .setAction(getString(R.string.undo), v -> restoreItems(itemsCopy))
-                            .addCallback(new Snackbar.Callback() {
-                                @Override
-                                public void onDismissed(Snackbar transientBottomBar, int event) {
-                                    if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                                        itemViewModel.deleteItems(itemsCopy);
-                                    }
-                                }
-                            }).show();
+                            .show();
                 } else {
                     final Toast toast = Toast.makeText(this, "Nothing to clear", Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.BOTTOM, 0, dpToPx(this, 112f));
@@ -374,93 +394,100 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         }
         return super.onOptionsItemSelected(item);
     }
-//
-//    private void setError(@NonNull EditText text) {
-//        text.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.delete_red)));
-//        text.setHintTextColor(ContextCompat.getColor(this, R.color.delete_red));
-//        text.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                text.setHintTextColor(ContextCompat.getColor(EditActivity.this, R.color.top_row_view_holder));
-//                text.setBackgroundTintList(getColorStateList(R.color.state_list_input_field));
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//
-//    }
-//
-//    @SuppressWarnings("ResultOfMethodCallIgnored")
-//    private void showUnsavedChangesDialog() {
-//        ConfirmationDialog.make(this, new String[]{
-//                getString(R.string.dialog_discard_box_title),
-//                getString(R.string.dialog_discard_box_message),
-//                getString(R.string.discard),
-//                getString(R.string.cancel)}, true, new int[]{ContextCompat.getColor(this, R.color.colorAccent),
-//                ContextCompat.getColor(this, android.R.color.holo_red_dark)}, dialogInterface -> {
-//            if (itemViewModel.getItemsFromThis() != null) {
-//                for (Item item : itemViewModel.getItemsFromThis()) {
-//                    new File(item.getFilePath()).delete();
-//                }
-//                itemViewModel.deleteItems(itemViewModel.getItemsFromThis());
-//            }
-//            this.finish();
-//            return null;
-//        }, dialogInterface -> {
-//            dialogInterface.cancel();
-//            return null;
-//        });
-//    }
-//
-//    private void showEmptyBoxDialog() {
-//        final AlertDialog dialog = new MaterialAlertDialogBuilder(this)
-//                .setTitle(R.string.dialog_empty_box_title)
-//                .setMessage(R.string.dialog_empty_box_message)
-//                .setCancelable(true)
-//                .setPositiveButton(R.string.ok, (dialog1, which) -> dialog1.dismiss()).create();
-//        dialog.show();
-//        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
-//    }
-//
-//    private void showNfcTagAlreadyRegisteredDialog() {
-//        ConfirmationDialog.make(this, new String[]{
-//                        getString(R.string.dialog_nfc_tag_already_registered_title),
-//                        getString(R.string.dialog_nfc_tag_already_registered_message),
-//                        getString(R.string.yes),
-//                        getString(R.string.no)},
-//                true,
-//                new int[]{ContextCompat.getColor(this, R.color.colorAccent),
-//                        ContextCompat.getColor(this, R.color.colorAccent)},
-//                dialogInterface -> {
-//                    createNfcTagRegistrationIntent();
-//                    return null;
-//                }, dialogInterface -> {
-//                    dialogInterface.cancel();
-//                    return null;
-//                });
-//    }
-//
-//    private void closeWithConfirmation() {
-//        final Box box = boxViewModel.getBox();
-//        if (box.getName() != null || items.size() > 0) {
-//            showUnsavedChangesDialog();
-//        } else {
-//            this.finish();
-//        }
-//    }
-//
-//    @Override
-//    public void onBackPressed() {
-//        closeWithConfirmation();
-//    }
-//
+
+    private void setError(@NonNull EditText text) {
+        text.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, R.color.delete_red)));
+        text.setHintTextColor(ContextCompat.getColor(this, R.color.delete_red));
+        text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                text.setHintTextColor(ContextCompat.getColor(EditActivity.this, R.color.top_row_view_holder));
+                text.setBackgroundTintList(getColorStateList(R.color.state_list_input_field));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    private void showUnsavedChangesDialog() {
+        ConfirmationDialog.make(this, new String[]{
+                getString(R.string.dialog_discard_box_title),
+                getString(R.string.dialog_discard_box_message),
+                getString(R.string.discard),
+                getString(R.string.cancel)}, true, new int[]{ContextCompat.getColor(this, R.color.colorAccent),
+                ContextCompat.getColor(this, android.R.color.holo_red_dark)}, dialogInterface -> {
+            if(addItemPaths.size() > 0) {
+                for (String path : addItemPaths) {
+                    new File(path).delete();
+                }
+            }
+            this.finish();
+            return null;
+        }, dialogInterface -> {
+            dialogInterface.cancel();
+            return null;
+        });
+    }
+
+    private void showEmptyBoxDialog() {
+        final AlertDialog dialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.dialog_empty_box_title)
+                .setMessage(R.string.dialog_empty_box_message)
+                .setCancelable(true)
+                .setPositiveButton(R.string.ok, (dialog1, which) -> dialog1.dismiss()).create();
+        dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+    }
+
+    private void showNfcTagAlreadyRegisteredDialog() {
+        ConfirmationDialog.make(this, new String[]{
+                        getString(R.string.dialog_nfc_tag_already_registered_title),
+                        getString(R.string.dialog_nfc_tag_already_registered_message),
+                        getString(R.string.yes),
+                        getString(R.string.no)},
+                true,
+                new int[]{ContextCompat.getColor(this, R.color.colorAccent),
+                        ContextCompat.getColor(this, R.color.colorAccent)},
+                dialogInterface -> {
+                    createNfcTagRegistrationIntent();
+                    return null;
+                }, dialogInterface -> {
+                    dialogInterface.cancel();
+                    return null;
+                });
+    }
+
+    private boolean unsavedChangesMade() {
+        return !original.getName().equals(edited.getName())
+                || !original.getCategories().equals(edited.getCategories())
+                || !original.getDescription().equals(edited.getDescription())
+                || items.size() != originalItemsSize
+                || itemWasEdited;
+    }
+
+
+    private void closeWithConfirmation() {
+        if (unsavedChangesMade()) {
+            showUnsavedChangesDialog();
+        } else {
+            this.finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        closeWithConfirmation();
+    }
+
     @Override
     public void unpackItem(@NonNull Item item, @NonNull Integer position) {
         removeItem(item);

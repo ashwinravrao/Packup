@@ -68,7 +68,6 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     private ItemPackAdapter adapter;
     private String description;
     private List<String> boxCategories = new ArrayList<>();
-    private boolean wasTagAssigned = false;
     private List<Item> items = new ArrayList<>();
 
 
@@ -181,7 +180,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
     private void initializeButtons(@NonNull CardView nfcButton, @NonNull CardView fillButton) {
         nfcButton.setOnClickListener(view -> {
-            if (wasTagAssigned) {
+            if (boxViewModel.getBox().isTagRegistered()) {
                 showNfcTagAlreadyRegisteredDialog();
             } else {
                 createNfcTagRegistrationIntent();
@@ -237,7 +236,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
         if (requestCode == 2) {
             if (resultCode == RESULT_OK) {
-                wasTagAssigned = true;
+                boxViewModel.getBox().setTagRegistered(true);
                 Snackbar.make(binding.snackbarContainer, R.string.tag_success_message, Snackbar.LENGTH_SHORT)
                         .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
                         .show();

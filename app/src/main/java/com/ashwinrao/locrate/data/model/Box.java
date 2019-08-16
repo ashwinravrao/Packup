@@ -38,6 +38,9 @@ public class Box {
     @ColumnInfo(name = "is_full")
     private boolean isFull;
 
+    @ColumnInfo(name = "is_tag_registered")
+    private boolean isTagRegistered;
+
     public Box() { }
 
     public void setId(@NonNull String id) {
@@ -95,5 +98,13 @@ public class Box {
 
     public void setCategories(List<String> categories) {
         this.categories = categories;
+    }
+
+    public boolean isTagRegistered() {
+        return isTagRegistered;
+    }
+
+    public void setTagRegistered(boolean tagRegistered) {
+        isTagRegistered = tagRegistered;
     }
 }
