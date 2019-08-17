@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import com.ashwinrao.locrate.R;
 import com.ashwinrao.locrate.data.model.Box;
 import com.ashwinrao.locrate.data.model.Item;
 import com.ashwinrao.locrate.databinding.ActivityEditBinding;
+import com.ashwinrao.locrate.util.HashtagDetection;
 import com.ashwinrao.locrate.util.callback.ItemEditedCallback;
 import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.locrate.view.ConfirmationDialog;
@@ -39,6 +41,8 @@ import com.ashwinrao.locrate.view.adapter.ItemPackAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.CategoryViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -62,7 +66,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     private Box original;
     private Box edited;
     private int originalItemsSize;
-    private boolean itemWasEdited;
     private final boolean[] initialBoxBound = {false};
     private ActivityEditBinding binding;
     private RecyclerView recyclerView;
@@ -117,9 +120,20 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     private void populate(@NonNull final Box box) {
         edited = box;
-        original = box;
+        try {
+            original = (Box) box.clone();
+        } catch (CloneNotSupportedException e) {
+            Log.e(TAG, "populate: " + e.getMessage());
+        }
         binding.setBox(edited);
+        populateCategories(edited.getCategories());
         initialBoxBound[0] = true;
+    }
+
+    private void populateCategories(@NonNull List<String> categories) {
+        for(String category : categories) {
+            addNewCategoryChip(binding.categoryChipGroup, category);
+        }
     }
 
     private void populateItems(@NonNull final List<Item> items) {
@@ -129,23 +143,10 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         updateListedItems();
     }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-////        if (edited != null) populate(edited);
-////        if (items.size() > 0) populateItems(items);
-//    }
-
     private void setupInputFields(EditText nameInputField, EditText descriptionInputField) {
 
-//        nameInputField.setText(edited.getName());
-//        descriptionInputField.setText(edited.getDescription());
-//        for(String category : edited.getCategories()) {
-//            addPreExistingCategoryChips(binding.categoryChipGroup, category);
-//        }
-
-//        final Boolean[] matchFound = {false};
-//        final String[] matchStrings = {null, null};
+        final Boolean[] matchFound = {false};
+        final String[] matchStrings = {null, null};
 
         // Name Input Field
         Objects.requireNonNull(nameInputField).addTextChangedListener(new TextWatcher() {
@@ -176,55 +177,41 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 binding.charCount.setText(String.valueOf(s.length()));
-//                HashtagDetection.detect(s, edited.getCategories(), matchFound, matchStrings);
+                HashtagDetection.detect(s, edited.getCategories(), matchFound, matchStrings);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-//                tagToChip(s, matchFound, matchStrings, binding.categoryChipGroup);
                 description = s.toString().length() > 0 ? s.toString() : "";
                 if (initialBoxBound[0]) {
                     edited.setDescription(description);
+                    tagToChip(s, matchFound, matchStrings, binding.categoryChipGroup);
                 }
             }
         });
     }
 
-    //
-//    private void tagToChip(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {
-//        if (matchFound[0]) {
-//            s.delete(s.length() - matchStrings[0].length(), s.length());
-//            addNewCategoryChip(group);
-//        }
-//    }
-//
-//    private void addPreExistingCategoryChips(@NonNull final ChipGroup group, @NonNull final String text) {
-//        final Chip chip = new Chip(group.getContext());
-//        chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-//        chip.setChipBackgroundColorResource(R.color.colorAccent);
-//        chip.setText(text);
-//        chip.setCloseIconVisible(true);
-//        chip.setCloseIconTintResource(android.R.color.white);
-//        chip.setOnCloseIconClickListener(v -> {
-//            group.removeView(v);
-//            edited.getCategories().remove(text);
-//        });
-//        group.addView(chip);
-//    }
-//
-//    private void addNewCategoryChip(@NonNull ChipGroup group) {
-//        final Chip chip = new Chip(group.getContext());
-//        chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-//        chip.setChipBackgroundColorResource(R.color.colorAccent);
-//        chip.setText(edited.getCategories().get(edited.getCategories().size() - 1));
-//        chip.setCloseIconVisible(true);
-//        chip.setCloseIconTintResource(android.R.color.white);
-//        chip.setOnCloseIconClickListener(v -> {
-//            group.removeView(v);
-//            edited.getCategories().remove(edited.getCategories().size() - 1);
-//        });
-//        group.addView(chip);
-//    }
+
+    private void tagToChip(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {
+        if (matchFound[0]) {
+            s.delete(s.length() - matchStrings[0].length(), s.length());
+            addNewCategoryChip(group, null);
+        }
+    }
+
+    private void addNewCategoryChip(@NonNull ChipGroup group, @Nullable final String text) {
+        final Chip chip = new Chip(group.getContext());
+        chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        chip.setChipBackgroundColorResource(R.color.colorAccent);
+        chip.setText(text == null ? edited.getCategories().get(edited.getCategories().size() - 1) : text);
+        chip.setCloseIconVisible(true);
+        chip.setCloseIconTintResource(android.R.color.white);
+        chip.setOnCloseIconClickListener(v -> {
+            group.removeView(v);
+            edited.getCategories().remove(text == null ? edited.getCategories().size() - 1 : text);
+        });
+        group.addView(chip);
+    }
 
     private void setupButtons(@NonNull CardView nfcButton, @NonNull CardView fillButton) {
         nfcButton.setOnClickListener(view -> {
@@ -261,26 +248,13 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         toolbar.setNavigationOnClickListener(v -> closeWithConfirmation());
     }
 
-    @Override
-    public void itemEdited(@NonNull Item item, @NonNull Integer position) {
-        itemWasEdited = true;
-        this.items.remove((int) position);
-        this.items.add(position, item);
-    }
-
-//    @Override
-//    protected void onPause() {
-//        super.onPause();
-////        itemViewModel.updateItems(items);
-////        boxViewModel.updateBox(edited);
-//    }
-
     private void saveAndClose() {
-        boxViewModel.updateBox(edited);
-        itemViewModel.insertItems(this.items);
-        this.finish();
+        if (items.size() > 0) {
+            boxViewModel.updateBox(edited);
+            itemViewModel.insertItems(this.items);
+            this.finish();
+        }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -314,7 +288,9 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         if (items.size() == 0) {
             binding.setNumItems(null);
         } else {
-            binding.setNumItems(items.size() > 1 ? String.format(Locale.US, "%d items", items.size()) : String.format(Locale.US, "%d item", items.size()));
+            binding.setNumItems(items.size() > 1 ?
+                    String.format(Locale.US, "%d items", items.size()) :
+                    String.format(Locale.US, "%d item", items.size()));
         }
         togglePlaceholderVisibility(items);
     }
@@ -411,25 +387,20 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    private void showUnsavedChangesDialog() {
+    private void showPossibleUnsavedChangesDialog() {
         ConfirmationDialog.make(this, new String[]{
-                getString(R.string.dialog_discard_box_title),
-                getString(R.string.dialog_discard_box_message),
-                getString(R.string.discard),
+                getString(R.string.dialog_discard_changes_title),
+                getString(R.string.dialog_discard_changes_message),
+                getString(R.string.leave),
                 getString(R.string.cancel)}, true, new int[]{ContextCompat.getColor(this, R.color.colorAccent),
-                ContextCompat.getColor(this, android.R.color.holo_red_dark)}, dialogInterface -> {
-            if(addItemPaths.size() > 0) {
-                for (String path : addItemPaths) {
-                    new File(path).delete();
-                }
-            }
+                ContextCompat.getColor(this, R.color.delete_red)}, dialogInterface -> {
+            if (addItemPaths.size() > 0) for (String path : addItemPaths) new File(path).delete();
             this.finish();
             return null;
         }, dialogInterface -> {
@@ -466,21 +437,21 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                 });
     }
 
-    private boolean unsavedChangesMade() {
-        return !original.getName().equals(edited.getName())
-                || !original.getCategories().equals(edited.getCategories())
-                || !original.getDescription().equals(edited.getDescription())
-                || items.size() != originalItemsSize
-                || itemWasEdited;
-    }
-
+//    private boolean areChangesUnsaved() {
+//        return !original.getName().equals(edited.getName())
+//                || !original.getCategories().equals(edited.getCategories())
+//                || !original.getDescription().equals(edited.getDescription())
+//                || items.size() != originalItemsSize
+//                || wereCategoriesChanged();
+//    }
 
     private void closeWithConfirmation() {
-        if (unsavedChangesMade()) {
-            showUnsavedChangesDialog();
-        } else {
-            this.finish();
-        }
+//        if (areChangesUnsaved()) {
+//            showUnsavedChangesDialog();
+//        } else {
+//            this.finish();
+//        }
+        showPossibleUnsavedChangesDialog();
     }
 
     @Override
@@ -489,20 +460,17 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     }
 
     @Override
+    public void itemEdited(@NonNull Item item, @NonNull Integer position) {
+        this.items.remove((int) position);
+        this.items.add(position, item);
+    }
+
+    @Override
     public void unpackItem(@NonNull Item item, @NonNull Integer position) {
         removeItem(item);
-
         Snackbar.make(binding.snackbarContainer, "Item removed", Snackbar.LENGTH_LONG)
                 .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
                 .setAction(getString(R.string.undo), v -> restoreSingleItem(item))
-                .addCallback(new Snackbar.Callback() {
-                    @Override
-                    public void onDismissed(Snackbar transientBottomBar, int event) {
-                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
-                            itemViewModel.deleteItem(item);
-                        }
-                    }
-                })
                 .show();
     }
 }

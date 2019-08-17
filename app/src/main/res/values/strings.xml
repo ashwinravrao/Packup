@@ -86,6 +86,10 @@
     <string name="go_to_box">Go to box</string>
     <string name="view_box">View box</string>
     <string name="item_deleted_snackbar">Item deleted</string>
+    <string name="dialog_discard_changes_title">Discard changes</string>
+    <string name="dialog_discard_changes_message">You may have made changes to this box. Are you sure you want to leave without saving?</string>
+    <string name="leave">Leave</string>
+
 
     <string-array name="currency_abbreviations">
         <item>USD</item>
