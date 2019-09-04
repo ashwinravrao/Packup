@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/toolbar_unpack"
-        android:title="@string/unpack"
+        android:id="@+id/toolbar_view_box"
+        android:title="@string/view_box"
         app:showAsAction="never"/>
 
 </menu>

@@ -80,7 +80,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         this.savedInstanceState = savedInstanceState;
-        boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        boxViewModel = new ViewModelProvider(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
         ((MainActivity) Objects.requireNonNull(getActivity())).registerBackNavigationListener(this);
     }
 

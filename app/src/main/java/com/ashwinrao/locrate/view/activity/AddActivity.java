@@ -80,9 +80,9 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
         ((Locrate) getApplicationContext()).getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add);
 
-        boxViewModel = ViewModelProviders.of(this, factory).get(BoxViewModel.class);
-        itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
-        categoryViewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
+        boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
+        itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
+        categoryViewModel = new ViewModelProvider(this, factory).get(CategoryViewModel.class);
 
         // Setup CategoryViewModel to be able to retrieve item categories later
         new Handler().post(() ->

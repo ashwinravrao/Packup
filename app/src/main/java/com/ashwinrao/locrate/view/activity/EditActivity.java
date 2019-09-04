@@ -63,9 +63,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     private ItemViewModel itemViewModel;
     private CategoryViewModel categoryViewModel;
 
-    private Box original;
     private Box edited;
-    private int originalItemsSize;
     private final boolean[] initialBoxBound = {false};
     private ActivityEditBinding binding;
     private RecyclerView recyclerView;
@@ -86,9 +84,9 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         ((Locrate) getApplicationContext()).getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit);
 
-        boxViewModel = ViewModelProviders.of(this, factory).get(BoxViewModel.class);
-        itemViewModel = ViewModelProviders.of(this, factory).get(ItemViewModel.class);
-        categoryViewModel = ViewModelProviders.of(this, factory).get(CategoryViewModel.class);
+        boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
+        itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
+        categoryViewModel = new ViewModelProvider(this, factory).get(CategoryViewModel.class);
 
         // Setup CategoryViewModel to be able to retrieve item categories later
         // Used for suggesting previously made categories (app-wide) in AutoCompleteTextView later on
@@ -120,11 +118,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     private void populate(@NonNull final Box box) {
         edited = box;
-        try {
-            original = (Box) box.clone();
-        } catch (CloneNotSupportedException e) {
-            Log.e(TAG, "populate: " + e.getMessage());
-        }
         binding.setBox(edited);
         populateCategories(edited.getCategories());
         initialBoxBound[0] = true;
@@ -138,7 +131,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     private void populateItems(@NonNull final List<Item> items) {
         this.items = items;
-        originalItemsSize = items.size();
         adapter.setFirstBind(false);
         updateListedItems();
     }
@@ -437,20 +429,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                 });
     }
 
-//    private boolean areChangesUnsaved() {
-//        return !original.getName().equals(edited.getName())
-//                || !original.getCategories().equals(edited.getCategories())
-//                || !original.getDescription().equals(edited.getDescription())
-//                || items.size() != originalItemsSize
-//                || wereCategoriesChanged();
-//    }
-
     private void closeWithConfirmation() {
-//        if (areChangesUnsaved()) {
-//            showUnsavedChangesDialog();
-//        } else {
-//            this.finish();
-//        }
         showPossibleUnsavedChangesDialog();
     }
 

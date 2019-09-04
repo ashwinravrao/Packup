@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,9 +56,9 @@ public class ItemsPage extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final ItemViewModel itemViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class);
+        final ItemViewModel itemViewModel = new ViewModelProvider(Objects.requireNonNull(getActivity()), factory).get(ItemViewModel.class);
         itemsLD = itemViewModel.getAllItemsFromDatabase();
-        ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class).getBoxes().observe(getActivity(), boxes -> numBoxes = boxes != null ? boxes.size() : 0);
+        new ViewModelProvider(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class).getBoxes().observe(getActivity(), boxes -> numBoxes = boxes != null ? boxes.size() : 0);
     }
 
     @Override
@@ -80,7 +79,7 @@ public class ItemsPage extends Fragment {
         binding.setFilterActivated(false);
 
         // layout widgets
-        initializeButtons(binding.unpackButton, binding.filterButton, binding.packButton);
+//        initializeButtons(binding.unpackButton, binding.filterButton, binding.packButton);
         initializeRecyclerView(binding.recyclerView);
         return binding.getRoot();
     }
@@ -93,54 +92,54 @@ public class ItemsPage extends Fragment {
         return adapter;
     }
 
-    private void initializeButtons(@NonNull FloatingActionButton unpackButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
-        unpackButton.setOnClickListener(view -> {
-            if(numBoxes == 0) {
-                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no boxes to unpack", 4000)
-                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
-                        .setAction(R.string.create, v1 -> {
-                            final Intent intent = new Intent(getActivity(), AddActivity.class);
-                            startActivity(intent);
-                        })
-                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                        .show();
-            } else {
-                if (adapter.getSelected() == null) {
-                    Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "Select one or more items to unpack", 4000)
-                            .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
-                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                            .show();
-                }
-            }
-        });
-
-        filterButton.setOnClickListener(view -> {
-            if(numBoxes == 0) {
-                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no items to filter", 4000)
-                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
-                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                        .show();
-            } else {
-                binding.setFilterActivated(!binding.getFilterActivated());
-                if (binding.getFilterActivated()) {
-                    // TODO
-                }
-            }
-        });
-
-        packButton.setOnClickListener(v -> {
-            if(numBoxes == 0) {
-                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no boxes to pack", 4000)
-                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
-                        .setAction(R.string.create, v1 -> {
-                            final Intent intent = new Intent(getActivity(), AddActivity.class);
-                            startActivity(intent);
-                        })
-                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                        .show();
-            }
-        });
-    }
+//    private void initializeButtons(@NonNull FloatingActionButton unpackButton, @NonNull FloatingActionButton filterButton, @NonNull FloatingActionButton packButton) {
+//        unpackButton.setOnClickListener(view -> {
+//            if(numBoxes == 0) {
+//                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no boxes to unpack", 4000)
+//                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+//                        .setAction(R.string.create, v1 -> {
+//                            final Intent intent = new Intent(getActivity(), AddActivity.class);
+//                            startActivity(intent);
+//                        })
+//                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+//                        .show();
+//            } else {
+//                if (adapter.getSelected() == null) {
+//                    Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "Select one or more items to unpack", 4000)
+//                            .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+//                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+//                            .show();
+//                }
+//            }
+//        });
+//
+//        filterButton.setOnClickListener(view -> {
+//            if(numBoxes == 0) {
+//                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no items to filter", 4000)
+//                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+//                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+//                        .show();
+//            } else {
+//                binding.setFilterActivated(!binding.getFilterActivated());
+//                if (binding.getFilterActivated()) {
+//                    // TODO
+//                }
+//            }
+//        });
+//
+//        packButton.setOnClickListener(v -> {
+//            if(numBoxes == 0) {
+//                Snackbar.make(Objects.requireNonNull(getActivity()).findViewById(android.R.id.content), "There are no boxes to pack", 4000)
+//                        .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()), R.color.colorAccent))
+//                        .setAction(R.string.create, v1 -> {
+//                            final Intent intent = new Intent(getActivity(), AddActivity.class);
+//                            startActivity(intent);
+//                        })
+//                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+//                        .show();
+//            }
+//        });
+//    }
 
     private void togglePlaceholderVisibility(@Nullable List<Item> items) {
         final View[] placeholders = new View[]{binding.placeholderImage, binding.placeholderText};

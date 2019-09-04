@@ -3,6 +3,7 @@ package com.ashwinrao.locrate.view.adapter;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -23,6 +25,8 @@ import com.ashwinrao.locrate.util.callback.SingleItemUnpackCallback;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -34,6 +38,8 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
     private MutableLiveData<Item> editedItem = new MutableLiveData<>();
     private SingleItemUnpackCallback singleItemUnpackCallback;
     private ItemEditedCallback itemEditedCallback;
+
+    private final String TAG = this.getClass().getSimpleName();
 
     public ItemPackAdapter(@NonNull Context context) {
         this.context = context;
@@ -137,22 +143,6 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
                     }
                 }
             });
-
-            // Currency Spinner
-            final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(context, R.array.currency_abbreviations, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            this.binding.currencySpinner.setAdapter(adapter);
-            this.binding.currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    items.get(getAdapterPosition()).setCurrencyCode(parent.getItemAtPosition(position).toString());
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            });
-            this.binding.currencySpinner.setSelection(0);
         }
 
         @Override

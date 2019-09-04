@@ -64,7 +64,7 @@ public class CategoryFilterDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        categoryViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(CategoryViewModel.class);
+        categoryViewModel = new ViewModelProvider(Objects.requireNonNull(getActivity()), factory).get(CategoryViewModel.class);
     }
 
     @Nullable

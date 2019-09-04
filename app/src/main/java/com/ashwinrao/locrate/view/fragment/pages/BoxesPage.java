@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,8 +70,8 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        boxViewModel = ViewModelProviders.of(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
-        categoryViewModel = ViewModelProviders.of(getActivity(), factory).get(CategoryViewModel.class);
+        boxViewModel = new ViewModelProvider(Objects.requireNonNull(getActivity()), factory).get(BoxViewModel.class);
+        categoryViewModel = new ViewModelProvider(getActivity(), factory).get(CategoryViewModel.class);
         if (savedInstanceState != null) {
             recyclerViewState = savedInstanceState.getBundle(RECYCLER_VIEW_STATE_KEY);
         }

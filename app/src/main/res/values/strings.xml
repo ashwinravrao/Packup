@@ -89,6 +89,8 @@
     <string name="dialog_discard_changes_title">Discard changes</string>
     <string name="dialog_discard_changes_message">You may have made changes to this box. Are you sure you want to leave without saving?</string>
     <string name="leave">Leave</string>
+    <string name="usd_symbol">$</string>
+    <string name="estimated_value_format_string">$%.2f</string>
 
 
     <string-array name="currency_abbreviations">

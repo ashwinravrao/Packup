@@ -1,8 +1,7 @@
 package com.ashwinrao.locrate.view.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,6 +18,7 @@ import com.ashwinrao.locrate.view.activity.SettingsActivity;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,14 +30,21 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Na
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final FragmentBottomSheetBinding binding = FragmentBottomSheetBinding.inflate(inflater);
         binding.navigationView.setNavigationItemSelectedListener(this);
-        binding.setAppUserName(getUserDetails()[0]);
-        binding.setAppUserEmail(getUserDetails()[1]);
+        binding.greeting.setText(getTimeDependentGreeting());
         return binding.getRoot();
     }
 
-    private String[] getUserDetails() {
-        SharedPreferences pref = Objects.requireNonNull(getActivity()).getApplicationContext().getSharedPreferences("userdata", Context.MODE_PRIVATE);
-        return new String[]{pref.getString("name", "Guest"), pref.getString("email", "Tap to sign in")};
+    private String getTimeDependentGreeting() {
+        final SimpleDateFormat formatter = new SimpleDateFormat("HH");
+        final Date date = new Date();
+        final int hour = Integer.valueOf(formatter.format(date));
+        if(hour >= 1 && hour < 12) {
+            return "Good morning!";
+        } else if(hour >= 12 && hour <= 17) {
+            return "Good afternoon!";
+        } else {
+            return "Good evening!";
+        }
     }
 
     @Override

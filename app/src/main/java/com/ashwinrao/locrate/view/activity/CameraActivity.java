@@ -31,10 +31,6 @@ public class CameraActivity extends AppCompatActivity {
         this.listener = listener;
     }
 
-    public void unregisterBackNavigationListener() {
-        this.listener = null;
-    }
-
     @Override
     public void onBackPressed() {
         if(getSupportFragmentManager().getFragments().get(0).getClass() == CameraFragment.class) {

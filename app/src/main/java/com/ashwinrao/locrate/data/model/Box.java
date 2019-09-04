@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey;
 
 
 @Entity(tableName = "boxes", indices = @Index("id"))
-public class Box implements Cloneable {
+public class Box {
 
     @NonNull
     @PrimaryKey
@@ -106,10 +106,5 @@ public class Box implements Cloneable {
 
     public void setTagRegistered(boolean tagRegistered) {
         isTagRegistered = tagRegistered;
-    }
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }

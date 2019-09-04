@@ -43,7 +43,6 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     // Callbacks
     private UpdateActionModeCallback updateActionModeCallback;
-    private SingleItemUnpackCallback singleItemUnpackCallback;
 
     private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new DiffUtil.ItemCallback<Item>() {
 
@@ -59,7 +58,6 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
                     && oldItem.getName().equals(newItem.getName())
                     && oldItem.getPackedDate().equals(newItem.getPackedDate())
                     && oldItem.getFilePath().equals(newItem.getFilePath())
-                    && oldItem.getCurrencyCode().equals(newItem.getCurrencyCode())
                     && oldItem.getBoxNumber() == newItem.getBoxNumber();
         }
     };
@@ -80,10 +78,6 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     public void setActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
-    }
-
-    public void setSingleItemUnpackCallback(@NonNull SingleItemUnpackCallback callback) {
-        this.singleItemUnpackCallback = callback;
     }
 
     public List<Object> getSelected() {
@@ -161,9 +155,8 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
             this.binding = binding;
             this.binding.getRoot().setOnClickListener(this);
             this.binding.getRoot().setOnLongClickListener(this);
-            this.binding.toolbar.inflateMenu(isShownWithBoxContext ?
-                    R.menu.toolbar_item_with_context :
-                    R.menu.toolbar_item_without_context);
+            this.binding.toolbar.inflateMenu(R.menu.toolbar_view_box);
+            if (isShownWithBoxContext) this.binding.toolbar.setVisibility(View.GONE);
             this.binding.toolbar.setOnMenuItemClickListener(this);
             this.binding.toolbar.setOverflowIcon(ContextCompat.getDrawable(context, R.drawable.ic_overflow));
         }
@@ -205,33 +198,14 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-            if (isShownWithBoxContext) {
-                if (item.getItemId() == R.id.toolbar_unpack) {
-                    if (singleItemUnpackCallback != null) {
-                        singleItemUnpackCallback.unpackItem(getItem(getAdapterPosition()),
-                                getAdapterPosition());
-                    }
-                    return true;
-                }
-                return false;
-            } else {
-                switch (item.getItemId()) {
-                    case R.id.toolbar_view_box:
-                        final Intent intent = new Intent(context, DetailActivity.class);
-                        intent.putExtra("ID", getItem(getAdapterPosition()).getBoxUUID());
-                        context.startActivity(intent);
-                        ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
-                        return true;
-                    case R.id.toolbar_unpack:
-                        if (singleItemUnpackCallback != null) {
-                            singleItemUnpackCallback.unpackItem(getItem(getAdapterPosition()),
-                                    getAdapterPosition());
-                        }
-                        return true;
-                    default:
-                        return false;
-                }
+            if (item.getItemId() == R.id.toolbar_view_box) {
+                final Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("ID", getItem(getAdapterPosition()).getBoxUUID());
+                context.startActivity(intent);
+                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
+                return true;
             }
+            return false;
         }
     }
 
