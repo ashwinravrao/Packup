@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -54,17 +55,39 @@
                     app:layout_constraintTop_toTopOf="@id/delete_button"
                     android:layout_marginStart="24dp"
                     android:text="@{box.name}"
+                    tools:text="Box Name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                <TextView
+                    android:id="@+id/box_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/box_name"
+                    app:layout_constraintEnd_toStartOf="@id/delete_button"
+                    android:layout_marginEnd="32dp"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="@{box.description}"
+                    android:textColor="@color/top_row_view_holder"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                    tools:text="Box description"/>
 
                 <TextView
                     android:id="@+id/number_of_items"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/box_name"
-                    app:layout_constraintBottom_toBottomOf="@id/delete_button"
+                    app:layout_constraintStart_toStartOf="@id/box_description"
+                    app:layout_constraintTop_toBottomOf="@id/box_description"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="2dp"
                     android:text="@{String.format(@string/number_of_items_format_string, numItems)}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/top_row_view_holder"/>
+                    android:textColor="@color/top_row_view_holder"
+                    tools:text="0 items"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/delete_button"

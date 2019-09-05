@@ -65,7 +65,6 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/text_color_secondary_view_holder"
                 android:ellipsize="end"
-                android:maxEms="25"
                 android:maxLines="1"
                 tools:text="Bodum Chambord and accessories and stuff" />
 
