@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.ashwinrao.sanbox.data.model.Item" />
+            type="com.ashwinrao.locrate.data.model.Item" />
         <variable
             name="selected"
             type="Boolean" />
