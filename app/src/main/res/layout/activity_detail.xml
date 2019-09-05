@@ -3,23 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="box"
-            type="com.ashwinrao.locrate.data.model.Box" />
-
-        <variable
-            name="numItems"
-            type="Integer" />
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryLight"
         android:elevation="50dp"
         android:fitsSystemWindows="true">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/snackbar_container"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom">
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -34,6 +31,56 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorPrimaryLight">
 
+                <TextView
+                    android:id="@+id/box_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@{box.name}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:transitionName="@string/box_name_transition"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/delete_button"
+                    tools:text="Box Name" />
+
+                <TextView
+                    android:id="@+id/box_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="32dp"
+                    android:text="@{box.description}"
+                    android:transitionName="@string/box_description_transition"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"
+                    app:layout_constraintEnd_toStartOf="@id/delete_button"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/box_name"
+                    tools:text="Box description" />
+
+                <TextView
+                    android:id="@+id/number_of_items"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"
+                    app:layout_constraintStart_toStartOf="@id/box_description"
+                    app:layout_constraintTop_toBottomOf="@id/box_description"
+                    tools:text="0 items" />
+
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="32dp"
+                    android:background="@color/divider"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/number_of_items" />
+
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
@@ -43,94 +90,35 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:title="@{null}"
                     app:navigationIcon="@drawable/ic_arrow_back"
-                    app:title="@{String.format(@string/box_number_placeholder, box.number)}"
-                    app:popupTheme="@style/AppTheme.PopUpOverlay"/>
+                    app:popupTheme="@style/AppTheme.PopUpOverlay">
 
-                <TextView
-                    android:id="@+id/box_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/delete_button"
-                    android:layout_marginStart="24dp"
-                    android:text="@{box.name}"
-                    tools:text="Box Name"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                    <LinearLayout
+                        android:id="@+id/toolbar_title_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/box_description"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/box_name"
-                    app:layout_constraintEnd_toStartOf="@id/delete_button"
-                    android:layout_marginEnd="32dp"
-                    app:layout_constraintHorizontal_bias="0"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="4dp"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="@{box.description}"
-                    android:textColor="@color/top_row_view_holder"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                    tools:text="Box description"/>
+                        <TextView
+                            android:id="@+id/toolbar_title_box_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/box"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
 
-                <TextView
-                    android:id="@+id/number_of_items"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="@id/box_description"
-                    app:layout_constraintTop_toBottomOf="@id/box_description"
-                    android:layout_marginTop="12dp"
-                    android:layout_marginStart="2dp"
-                    android:text="@{String.format(@string/number_of_items_format_string, numItems)}"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/top_row_view_holder"
-                    tools:text="0 items"/>
+                        <TextView
+                            android:id="@+id/toolbar_title_box_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@{String.valueOf(box.number)}"
+                            android:transitionName="@string/box_number_transition"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                            tools:text="null" />
+                    </LinearLayout>
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/delete_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar"
-                    app:layout_constraintEnd_toStartOf="@id/edit_button"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="32dp"
-                    app:elevation="0dp"
-                    app:fabCustomSize="45dp"
-                    app:borderWidth="0dp"
-                    app:rippleColor="@android:color/white"
-                    app:tint="@android:color/white"
-                    android:backgroundTint="@color/delete_red"
-                    android:src="@drawable/ic_delete" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/edit_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginTop="32dp"
-                    app:elevation="0dp"
-                    app:fabCustomSize="45dp"
-                    app:borderWidth="0dp"
-                    android:layout_gravity="end"
-                    app:rippleColor="@android:color/white"
-                    app:tint="@android:color/white"
-                    android:backgroundTint="@color/colorAccent"
-                    android:src="@drawable/ic_edit" />
-
-                <View
-                    android:id="@+id/divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/divider"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/number_of_items"
-                    android:layout_marginTop="32dp"/>
+                </androidx.appcompat.widget.Toolbar>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view"
@@ -143,18 +131,50 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider" />
 
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/delete_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="20dp"
+                    android:backgroundTint="@color/delete_red"
+                    android:src="@drawable/ic_delete"
+                    app:borderWidth="0dp"
+                    app:elevation="0dp"
+                    app:fabCustomSize="45dp"
+                    app:layout_constraintEnd_toStartOf="@id/edit_button"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"
+                    app:rippleColor="@android:color/white"
+                    app:tint="@android:color/white" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/edit_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:src="@drawable/ic_edit"
+                    app:borderWidth="0dp"
+                    app:elevation="0dp"
+                    app:fabCustomSize="45dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar"
+                    app:rippleColor="@android:color/white"
+                    app:tint="@android:color/white" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/snackbar_container"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_gravity="bottom">
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <data>
+
+        <variable
+            name="box"
+            type="com.ashwinrao.locrate.data.model.Box" />
+    </data>
 
 </layout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -139,8 +140,14 @@ public class DetailActivity extends AppCompatActivity {
         itemsLD.observe(this, items -> {
             adapter.submitList(items);
             adapter.setItemsForFiltering(items);
-            binding.setNumItems(items.size());
+            setNumberOfItems(binding.numberOfItems, items.size());
         });
+    }
+
+    private void setNumberOfItems(TextView textView, final int numberOfItems) {
+        textView.setText(numberOfItems == 1
+                ? getString(R.string.one_item)
+                : String.format(getString(R.string.number_of_items_format_string), numberOfItems));
     }
 
     private void showDeleteConfirmationDialog() {
@@ -165,13 +172,15 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void finishWithTransition() {
-        this.finish();
-        overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
+//        this.finish();
+        supportFinishAfterTransition();
+//        overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
+        supportFinishAfterTransition();
+//        overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
     }
 }

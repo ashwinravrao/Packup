@@ -21,10 +21,14 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
 
 
 public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> implements Filterable {
@@ -95,7 +99,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
     public void onBindViewHolder(@NonNull BoxViewHolder holder, int position) {
         final Box box = getItem(position);
         if (box.getDescription().equals("")) {
-            holder.binding.description.setText(R.string.no_description);
+            holder.binding.boxDescription.setText(R.string.no_description);
         }
         holder.binding.setBox(box);
         holder.binding.setSelected(false);
@@ -144,8 +148,8 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
             if (selected == null) {
                 final Intent intent = new Intent(context, DetailActivity.class);
                 intent.putExtra("ID", getItem(getAdapterPosition()).getId());
-                context.startActivity(intent);
-                ((MainActivity) context).overridePendingTransition(R.anim.slide_in_from_right, R.anim.stay_still);
+                final ActivityOptionsCompat optionsCompat = makeActivityOptions();
+                context.startActivity(intent, optionsCompat.toBundle());
             } else {
                 if (updateActionModeCallback != null) {
                     final Box box = getItem(getAdapterPosition());
@@ -160,8 +164,15 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
             }
         }
 
+        @SuppressWarnings("unchecked")
+        private ActivityOptionsCompat makeActivityOptions() {
+            final Pair<View, String> boxNamePair = Pair.create(binding.boxName, context.getString(R.string.box_name_transition));
+            final Pair<View, String> boxDescriptionPair = Pair.create(binding.boxDescription, context.getString(R.string.box_description_transition));
+            return ActivityOptionsCompat.makeSceneTransitionAnimation((MainActivity) context, boxNamePair, boxDescriptionPair);
+        }
+
         private String getObjectTypeString() {
-            return (selected.size() < 1 || selected.size() > 1) ? "boxes" : "box";
+            return (selected.size() != 1) ? "boxes" : "box";
         }
 
         @Override

@@ -91,6 +91,11 @@
     <string name="leave">Leave</string>
     <string name="usd_symbol">$</string>
     <string name="estimated_value_format_string">$%.2f</string>
+    <string name="one_item">1 item</string>
+    <string name="box_name_transition">box name</string>
+    <string name="box_number_transition">box number transition</string>
+    <string name="box">Box</string>
+    <string name="box_description_transition">box description transition</string>
 
 
     <string-array name="currency_abbreviations">
