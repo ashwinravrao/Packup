@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Locrate</string>
+    <string name="app_name">Sanbox</string>
     <string name="title_search">Search</string>
     <string name="hint_name">Name</string>
     <string name="hint_description">Description / #category</string>

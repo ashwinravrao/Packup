@@ -48,7 +48,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.ashwinrao.locrate.view.CustomViewPager
+        <com.ashwinrao.sanbox.view.CustomViewPager
             android:id="@+id/list_view_pager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
