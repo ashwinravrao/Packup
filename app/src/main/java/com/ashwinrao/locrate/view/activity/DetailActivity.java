@@ -2,8 +2,10 @@ package com.ashwinrao.locrate.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
@@ -28,6 +30,7 @@ import com.ashwinrao.locrate.view.ConfirmationDialog;
 import com.ashwinrao.locrate.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.locrate.viewmodel.BoxViewModel;
 import com.ashwinrao.locrate.viewmodel.ItemViewModel;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -52,6 +55,15 @@ public class DetailActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((Locrate) getApplicationContext()).getAppComponent().inject(this);
+
+        // Exclude certain view elements from participating in activity fade transition
+        final Fade fade = new Fade();
+        final View decor = getWindow().getDecorView();
+        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
+        fade.excludeTarget(android.R.id.navigationBarBackground, true);
+        getWindow().setEnterTransition(fade);
+        getWindow().setExitTransition(fade);
+
         final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
 
         boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
@@ -64,10 +76,10 @@ public class DetailActivity extends AppCompatActivity {
                 boxLD = boxViewModel.getBoxByUUID(boxUUID);
                 itemsLD = itemViewModel.getItemsFromBox(boxUUID);
             } else {
-                finishWithTransition();
+                supportFinishAfterTransition();
             }
         } else {
-            finishWithTransition();
+            supportFinishAfterTransition();
         }
 
         setupToolbar(binding.toolbar);
@@ -95,7 +107,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setupToolbar(Toolbar toolbar) {
         this.setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(view -> finishWithTransition());
+        toolbar.setNavigationOnClickListener(view -> supportFinishAfterTransition());
     }
 
     @Override
@@ -163,7 +175,7 @@ public class DetailActivity extends AppCompatActivity {
                         ContextCompat.getColor(this, android.R.color.holo_red_dark)},
                 dialogInterface -> {
                     boxViewModel.delete(box);
-                    finishWithTransition();
+                    supportFinishAfterTransition();
                     return null;
                 }, dialogInterface -> {
                     dialogInterface.cancel();
@@ -171,16 +183,9 @@ public class DetailActivity extends AppCompatActivity {
                 });
     }
 
-    private void finishWithTransition() {
-//        this.finish();
-        supportFinishAfterTransition();
-//        overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         supportFinishAfterTransition();
-//        overridePendingTransition(R.anim.stay_still, R.anim.slide_out_to_right);
     }
 }

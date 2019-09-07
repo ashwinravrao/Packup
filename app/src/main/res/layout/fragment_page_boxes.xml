@@ -84,6 +84,7 @@
                             app:borderWidth="0dp"
                             app:tint="@android:color/white"
                             app:rippleColor="@android:color/white"
+                            android:transitionName="@string/categories_or_delete_button_transition_name"
                             android:backgroundTint="@{safeUnbox(filterActivated) ? @color/colorAccentGold : @color/unselected_fab}"
                             android:src="@drawable/ic_filter" />
 
@@ -113,8 +114,9 @@
                             android:layout_gravity="end"
                             app:rippleColor="@android:color/white"
                             app:tint="@android:color/white"
+                            android:transitionName="@string/add_or_edit_button_transition_name"
                             android:backgroundTint="@color/colorAccent"
-                            android:src="@drawable/ic_add_default" />
+                            android:src="@drawable/ic_edit" />
 
                         <TextView
                             android:id="@+id/add_button_caption"

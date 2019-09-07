@@ -96,6 +96,10 @@
     <string name="box_number_transition">box number transition</string>
     <string name="box">Box</string>
     <string name="box_description_transition">box description transition</string>
+    <string name="add_or_edit_button_transition_name">add or edit button transition name</string>
+    <string name="categories_or_delete_button_transition_name">categories or delete button transition name</string>
+    <string name="description_num_items_concatenation">%s %s</string>
+    <string name="box_to_item_transition_name">box to item transition name</string>
 
 
     <string-array name="currency_abbreviations">

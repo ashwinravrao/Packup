@@ -14,7 +14,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp">
+        android:layout_height="350dp">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/image_card_view"
@@ -37,7 +37,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_half"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:elevation="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -51,12 +51,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:padding="8dp"
                 android:text="@{item.name}"
                 android:textColor="@color/iconAndTextColor"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintBottom_toTopOf="@id/estimated_value"
                 app:layout_constraintEnd_toStartOf="@id/toolbar"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,12 +78,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:padding="8dp"
                 android:text="@{String.format(@string/estimated_value_format_string, item.estimatedValue)}"
                 android:textColor="@color/item_value_green"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintBottom_toTopOf="@id/packed_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="sans-serif-medium"
                 android:padding="8dp"
                 android:text="@{item.packedDateAsString}"

@@ -28,14 +28,15 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static androidx.core.app.ActivityOptionsCompat.makeSceneTransitionAnimation;
-
 
 public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> implements Filterable {
 
     private Filter filter;
     private Context context;
     private List<Box> boxesForFiltering = new ArrayList<>();
+
+    // Shared Element Activity Transitions
+    private Pair[] viewsToTransition;
 
     // Action Mode
     private UpdateActionModeCallback updateActionModeCallback;
@@ -71,6 +72,10 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
 
     public void setUpdateActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
+    }
+
+    public void setViewsToTransition(@NonNull Pair[] viewsToTransition) {
+        this.viewsToTransition = viewsToTransition;
     }
 
     public List<Object> getSelected() {
@@ -168,7 +173,13 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
         private ActivityOptionsCompat makeActivityOptions() {
             final Pair<View, String> boxNamePair = Pair.create(binding.boxName, context.getString(R.string.box_name_transition));
             final Pair<View, String> boxDescriptionPair = Pair.create(binding.boxDescription, context.getString(R.string.box_description_transition));
-            return ActivityOptionsCompat.makeSceneTransitionAnimation((MainActivity) context, boxNamePair, boxDescriptionPair);
+            return ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    (MainActivity) context,
+                    boxNamePair,
+                    boxDescriptionPair,
+                    viewsToTransition[0],
+                    viewsToTransition[1]
+            );
         }
 
         private String getObjectTypeString() {

@@ -13,6 +13,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -111,12 +112,18 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
 
         binding = FragmentPageBoxesBinding.inflate(inflater);
 
+        // append views with transition_name attributes to the map
+        final Pair[] viewsToTransition = new Pair[]{
+                Pair.create(binding.addButton, getString(R.string.add_or_edit_button_transition_name)),
+                Pair.create(binding.categoriesButton, getString(R.string.categories_or_delete_button_transition_name))
+        };
+
         // init filter state
         setFilterActivated(false);
 
         // layout widgets
         togglePlaceholderVisibility(null);
-        setupRecyclerView(binding.recyclerView);
+        setupRecyclerView(binding.recyclerView, viewsToTransition);
         setupButtons(binding.categoriesButton, binding.nfcButton, binding.addButton, binding.clearFiltersButton);
         return binding.getRoot();
     }
@@ -220,7 +227,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
             v.setVisibility(preferences.getBoolean("areBoxes", true) ? View.GONE : View.VISIBLE);
     }
 
-    private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
+    private void setupRecyclerView(@NonNull RecyclerView recyclerView, @NonNull Pair[] viewsToTransition) {
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
@@ -229,6 +236,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
                 new BoxesAdapter(Objects.requireNonNull(getActivity()));
         boxesAdapter.setHasStableIds(true);
         boxesAdapter.setUpdateActionModeCallback(callback);
+        boxesAdapter.setViewsToTransition(viewsToTransition);
         recyclerView.setAdapter(boxesAdapter);
 
         boxViewModel.getBoxes().observe(this, boxes -> {
