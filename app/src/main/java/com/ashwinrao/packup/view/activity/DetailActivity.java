@@ -30,6 +30,8 @@ import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.packup.viewmodel.BoxViewModel;
 import com.ashwinrao.packup.viewmodel.ItemViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -140,19 +142,37 @@ public class DetailActivity extends AppCompatActivity {
     private void setupRecyclerView(@NonNull ActivityDetailBinding binding, @NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(null);
-        addItemDecoration(this, recyclerView, 1);
+        addItemDecoration(this, recyclerView, 1, 8);
         adapter = new ItemDisplayAdapter(this, true);
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
         boxLD.observe(this, box -> {
             this.box = box;
             binding.setBox(box);
+            setupCategoryChips(binding.chipGroup, box.getCategories());
         });
         itemsLD.observe(this, items -> {
             adapter.submitList(items);
             adapter.setItemsForFiltering(items);
             setNumberOfItems(binding.numberOfItems, items.size());
         });
+    }
+
+    private void setupCategoryChips(@NonNull ChipGroup chipGroup, @NonNull List<String> categories) {
+        if(categories.size() > 0) {
+            for (String category : categories) {
+                addNewCategoryChip(chipGroup, category);
+            }
+        }
+    }
+
+    private void addNewCategoryChip(@NonNull ChipGroup group, @Nullable final String text) {
+        final Chip chip = new Chip(group.getContext());
+        chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+        chip.setChipBackgroundColorResource(R.color.colorAccent);
+        chip.setText(text == null ? box.getCategories().get(box.getCategories().size() - 1) : text);
+        chip.setClickable(false);
+        group.addView(chip);
     }
 
     private void setNumberOfItems(TextView textView, final int numberOfItems) {

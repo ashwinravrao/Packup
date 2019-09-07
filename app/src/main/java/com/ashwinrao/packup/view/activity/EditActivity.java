@@ -225,7 +225,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(null);
-        addItemDecoration(this, recyclerView, 1);
+        addItemDecoration(this, recyclerView, 1, null);
         adapter = new ItemPackAdapter(this);
         adapter.setItemEditedCallback(this);
         adapter.setSingleItemUnpackCallback(this);

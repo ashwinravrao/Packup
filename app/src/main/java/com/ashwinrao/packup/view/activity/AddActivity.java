@@ -197,7 +197,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        addItemDecoration(this, recyclerView, 1);
+        addItemDecoration(this, recyclerView, 1, null);
         adapter = new ItemPackAdapter(this);
         adapter.setFirstBind(false);
         adapter.setSingleItemUnpackCallback(this);

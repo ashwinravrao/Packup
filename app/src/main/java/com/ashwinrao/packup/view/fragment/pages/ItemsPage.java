@@ -148,7 +148,7 @@ public class ItemsPage extends Fragment {
     private void initializeRecyclerView(@NonNull RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setItemAnimator(null);
-        addItemDecoration(getContext(), recyclerView, 1);
+        addItemDecoration(getContext(), recyclerView, 1, null);
         adapter = new ItemDisplayAdapter(Objects.requireNonNull(getActivity()), false);
         adapter.setActionModeCallback(callback);
         adapter.setHasStableIds(true);

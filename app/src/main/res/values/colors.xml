@@ -21,5 +21,6 @@
 
     <color name="colorAccentSolidSelected">#331788D3</color>
     <color name="colorAccentBorderSelected">#801788D3</color>
+    <color name="divider">#D4D4D4</color>
 
 </resources>

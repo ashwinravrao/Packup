@@ -5,13 +5,14 @@ import android.graphics.Rect;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.ashwinrao.packup.util.UnitConversion.dpToPx;
 
 public class Decorations {
 
-    public static void addItemDecoration(Context context, RecyclerView recyclerView, final int spanCount) {
+    public static void addItemDecoration(Context context, RecyclerView recyclerView, final int spanCount, @Nullable Integer horizontalBias) {
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -21,8 +22,8 @@ public class Decorations {
                 if (position >= 0) {
                     int column = position % spanCount;
 
-                    outRect.left = spacing - column * spacing / spanCount;
-                    outRect.right = (column + 1) * spacing / spanCount;
+                    outRect.left = spacing - column * spacing / spanCount + (horizontalBias == null ? 0 : dpToPx(context, horizontalBias));
+                    outRect.right = (column + 1) * spacing / spanCount + (horizontalBias == null ? 0 : dpToPx(context, horizontalBias));
 
                     if (position < spanCount) {
                         outRect.top = spacing;

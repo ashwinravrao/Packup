@@ -231,7 +231,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         this.recyclerView = recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
-        addItemDecoration(getContext(), recyclerView, 1);
+        addItemDecoration(getContext(), recyclerView, 1, null);
         final BoxesAdapter boxesAdapter =
                 new BoxesAdapter(Objects.requireNonNull(getActivity()));
         boxesAdapter.setHasStableIds(true);
