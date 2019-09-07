@@ -7,7 +7,7 @@
 
         <variable
             name="Box"
-            type="com.ashwinrao.locrate.data.model.Box" />
+            type="com.ashwinrao.packup.data.model.Box" />
 
         <variable
             name="selected"

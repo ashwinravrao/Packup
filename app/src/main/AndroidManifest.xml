@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ashwinrao.locrate">
+    package="com.ashwinrao.packup">
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.ashwinrao.locrate.Locrate"
+        android:name="com.ashwinrao.packup.Packup"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -20,7 +20,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 
         <activity
-            android:name="com.ashwinrao.locrate.view.activity.MainActivity"
+            android:name="com.ashwinrao.packup.view.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan">
@@ -31,30 +31,30 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.ashwinrao.locrate.view.activity.AddActivity"
+        <activity android:name="com.ashwinrao.packup.view.activity.AddActivity"
             android:theme="@style/AppTheme.AddActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name="com.ashwinrao.locrate.view.activity.CameraActivity"
+        <activity android:name="com.ashwinrao.packup.view.activity.CameraActivity"
             android:theme="@style/AppTheme.CameraActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name="com.ashwinrao.locrate.view.activity.NfcActivity"
+        <activity android:name="com.ashwinrao.packup.view.activity.NfcActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name="com.ashwinrao.locrate.view.activity.DetailActivity"
+        <activity android:name="com.ashwinrao.packup.view.activity.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name="com.ashwinrao.locrate.view.activity.SettingsActivity"
+        <activity android:name="com.ashwinrao.packup.view.activity.SettingsActivity"
             android:theme="@style/AppTheme.SettingsActivity"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name="com.ashwinrao.locrate.view.activity.EditActivity"
+        <activity android:name="com.ashwinrao.packup.view.activity.EditActivity"
             android:theme="@style/AppTheme.AddActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
