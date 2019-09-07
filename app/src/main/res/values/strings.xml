@@ -20,7 +20,6 @@
     <string name="box_number_placeholder">Box %d</string>
     <string name="char_limit">/ 250</string>
     <string name="char_count_default">0</string>
-    <string name="content_description_item_image">Item photo</string>
     <string name="number_of_items_format_string">%d items</string>
     <string name="tap_to_reveal">Tap to Reveal</string>
     <string name="tap_nfc_content_description">Tap NFC sticker to reveal box contents</string>
@@ -28,13 +27,9 @@
     <string name="nfc_read_instructions_p2">to reveal that box\'s contents</string>
     <string name="cancel">Cancel</string>
     <string name="nfc_tag">NFC Tag</string>
-    <string name="item_name">Item name</string>
-    <string name="filter">Filter By</string>
-    <string name="filtering">Filtering…</string>
     <string name="nfc">Scan NFC</string>
     <string name="add">New Box</string>
     <string name="unpack">Unpack</string>
-    <string name="pack">Pack</string>
     <string name="action_mode_title">%d %s</string>
     <string name="permanent_delete">Permanently delete</string>
     <string name="dialog_bulk_delete_title">Permanently delete boxes</string>
@@ -59,33 +54,20 @@
     <string name="toolbar_save">Save</string>
     <string name="clear_items">Clear items</string>
     <string name="undo">Undo</string>
-    <string name="items_section_title">Items</string>
     <string name="pack_box">Pack Box</string>
     <string name="description_instructions">Category tags will show up below</string>
     <string name="filter_dialog_title">Filter…</string>
-    <string name="filter_dialog_positive_button">Filter</string>
     <string name="categories">Categories</string>
     <string name="filtered_results_disclaimer">Showing filtered results…</string>
     <string name="clear">clear</string>
     <string name="filters_cleared">Filters cleared</string>
-    <string name="filter_dialog_message">Choose at least one category to filter on</string>
-    <string name="filters_cleared_all_categories">Filters cleared because all categories selected</string>
     <string name="apply">Apply</string>
     <string name="showing_all">Showing all</string>
     <string name="no_description">No description</string>
     <string name="hint_item_name">Item name</string>
-    <string name="hint_item_value">Estimated value</string>
-    <string name="category_hint">#categories</string>
     <string name="estimate_value_hint">Estimated value</string>
-    <string name="remove">Remove</string>
-    <string name="fill_box">Fill Box</string>
-    <string name="register_nfc">Register NFC Tag</string>
-    <string name="write_to_nfc">Write to NFC</string>
-    <string name="pair_nfc_tag">Pair NFC</string>
     <string name="edit">Edit</string>
-    <string name="go_to_box">Go to box</string>
     <string name="view_box">View box</string>
-    <string name="item_deleted_snackbar">Item deleted</string>
     <string name="dialog_discard_changes_title">Discard changes</string>
     <string name="dialog_discard_changes_message">You may have made changes to this box. Are you sure you want to leave without saving?</string>
     <string name="leave">Leave</string>
@@ -98,15 +80,6 @@
     <string name="box_description_transition">box description transition</string>
     <string name="add_or_edit_button_transition_name">add or edit button transition name</string>
     <string name="categories_or_delete_button_transition_name">categories or delete button transition name</string>
-    <string name="description_num_items_concatenation">%s %s</string>
-    <string name="box_to_item_transition_name">box to item transition name</string>
 
 
-    <string-array name="currency_abbreviations">
-        <item>USD</item>
-        <item>EUR</item>
-        <item>GBP</item>
-        <item>INR</item>
-        <item>CNY</item>
-    </string-array>
 </resources>
