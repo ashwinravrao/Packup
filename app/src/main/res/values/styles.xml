@@ -36,8 +36,4 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="AppTheme.AppBarOverlay.Black" parent="ThemeOverlay.AppCompat.Dark">
-        <item name="android:actionMenuTextColor">@android:color/white</item>
-    </style>
-
 </resources>

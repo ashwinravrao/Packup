@@ -59,7 +59,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="32dp"
                     android:text="@{box.description}"
                     android:transitionName="@string/box_description_transition"
@@ -75,18 +75,18 @@
                     android:id="@+id/chip_group"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/delete_button_caption" />
+                    app:layout_constraintTop_toBottomOf="@id/box_description" />
 
                 <View
                     android:id="@+id/divider"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="16dp"
                     android:background="@color/divider"
@@ -174,19 +174,6 @@
                     app:rippleColor="@android:color/white"
                     app:tint="@android:color/white" />
 
-                <TextView
-                    android:id="@+id/delete_button_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/delete"
-                    android:layout_marginTop="16dp"
-                    android:textAlignment="center"
-                    android:fontFamily="sans-serif-medium"
-                    app:layout_constraintTop_toBottomOf="@id/delete_button"
-                    app:layout_constraintStart_toStartOf="@id/delete_button"
-                    app:layout_constraintEnd_toEndOf="@id/delete_button"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
-
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/edit_button"
                     android:layout_width="wrap_content"
@@ -203,19 +190,6 @@
                     app:layout_constraintTop_toBottomOf="@id/toolbar"
                     app:rippleColor="@android:color/white"
                     app:tint="@android:color/white" />
-
-                <TextView
-                    android:id="@+id/edit_button_caption"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/edit"
-                    android:layout_marginTop="16dp"
-                    android:textAlignment="center"
-                    android:fontFamily="sans-serif-medium"
-                    app:layout_constraintTop_toBottomOf="@id/edit_button"
-                    app:layout_constraintStart_toStartOf="@id/edit_button"
-                    app:layout_constraintEnd_toEndOf="@id/edit_button"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
