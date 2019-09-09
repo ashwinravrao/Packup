@@ -11,10 +11,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            buildConfigField 'String', "DEVELOPER_CONTACT", developer_contact
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField 'String', "DEVELOPER_CONTACT", developer_contact
         }
+
     }
     dataBinding {
         enabled = true

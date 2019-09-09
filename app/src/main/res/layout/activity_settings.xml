@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="developerName"
+            type="String" />
+        <variable
+            name="developerEmail"
+            type="String" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_window">
+        android:background="@color/colorPrimaryLight">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,14 +30,117 @@
             app:title="@string/settings"
             app:titleTextColor="@color/iconAndTextColor" />
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/feedback_setting"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="100dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/feedback_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_bug"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintStart_toEndOf="@id/feedback_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="32dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/feedback_setting_title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/feedback_setting_message"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/text_color_secondary_view_holder"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/icons_attribution"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/feedback_setting">
+
+            <LinearLayout
+                android:id="@+id/icons_preview"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="48dp">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_warehouse"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_open_box"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_contents"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/icons_attribution_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/icons_attribution_message"
+                app:layout_constraintStart_toStartOf="@id/icons_preview"
+                app:layout_constraintEnd_toEndOf="@id/icons_preview"
+                app:layout_constraintTop_toBottomOf="@id/icons_preview"
+                android:textColor="@color/text_color_secondary_view_holder"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:layout_marginTop="32dp"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
