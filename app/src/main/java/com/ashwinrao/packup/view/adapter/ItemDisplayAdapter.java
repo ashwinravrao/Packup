@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Item;
@@ -110,11 +111,17 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
     }
 
     private void loadImage(@NonNull Context context, @NonNull final Item item, @NonNull ImageView imageView) {
+        final CircularProgressDrawable progress = new CircularProgressDrawable(context);
+        progress.setStrokeWidth(5f);
+        progress.setCenterRadius(30f);
+        progress.start();
+
         final String filePath = item.getFilePath();
         Glide.with(context)
                 .load(new File(filePath))
                 .thumbnail(0.01f)  // down-sample to 1% of original resolution
                 .centerCrop()
+                .placeholder(progress)
                 .into(imageView);
     }
 

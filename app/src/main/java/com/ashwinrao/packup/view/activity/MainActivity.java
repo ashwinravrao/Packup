@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Exclude certain view elements from participating in activity fade transition
+        // Exclude certain window elements from participating in activity fade transition
         final Fade fade = new Fade();
         final View decor = getWindow().getDecorView();
         fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);

@@ -8,12 +8,11 @@ import com.ashwinrao.packup.di.DatabaseModule;
 
 public class Packup extends Application {
 
-    AppComponent appComponent;
+    private AppComponent appComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
         appComponent = DaggerAppComponent.builder().databaseModule(new DatabaseModule(this)).build();
     }
 

@@ -34,6 +34,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,10 +45,12 @@ import static com.ashwinrao.packup.util.UnitConversion.dpToPx;
 public class DetailActivity extends AppCompatActivity {
 
     private Box box;
+    private ChipGroup chipGroup;
     private ItemDisplayAdapter adapter;
     private BoxViewModel boxViewModel;
     private LiveData<Box> boxLD;
     private LiveData<List<Item>> itemsLD;
+    private List<Chip> chips = new ArrayList<>();
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -57,7 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((Packup) getApplicationContext()).getAppComponent().inject(this);
 
-        // Exclude certain view elements from participating in activity fade transition
+        // Exclude certain window elements from participating in activity fade transition
         final Fade fade = new Fade();
         final View decor = getWindow().getDecorView();
         fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
@@ -66,6 +69,7 @@ public class DetailActivity extends AppCompatActivity {
         getWindow().setExitTransition(fade);
 
         final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+        chipGroup = binding.chipGroup;
 
         boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
         final ItemViewModel itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
@@ -93,6 +97,13 @@ public class DetailActivity extends AppCompatActivity {
         super.onResume();
         if(adapter != null) {
             adapter.initializeFilter();
+        }
+
+        // Clear existing chips to prevent duplicates
+        if(chips.size() > 0 && chipGroup != null) {
+            for(Chip chip : chips) {
+                chipGroup.removeView(chip);
+            }
         }
     }
 
@@ -173,6 +184,7 @@ public class DetailActivity extends AppCompatActivity {
         chip.setText(text == null ? box.getCategories().get(box.getCategories().size() - 1) : text);
         chip.setClickable(false);
         group.addView(chip);
+        chips.add(chip);
     }
 
     private void setNumberOfItems(TextView textView, final int numberOfItems) {
