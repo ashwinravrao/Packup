@@ -1,6 +1,7 @@
 package com.ashwinrao.packup.view.fragment;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,12 +12,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.Rational;
 import android.util.Size;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +32,7 @@ import androidx.camera.core.ImageCaptureConfig;
 import androidx.camera.core.Preview;
 import androidx.camera.core.PreviewConfig;
 import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -35,6 +40,9 @@ import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.databinding.FragmentCameraBinding;
 import com.ashwinrao.packup.util.callback.BackNavCallback;
 import com.ashwinrao.packup.view.activity.CameraActivity;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.snackbar.SnackbarContentLayout;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -47,6 +55,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private TextureView textureView;
     private CardView shutterButton;
+    private TextView cameraInstructions;
+    private CoordinatorLayout snackbarContainer;
     private ArrayList<String> paths = new ArrayList<>();
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 5;
@@ -61,16 +71,45 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        FragmentCameraBinding binding = FragmentCameraBinding.inflate(inflater);
+        final FragmentCameraBinding binding = FragmentCameraBinding.inflate(inflater);
         textureView = binding.preview;
+        snackbarContainer = binding.snackbarContainer;
         shutterButton = binding.shutter.findViewById(R.id.button);
-        setupDoneButton(binding.doneButton);
         checkPermissionsBeforeBindingTextureView();
+        manageInstructionAnimations(binding.cameraInstructions, false);
         return binding.getRoot();
     }
 
-    private void setupDoneButton(ImageView doneButton) {
-        doneButton.setOnClickListener(view -> finishUpActivity());
+    private void manageInstructionAnimations(@NonNull final TextView instructions, @NonNull Boolean fromZeroAlpha) {
+        if(!fromZeroAlpha) {
+            this.cameraInstructions = instructions;
+            final AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+            anim.setDuration(500);
+            anim.setFillAfter(true);
+            anim.setStartOffset(5000);
+            instructions.startAnimation(anim);
+        } else {
+            final AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+            anim.setDuration(500);
+            anim.setFillAfter(true);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) { }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    final AlphaAnimation anim1 = new AlphaAnimation(1.0f, 0.0f);
+                    anim1.setDuration(500);
+                    anim1.setFillAfter(true);
+                    anim1.setStartOffset(2000);
+                    instructions.startAnimation(anim1);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) { }
+            });
+            instructions.startAnimation(anim);
+        }
     }
 
     private void checkPermissionsBeforeBindingTextureView() {
@@ -87,7 +126,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private void finishUpActivity() {
         if (paths.size() > 0) {
-            Intent intent = new Intent();
+            final Intent intent = new Intent();
             intent.putStringArrayListExtra("paths", paths);
             Objects.requireNonNull(getActivity()).setResult(Activity.RESULT_OK, intent);
         }
@@ -106,10 +145,10 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
 
     private void startCamera() {
 
-        DisplayMetrics metrics = new DisplayMetrics();
+        final DisplayMetrics metrics = new DisplayMetrics();
         textureView.getDisplay().getRealMetrics(metrics);
-        Size screenSize = new Size(metrics.widthPixels, metrics.heightPixels);
-        Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels);
+        final Size screenSize = new Size(metrics.widthPixels, metrics.heightPixels);
+        final Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels);
 
         final PreviewConfig previewConfig = new PreviewConfig.Builder()
                 .setLensFacing(CameraX.LensFacing.BACK)
@@ -120,7 +159,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         final Preview preview = new Preview(previewConfig);
 
         preview.setOnPreviewOutputUpdateListener(output -> {
-            ViewGroup parent = (ViewGroup) textureView.getParent();
+            final ViewGroup parent = (ViewGroup) textureView.getParent();
             parent.removeView(textureView);
             parent.addView(textureView, 0);
 
@@ -136,6 +175,8 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
         shutterButton.setOnClickListener(v -> {
 
+            manageInstructionAnimations(cameraInstructions, true);
+
             final File file = new File(Objects.requireNonNull(getActivity()).getExternalMediaDirs()[0], System.currentTimeMillis() + ".jpg");
             imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
 
@@ -143,7 +184,7 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                 public void onImageSaved(@NonNull File file) {
                     paths.add(file.getAbsolutePath());
 
-                    // Provide vibration feedback (check for API deprecation)
+                    // Provide vibration feedback
                     if (android.os.Build.VERSION.SDK_INT >= 26) {
                         ((Vibrator) Objects.requireNonNull(getActivity()).getSystemService(VIBRATOR_SERVICE)).vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
                     } else {
@@ -151,18 +192,27 @@ public class CameraFragment extends Fragment implements Toolbar.OnMenuItemClickL
                     }
 
                     // Notify user of saved image
-                    Toast toast = Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT);
-                    toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
-                    toast.show();
+                    final Snackbar snackbar = Snackbar.make(snackbarContainer, "Saved", Snackbar.LENGTH_SHORT)
+                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                            .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()),
+                                    R.color.success_green))
+                            .setTextColor(ContextCompat.getColor(getContext(), R.color.success_green_text));
+                    snackbar.getView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    snackbar.show();
 
                 }
 
                 @Override
                 public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
-                    Toast toast = Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT);
-                    toast.setGravity(toast.getGravity(), toast.getXOffset(), 500);
-                    toast.show();
-                    Log.e(TAG, message);
+
+                    // Notify user of failed save
+                    final Snackbar snackbar = Snackbar.make(snackbarContainer, "Error", Snackbar.LENGTH_SHORT)
+                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                            .setBackgroundTint(ContextCompat.getColor(Objects.requireNonNull(getContext()),
+                                    R.color.delete_red))
+                            .setTextColor(ContextCompat.getColor(getContext(), android.R.color.holo_red_dark));
+                    snackbar.getView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    snackbar.show();
                 }
             });
         });

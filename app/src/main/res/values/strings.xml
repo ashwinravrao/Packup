@@ -83,6 +83,7 @@
     <string name="feedback_setting_mail_subject">Re: Packup Feedback</string>
     <string name="icons_attribution_message">Icons made by Nikita Golubev from www.flaticon.com</string>
     <string name="icons_attribution_url">https://www.flaticon.com/authors/nikita-golubev</string>
+    <string name="camera_instructions">Press back to continue editing your box</string>
 
 
 </resources>

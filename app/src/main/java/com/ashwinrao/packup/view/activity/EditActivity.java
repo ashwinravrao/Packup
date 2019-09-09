@@ -59,9 +59,9 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
-    private CategoryViewModel categoryViewModel;
 
     private Box edited;
+    private Boolean isFinishing = false;
     private final boolean[] initialBoxBound = {false};
     private ActivityEditBinding binding;
     private RecyclerView recyclerView;
@@ -84,13 +84,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
         boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
         itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
-        categoryViewModel = new ViewModelProvider(this, factory).get(CategoryViewModel.class);
-
-        // Setup CategoryViewModel to be able to retrieve item categories later
-        // Used for suggesting previously made categories (app-wide) in AutoCompleteTextView later on
-        new Handler().post(() ->
-                itemViewModel.getAllItemsFromDatabase().observe(this, items ->
-                        categoryViewModel.setCachedItemCategories(items)));
 
         setupToolbar(binding.toolbar);
         setupInputFields(binding.nameInputField, binding.descriptionInputField);
@@ -190,17 +183,19 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     }
 
     private void addNewCategoryChip(@NonNull ChipGroup group, @Nullable final String text) {
-        final Chip chip = new Chip(group.getContext());
-        chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
-        chip.setChipBackgroundColorResource(R.color.colorAccent);
-        chip.setText(text == null ? edited.getCategories().get(edited.getCategories().size() - 1) : text);
-        chip.setCloseIconVisible(true);
-        chip.setCloseIconTintResource(android.R.color.white);
-        chip.setOnCloseIconClickListener(v -> {
-            group.removeView(v);
-            edited.getCategories().remove(text == null ? edited.getCategories().size() - 1 : text);
-        });
-        group.addView(chip);
+        if(!isFinishing) {
+            final Chip chip = new Chip(group.getContext());
+            chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
+            chip.setChipBackgroundColorResource(R.color.colorAccent);
+            chip.setText(text == null ? edited.getCategories().get(edited.getCategories().size() - 1) : text);
+            chip.setCloseIconVisible(true);
+            chip.setCloseIconTintResource(android.R.color.white);
+            chip.setOnCloseIconClickListener(v -> {
+                group.removeView(v);
+                edited.getCategories().remove(text == null ? edited.getCategories().size() - 1 : text);
+            });
+            group.addView(chip);
+        }
     }
 
     private void setupButtons(@NonNull CardView nfcButton, @NonNull CardView fillButton) {
@@ -239,6 +234,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     }
 
     private void saveAndClose() {
+        isFinishing = true;
         if (items.size() > 0) {
             boxViewModel.updateBox(edited);
             itemViewModel.insertItems(this.items);

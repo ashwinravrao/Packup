@@ -59,7 +59,6 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
-    private CategoryViewModel categoryViewModel;
 
     private ActivityAddBinding binding;
     private RecyclerView recyclerView;
@@ -80,17 +79,8 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
         boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
         itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
-        categoryViewModel = new ViewModelProvider(this, factory).get(CategoryViewModel.class);
 
-        // Setup CategoryViewModel to be able to retrieve item categories later
-        new Handler().post(() ->
-                itemViewModel.getAllItemsFromDatabase().observe(this, items ->
-                        categoryViewModel.setCachedItemCategories(items)));
-
-        // data binding
         binding.setNumItems(null);
-
-        // layout widgets
         initializeToolbar(binding.toolbar);
         initializeFields(binding.nameInputField, binding.descriptionInputField);
         initializeRecyclerView(binding.recyclerView);
@@ -206,7 +196,6 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                 itemViewModel.updateItem(item);
             }
         });
-//        adapter.setItemEditedCallback(this);
         recyclerView.setItemAnimator(null);
         recyclerView.setAdapter(adapter);
     }
