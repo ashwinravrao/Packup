@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
 import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Item;
@@ -81,10 +82,17 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
         if (item.getEstimatedValue() > 0.0) {
             holder.binding.estimatedValueEditText.setText(String.valueOf(item.getEstimatedValue()));
         }
+
+        final CircularProgressDrawable progress = new CircularProgressDrawable(context);
+        progress.setStrokeWidth(5f);
+        progress.setCenterRadius(30f);
+        progress.start();
+
         Glide.with(context)
                 .load(new File(item.getFilePath()))
                 .thumbnail(0.01f)  // downsample to 1% of original resolution
                 .centerCrop()
+                .placeholder(progress)
                 .into(holder.binding.itemImage);
     }
 

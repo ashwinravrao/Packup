@@ -181,8 +181,8 @@ public class CameraActivity extends AppCompatActivity {
                     final Snackbar snackbar = Snackbar.make(snackbarContainer, "Error", Snackbar.LENGTH_SHORT)
                             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
                             .setBackgroundTint(ContextCompat.getColor(CameraActivity.this,
-                                    R.color.delete_red))
-                            .setTextColor(ContextCompat.getColor(CameraActivity.this, android.R.color.holo_red_dark));
+                                    R.color.error_red))
+                            .setTextColor(ContextCompat.getColor(CameraActivity.this, R.color.error_red_text));
                     snackbar.getView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
                     snackbar.show();
                 }

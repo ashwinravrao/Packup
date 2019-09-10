@@ -88,7 +88,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
         final Boolean[] notSet = {true};
         boxViewModel.getLastUsedBoxNumber().observe(this, integer -> {
-            if(notSet[0]) {
+            if (notSet[0]) {
                 binding.setBoxNum(integer + 1);
                 boxViewModel.getBox().setNumber(integer + 1);
                 notSet[0] = false;
@@ -146,7 +146,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     }
 
     private void tagToChip(@NonNull Editable s, @NonNull Boolean[] matchFound, @NonNull String[] matchStrings, @NonNull ChipGroup group) {
-        if(matchFound[0]) {
+        if (matchFound[0]) {
             s.delete(s.length() - matchStrings[0].length(), s.length());
             addNewCategoryChip(group);
         }
@@ -156,12 +156,12 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
         final Chip chip = new Chip(group.getContext());
         chip.setTextColor(ContextCompat.getColor(this, android.R.color.white));
         chip.setChipBackgroundColorResource(R.color.colorAccent);
-        chip.setText(boxCategories.get(boxCategories.size()-1));
+        chip.setText(boxCategories.get(boxCategories.size() - 1));
         chip.setCloseIconVisible(true);
         chip.setCloseIconTintResource(android.R.color.white);
         chip.setOnCloseIconClickListener(v -> {
             group.removeView(v);
-            boxCategories.remove(boxCategories.size()-1);
+            boxCategories.remove(boxCategories.size() - 1);
         });
         group.addView(chip);
     }
@@ -192,7 +192,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
         adapter.setFirstBind(false);
         adapter.setSingleItemUnpackCallback(this);
         adapter.getEditedItem().observe(this, item -> {
-            if(item != null) {
+            if (item != null) {
                 itemViewModel.updateItem(item);
             }
         });
@@ -234,8 +234,11 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     private void updateItems() {
         adapter.setItems(items);
         recyclerView.setAdapter(adapter);
-        if (items.size() == 0) binding.setNumItems(null);
-        else binding.setNumItems(items.size() > 1 ? String.format(Locale.US, "%d items", items.size()) : String.format(Locale.US, "%d item", items.size()));
+        if (items.size() == 0) {
+            binding.setNumItems(null);
+        } else {
+            binding.setNumItems(items.size() > 1 ? String.format(Locale.US, "%d items", items.size()) : String.format(Locale.US, "%d item", items.size()));
+        }
         togglePlaceholderVisibility();
     }
 
@@ -277,7 +280,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                 }
                 return true;
             case R.id.toolbar_clear_items:
-                if(items.size() > 0) {
+                if (items.size() > 0) {
                     items.clear();
                     updateItems();
                     Snackbar.make(binding.snackbarContainer, "Items cleared", Snackbar.LENGTH_LONG)
@@ -296,7 +299,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                             }).show();
                 } else {
                     final Toast toast = Toast.makeText(this, "Nothing to clear", Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.BOTTOM,0,dpToPx(this, 112f));
+                    toast.setGravity(Gravity.BOTTOM, 0, dpToPx(this, 112f));
                     toast.show();
                 }
                 return true;
@@ -309,7 +312,8 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
         text.setHintTextColor(ContextCompat.getColor(this, R.color.delete_red));
         text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -391,7 +395,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
     @Override
     public void unpackItem(@NonNull Item item, @NonNull Integer position) {
-        if(items.size() > 0) {
+        if (items.size() > 0) {
             items.remove(item);
             updateItems();
         }
@@ -405,7 +409,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                 .addCallback(new Snackbar.Callback() {
                     @Override
                     public void onDismissed(Snackbar transientBottomBar, int event) {
-                        if(event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
+                        if (event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT) {
                             itemViewModel.removeItemFromThis(item);
                         }
                     }

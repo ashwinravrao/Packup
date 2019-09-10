@@ -60,6 +60,8 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((Packup) getApplicationContext()).getAppComponent().inject(this);
 
+        postponeEnterTransition();
+
         // Exclude certain window elements from participating in activity fade transition
         final Fade fade = new Fade();
         final View decor = getWindow().getDecorView();
@@ -90,6 +92,12 @@ public class DetailActivity extends AppCompatActivity {
         setupToolbar(binding.toolbar);
         setupRecyclerView(binding, binding.recyclerView);
         setupButtons(binding.editButton, binding.deleteButton);
+    }
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        startPostponedEnterTransition();
     }
 
     @Override
@@ -158,9 +166,11 @@ public class DetailActivity extends AppCompatActivity {
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
         boxLD.observe(this, box -> {
-            this.box = box;
-            binding.setBox(box);
-            setupCategoryChips(binding.chipGroup, box.getCategories());
+            if(box != null) {
+                this.box = box;
+                binding.setBox(box);
+                setupCategoryChips(binding.chipGroup, box.getCategories());
+            }
         });
         itemsLD.observe(this, items -> {
             adapter.submitList(items);
