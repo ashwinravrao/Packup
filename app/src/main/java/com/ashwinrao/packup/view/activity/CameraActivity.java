@@ -13,7 +13,6 @@ import android.util.Size;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +42,6 @@ public class CameraActivity extends AppCompatActivity {
 
     private TextureView textureView;
     private CardView shutterButton;
-    private TextView cameraInstructions;
     private CoordinatorLayout snackbarContainer;
     private ArrayList<String> paths = new ArrayList<>();
 
@@ -59,39 +57,15 @@ public class CameraActivity extends AppCompatActivity {
         snackbarContainer = binding.snackbarContainer;
         shutterButton = binding.shutter.findViewById(R.id.button);
         checkPermissionsBeforeBindingTextureView();
-        manageInstructionAnimations(binding.cameraInstructions, false);
+        fadeCameraInstructions(binding.cameraInstructions);
     }
 
-    private void manageInstructionAnimations(@NonNull final TextView instructions, @NonNull Boolean fromZeroAlpha) {
-        if(!fromZeroAlpha) {
-            this.cameraInstructions = instructions;
-            final AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
-            anim.setDuration(500);
-            anim.setFillAfter(true);
-            anim.setStartOffset(5000);
-            instructions.startAnimation(anim);
-        } else {
-            final AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
-            anim.setDuration(500);
-            anim.setFillAfter(true);
-            anim.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) { }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    final AlphaAnimation anim1 = new AlphaAnimation(1.0f, 0.0f);
-                    anim1.setDuration(500);
-                    anim1.setFillAfter(true);
-                    anim1.setStartOffset(2000);
-                    instructions.startAnimation(anim1);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) { }
-            });
-            instructions.startAnimation(anim);
-        }
+    private void fadeCameraInstructions(@NonNull final TextView instructions) {
+        final AlphaAnimation anim = new AlphaAnimation(1.0f, 0.0f);
+        anim.setDuration(500);
+        anim.setFillAfter(true);
+        anim.setStartOffset(10000);
+        instructions.startAnimation(anim);
     }
 
     private void checkPermissionsBeforeBindingTextureView() {
@@ -146,8 +120,6 @@ public class CameraActivity extends AppCompatActivity {
 
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
         shutterButton.setOnClickListener(v -> {
-
-            manageInstructionAnimations(cameraInstructions, true);
 
             final File file = new File(getExternalMediaDirs()[0], System.currentTimeMillis() + ".jpg");
             imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
