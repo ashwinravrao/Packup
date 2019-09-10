@@ -73,7 +73,8 @@ public class DetailActivity extends AppCompatActivity {
         final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         chipGroup = binding.chipGroup;
 
-        boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
+        boxViewModel = new ViewModelProvider(
+                this, factory).get(BoxViewModel.class);
         final ItemViewModel itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
 
         final Bundle extras = getIntent().getExtras();
@@ -216,7 +217,8 @@ public class DetailActivity extends AppCompatActivity {
                         ContextCompat.getColor(this, android.R.color.holo_red_dark)},
                 dialogInterface -> {
                     boxViewModel.delete(box);
-                    supportFinishAfterTransition();
+                    finish();
+//                    supportFinishAfterTransition();
                     return null;
                 }, dialogInterface -> {
                     dialogInterface.cancel();
