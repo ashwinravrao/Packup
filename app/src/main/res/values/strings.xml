@@ -85,11 +85,13 @@
     <string name="icons_attribution_url">https://www.flaticon.com/authors/nikita-golubev</string>
     <string name="camera_instructions">Press back to continue editing your box</string>
     <string name="empty_search_text">Couldn\'t find any boxes to match that search</string>
+    <string name="empty_search_items_text">Couldn\'t find any items to match that search</string>
     <string name="content_description_settings_find_icon">inspection free icon</string>
     <string name="content_description_settings_warehouse_icon">Warehouse free icon</string>
     <string name="content_description_settings_open_box_icon">Open box free icon</string>
     <string name="content_description_settings_fragile_icon">Fragile free icon</string>
     <string name="content_description_bug_icon">Bug icon</string>
+    <string name="content_description_settings_coat_stand_icon">Coat stand free icon</string>
 
 
 </resources>

@@ -23,6 +23,7 @@ import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ViewholderItemDisplayBinding;
 import com.ashwinrao.packup.util.ItemPropertiesFilter;
+import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.packup.view.activity.DetailActivity;
 import com.ashwinrao.packup.view.activity.MainActivity;
@@ -43,6 +44,7 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     // Callbacks
     private UpdateActionModeCallback updateActionModeCallback;
+    private EmptySearchResultsCallback emptySearchResultsCallback;
 
     private static final DiffUtil.ItemCallback<Item> DIFF_CALLBACK = new DiffUtil.ItemCallback<Item>() {
 
@@ -78,6 +80,10 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
 
     public void setActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
+    }
+
+    public void setEmptySearchResultsCallback(@NonNull EmptySearchResultsCallback callback) {
+        this.emptySearchResultsCallback = callback;
     }
 
     public List<Object> getSelected() {
@@ -147,6 +153,7 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
+                emptySearchResultsCallback.handleEmptyResults(((List) results.values).size());
                 ItemDisplayAdapter.this.submitList((List) results.values);
             }
         };
