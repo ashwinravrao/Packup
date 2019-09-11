@@ -84,6 +84,7 @@
     <string name="icons_attribution_message">Icons made by Nikita Golubev from www.flaticon.com</string>
     <string name="icons_attribution_url">https://www.flaticon.com/authors/nikita-golubev</string>
     <string name="camera_instructions">Press back to continue editing your box</string>
+    <string name="empty_search_text">Couldn\'t find any boxes to match that search</string>
 
 
 </resources>

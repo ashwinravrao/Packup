@@ -12,6 +12,7 @@ import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.databinding.ViewholderBoxBinding;
 import com.ashwinrao.packup.util.BoxPropertiesFilter;
+import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.packup.view.activity.DetailActivity;
 import com.ashwinrao.packup.view.activity.MainActivity;
@@ -34,6 +35,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
     private Filter filter;
     private Context context;
     private List<Box> boxesForFiltering = new ArrayList<>();
+    private EmptySearchResultsCallback emptySearchResultsCallback;
 
     // Shared Element Activity Transitions
     private Pair[] viewsToTransition;
@@ -72,6 +74,10 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
 
     public void setUpdateActionModeCallback(@NonNull UpdateActionModeCallback callback) {
         this.updateActionModeCallback = callback;
+    }
+
+    public void setEmptySearchResultsCallback(@NonNull EmptySearchResultsCallback callback) {
+        this.emptySearchResultsCallback = callback;
     }
 
     public void setViewsToTransition(@NonNull Pair[] viewsToTransition) {
@@ -132,6 +138,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
+                emptySearchResultsCallback.handleEmptyResults(((List) results.values).size());
                 BoxesAdapter.this.submitList((List) results.values);
             }
         };

@@ -8,6 +8,8 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.ashwinrao.packup.databinding.FragmentPageBoxesBinding;
 import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.util.callback.DialogDismissedCallback;
+import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.packup.view.activity.AddActivity;
 import com.ashwinrao.packup.view.activity.NfcActivity;
@@ -43,7 +46,7 @@ import javax.inject.Inject;
 
 import static com.ashwinrao.packup.util.Decorations.addItemDecoration;
 
-public class BoxesPage extends Fragment implements DialogDismissedCallback {
+public class BoxesPage extends Fragment implements DialogDismissedCallback, EmptySearchResultsCallback {
 
     private RecyclerView recyclerView;
     private Parcelable recyclerViewState;
@@ -236,6 +239,7 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
                 new BoxesAdapter(Objects.requireNonNull(getActivity()));
         boxesAdapter.setHasStableIds(true);
         boxesAdapter.setUpdateActionModeCallback(callback);
+        boxesAdapter.setEmptySearchResultsCallback(this);
         boxesAdapter.setViewsToTransition(viewsToTransition);
         recyclerView.setAdapter(boxesAdapter);
 
@@ -290,4 +294,13 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback {
         }
     }
 
+    @Override
+    public void handleEmptyResults(@NonNull Integer numResults) {
+        final View[] emptySearchPlaceholders =
+                new View[]{binding.emptySearchPlaceholder,
+                        binding.emptySearchPlaceholderText};
+        for (View view : emptySearchPlaceholders) {
+            view.setVisibility(numResults > 0 ? View.INVISIBLE : View.VISIBLE);
+        }
+    }
 }

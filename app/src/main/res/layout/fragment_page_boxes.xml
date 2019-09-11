@@ -183,6 +183,18 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:ignore="ContentDescription" />
 
+                <ImageView
+                    android:id="@+id/empty_search_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_find"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/top_buttons"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:ignore="ContentDescription" />
+
                 <TextView
                     android:id="@+id/placeholder_text"
                     android:layout_width="wrap_content"
@@ -197,6 +209,22 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/top_row_view_holder"
                     android:text="@string/empty_list_text"/>
+
+                <TextView
+                    android:id="@+id/empty_search_placeholder_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="sans-serif"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/empty_search_placeholder"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"
+                    android:text="@string/empty_search_text"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
