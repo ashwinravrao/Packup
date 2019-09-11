@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <data>
-        <variable
-            name="developerName"
-            type="String" />
-        <variable
-            name="developerEmail"
-            type="String" />
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -49,7 +40,8 @@
                 android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/content_description_bug_icon" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -112,19 +104,29 @@
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_warehouse"/>
+                    android:src="@drawable/ic_warehouse"
+                    android:contentDescription="@string/content_description_settings_warehouse_icon" />
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_open_box"/>
+                    android:src="@drawable/ic_open_box"
+                    android:contentDescription="@string/content_description_settings_open_box_icon" />
 
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_contents"/>
+                    android:src="@drawable/ic_find"
+                    android:contentDescription="@string/content_description_settings_find_icon"/>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_contents"
+                    android:contentDescription="@string/content_description_settings_fragile_icon" />
 
             </LinearLayout>
 
