@@ -147,8 +147,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onError(@NonNull ImageCapture.UseCaseError useCaseError, @NonNull String message, @Nullable Throwable cause) {
-
+                public void onError(@NonNull ImageCapture.ImageCaptureError imageCaptureError, @NonNull String message, @Nullable Throwable cause) {
                     // Notify user of failed save
                     final Snackbar snackbar = Snackbar.make(snackbarContainer, "Error", Snackbar.LENGTH_SHORT)
                             .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)

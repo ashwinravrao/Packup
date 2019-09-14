@@ -60,6 +60,8 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback, Empt
     private final String RECYCLER_VIEW_STATE_KEY = "recycler_view_state";
     private final Integer SNACKBAR_DURATION = 4000;
 
+    private View[] emptySearchPlaceholders;
+
     @Inject
     ViewModelProvider.Factory factory;
 
@@ -119,6 +121,11 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback, Empt
         final Pair[] viewsToTransition = new Pair[]{
                 Pair.create(binding.addButton, getString(R.string.add_or_edit_button_transition_name)),
                 Pair.create(binding.categoriesButton, getString(R.string.categories_or_delete_button_transition_name))
+        };
+
+        emptySearchPlaceholders = new View[]{
+                binding.emptySearchPlaceholder,
+                binding.emptySearchPlaceholderText
         };
 
         // init filter state
@@ -294,11 +301,16 @@ public class BoxesPage extends Fragment implements DialogDismissedCallback, Empt
         }
     }
 
+    /**
+     * Handles visibility of the "no search results" placeholder image and text. An instance of
+     * this callback is passed to the RecyclerView Adapter responsible for displaying boxes.
+     *
+     * @param numResults zero or positive. Zero indicates no results were found, and a placeholder
+     *                   should be shown to the user. Positive indicates the opposite.
+     */
+
     @Override
     public void handleEmptyResults(@NonNull Integer numResults) {
-        final View[] emptySearchPlaceholders =
-                new View[]{binding.emptySearchPlaceholder,
-                        binding.emptySearchPlaceholderText};
         for (View view : emptySearchPlaceholders) {
             view.setVisibility(numResults > 0 ? View.INVISIBLE : View.VISIBLE);
         }

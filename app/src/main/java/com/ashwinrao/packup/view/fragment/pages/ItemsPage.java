@@ -37,6 +37,8 @@ public class ItemsPage extends Fragment implements EmptySearchResultsCallback {
     private FragmentPageItemsBinding binding;
     private UpdateActionModeCallback callback;
 
+    private View[] emptySearchPlaceholders;
+
     @Inject
     ViewModelProvider.Factory factory;
 
@@ -66,6 +68,11 @@ public class ItemsPage extends Fragment implements EmptySearchResultsCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentPageItemsBinding.inflate(inflater);
+
+        emptySearchPlaceholders = new View[]{
+            binding.emptySearchPlaceholder,
+            binding.emptySearchPlaceholderText
+        };
 
         // binding vars
         binding.setFilterActivated(false);
@@ -113,11 +120,16 @@ public class ItemsPage extends Fragment implements EmptySearchResultsCallback {
         adapter.getFilter().filter(newText);
     }
 
+    /**
+     * Handles visibility of the "no search results" placeholder image and text. An instance of
+     * this callback is passed to the RecyclerView Adapter responsible for displaying items.
+     *
+     * @param numResults zero or positive. Zero indicates no results were found, and a placeholder
+     *                   should be shown to the user. Positive indicates the opposite.
+     */
+
     @Override
     public void handleEmptyResults(@NonNull Integer numResults) {
-        final View[] emptySearchPlaceholders =
-                new View[]{binding.emptySearchPlaceholder,
-                        binding.emptySearchPlaceholderText};
         for (View view : emptySearchPlaceholders) {
             view.setVisibility(numResults > 0 ? View.INVISIBLE : View.VISIBLE);
         }

@@ -138,7 +138,7 @@ public class BoxesAdapter extends ListAdapter<Box, BoxesAdapter.BoxViewHolder> i
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
-                emptySearchResultsCallback.handleEmptyResults(((List) results.values).size());
+                emptySearchResultsCallback.handleEmptyResults(boxesForFiltering.size() > 0 ? ((List) results.values).size() : 1);
                 BoxesAdapter.this.submitList((List) results.values);
             }
         };

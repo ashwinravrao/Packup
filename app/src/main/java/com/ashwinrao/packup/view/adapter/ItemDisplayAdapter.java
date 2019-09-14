@@ -153,7 +153,7 @@ public class ItemDisplayAdapter extends ListAdapter<Item, ItemDisplayAdapter.Ite
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, Filter.FilterResults results) {
-                emptySearchResultsCallback.handleEmptyResults(((List) results.values).size());
+                emptySearchResultsCallback.handleEmptyResults(itemsForFiltering.size() > 0 ? ((List) results.values).size() : 1);
                 ItemDisplayAdapter.this.submitList((List) results.values);
             }
         };
