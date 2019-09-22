@@ -1,6 +1,6 @@
-package com.ashwinrao.packup.util.callback;
+package com.ashwinrao.packup.util.callback
 
-public interface BackNavCallback {
+interface BackNavCallback {
 
     /***
      * Custom callback function that overrides the system level callback of the same name
@@ -9,5 +9,5 @@ public interface BackNavCallback {
      * If the back press was consumed completely, no super calls are necessary.
      */
 
-    boolean onBackPressed();
+    fun onBackPressed(): Boolean
 }

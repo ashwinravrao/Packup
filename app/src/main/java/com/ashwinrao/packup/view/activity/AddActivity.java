@@ -394,7 +394,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     }
 
     @Override
-    public void unpackItem(@NonNull Item item, @NonNull Integer position) {
+    public void unpackItem(@NonNull Item item, int position) {
         if (items.size() > 0) {
             items.remove(item);
             updateItems();
@@ -418,7 +418,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     }
 
     @Override
-    public void itemEdited(@NonNull Item item, @NonNull Integer position) {
+    public void itemEdited(@NonNull Item item, int position) {
         itemViewModel.updateItem(item);
     }
 }

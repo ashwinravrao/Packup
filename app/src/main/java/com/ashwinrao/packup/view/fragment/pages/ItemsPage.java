@@ -129,7 +129,7 @@ public class ItemsPage extends Fragment implements EmptySearchResultsCallback {
      */
 
     @Override
-    public void handleEmptyResults(@NonNull Integer numResults) {
+    public void handleEmptyResults(int numResults) {
         for (View view : emptySearchPlaceholders) {
             view.setVisibility(numResults > 0 ? View.INVISIBLE : View.VISIBLE);
         }

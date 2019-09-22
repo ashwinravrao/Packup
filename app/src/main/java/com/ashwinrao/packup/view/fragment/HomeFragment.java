@@ -42,6 +42,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.inject.Inject;
 
 import static com.ashwinrao.packup.util.UnitConversion.dpToPx;
@@ -212,7 +214,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     }
 
     @Override
-    public boolean update(List<Object> objects, String objectType) {
+    public boolean update(@NotNull List<?> objects, @NotNull String objectType) {
         if (actionMode == null && !searchView.hasFocus()) {
             ((MainActivity) Objects.requireNonNull(getActivity())).startActionMode(new ActionModeCallback());
             actionMode.setTitle(String.format(getString(R.string.action_mode_title), objects.size(), objectType));

@@ -17,7 +17,7 @@ import java.util.UUID;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "items",
-        indices = @Index("id"),
+        indices = {@Index("id"), @Index("box_uuid")},
         foreignKeys = @ForeignKey(entity = Box.class,
                 parentColumns = "id",
                 childColumns = "box_uuid",

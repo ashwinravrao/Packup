@@ -32,6 +32,7 @@ import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityEditBinding;
 import com.ashwinrao.packup.util.HashtagDetection;
+import com.ashwinrao.packup.util.UnitConversion;
 import com.ashwinrao.packup.util.callback.ItemEditedCallback;
 import com.ashwinrao.packup.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
@@ -43,6 +44,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -433,13 +436,13 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     }
 
     @Override
-    public void itemEdited(@NonNull Item item, @NonNull Integer position) {
-        this.items.remove((int) position);
+    public void itemEdited(@NonNull Item item, int position) {
+        this.items.remove(position);
         this.items.add(position, item);
     }
 
     @Override
-    public void unpackItem(@NonNull Item item, @NonNull Integer position) {
+    public void unpackItem(@NonNull Item item, int position) {
         removeItem(item);
         Snackbar.make(binding.snackbarContainer, "Item removed", Snackbar.LENGTH_LONG)
                 .setBackgroundTint(ContextCompat.getColor(this, R.color.colorAccent))
