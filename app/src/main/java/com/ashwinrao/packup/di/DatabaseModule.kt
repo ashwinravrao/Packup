@@ -44,6 +44,6 @@ class DatabaseModule(application: Application) {
     @Provides
     @Singleton
     fun provideViewModelFactory(boxRepo: BoxRepository, itemRepo: ItemRepository) : ViewModelProvider.Factory =
-            ViewModelFactory(boxRepo, itemRepo)
+            ViewModelFactory(database, boxRepo, itemRepo)
 
 }

@@ -4,9 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,8 +37,8 @@ import com.ashwinrao.packup.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemPackAdapter;
 import com.ashwinrao.packup.viewmodel.BoxViewModel;
-import com.ashwinrao.packup.viewmodel.CategoryViewModel;
 import com.ashwinrao.packup.viewmodel.ItemViewModel;
+import com.ashwinrao.packup.viewmodel.InsertionViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -57,6 +57,7 @@ import static com.ashwinrao.packup.util.UnitConversion.dpToPx;
 
 public class AddActivity extends AppCompatActivity implements SingleItemUnpackCallback, ItemEditedCallback {
 
+    private InsertionViewModel insertViewModel;
     private BoxViewModel boxViewModel;
     private ItemViewModel itemViewModel;
 
@@ -79,6 +80,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
         boxViewModel = new ViewModelProvider(this, factory).get(BoxViewModel.class);
         itemViewModel = new ViewModelProvider(this, factory).get(ItemViewModel.class);
+        insertViewModel = new ViewModelProvider(this, factory).get(InsertionViewModel.class);
 
         binding.setNumItems(null);
         initializeToolbar(binding.toolbar);
@@ -271,12 +273,20 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                 if (itemViewModel.getItemsFromThis().size() == 0) {
                     showEmptyBoxDialog();
                 } else {
-                    if (boxViewModel.saveBox(this.boxCategories)) {
-                        itemViewModel.insertItems(itemViewModel.getItemsFromThis());
+                    try {
+                        boxViewModel.getBox().setCategories(this.boxCategories);
+                        insertViewModel.saveBox(boxViewModel.getBox(), itemViewModel.getItemsFromThis());
                         this.finish();
-                    } else {
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         setError(binding.nameInputField);
                     }
+//                    if (boxViewModel.saveBox(this.boxCategories)) {
+//                        itemViewModel.insertItems(itemViewModel.getItemsFromThis());
+//                        this.finish();
+//                    } else {
+//                        setError(binding.nameInputField);
+//                    }
                 }
                 return true;
             case R.id.toolbar_clear_items:

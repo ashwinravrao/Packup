@@ -17,8 +17,6 @@ class BoxRepository @Inject constructor(database: AppDatabase) {
 
     fun getBoxes(): LiveData<List<Box>> = dao.getBoxes()
 
-    fun getBoxByNumber(id: Int): LiveData<Box> = dao.getBoxByNumber(id)
-
     fun getBoxByUUID(uuid: String): LiveData<Box> = dao.getBoxByUUID(uuid)
 
     fun insert(vararg box: Box) =

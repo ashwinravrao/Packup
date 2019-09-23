@@ -14,9 +14,6 @@ interface BoxDao {
     @Query("select * from boxes where name = :name")
     fun getBoxByName(name: String) : LiveData<Box>
 
-    @Query("select * from boxes where number = :number")
-    fun getBoxByNumber(number: Int) : LiveData<Box>
-
     @Query("select * from boxes where id = :uuid")
     fun getBoxByUUID(uuid: String) : LiveData<Box>
 
