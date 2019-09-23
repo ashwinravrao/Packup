@@ -6,13 +6,12 @@ import com.ashwinrao.packup.util.BoxPropertiesFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class PropertiesFilterTest {
 
@@ -38,7 +37,6 @@ public class PropertiesFilterTest {
     }
 
     @Test
-    @DisplayName("Should successfully filter on id alone")
     public void successfulFilterOnId() {
         final CharSequence constraint = "1";
         actual = propfilter.filter(constraint, true, false, false);
@@ -48,7 +46,6 @@ public class PropertiesFilterTest {
     }
 
     @Test
-    @DisplayName("Should fail to filter on id alone")
     public void unsuccessfulFilterOnId() {
         final CharSequence constraint = "2";
         actual = propfilter.filter(constraint, true, false, false);
@@ -58,7 +55,6 @@ public class PropertiesFilterTest {
     }
 
     @Test
-    @DisplayName("Should successfully filter on name alone")
     public void successfulFilterOnName() {
         final CharSequence constraint = "itchen";
         actual = propfilter.filter(constraint, false, true, false);
@@ -68,7 +64,6 @@ public class PropertiesFilterTest {
     }
 
     @Test
-    @DisplayName("Should fail to filter on name alone")
     public void unsuccessfulFilterOnName() {
         final CharSequence constraint = "itchen";
         actual = propfilter.filter(constraint, false, true, false);
@@ -78,7 +73,6 @@ public class PropertiesFilterTest {
     }
 
     @Test
-    @DisplayName("Should successfully filter on description alone")
     public void successfulFilterOnDescription() {
         final CharSequence constraint = "ow Away";
         actual = propfilter.filter(constraint, false, false, true);
@@ -88,7 +82,6 @@ public class PropertiesFilterTest {
     }
 
     @Test
-    @DisplayName("Should fail to filter on description alone")
     public void unsuccessfulFilterOnDescription() {
         final CharSequence constraint = "ow Away";
         actual = propfilter.filter(constraint, false, false, true);

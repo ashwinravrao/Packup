@@ -28,10 +28,6 @@ public class BoxViewModel extends ViewModel {
         return this.box;
     }
 
-    public LiveData<Box> getBoxByNumber(int id) {
-        return repo.getBoxByNumber(id);
-    }
-
     public LiveData<Box> getBoxByUUID(String uuid) {
         return repo.getBoxByUUID(uuid);
     }
