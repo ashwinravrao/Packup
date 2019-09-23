@@ -6,7 +6,6 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,6 @@ import java.util.Objects;
 public class NfcWriteFragment extends Fragment implements NfcFragment, BackNavCallback {
 
     private String uuidToRegister;
-
-    private final String TAG = getClass().getSimpleName();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +58,7 @@ public class NfcWriteFragment extends Fragment implements NfcFragment, BackNavCa
             Objects.requireNonNull(getActivity()).setResult(Activity.RESULT_OK);
             getActivity().finish();
         } catch (IOException | FormatException e) {
-            Log.e(TAG, "onTagDetected: writeTag: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
 import com.ashwinrao.packup.data.model.Box;
-import com.ashwinrao.packup.data.model.Item;
 
 import java.util.ArrayList;
 import java.util.List;

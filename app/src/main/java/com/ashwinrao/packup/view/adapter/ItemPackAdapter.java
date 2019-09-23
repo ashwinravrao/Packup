@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 
 
 public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemViewHolder> {
@@ -33,8 +34,6 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
     private MutableLiveData<Item> editedItem = new MutableLiveData<>();
     private SingleItemUnpackCallback singleItemUnpackCallback;
     private ItemEditedCallback itemEditedCallback;
-
-    private final String TAG = this.getClass().getSimpleName();
 
     public ItemPackAdapter(@NonNull Context context) {
         this.context = context;
@@ -89,7 +88,7 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
         progress.start();
 
         Glide.with(context)
-                .load(new File(item.getFilePath()))
+                .load(new File(Objects.requireNonNull(item.getFilePath())))
                 .thumbnail(0.01f)  // downsample to 1% of original resolution
                 .centerCrop()
                 .placeholder(progress)
@@ -121,7 +120,7 @@ public class ItemPackAdapter extends RecyclerView.Adapter<ItemPackAdapter.ItemVi
                 @Override
                 public void afterTextChanged(Editable s) {
                     if(!firstBind[0]) {
-                        items.get(getAdapterPosition()).setName(s.toString().length() > 0 ? s.toString() : null);
+                        items.get(getAdapterPosition()).setName(s.toString().length() > 0 ? s.toString() : "");
                         if(itemEditedCallback != null) itemEditedCallback.itemEdited(items.get(getAdapterPosition()), getAdapterPosition());
                         editedItem.setValue(items.get(getAdapterPosition()));
                     }

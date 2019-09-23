@@ -3,8 +3,6 @@ package com.ashwinrao.packup.view
 import android.content.Context
 import android.content.DialogInterface
 
-import androidx.appcompat.app.AlertDialog
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 import java.util.function.Function

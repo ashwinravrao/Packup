@@ -20,7 +20,6 @@ import com.ashwinrao.packup.databinding.FragmentPageItemsBinding;
 import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.util.callback.UpdateActionModeCallback;
 import com.ashwinrao.packup.view.adapter.ItemDisplayAdapter;
-import com.ashwinrao.packup.viewmodel.BoxViewModel;
 import com.ashwinrao.packup.viewmodel.ItemViewModel;
 
 import java.util.List;

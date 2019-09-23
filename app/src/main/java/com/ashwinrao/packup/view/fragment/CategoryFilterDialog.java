@@ -37,7 +37,6 @@ public class CategoryFilterDialog extends DialogFragment {
     private CategoryViewModel categoryViewModel;
     private List<String> selectedCategories = new ArrayList<>();
 
-
     @Inject
     ViewModelProvider.Factory factory;
 

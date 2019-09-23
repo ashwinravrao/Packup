@@ -5,7 +5,6 @@ import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,6 @@ import java.util.Objects;
 
 
 public class NfcReadFragment extends Fragment implements NfcFragment, BackNavCallback {
-
-    private final String TAG = this.getClass().getSimpleName();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,7 +58,7 @@ public class NfcReadFragment extends Fragment implements NfcFragment, BackNavCal
             }
             ndef.close();
         } catch (IOException | FormatException e) {
-            Log.e(TAG, "onTagDetected: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -1,13 +1,11 @@
 package com.ashwinrao.packup.viewmodel
 
-import android.content.res.TypedArray
 import androidx.lifecycle.ViewModel
 import com.ashwinrao.packup.data.AppDatabase
 import com.ashwinrao.packup.data.model.Box
 import com.ashwinrao.packup.data.model.Item
 import com.ashwinrao.packup.data.repo.dao.BoxDao
 import com.ashwinrao.packup.data.repo.dao.ItemDao
-import com.ashwinrao.packup.view.fragment.pages.ItemsPage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

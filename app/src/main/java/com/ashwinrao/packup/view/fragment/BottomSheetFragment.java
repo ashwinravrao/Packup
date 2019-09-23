@@ -23,8 +23,6 @@ import java.util.Objects;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static final String TAG = "BottomSheetFragment";
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

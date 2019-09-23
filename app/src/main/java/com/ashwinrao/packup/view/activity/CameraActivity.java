@@ -46,7 +46,6 @@ public class CameraActivity extends AppCompatActivity {
     private ArrayList<String> paths = new ArrayList<>();
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 5;
-    private static final String TAG = "CameraFragment";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

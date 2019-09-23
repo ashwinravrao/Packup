@@ -63,9 +63,6 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     private boolean wasBackPressed;
     private int currentPage = 0;
 
-    private final String TAG = this.getClass().getSimpleName();
-    private final String EXISTING_QUERY_KEY = "existing_query";
-
     @Inject
     ViewModelProvider.Factory factory;
 

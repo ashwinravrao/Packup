@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -32,20 +31,17 @@ import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityEditBinding;
 import com.ashwinrao.packup.util.HashtagDetection;
-import com.ashwinrao.packup.util.UnitConversion;
 import com.ashwinrao.packup.util.callback.ItemEditedCallback;
 import com.ashwinrao.packup.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemPackAdapter;
 import com.ashwinrao.packup.viewmodel.BoxViewModel;
-import com.ashwinrao.packup.viewmodel.CategoryViewModel;
 import com.ashwinrao.packup.viewmodel.ItemViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,8 +68,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     private String description;
     private List<Item> items = new ArrayList<>();
     private List<String> addItemPaths = new ArrayList<>();
-
-    private static final String TAG = "EditActivity";
 
 
     @Inject
