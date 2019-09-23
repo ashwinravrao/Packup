@@ -383,7 +383,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void showPossibleUnsavedChangesDialog() {
-        ConfirmationDialog.make(this, new String[]{
+        ConfirmationDialog.INSTANCE.make(this, new String[]{
                 getString(R.string.dialog_discard_changes_title),
                 getString(R.string.dialog_discard_changes_message),
                 getString(R.string.leave),
@@ -409,7 +409,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
     }
 
     private void showNfcTagAlreadyRegisteredDialog() {
-        ConfirmationDialog.make(this, new String[]{
+        ConfirmationDialog.INSTANCE.make(this, new String[]{
                         getString(R.string.dialog_nfc_tag_already_registered_title),
                         getString(R.string.dialog_nfc_tag_already_registered_message),
                         getString(R.string.yes),

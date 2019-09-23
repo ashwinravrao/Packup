@@ -281,12 +281,6 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                         e.printStackTrace();
                         setError(binding.nameInputField);
                     }
-//                    if (boxViewModel.saveBox(this.boxCategories)) {
-//                        itemViewModel.insertItems(itemViewModel.getItemsFromThis());
-//                        this.finish();
-//                    } else {
-//                        setError(binding.nameInputField);
-//                    }
                 }
                 return true;
             case R.id.toolbar_clear_items:
@@ -341,7 +335,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     private void showUnsavedChangesDialog() {
-        ConfirmationDialog.make(this, new String[]{
+        ConfirmationDialog.INSTANCE.make(this, new String[]{
                 getString(R.string.dialog_discard_box_title),
                 getString(R.string.dialog_discard_box_message),
                 getString(R.string.discard),
@@ -349,7 +343,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
                 ContextCompat.getColor(this, android.R.color.holo_red_dark)}, dialogInterface -> {
             if (itemViewModel.getItemsFromThis() != null) {
                 for (Item item : itemViewModel.getItemsFromThis()) {
-                    new File(item.getFilePath()).delete();
+                    new File(Objects.requireNonNull(item.getFilePath())).delete();
                 }
                 itemViewModel.deleteItems(itemViewModel.getItemsFromThis());
             }
@@ -372,7 +366,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     }
 
     private void showNfcTagAlreadyRegisteredDialog() {
-        ConfirmationDialog.make(this, new String[]{
+        ConfirmationDialog.INSTANCE.make(this, new String[]{
                         getString(R.string.dialog_nfc_tag_already_registered_title),
                         getString(R.string.dialog_nfc_tag_already_registered_message),
                         getString(R.string.yes),

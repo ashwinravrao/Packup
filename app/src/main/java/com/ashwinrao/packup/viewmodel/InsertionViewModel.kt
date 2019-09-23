@@ -41,6 +41,6 @@ class InsertionViewModel @Inject constructor(database: AppDatabase) : ViewModel(
         itemDao.insert(*items.toTypedArray())
     }
 
-    private fun checkModelConstraints(box: Box, items: List<Item>) = box.name.isNotBlank() && !items.isNullOrEmpty()
+    private fun checkModelConstraints(box: Box, items: List<Item>) = box.name!!.isNotEmpty() && !items.isNullOrEmpty()
 
 }

@@ -12,7 +12,6 @@ import java.util.List;
 public class CategoryViewModel extends ViewModel {
 
     private List<String> cachedBoxCategories = new ArrayList<>();
-    private List<String> cachedItemCategories = new ArrayList<>();
 
     public void setCachedBoxCategories(@NonNull final List<Box> cachedBoxes) {
         cachedBoxCategories = new ArrayList<>();
@@ -23,18 +22,6 @@ public class CategoryViewModel extends ViewModel {
 
     public List<String> getCachedBoxCategories() {
         return cachedBoxCategories;
-    }
-
-
-    public void setCachedItemCategories(@NonNull final List<Item> cachedItems) {
-        cachedItemCategories = new ArrayList<>();
-        for (final Item item : cachedItems) {
-            cachedItemCategories.add(item.getCategory());
-        }
-    }
-
-    public List<String> getCachedItemCategories() {
-        return cachedItemCategories;
     }
 
 }

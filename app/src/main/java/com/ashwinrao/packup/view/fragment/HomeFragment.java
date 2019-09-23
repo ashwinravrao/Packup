@@ -229,7 +229,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     }
 
     private void showBulkDeleteConfirmationDialog(@NonNull List<Box> toDelete, @NonNull ActionMode mode) {
-        ConfirmationDialog.make(getContext(), new String[]{
+        ConfirmationDialog.INSTANCE.make(Objects.requireNonNull(getContext()), new String[]{
                 getString(R.string.dialog_bulk_delete_title),
                 getString(R.string.dialog_bulk_delete_message),
                 getString(R.string.delete),
@@ -245,7 +245,7 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     }
 
     private void showUnpackConfirmationDialog(@NonNull List<Item> toUnpack, @NonNull ActionMode mode) {
-        ConfirmationDialog.make(getContext(), new String[]{
+        ConfirmationDialog.INSTANCE.make(Objects.requireNonNull(getContext()), new String[]{
                 getString(R.string.dialog_unpack_multiple_title),
                 getString(R.string.dialog_unpack_multiple_message),
                 getString(R.string.unpack),
@@ -279,19 +279,13 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.delete) {
                 final List<Object> selected = currentPage == 0 ? boxesPage.getBoxesAdapter().getSelected() : itemsPage.getAdapter().getSelected();
-                if(currentPage == 0) {
-                    @SuppressWarnings("unchecked")
-                    final List<Box> selectedBoxes = (List<Box>) (List<?>) selected;
+                if (currentPage == 0) {
+                    @SuppressWarnings("unchecked") final List<Box> selectedBoxes = (List<Box>) (List<?>) selected;
                     showBulkDeleteConfirmationDialog(selectedBoxes, mode);
                 } else {
-                    @SuppressWarnings("unchecked")
-                    final List<Item> selectedItems = (List<Item>) (List<?>) selected;
+                    @SuppressWarnings("unchecked") final List<Item> selectedItems = (List<Item>) (List<?>) selected;
                     showUnpackConfirmationDialog(selectedItems, mode);
                 }
-                return true;
-            } else if (item.getItemId() == R.id.archive) {
-                // TODO implement archiving
-                mode.finish();
                 return true;
             }
             return false;

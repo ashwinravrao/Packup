@@ -205,7 +205,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void showDeleteConfirmationDialog() {
-        ConfirmationDialog.make(this,
+        ConfirmationDialog.INSTANCE.make(this,
                 new String[]{
                         getString(R.string.dialog_delete_existing_box_title),
                         getString(R.string.dialog_delete_existing_box_message),

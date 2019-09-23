@@ -8,7 +8,7 @@ import com.ashwinrao.packup.data.model.Item
 import com.ashwinrao.packup.data.repo.dao.BoxDao
 import com.ashwinrao.packup.data.repo.dao.ItemDao
 
-@Database(entities = [Box::class, Item::class], version = 3, exportSchema = false)
+@Database(entities = [Box::class, Item::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
