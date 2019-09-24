@@ -158,6 +158,35 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/divider" />
 
+                <ImageView
+                    android:id="@+id/empty_search_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/ic_coat_stand"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/recycler_view"
+                    app:layout_constraintVertical_bias="0.3"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/empty_search_placeholder_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="32dp"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/empty_search_items_text"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/top_row_view_holder"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/empty_search_placeholder" />
+
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/delete_button"
                     android:layout_width="wrap_content"

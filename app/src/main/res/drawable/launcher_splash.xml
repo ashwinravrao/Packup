@@ -7,17 +7,10 @@
 
     <!-- Logo -->
     <item
-        android:width="125dp"
-        android:height="125dp"
-        android:gravity="center">
-
-        <shape
-            android:shape="rectangle">
-            <solid
-                android:color="@color/colorAccent"/>
-            <corners
-                android:radius="100dp"/>
-        </shape>
+        android:width="200dp"
+        android:height="200dp"
+        android:gravity="center"
+        android:drawable="@drawable/ic_launcher_foreground_round_gray">
     </item>
 
 </layer-list>

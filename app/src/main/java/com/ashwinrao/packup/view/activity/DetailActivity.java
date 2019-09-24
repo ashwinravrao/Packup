@@ -26,6 +26,7 @@ import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityDetailBinding;
+import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemDisplayAdapter;
 import com.ashwinrao.packup.viewmodel.BoxViewModel;
@@ -42,7 +43,7 @@ import javax.inject.Inject;
 import static com.ashwinrao.packup.util.Decorations.addItemDecoration;
 import static com.ashwinrao.packup.util.UnitConversion.dpToPx;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements EmptySearchResultsCallback {
 
     private Box box;
     private ChipGroup chipGroup;
@@ -51,6 +52,8 @@ public class DetailActivity extends AppCompatActivity {
     private LiveData<Box> boxLD;
     private LiveData<List<Item>> itemsLD;
     private List<Chip> chips = new ArrayList<>();
+
+    private View[] emptySearchPlaceholders;
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -72,6 +75,11 @@ public class DetailActivity extends AppCompatActivity {
 
         final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         chipGroup = binding.chipGroup;
+
+        emptySearchPlaceholders = new View[]{
+                binding.emptySearchPlaceholder,
+                binding.emptySearchPlaceholderText
+        };
 
         boxViewModel = new ViewModelProvider(
                 this, factory).get(BoxViewModel.class);
@@ -164,6 +172,7 @@ public class DetailActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(null);
         addItemDecoration(this, recyclerView, 1, 8);
         adapter = new ItemDisplayAdapter(this, true);
+        adapter.setEmptySearchResultsCallback(this);
         adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
         boxLD.observe(this, box -> {
@@ -218,7 +227,6 @@ public class DetailActivity extends AppCompatActivity {
                 dialogInterface -> {
                     boxViewModel.delete(box);
                     finish();
-//                    supportFinishAfterTransition();
                     return null;
                 }, dialogInterface -> {
                     dialogInterface.cancel();
@@ -230,5 +238,20 @@ public class DetailActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         supportFinishAfterTransition();
+    }
+
+    /**
+     * Handles visibility of the "no search results" placeholder image and text. An instance of
+     * this callback is passed to the RecyclerView Adapter responsible for displaying items.
+     *
+     * @param numResults zero or positive. Zero indicates no results were found, and a placeholder
+     *                   should be shown to the user. Positive indicates the opposite.
+     */
+
+    @Override
+    public void handleEmptyResults(int numResults) {
+        for (View view : emptySearchPlaceholders) {
+            view.setVisibility(numResults > 0 ? View.INVISIBLE : View.VISIBLE);
+        }
     }
 }

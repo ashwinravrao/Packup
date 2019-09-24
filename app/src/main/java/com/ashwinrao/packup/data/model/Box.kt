@@ -9,7 +9,9 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "boxes", indices = [Index("id")])
+@Entity(tableName = "boxes",
+        indices = [Index("id")])
+
 class Box {
 
     @PrimaryKey

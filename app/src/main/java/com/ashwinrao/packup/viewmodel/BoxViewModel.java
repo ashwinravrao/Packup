@@ -52,16 +52,6 @@ public class BoxViewModel extends ViewModel {
         repo.update(box);
     }
 
-    public boolean saveBox(@NonNull List<String> categories) {
-        if (box.getName() != null) {
-            box.setCategories(categories);
-            repo.insert(this.box);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public LiveData<Integer> getLastUsedBoxNumber() {
         return Transformations.switchMap(repo.getBoxes(), boxes -> {
             final MutableLiveData<Integer> mld = new MutableLiveData<>();
