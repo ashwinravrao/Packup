@@ -20,7 +20,7 @@ With Packup for Android you can conveniently keep track of boxes and their conte
 ## Minimum Requirements
 
  - JDK 1.8
- - Android 7.0 Nougat (API 26)
+ - Android 7.0 Nougat (API 24)
  - Android SDK and Gradle build tools (latest version)
 
 Updated 9/29/19
