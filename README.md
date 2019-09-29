@@ -14,6 +14,7 @@ With Packup for Android you can conveniently keep track of boxes and their conte
  - [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)
  - [Room](https://developer.android.com/topic/libraries/architecture/room)
  - [Glide](https://bumptech.github.io/glide/)
+ - [Gson](https://github.com/google/gson)
  - [CameraX](https://developer.android.com/training/camerax)
  - [Dagger2](https://dagger.dev/)
  
