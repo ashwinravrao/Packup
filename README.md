@@ -1,19 +1,27 @@
 # Packup for Android
 
-![ic_launcher](https://github.com/ashwinravrao/Packup/blob/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
+![screenshots](https://github.com/ashwinravrao/Packup/blob/master/screenshots/all.png)
 
 [Download from GitHub Releases](https://github.com/ashwinravrao/packup/releases)
 
-Packup for Android (Packup for short) is an app for conveniently keeping track of your boxes and their contents after a move. Moving can be stressful, especially when you want to find something but can't remember where you put it. While packing, simply snap a photo of every item with the built-in camera, label it with a name and value (optional), and you're done! Packup can also register NFC stickers so that your packing list is just a tap away. Simply select the NFC registration option when adding a box and tap your sticker to the back of your phone. Stick it onto the outside of your box. Whenever you want to know what's inside a box, simply open the app, tap your phone on the sticker, and a gallery of items will pop up! Packup supports text search on items, descriptions, names, and box numbers. You can search from the box list and inside a box. Try it by downloading the .apk file from the Releases tab above.
+With Packup for Android you can conveniently keep track of boxes and their contents during a move. Moving can be stressful, especially when you want to find something but can't remember where you put it. While packing, simply snap a photo of each item, give it a name and an optional value. You can also register an NFC sticker for each box so that your packing list is just a tap away. Simply select the NFC registration option when adding a box and tap your sticker to the back of your phone. Stick it onto the outside of your box. When searching for an item, open the app and tap your device on the tag. The app also supports text search on items, descriptions, names, and box numbers.
 
-Packup and Move is built with the following libraries and tools:
+## Languages, libraries and tools used
 
- - MVVM architecture
- - Room for local storage
- - Glide for image loading
- - CameraX for the built-in viewfinder
- - Dagger2 dependency injection
- - Native data binding
- - Kotlin coroutines
+ - [Java](https://en.wikipedia.org/wiki/Java_(programming_language))
+ - [Kotlin](https://kotlinlang.org)
+ - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)
+ - [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)
+ - [Room](https://developer.android.com/topic/libraries/architecture/room)
+ - [Glide](https://bumptech.github.io/glide/)
+ - [Gson](https://github.com/google/gson)
+ - [CameraX](https://developer.android.com/training/camerax)
+ - [Dagger2](https://dagger.dev/)
  
-**Updated 9/23/19**
+## Minimum Requirements
+
+ - JDK 1.8
+ - Android 7.0 Nougat (API 24)
+ - Android SDK and Gradle build tools (latest version)
+
+Updated 9/29/19
