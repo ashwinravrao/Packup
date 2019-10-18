@@ -31,6 +31,7 @@ import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityEditBinding;
 import com.ashwinrao.packup.util.HashtagDetection;
+import com.ashwinrao.packup.util.HideShowNotch;
 import com.ashwinrao.packup.util.callback.ItemEditedCallback;
 import com.ashwinrao.packup.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
@@ -102,6 +103,12 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                 itemViewModel.getItemsFromBox(uuid).removeObservers(this);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HideShowNotch.apply(this, getWindow(), R.color.colorAccent, false);
     }
 
     private void populate(@NonNull final Box box) {

@@ -81,7 +81,7 @@
     <string name="feedback_setting_title">Send feedback</string>
     <string name="feedback_setting_message">Contact the developer with bugs or suggestions</string>
     <string name="feedback_setting_mail_subject">Re: Packup Feedback</string>
-    <string name="icons_attribution_message">Icons made by Nikita Golubev from www.flaticon.com</string>
+    <string name="icons_attribution_message">Icons made by Nikita Golubev from flaticon.com</string>
     <string name="icons_attribution_url">https://www.flaticon.com/authors/nikita-golubev</string>
     <string name="camera_instructions">Press back to continue editing your box</string>
     <string name="empty_search_text">Couldn\'t find any boxes to match that search</string>
@@ -92,6 +92,27 @@
     <string name="content_description_settings_fragile_icon">Fragile free icon</string>
     <string name="content_description_bug_icon">Bug icon</string>
     <string name="content_description_settings_coat_stand_icon">Coat stand free icon</string>
+    <string name="plus_4">+ 4</string>
+    <string name="icons_attribution_title">View icons featured in this app</string>
+    <string name="plus_3">+ 3</string>
+    <string name="about_settings_title">About</string>
+    <string name="system_bars_settings_title">System bars</string>
+    <string name="window_settings_title">Window</string>
+    <string name="system_settings_title">System</string>
+    <string name="bars_settings_title">Bars</string>
+    <string name="status_bar_color_setting_title">Colored status bar</string>
+    <string name="hide_notch_setting_title">Hide display notch</string>
+    <string name="hide_notch_setting_message">Color the status bar black to hide the notch</string>
+    <string name="navigation_bar_setting_title">Color the navigation bar</string>
+    <string name="navigation_bar_setting_message">Color the navigation bar with the primary color</string>
+    <string name="camera_settings_title">Camera</string>
+    <string name="shutter_vibration_setting_title">Shutter vibration</string>
+    <string name="shutter_vibration_setting_message">Vibration feedback when taking pictures</string>
+    <string name="feedback_mail_subject">Re: Packup Feedback</string>
+    <string name="flaticon_attribution_gallery">https://www.flaticon.com/authors/nikita-golubev</string>
+    <string name="settings_reset">Reset to default</string>
+    <string name="hide_notch_key">hide_notch</string>
+    <string name="settings_shared_preference">settings</string>
 
 
 </resources>

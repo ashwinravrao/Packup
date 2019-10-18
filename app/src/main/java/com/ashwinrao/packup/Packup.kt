@@ -2,6 +2,8 @@
 package com.ashwinrao.packup
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import com.ashwinrao.packup.di.AppComponent
 import com.ashwinrao.packup.di.DaggerAppComponent
 import com.ashwinrao.packup.di.DatabaseModule
@@ -18,4 +20,5 @@ class Packup : Application() {
                         .databaseModule(DatabaseModule(this))
                         .build()
     }
+
 }

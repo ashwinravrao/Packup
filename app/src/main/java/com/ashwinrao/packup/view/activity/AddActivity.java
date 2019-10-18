@@ -31,6 +31,7 @@ import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityAddBinding;
 import com.ashwinrao.packup.util.HashtagDetection;
+import com.ashwinrao.packup.util.HideShowNotch;
 import com.ashwinrao.packup.util.callback.ItemEditedCallback;
 import com.ashwinrao.packup.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
@@ -100,6 +101,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     @Override
     public void onResume() {
         super.onResume();
+        HideShowNotch.apply(this, getWindow(), R.color.colorAccent, false);
         updateItems();
     }
 

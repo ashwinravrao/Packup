@@ -26,6 +26,7 @@ import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityDetailBinding;
+import com.ashwinrao.packup.util.HideShowNotch;
 import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemDisplayAdapter;
@@ -62,7 +63,6 @@ public class DetailActivity extends AppCompatActivity implements EmptySearchResu
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((Packup) getApplicationContext()).getAppComponent().inject(this);
-
         postponeEnterTransition();
 
         // Exclude certain window elements from participating in activity fade transition
@@ -112,6 +112,9 @@ public class DetailActivity extends AppCompatActivity implements EmptySearchResu
     @Override
     protected void onResume() {
         super.onResume();
+
+        HideShowNotch.apply(this, getWindow(), R.color.colorPrimary, true);
+
         if(adapter != null) {
             adapter.initializeFilter();
         }

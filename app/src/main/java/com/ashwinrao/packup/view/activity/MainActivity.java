@@ -5,6 +5,7 @@ import android.transition.Fade;
 import android.view.View;
 
 import com.ashwinrao.packup.R;
+import com.ashwinrao.packup.util.HideShowNotch;
 import com.ashwinrao.packup.util.callback.BackNavCallback;
 import com.ashwinrao.packup.view.fragment.HomeFragment;
 
@@ -40,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, "HomeFragment")
                 .commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HideShowNotch.apply(this, getWindow(), R.color.colorPrimary, true);
     }
 
     public void registerBackNavigationListener(@NonNull BackNavCallback listener) {
