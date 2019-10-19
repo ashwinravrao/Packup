@@ -1,18 +1,17 @@
 package com.ashwinrao.packup.view.activity;
 
 import android.os.Bundle;
-import android.transition.Fade;
-import android.view.View;
-
-import com.ashwinrao.packup.R;
-import com.ashwinrao.packup.util.HideShowNotch;
-import com.ashwinrao.packup.util.callback.BackNavCallback;
-import com.ashwinrao.packup.view.fragment.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
 import androidx.fragment.app.Fragment;
+
+import com.ashwinrao.packup.R;
+import com.ashwinrao.packup.util.HideShowNotch;
+import com.ashwinrao.packup.util.WindowUtil;
+import com.ashwinrao.packup.util.callback.BackNavCallback;
+import com.ashwinrao.packup.view.fragment.HomeFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,16 +20,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme_NoActionBar);
+        if (!HideShowNotch.applyThemeIfAvailable(this)) setTheme(R.style.AppTheme_NoActionBar);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Exclude certain window elements from participating in activity fade transition
-        final Fade fade = new Fade();
-        final View decor = getWindow().getDecorView();
-        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
-        getWindow().setEnterTransition(fade);
+        WindowUtil.transitionExcludeBars(getWindow());
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
         if(fragment == null) {
@@ -41,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment, "HomeFragment")
                 .commit();
+
     }
 
     @Override

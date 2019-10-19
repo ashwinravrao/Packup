@@ -16,9 +16,9 @@ import androidx.fragment.app.Fragment;
 import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.util.HideShowNotch;
 import com.ashwinrao.packup.util.callback.BackNavCallback;
+import com.ashwinrao.packup.view.fragment.nfc.NfcFragment;
 import com.ashwinrao.packup.view.fragment.nfc.NfcReadFragment;
 import com.ashwinrao.packup.view.fragment.nfc.NfcWriteFragment;
-import com.ashwinrao.packup.view.fragment.nfc.NfcFragment;
 
 
 public class NfcActivity extends AppCompatActivity {
@@ -30,6 +30,7 @@ public class NfcActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        HideShowNotch.applyThemeIfAvailable(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nfc);
         initializeNfcAdapter();
@@ -39,7 +40,6 @@ public class NfcActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        HideShowNotch.apply(this, getWindow(), R.color.colorPrimary, true);
         final IntentFilter[] intentFilters = new IntentFilter[]{
                 new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED),
                 new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED),

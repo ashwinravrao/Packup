@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.util.Rational;
-import android.util.Size;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
@@ -19,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.AspectRatio;
 import androidx.camera.core.CameraX;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureConfig;
@@ -31,6 +30,8 @@ import androidx.databinding.DataBindingUtil;
 
 import com.ashwinrao.packup.R;
 import com.ashwinrao.packup.databinding.ActivityCameraBinding;
+import com.ashwinrao.packup.util.HideShowNotch;
+import com.ashwinrao.packup.util.SettingsUtil;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -49,8 +50,8 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        HideShowNotch.applyThemeIfAvailable(this);
         super.onCreate(savedInstanceState);
-
         final ActivityCameraBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_camera);
         textureView = binding.preview;
         snackbarContainer = binding.snackbarContainer;
@@ -92,13 +93,13 @@ public class CameraActivity extends AppCompatActivity {
 
         final DisplayMetrics metrics = new DisplayMetrics();
         textureView.getDisplay().getRealMetrics(metrics);
-        final Size screenSize = new Size(metrics.widthPixels, metrics.heightPixels);
-        final Rational screenAspectRatio = new Rational(metrics.widthPixels, metrics.heightPixels);
+//        final Size screenSize = new Size(metrics.widthPixels, metrics.heightPixels);
+        final AspectRatio screenAspectRatio = AspectRatio.RATIO_4_3;
 
         final PreviewConfig previewConfig = new PreviewConfig.Builder()
                 .setLensFacing(CameraX.LensFacing.BACK)
                 .setTargetAspectRatio(screenAspectRatio)
-                .setTargetResolution(screenSize)
+//                .setTargetResolution(screenSize)
                 .build();
 
         final Preview preview = new Preview(previewConfig);
@@ -114,35 +115,38 @@ public class CameraActivity extends AppCompatActivity {
         final ImageCaptureConfig imageCaptureConfig = new ImageCaptureConfig.Builder()
                 .setTargetAspectRatio(screenAspectRatio)
                 .setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
-                .setTargetResolution(screenSize)
+//                .setTargetResolution(screenSize)
                 .build();
 
         final ImageCapture imageCapture = new ImageCapture(imageCaptureConfig);
         shutterButton.setOnClickListener(v -> {
 
             final File file = new File(getExternalMediaDirs()[0], System.currentTimeMillis() + ".jpg");
-            imageCapture.takePicture(file, new ImageCapture.OnImageSavedListener() {
+            imageCapture.takePicture(file, command -> {
 
-                @Override
-                public void onImageSaved(@NonNull File file) {
-                    paths.add(file.getAbsolutePath());
+                paths.add(file.getAbsolutePath());
 
-                    // Provide vibration feedback
+                // Provide vibration feedback
+                if (SettingsUtil.getShutterVibrationSetting(this)) {
                     if (android.os.Build.VERSION.SDK_INT >= 26) {
                         ((Vibrator) Objects.requireNonNull(getSystemService(VIBRATOR_SERVICE))).vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE));
                     } else {
                         ((Vibrator) Objects.requireNonNull(getSystemService(VIBRATOR_SERVICE))).vibrate(50);
                     }
+                }
 
-                    // Notify user of saved image
-                    final Snackbar snackbar = Snackbar.make(snackbarContainer, "Saved", Snackbar.LENGTH_SHORT)
-                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-                            .setBackgroundTint(ContextCompat.getColor(CameraActivity.this,
-                                    R.color.success_green))
-                            .setTextColor(ContextCompat.getColor(CameraActivity.this, R.color.success_green_text));
-                    snackbar.getView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-                    snackbar.show();
+                // Notify user of saved image
+                final Snackbar snackbar = Snackbar.make(snackbarContainer, "Saved", Snackbar.LENGTH_SHORT)
+                        .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
+                        .setBackgroundTint(ContextCompat.getColor(CameraActivity.this,
+                                R.color.success_green))
+                        .setTextColor(ContextCompat.getColor(CameraActivity.this, R.color.success_green_text));
+                snackbar.getView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                snackbar.show();
 
+            }, new ImageCapture.OnImageSavedListener() {
+                @Override
+                public void onImageSaved(@NonNull File file) {
                 }
 
                 @Override

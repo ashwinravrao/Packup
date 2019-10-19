@@ -37,8 +37,8 @@ import com.ashwinrao.packup.util.callback.SingleItemUnpackCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemPackAdapter;
 import com.ashwinrao.packup.viewmodel.BoxViewModel;
-import com.ashwinrao.packup.viewmodel.ItemViewModel;
 import com.ashwinrao.packup.viewmodel.InsertionViewModel;
+import com.ashwinrao.packup.viewmodel.ItemViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -74,6 +74,7 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        HideShowNotch.applyThemeIfAvailable(this);
         super.onCreate(savedInstanceState);
         ((Packup) getApplicationContext()).getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add);
@@ -101,7 +102,6 @@ public class AddActivity extends AppCompatActivity implements SingleItemUnpackCa
     @Override
     public void onResume() {
         super.onResume();
-        HideShowNotch.apply(this, getWindow(), R.color.colorAccent, false);
         updateItems();
     }
 

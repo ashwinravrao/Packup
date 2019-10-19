@@ -113,6 +113,7 @@
     <string name="settings_reset">Reset to default</string>
     <string name="hide_notch_key">hide_notch</string>
     <string name="settings_shared_preference">settings</string>
+    <string name="shutter_vibration_key">shutter vibration key</string>
 
 
 </resources>

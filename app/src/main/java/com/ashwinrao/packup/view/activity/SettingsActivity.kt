@@ -1,6 +1,5 @@
 package com.ashwinrao.packup.view.activity
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,26 +11,30 @@ import androidx.databinding.DataBindingUtil
 import com.ashwinrao.packup.BuildConfig
 import com.ashwinrao.packup.R
 import com.ashwinrao.packup.databinding.ActivitySettingsBinding
-import kotlinx.android.synthetic.main.activity_settings.*
 import com.ashwinrao.packup.util.HideShowNotch
+import com.ashwinrao.packup.util.SettingsUtil
+import kotlinx.android.synthetic.main.activity_settings.*
 
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        HideShowNotch.applyThemeIfAvailable(this)
         super.onCreate(savedInstanceState)
         DataBindingUtil.setContentView<ActivitySettingsBinding>(
                 this@SettingsActivity,
                 R.layout.activity_settings)
         setupToolbar(toolbar)
-        listenToHideNotchSetting(hide_notch_checkbox)
+        listenToHideNotchSetting(hide_notch_setting, hide_notch_checkbox)
+        listenToShutterVibrationSetting(shutter_vibration_setting, shutter_vibration_checkbox)
         listenToFeedbackSetting(feedback_setting)
         listenToIconAttribution(icons_attribution)
     }
 
     override fun onResume() {
         super.onResume()
-        hide_notch_checkbox.isChecked = HideShowNotch.apply(this, window, R.color.colorPrimaryDark)
+        hide_notch_checkbox.isChecked = HideShowNotch.apply(this, window)
+        shutter_vibration_checkbox.isChecked = SettingsUtil.getShutterVibrationSetting(this)
     }
 
     private fun setupToolbar(toolbar: Toolbar) {
@@ -39,15 +42,18 @@ class SettingsActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
     }
 
-    private fun listenToHideNotchSetting(checkBox: CheckBox) {
+    private fun listenToHideNotchSetting(view: View, checkBox: CheckBox) {
+        view.setOnClickListener { checkBox.performClick() }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
-            application
-                    .getSharedPreferences(getString(R.string.settings_shared_preference), Context.MODE_PRIVATE)
-                    .edit()
-                    .putBoolean(getString(R.string.hide_notch_key), isChecked)
-                    .apply()
-
+            SettingsUtil.writeHideNotchSetting(this, isChecked)
             HideShowNotch.contextSpecific(this, window, isChecked, R.color.colorPrimaryDark)
+        }
+    }
+
+    private fun listenToShutterVibrationSetting(view: View, checkBox: CheckBox) {
+        view.setOnClickListener { checkBox.performClick() }
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            SettingsUtil.writeShutterVibrationSetting(this, isChecked)
         }
     }
 
@@ -72,7 +78,5 @@ class SettingsActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW, webPage)
         if (intent.resolveActivity(packageManager) != null) startActivity(intent)
     }
-
-    private fun clearDefaults() {}
 
 }

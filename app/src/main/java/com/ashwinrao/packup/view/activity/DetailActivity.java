@@ -2,7 +2,6 @@ package com.ashwinrao.packup.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.transition.Fade;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +26,7 @@ import com.ashwinrao.packup.data.model.Box;
 import com.ashwinrao.packup.data.model.Item;
 import com.ashwinrao.packup.databinding.ActivityDetailBinding;
 import com.ashwinrao.packup.util.HideShowNotch;
+import com.ashwinrao.packup.util.WindowUtil;
 import com.ashwinrao.packup.util.callback.EmptySearchResultsCallback;
 import com.ashwinrao.packup.view.ConfirmationDialog;
 import com.ashwinrao.packup.view.adapter.ItemDisplayAdapter;
@@ -61,17 +61,12 @@ public class DetailActivity extends AppCompatActivity implements EmptySearchResu
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        HideShowNotch.applyThemeIfAvailable(this);
         super.onCreate(savedInstanceState);
         ((Packup) getApplicationContext()).getAppComponent().inject(this);
         postponeEnterTransition();
 
-        // Exclude certain window elements from participating in activity fade transition
-        final Fade fade = new Fade();
-        final View decor = getWindow().getDecorView();
-        fade.excludeTarget(decor.findViewById(R.id.action_bar_container), true);
-        fade.excludeTarget(android.R.id.navigationBarBackground, true);
-        getWindow().setEnterTransition(fade);
-        getWindow().setExitTransition(fade);
+        WindowUtil.transitionExcludeBars(getWindow());
 
         final ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         chipGroup = binding.chipGroup;
@@ -112,8 +107,6 @@ public class DetailActivity extends AppCompatActivity implements EmptySearchResu
     @Override
     protected void onResume() {
         super.onResume();
-
-        HideShowNotch.apply(this, getWindow(), R.color.colorPrimary, true);
 
         if(adapter != null) {
             adapter.initializeFilter();

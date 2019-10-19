@@ -3,6 +3,7 @@ package com.ashwinrao.packup.util
 import android.content.Context
 import android.view.View
 import android.view.Window
+import androidx.appcompat.app.AppCompatActivity
 import com.ashwinrao.packup.R
 
 object HideShowNotch {
@@ -47,11 +48,16 @@ object HideShowNotch {
 
     @JvmStatic
     fun apply(context: Context, window: Window, lightBackground: Int = R.color.colorPrimary, darkIconsOnLight: Boolean = true): Boolean {
-        val shouldHideNotch = context.applicationContext
-                .getSharedPreferences(context.getString(R.string.settings_shared_preference), Context.MODE_PRIVATE)
-                .getBoolean(context.getString(R.string.hide_notch_key), false)
+        val shouldHideNotch = SettingsUtil.getHideNotchSetting(context)
         contextSpecific(context, window, shouldHideNotch, lightBackground, darkIconsOnLight)
         return shouldHideNotch
     }
 
+    @JvmStatic
+    fun applyThemeIfAvailable(activity: AppCompatActivity): Boolean {
+        return if (SettingsUtil.getHideNotchSetting(activity.applicationContext)) {
+            activity.setTheme(R.style.AppTheme_NoActionBar_HideNotch)
+            true
+        } else false
+    }
 }

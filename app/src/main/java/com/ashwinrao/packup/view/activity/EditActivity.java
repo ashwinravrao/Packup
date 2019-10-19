@@ -43,7 +43,6 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +75,7 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        HideShowNotch.applyThemeIfAvailable(this);
         super.onCreate(savedInstanceState);
         ((Packup) getApplicationContext()).getAppComponent().inject(this);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit);
@@ -103,12 +103,6 @@ public class EditActivity extends AppCompatActivity implements ItemEditedCallbac
                 itemViewModel.getItemsFromBox(uuid).removeObservers(this);
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        HideShowNotch.apply(this, getWindow(), R.color.colorAccent, false);
     }
 
     private void populate(@NonNull final Box box) {
