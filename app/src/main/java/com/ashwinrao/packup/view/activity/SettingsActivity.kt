@@ -46,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
         view.setOnClickListener { checkBox.performClick() }
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             SettingsUtil.writeHideNotchSetting(this, isChecked)
-            HideShowNotch.contextSpecific(this, window, isChecked, R.color.colorPrimaryDark)
+            HideShowNotch.contextSpecific(this, window, isChecked, R.color.colorPrimary)
         }
     }
 

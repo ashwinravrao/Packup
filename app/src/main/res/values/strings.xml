@@ -2,7 +2,7 @@
     <string name="app_name">Packup</string>
     <string name="title_search">Search</string>
     <string name="hint_name">Name</string>
-    <string name="hint_description">Description / #category</string>
+    <string name="hint_description">Description and #categories</string>
     <string name="dialog_discard_box_title">Discard current box</string>
     <string name="dialog_discard_box_message">Are you sure you want to leave? Your current box will be discarded. You cannot undo this action.</string>
     <string name="dialog_empty_box_title">Empty box</string>
@@ -54,7 +54,7 @@
     <string name="clear_items">Clear items</string>
     <string name="undo">Undo</string>
     <string name="pack_box">Pack Box</string>
-    <string name="description_instructions">Category tags will show up below</string>
+    <string name="description_instructions">Add a space after your hashtag to convert it to a category tag.</string>
     <string name="filter_dialog_title">Filter…</string>
     <string name="categories">Categories</string>
     <string name="filtered_results_disclaimer">Showing filtered results…</string>

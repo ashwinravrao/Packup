@@ -6,8 +6,7 @@ import android.view.Window
 object WindowUtil {
 
     /**
-     * Excludes action bar + system bars from participating in an activity's SharedElement
-     * fade transition.
+     * Excludes system bars from participating in an activity's SharedElement fade transition.
      */
 
     @JvmStatic
