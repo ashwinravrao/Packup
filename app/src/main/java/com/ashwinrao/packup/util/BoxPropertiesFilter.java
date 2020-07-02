@@ -15,7 +15,7 @@ public class BoxPropertiesFilter {
 
     public List<Box> filter(CharSequence constraint, boolean onID, boolean onName, boolean onDescription) {
         List<Box> result = new ArrayList<>();
-        if(constraint == null || constraint.length() == 0) {
+        if (constraint == null || constraint.length() == 0) {
             result.addAll(boxes);
         } else {
             final String constr = constraint.toString().toLowerCase();
