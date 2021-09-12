@@ -85,10 +85,10 @@ public class HomeFragment extends Fragment implements BackNavCallback, UpdateAct
     public void onResume() {
         super.onResume();
 
-        if(actionMode != null) {
+        if (actionMode != null) {
             actionMode.finish();
             viewPager.setPagingEnabled(true);
-            if(currentPage == 0) {
+            if (currentPage == 0) {
                 boxesPage.getBoxesAdapter().clearSelected();
             } else {
                 itemsPage.getAdapter().clearSelected();
