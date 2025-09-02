@@ -24,4 +24,15 @@ With Packup for Android you can conveniently keep track of boxes and their conte
  - Android 7.0 Nougat (API 24)
  - Android SDK and Gradle build tools (latest version)
 
-Updated 9/29/19
+<sub>Updated 9/29/19</sub>
+
+
+This project is no longer being maintained.
+
+<sub>Updated 9/1/25</sub>
+
+---
+
+<sub>All rights reserved © 2025 Ashwin R. Rao.
+You are welcome to review or learn from my code.
+But reproduction or commercial use is not permitted.</sub>
